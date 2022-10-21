@@ -7,7 +7,7 @@ export interface IMCQuestion {
   answerIndex?: number;
 }
 
-const QuestionSchema = new Schema({
+const questionSchema = new Schema({
   question: {
     type: String,
     required: true
@@ -23,9 +23,9 @@ export interface IExcercise {
   questions: Array<IMCQuestion>;
 }
 
-const ExcerciseSchema = new Schema({
+const excerciseSchema = new Schema({
   questions: {
-    type: [QuestionSchema],
+    type: [questionSchema],
     required: true
   }
 });
@@ -40,9 +40,9 @@ export interface ILesson {
   };
 }
 
-const LessonSchema = new Schema({
+const lessonSchema = new Schema({
   title: { type: String, required: true, unique: true },
-  excercises: [ExcerciseSchema],
+  excercises: [excerciseSchema],
   totalHours: { type: Number, required: true },
   video: {
     videoLink: { type: String, required: true },
@@ -59,7 +59,7 @@ export interface IRating {
   };
 }
 
-const RatingSchema = new Schema({
+const ratingSchema = new Schema({
   comment: { type: String },
   rating: { type: Number, required: true },
   traineedID: {
@@ -82,18 +82,18 @@ export interface ICourse {
 
 export interface ICourseModel extends ICourse, Document {}
 
-const CourseSchema = new Schema({
+const courseSchema = new Schema({
   title: { type: String, required: true, trim: true },
   description: { type: String, required: true, trim: true },
   instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
   subject: { type: String, required: true },
   price: { type: Number, required: true, min: 0 },
   averageRating: { type: Number, required: true, min: 0, max: 5, default: 0 } /* calculate average rating */,
-  ratings: [RatingSchema],
+  ratings: [ratingSchema],
   totalHours: { type: Number, required: true },
-  lessons: [LessonSchema]
+  lessons: [lessonSchema]
 });
 
-CourseSchema.plugin(uniqueValidator, { message: "is already taken." });
+courseSchema.plugin(uniqueValidator, { message: "is already taken." });
 
-export default mongoose.model<ICourseModel>("Course", CourseSchema);
+export default mongoose.model<ICourseModel>("Course", courseSchema);
