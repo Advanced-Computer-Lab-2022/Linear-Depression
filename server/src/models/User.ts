@@ -5,7 +5,7 @@ export interface IUser {
   lastName: string;
   email: string;
   username: string;
-  password: string;
+  passwordHash: string;
 }
 export interface IUserModel extends IUser, Document {}
 
