@@ -1,5 +1,4 @@
 import express from "express";
-import http from "http";
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
