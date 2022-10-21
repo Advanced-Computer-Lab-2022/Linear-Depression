@@ -1,5 +1,4 @@
 import express from "express";
-import http from "http";
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
@@ -41,7 +40,7 @@ const startServer = () => {
 
   /* Routers*/
   
-  /*sealth Check*/
+  /*Health Check*/
   app.get("/ping", (req, res) => {
     return res.status(200).json({message:"pong"});
   });
@@ -53,7 +52,7 @@ const startServer = () => {
     return res.status(404).json({message: error.message});
   });
 
-  app.listen(config.server.port, () => {
+ app.listen(config.server.port, () => {
     Logger.log(`Server started at port ${config.server.port}`);
   });
 };
