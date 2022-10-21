@@ -12,3 +12,4 @@ repos:
     rev: 9479d2357db4ed11984e3a6517c1559ca5655b4a
     hooks:
       - id: prettier
+        args: [--config, .prettierrc]
