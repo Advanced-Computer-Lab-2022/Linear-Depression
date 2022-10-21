@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 
-export interface IQuestion {
+export interface IMCQuestion {
   question: string;
   choices: Array<[string, string, string, string]>;
   answerIndex?: number;
@@ -20,7 +20,7 @@ const QuestionSchema = new Schema({
 });
 
 export interface IExcercise {
-  questions: Array<IQuestion>;
+  questions: Array<IMCQuestion>;
 }
 
 const ExcerciseSchema = new Schema({
@@ -40,13 +40,31 @@ export interface ILesson {
   };
 }
 
-const lessonSchema = new Schema({
+const LessonSchema = new Schema({
   title: { type: String, required: true, unique: true },
-  excercises: [excerciseSchema],
+  excercises: [ExcerciseSchema],
   totalHours: { type: Number, required: true },
   video: {
     videoLink: { type: String, required: true },
     description: { type: String, required: true }
+  }
+});
+
+export interface IRating {
+  comment: string;
+  rating: number;
+  traineedID: {
+    type: Schema.Types.ObjectId;
+    ref: "Trainee";
+  };
+}
+
+const RatingSchema = new Schema({
+  comment: { type: String },
+  rating: { type: Number, required: true },
+  traineedID: {
+    type: Schema.Types.ObjectId,
+    ref: "Trainee"
   }
 });
 
@@ -56,7 +74,8 @@ export interface ICourse {
   instructor: mongoose.Types.ObjectId;
   subject: string;
   price: number;
-  rating: number;
+  averageRating: number;
+  ratings: Array<IRating>;
   totalHours: number;
   lessons: Array<ILesson>;
 }
@@ -64,12 +83,13 @@ export interface ICourse {
 export interface ICourseModel extends ICourse, Document {}
 
 const courseSchema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  instructor: { type: mongoose.Types.ObjectId, required: true },
+  title: { type: String, required: true, trim: true },
+  description: { type: String, required: true, trim: true },
+  instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
   subject: { type: String, required: true },
-  price: { type: Number, required: true },
-  rating: { type: Number, required: true, min: 0, max: 5, default: 0 },
+  price: { type: Number, required: true, min: 0 },
+  averageRating: { type: Number, required: true, min: 0, max: 5, default: 0 } /* calculate average rating */,
+  ratings: [RatingSchema],
   totalHours: { type: Number, required: true },
   lessons: [LessonSchema]
 });
