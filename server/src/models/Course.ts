@@ -82,7 +82,7 @@ export interface ICourse {
 
 export interface ICourseModel extends ICourse, Document {}
 
-const courseSchema = new Schema({
+const CourseSchema = new Schema({
   title: { type: String, required: true, trim: true },
   description: { type: String, required: true, trim: true },
   instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
@@ -94,6 +94,6 @@ const courseSchema = new Schema({
   lessons: [LessonSchema]
 });
 
-courseSchema.plugin(uniqueValidator, { message: "is already taken." });
+CourseSchema.plugin(uniqueValidator, { message: "is already taken." });
 
-export default mongoose.model<ICourseModel>("Course", courseSchema);
+export default mongoose.model<ICourseModel>("Course", CourseSchema);
