@@ -53,7 +53,7 @@ const startServer = () => {
     return res.status(404).json({message: error.message});
   });
 
-  http.createServer(app).listen(config.server.port, () => {
+  app.listen(config.server.port, () => {
     Logger.log(`Server started at port ${config.server.port}`);
   });
 };
