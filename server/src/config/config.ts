@@ -1,9 +1,11 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
-const MONGO_URL = process.env.MONGO_URL || "";
-const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 3000;
+const MONGO_URL = process.env.MONGO_URL || ''
+const SERVER_PORT = process.env.SERVER_PORT
+    ? Number(process.env.SERVER_PORT)
+    : 3000
 
 export const config = {
     mongo: {
@@ -12,4 +14,4 @@ export const config = {
     server: {
         port: SERVER_PORT,
     },
-};
+}
