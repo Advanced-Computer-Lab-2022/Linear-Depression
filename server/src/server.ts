@@ -41,7 +41,7 @@ const startServer = () => {
 
   /* Routers*/
   
-  /*sealth Check*/
+  /*Health Check*/
   app.get("/ping", (req, res) => {
     return res.status(200).json({message:"pong"});
   });
