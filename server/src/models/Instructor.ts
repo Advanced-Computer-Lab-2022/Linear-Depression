@@ -14,7 +14,7 @@ const Instructor = User.discriminator(
   "Instructor",
   new Schema(
     {
-      courses: { type: Array, default: [0] }
+      courses: { type: Array, default: [] }
     },
     options
   )
