@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+
 export interface IUser {
   firstName: string;
   lastName: string;
