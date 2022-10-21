@@ -25,7 +25,7 @@ export interface IExcercise {
 
 const ExcerciseSchema = new Schema({
   questions: {
-    type: [questionSchema],
+    type: [QuestionSchema],
     required: true
   }
 });
