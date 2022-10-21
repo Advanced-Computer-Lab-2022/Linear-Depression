@@ -71,7 +71,7 @@ const courseSchema = new Schema({
   price: { type: Number, required: true },
   rating: { type: Number, required: true, min: 0, max: 5, default: 0 },
   totalHours: { type: Number, required: true },
-  lessons: [lessonSchema]
+  lessons: [LessonSchema]
 });
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
