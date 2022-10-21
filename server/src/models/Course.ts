@@ -7,7 +7,7 @@ export interface IQuestion {
   answerIndex?: number;
 }
 
-const questionSchema = new Schema({
+const QuestionSchema = new Schema({
   question: {
     type: String,
     required: true
