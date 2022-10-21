@@ -23,7 +23,7 @@ export interface IExcercise {
   questions: Array<IQuestion>;
 }
 
-const excerciseSchema = new Schema({
+const ExcerciseSchema = new Schema({
   questions: {
     type: [questionSchema],
     required: true
