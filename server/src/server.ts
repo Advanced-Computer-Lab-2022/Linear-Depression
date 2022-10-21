@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
-import Instructor from "./models/Instructor";
 const app = express();
 
 /*connect to MongoDB*/

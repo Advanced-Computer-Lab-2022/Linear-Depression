@@ -16,7 +16,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    match: [/\S+@\S+\.\S+/, "is invalid"],
+    match: [/\S+@\S+\.\S+/, "is invalid"], //regexr.com/70m6a
     trim: true,
     lowercase: true
   },
