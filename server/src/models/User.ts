@@ -12,9 +12,9 @@ export interface IUserModel extends IUser, Document {}
 const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true },
-  username: { type: String, required: true },
-  password: { type: String, required: true }
+  email: { type: String, required: true, unique: true, match: [/\S+@\S+\.\S+/, "is invalid"] },
+  userName: { type: String, required: true, unique: true },
+  passwordHash: { type: String, required: true }
 });
 
 UserSchema.plugin(uniqueValidator, { message: "is already taken." });
