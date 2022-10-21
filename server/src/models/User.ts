@@ -4,7 +4,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  username: string;
+  userName: string;
   passwordHash: string;
 }
 export interface IUserModel extends IUser, Document {}
