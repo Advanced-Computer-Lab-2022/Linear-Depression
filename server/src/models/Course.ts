@@ -4,7 +4,7 @@ import uniqueValidator from "mongoose-unique-validator";
 export interface IQuestion {
   question: string;
   choices: Array<[string, string, string, string]>;
-  answer?: number;
+  answerIndex?: number;
 }
 
 const questionSchema = new Schema({
