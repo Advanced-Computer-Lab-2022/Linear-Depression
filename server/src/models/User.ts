@@ -10,10 +10,17 @@ export interface IUser {
 export interface IUserModel extends IUser, Document {}
 
 const UserSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true, match: [/\S+@\S+\.\S+/, "is invalid"] },
-  userName: { type: String, required: true, unique: true },
+  firstName: { type: String, required: true, trim: true },
+  lastName: { type: String, required: true, trim: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/\S+@\S+\.\S+/, "is invalid"],
+    trim: true,
+    lowercase: true
+  },
+  userName: { type: String, required: true, unique: true, trim: true, lowercase: true },
   passwordHash: { type: String, required: true }
 });
 
