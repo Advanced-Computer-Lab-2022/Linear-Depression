@@ -67,7 +67,7 @@ export interface ICourse {
   subject: string;
   price: number;
   averageRating: number;
-  ratings: Array<IRating>;
+  ratings: Array<mongoose.Types.ObjectId>;
   totalHours: number;
   lessons: Array<ILesson>;
 }

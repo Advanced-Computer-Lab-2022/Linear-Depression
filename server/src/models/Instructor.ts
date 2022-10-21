@@ -3,7 +3,7 @@ import User, { IUser } from "./User";
 const options = { discriminatorKey: "kind" };
 
 export interface IInstructor extends IUser {
-  courses: string[];
+  courses: Array<mongoose.Types.ObjectId>; // Array of course IDs
 }
 
 // inherit from IUserModel
@@ -13,7 +13,7 @@ const Instructor = User.discriminator(
   "Instructor",
   new Schema(
     {
-      courses: { type: Array, default: [] }
+      courses: [{ type: mongoose.Types.ObjectId, ref: "Course" }]
     },
     options
   )

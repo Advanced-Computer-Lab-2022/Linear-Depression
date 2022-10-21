@@ -10,7 +10,7 @@ export interface IUser {
 }
 export interface IUserModel extends IUser, Document {}
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
   firstName: { type: String, required: true, trim: true },
   lastName: { type: String, required: true, trim: true },
   email: {
@@ -25,5 +25,5 @@ const UserSchema = new Schema({
   passwordHash: { type: String, required: true }
 });
 
-UserSchema.plugin(uniqueValidator, { message: "is already taken." });
-export default mongoose.model<IUserModel>("User", UserSchema);
+userSchema.plugin(uniqueValidator, { message: "is already taken." });
+export default mongoose.model<IUserModel>("User", userSchema);
