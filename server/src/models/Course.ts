@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import Rating from "./Rating";
 
 export interface IMCQuestion {
   question: string;
@@ -59,15 +60,6 @@ export interface IRating {
   };
 }
 
-const ratingSchema = new Schema({
-  comment: { type: String },
-  rating: { type: Number, required: true },
-  traineedID: {
-    type: Schema.Types.ObjectId,
-    ref: "Trainee"
-  }
-});
-
 export interface ICourse {
   title: string;
   description: string;
@@ -88,8 +80,8 @@ const courseSchema = new Schema({
   instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
   subject: { type: String, required: true },
   price: { type: Number, required: true, min: 0 },
-  averageRating: { type: Number, required: true, min: 0, max: 5, default: 0 } /* calculate average rating */,
-  ratings: [ratingSchema],
+  averageRating: { type: Number, required: true, min: 0, max: 5, default: 0 } /* calculate average rating - use hook */,
+  ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
   totalHours: { type: Number, required: true },
   lessons: [lessonSchema]
 });
