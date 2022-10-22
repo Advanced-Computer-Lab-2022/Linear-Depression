@@ -7,5 +7,6 @@ router.get("/", controller.readAll);
 router.post("/", controller.createCourse);
 router.get("/:courseId", controller.readCourse);
 router.put("/:courseId", controller.updateCourse);
+router.delete("/:courseId", controller.deleteCourse);
 
 export = router;

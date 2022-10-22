@@ -59,4 +59,16 @@ const updateCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-export default { readAll, createCourse, readCourse, updateCourse };
+const deleteCourse = (req: Request, res: Response, next: NextFunction) => {
+    const courseId = req.params.courseId;
+
+    return Course.findByIdAndDelete(courseId)
+        .then((course) =>
+            course
+                ? res.status(201).json({ course, message: "Deleted" })
+                : res.status(404).json({ message: "not found" })
+        )
+        .catch((error) => res.status(500).json({ error }));
+};
+
+export default { readAll, createCourse, readCourse, updateCourse, deleteCourse };
