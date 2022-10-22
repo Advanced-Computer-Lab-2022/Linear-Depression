@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
-import Rating from "./Rating";
+import { validateURL } from "../utils/modelUtilities";
 
 export interface IMCQuestion {
     question: string;
@@ -8,7 +8,7 @@ export interface IMCQuestion {
     answerIndex?: number;
 }
 
-const questionSchema = new Schema({
+export const questionSchema = new Schema({
     question: {
         type: String,
         required: true
@@ -20,20 +20,9 @@ const questionSchema = new Schema({
     answer: Number
 });
 
-export interface IExcercise {
-    questions: Array<IMCQuestion>;
-}
-
-const excerciseSchema = new Schema({
-    questions: {
-        type: [questionSchema],
-        required: true
-    }
-});
-
 export interface ILesson {
     title: string;
-    excercises: Array<IExcercise>;
+    excercises: Array<mongoose.Types.ObjectId>;
     totalHours: number;
     video?: {
         videoLink: string;
@@ -43,22 +32,20 @@ export interface ILesson {
 
 const lessonSchema = new Schema({
     title: { type: String, required: true, unique: true },
-    excercises: [excerciseSchema],
+    exercises: [{ type: mongoose.Types.ObjectId, ref: "Exercise" }],
     totalHours: { type: Number, required: true },
     video: {
-        videoLink: { type: String, required: true },
+        videoLink: {
+            type: String,
+            required: true,
+            validate: {
+                validator: validateURL,
+                message: "Invalid URL"
+            }
+        },
         description: { type: String, required: true }
     }
 });
-
-export interface IRating {
-    comment: string;
-    rating: number;
-    traineedID: {
-        type: Schema.Types.ObjectId;
-        ref: "Trainee";
-    };
-}
 
 export interface ICourse {
     title: string;
@@ -69,6 +56,7 @@ export interface ICourse {
     averageRating: number;
     ratings: Array<mongoose.Types.ObjectId>;
     totalHours: number;
+    preview: string;
     lessons: Array<ILesson>;
 }
 
@@ -89,6 +77,14 @@ const courseSchema = new Schema({
     } /* calculate average rating - use hook */,
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
     totalHours: { type: Number, required: true },
+    preview: {
+        type: String,
+        required: true,
+        validate: {
+            validator: validateURL,
+            message: "Invalid URL"
+        }
+    },
     lessons: [lessonSchema]
 });
 
