@@ -1,0 +1,14 @@
+name: CI
+on: push
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            # set environment variables
+            - uses: actions/checkout@v2
+            - name: Install modules
+              run: cd server; npm install
+            - name: Run test
+              env:
+                  MONGO_TEST_URL: ${{ secrets.MONGO_TEST_URL }}
+              run: cd server; npm test
