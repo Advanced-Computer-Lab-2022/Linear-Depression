@@ -4,7 +4,7 @@ import { validateURL } from "../utils/modelUtilities";
 
 export interface IMCQuestion {
     question: string;
-    choices: Array<[string, string, string, string]>;
+    choices: Array<string>;
     answerIndex?: number;
 }
 
@@ -14,15 +14,19 @@ export const questionSchema = new Schema({
         required: true
     },
     choices: {
-        type: Array<[string, string, string, string]>,
-        required: true
+        type: Array<String>,
+        required: true,
+        validate: {
+            validator: (choices: Array<string>) => choices.length === 4,
+            message: "Choices must be an array of 4 strings"
+        }
     },
-    answer: Number
+    answerIndex: Number
 });
 
 export interface ILesson {
     title: string;
-    excercises: Array<mongoose.Types.ObjectId>;
+    exercises: Array<mongoose.Types.ObjectId>;
     totalHours: number;
     video?: {
         videoLink: string;
