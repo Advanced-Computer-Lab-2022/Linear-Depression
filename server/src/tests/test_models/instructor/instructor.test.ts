@@ -1,5 +1,3 @@
-import jest from "jest";
-
 import Instructor from "../../../models/Instructor";
 import { instructorFactory } from "./factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
