@@ -13,7 +13,7 @@ const ratingSchema = new mongoose.Schema({
     rating: { type: Number, required: true },
     traineeID: {
         type: mongoose.Schema.Types.ObjectId
-        // ref: "Trainee" Fix Me
+        // FIXME: ref: "Trainee"
     }
 });
 

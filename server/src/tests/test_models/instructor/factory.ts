@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { IInstructor } from "../../../models/Instructor";
+import mongoose from "mongoose";
 
 export function instructorFactory(): IInstructor {
     return {
@@ -9,6 +10,6 @@ export function instructorFactory(): IInstructor {
         email: faker.internet.email(),
         userName: faker.internet.userName(),
         passwordHash: faker.internet.password(),
-        courses: [] //FIXME: Use `courseFactory`
+        courses: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())]
     };
 }
