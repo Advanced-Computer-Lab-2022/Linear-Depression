@@ -4,7 +4,7 @@
     "description": "backend for online edu system",
     "main": "src/server.ts",
     "scripts": {
-        "test": "jest --detectOpenHandles",
+        "test": "jest",
         "start": "node build/server.js ",
         "build": "rm -rf build/ && tsc"
     },
