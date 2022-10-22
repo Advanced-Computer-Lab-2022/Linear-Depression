@@ -40,4 +40,23 @@ const readCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-export default { readAll, createCourse, readCourse };
+const updateCourse = (req: Request, res: Response, next: NextFunction) => {
+    const courseId = req.params.courseId;
+
+    return Course.findById(courseId)
+        .then((course) => {
+            if (course) {
+                course.set(req.body);
+
+                return course
+                    .save()
+                    .then((course) => res.status(201).json({ course }))
+                    .catch((error) => res.status(500).json({ error }));
+            } else {
+                return res.status(404).json({ message: "not found" });
+            }
+        })
+        .catch((error) => res.status(500).json({ error }));
+};
+
+export default { readAll, createCourse, readCourse, updateCourse };
