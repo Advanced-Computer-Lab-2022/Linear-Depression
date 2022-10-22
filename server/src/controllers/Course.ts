@@ -32,4 +32,12 @@ const readAll = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-export default { readAll, createCourse };
+const readCourse = (req: Request, res: Response, next: NextFunction) => {
+    const courseId = req.params.courseId;
+
+    return Course.findById(courseId)
+        .then((course) => (course ? res.status(200).json({ course }) : res.status(404).json({ message: "not found" })))
+        .catch((error) => res.status(500).json({ error }));
+};
+
+export default { readAll, createCourse, readCourse };
