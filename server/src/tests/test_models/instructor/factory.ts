@@ -9,7 +9,6 @@ export function instructorFactory(): IInstructor {
         lastName: faker.name.lastName(),
         email: faker.internet.email(),
         userName: faker.internet.userName(),
-        passwordHash: faker.internet.password(),
-        courses: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())]
+        passwordHash: faker.internet.password()
     };
 }
