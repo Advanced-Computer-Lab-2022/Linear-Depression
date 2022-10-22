@@ -3,21 +3,9 @@ import mongoose from "mongoose";
 import Course from "../models/Course";
 
 const createCourse = (req: Request, res: Response, next: NextFunction) => {
-    const { title, description, instructor, subject, price, averageRating, rating, totalHours, preview, lessons } =
-        req.body;
-
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
-        title,
-        description,
-        instructor,
-        subject,
-        price,
-        averageRating,
-        rating,
-        totalHours,
-        preview,
-        lessons
+        ...req.body
     });
 
     return course
