@@ -26,4 +26,10 @@ const createCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-export default { createCourse };
+const readAll = (req: Request, res: Response, next: NextFunction) => {
+    return Course.find()
+        .then((courses) => res.status(200).json({ courses }))
+        .catch((error) => res.status(500).json({ error }));
+};
+
+export default { readAll, createCourse };
