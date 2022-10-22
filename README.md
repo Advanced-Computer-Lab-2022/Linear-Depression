@@ -17,3 +17,13 @@ pre-commit install
 ```
 
 Afterwards the hook should run the next commit you will attempt!
+
+## Testing
+
+The testing is done using jest. To run the tests, run the following command
+
+```bash
+npm run test
+```
+
+You can use vscode to run the tests as well.
