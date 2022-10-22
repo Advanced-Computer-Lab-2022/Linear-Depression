@@ -4,6 +4,9 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
+            # set environment variables
+            - name: Set environment variables
+              run: export MONGO_TEST_URL= {{ secrets.MONGO_TEST_URL }}
             - uses: actions/checkout@v2
             - name: Install modules
               run: cd server; npm install
