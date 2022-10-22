@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
+import courseRouter from "./routes/Course";
 const app = express();
 
 /*connect to MongoDB*/
@@ -50,6 +51,7 @@ const startServer = () => {
     });
 
     /* Routers*/
+    app.use("/courses", courseRouter);
 
     /*Health Check*/
     app.get("/ping", (req, res) => {
