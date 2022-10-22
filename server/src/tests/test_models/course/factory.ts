@@ -15,9 +15,19 @@ export function courseFactory(): ICourse {
             min: 0,
             max: 5
         }),
-        ratings: [], //FIXME: Use `ratingFactory`
+        ratings: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
         totalHours: faker.datatype.number(),
         preview: faker.internet.url(),
-        lessons: [] //FIXME: Use `exerciseFactory`
+        lessons: [
+            {
+                title: faker.lorem.words(),
+                exercises: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
+                totalHours: faker.datatype.number(),
+                video: {
+                    videoLink: faker.internet.url(),
+                    description: faker.lorem.paragraph()
+                }
+            }
+        ]
     };
 }

@@ -19,9 +19,10 @@ export async function connectDBForTesting() {
 
 export async function disconnectDBForTesting() {
     try {
-        await mongoose.connection.close();
         // destroy all data in the database
         await mongoose.connection.db.dropDatabase();
+
+        await mongoose.connection.close();
     } catch (error) {
         console.log("DB disconnect error");
     }
