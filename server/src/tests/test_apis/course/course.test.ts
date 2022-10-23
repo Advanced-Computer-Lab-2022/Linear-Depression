@@ -23,6 +23,7 @@ describe("GET /courses/", () => {
         const res = await request.get("/courses");
         expect(res.status).toBe(200);
         expect(res.body.courses.length).toBe(1);
+        expect(res.body.courses[0].instructor.firstName).toEqual(instructor.firstName);
     });
 
     afterAll(async () => {
