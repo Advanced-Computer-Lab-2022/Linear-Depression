@@ -1,6 +1,6 @@
 import Rating from "../../../models/Rating";
 import { ratingFactory } from "./factory";
-import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
+import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 
 describe("Rating Model Test", () => {
     beforeAll(async () => {

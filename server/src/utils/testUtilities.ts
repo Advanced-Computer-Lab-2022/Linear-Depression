@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-export async function connectDBForTesting() {
+async function connectDBForTesting() {
     try {
         dotenv.config();
         const dbUri = process.env.MONGO_TEST_URL || "";
@@ -18,7 +18,7 @@ export async function connectDBForTesting() {
     }
 }
 
-export async function disconnectDBForTesting() {
+async function disconnectDBForTesting() {
     try {
         // destroy all data in the database
         await mongoose.connection.db.dropDatabase();
@@ -28,3 +28,6 @@ export async function disconnectDBForTesting() {
         console.log("DB disconnect error");
     }
 }
+
+const TIME_OUT = 10000;
+export { TIME_OUT, connectDBForTesting, disconnectDBForTesting };
