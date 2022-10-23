@@ -1,11 +1,11 @@
 import Instructor from "../../../models/Instructor";
 import { instructorFactory } from "./factory";
-import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
-
+import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
+import { TIME_OUT } from "../../../utils/testUtilities";
 describe("Instructor Model Test", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
     it("Should create a new Instructor", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
@@ -18,5 +18,5 @@ describe("Instructor Model Test", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
