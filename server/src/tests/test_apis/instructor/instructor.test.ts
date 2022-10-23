@@ -1,4 +1,5 @@
 import Instructor from "../../../models/Instructor";
+import mongoose from "mongoose";
 import { instructorFactory } from "../../test_models/instructor/factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 import { StatusCodes } from "http-status-codes";
@@ -13,6 +14,22 @@ describe("GET /instructors/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
+
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    });
+
+    it("should return an empty array", async () => {
+        const response = await request.get("/instructors");
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.instructors).toEqual([]);
+    });
+});
+
+describe("GET /instructors/", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    });
     it("Should return all instructors", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
@@ -20,6 +37,29 @@ describe("GET /instructors/", () => {
         const res = await request.get("/instructors");
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.instructors.length).toBe(1);
+    });
+
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    }, TIME_OUT);
+});
+
+describe("GET /instructors/", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    });
+    it("Should return all instructors", async () => {
+        const randomLength = faker.datatype.number({ min: 2, max: 10 });
+        const instructors = [];
+        for (let i = 0; i < randomLength; i++) {
+            const instructor = new Instructor(instructorFactory());
+            await instructor.save();
+            instructors.push(instructor);
+        }
+
+        const res = await request.get("/instructors");
+        expect(res.status).toBe(StatusCodes.OK);
+        expect(res.body.instructors.length).toBe(instructors.length);
     });
 
     afterAll(async () => {
@@ -45,6 +85,21 @@ describe("GET /instructors/:instructorId", () => {
     }, TIME_OUT);
 });
 
+describe("GET /instructors/:instructorId", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    });
+    it("Should not return an instructor", async () => {
+        const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
+        const res = await request.get(`/instructors/${fakeId}`);
+        expect(res.status).toBe(StatusCodes.NOT_FOUND);
+    });
+
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    }, TIME_OUT);
+});
+
 describe("POST /instructors/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
@@ -54,6 +109,27 @@ describe("POST /instructors/", () => {
         const res = await request.post("/instructors").send(instructor);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.instructor.firstName).toEqual(instructor.firstName);
+    });
+
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    }, TIME_OUT);
+});
+
+describe("POST /instructors/", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    });
+    it("Should not create an instructor", async () => {
+        const firstInstructor = instructorFactory();
+        const firstRes = await request.post("/instructors").send(firstInstructor);
+        expect(firstRes.status).toBe(StatusCodes.CREATED);
+        expect(firstRes.body.instructor.firstName).toEqual(firstInstructor.firstName);
+
+        const secondInstructor = instructorFactory();
+        secondInstructor.userName = firstInstructor.userName;
+        const secondRes = await request.post("/instructors").send(secondInstructor);
+        expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });
 
     afterAll(async () => {
@@ -71,7 +147,7 @@ describe("PUT /instructors/:instructorId", () => {
 
         const fakeFirstName = faker.name.firstName();
         const res = await request.put(`/instructors/${instructor._id}`).send({ firstName: fakeFirstName });
-        expect(res.status).toBe(StatusCodes.OK);
+        expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.instructor.firstName).toEqual(fakeFirstName);
     });
 

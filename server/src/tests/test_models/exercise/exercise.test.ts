@@ -1,5 +1,6 @@
 import Exercise from "../../../models/Exercise";
 import { exerciseFactory } from "./factory";
+import { TIME_OUT } from "../../../utils/testUtilities";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 
 describe("Exercise Model Test", () => {
@@ -18,5 +19,5 @@ describe("Exercise Model Test", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
