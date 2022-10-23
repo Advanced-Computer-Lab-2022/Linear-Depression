@@ -22,7 +22,6 @@ describe("Trainee Model Test", () => {
         await corporateTrainee.save();
         // make sure corporateTrainee exists in db.
         const corporateTrainees = await CorporateTrainee.find({});
-        console.log(corporateTrainees[0]);
         expect(corporateTrainees.length).toBe(1);
         // make sure corporateTrainee has the same id.
         expect(corporateTrainees[0].id).toBe(corporateTrainee.id);
