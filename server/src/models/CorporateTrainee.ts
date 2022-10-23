@@ -3,9 +3,13 @@ import { ITrainee, TraineeSchema } from "./Trainee";
 import User from "./User";
 const options = { discriminatorKey: "kind" };
 
+export enum status {
+    active = "ACTIVE",
+    expired = "EXPIRED"
+}
 export interface ICorporateTrainee extends ITrainee {
     corporate: String;
-    status: String;
+    status: status;
     expiredAt: Date;
 }
 
@@ -17,7 +21,7 @@ class CorporateTraineeSchema extends TraineeSchema {
         super(obj, options);
         this.add({
             corporate: { type: String, required: true, trim: true },
-            status: { type: String, required: true, enum: ["EXPIRED", "ACTIVE"], default: "ACTIVE" },
+            status: { type: String, required: true, enum: Object.values(status), default: "ACTIVE" },
             expiredAt: { type: Date, required: true }
         });
     }

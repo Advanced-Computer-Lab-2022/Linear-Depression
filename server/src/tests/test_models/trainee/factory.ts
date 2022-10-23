@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { ITraineeModel } from "../../../models/Trainee";
 import { IIndividualTraineeModel } from "../../../models/IndividualTrainee";
-import { ICorporateTraineeModel } from "../../../models/CorporateTrainee";
+import { ICorporateTraineeModel, status } from "../../../models/CorporateTrainee";
 import { userFactory } from "../userFactory";
 
 export function traineeFactory(): ITraineeModel {
@@ -22,9 +22,9 @@ export function corporateTraineeFactory(): ICorporateTraineeModel {
     CorporateTrainee["expiredAt"] = faker.date.between("2000-01-01", "2030-01-01");
     //check if expired or not
     if (new Date(CorporateTrainee["expiredAt"]) < new Date()) {
-        CorporateTrainee["status"] = "EXPIRED";
+        CorporateTrainee["status"] = status.expired;
     } else {
-        CorporateTrainee["status"] = "ACTIVE";
+        CorporateTrainee["status"] = status.active;
     }
     return CorporateTrainee;
 }
