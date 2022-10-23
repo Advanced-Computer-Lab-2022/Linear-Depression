@@ -68,4 +68,11 @@ const deleteCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse };
+const listSubjects = (req: Request, res: Response, next: NextFunction) => {
+    return Course.find(req.query)
+        .distinct("subject")
+        .then((subjects) => res.status(StatusCodes.OK).json({ subjects }))
+        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+};
+
+export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse, listSubjects };
