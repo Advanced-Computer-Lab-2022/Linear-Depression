@@ -1,6 +1,6 @@
 import Exercise from "../../../models/Exercise";
 import { exerciseFactory } from "./factory";
-import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
+import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 
 describe("Exercise Model Test", () => {
     beforeAll(async () => {

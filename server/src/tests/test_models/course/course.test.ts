@@ -1,6 +1,6 @@
 import Course from "../../../models/Course";
 import { courseFactory } from "./factory";
-import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
+import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 
 describe("Course Model Test", () => {
     beforeAll(async () => {
