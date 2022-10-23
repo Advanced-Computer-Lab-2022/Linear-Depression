@@ -15,7 +15,7 @@ const createCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const readAll = (req: Request, res: Response, next: NextFunction) => {
+const listCourses = (req: Request, res: Response, next: NextFunction) => {
     return Course.find(req.query)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
@@ -68,4 +68,4 @@ const deleteCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-export default { readAll, createCourse, readCourse, updateCourse, deleteCourse };
+export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse };
