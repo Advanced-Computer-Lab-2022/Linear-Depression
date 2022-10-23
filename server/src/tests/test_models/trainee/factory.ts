@@ -5,10 +5,9 @@ import { ICorporateTrainee } from "../../../models/CorporateTrainee";
 import { userFactory } from "../userFactory";
 
 export function traineeFactory(): ITrainee {
-    const gender = ["male", "female"];
     const trainee = userFactory() as ITrainee;
     trainee["courses"] = [];
-    trainee["gender"] = gender[faker.datatype.number({ min: 0, max: 1 })];
+    trainee["gender"] = faker.name.sex().toLowerCase();
     return trainee;
 }
 
@@ -18,8 +17,8 @@ export function individualTraineeFactory(): IIndividualTrainee {
 }
 
 export function corporateTraineeFactory(): ICorporateTrainee {
-    const corporates = ["google", "facebook", "microsoft"];
     const CorporateTrainee = traineeFactory() as ICorporateTrainee;
-    CorporateTrainee["corporate"] = corporates[faker.datatype.number({ min: 0, max: 2 })];
+    CorporateTrainee["corporate"] = faker.company.name();
+    CorporateTrainee["expiredAt"] = faker.date.future(2);
     return CorporateTrainee;
 }

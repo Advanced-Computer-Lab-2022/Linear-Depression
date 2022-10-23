@@ -4,9 +4,10 @@ import IndividualTrainee from "../../../models/IndividualTrainee";
 import CorporateTrainee from "../../../models/CorporateTrainee";
 
 describe("Trainee Model Test", () => {
+    const TIME_OUT = 10000;
     beforeAll(async () => {
         await connectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
     it("Should create a new IndividualTrainee", async () => {
         const individualTrainee = new IndividualTrainee(individualTraineeFactory());
         await individualTrainee.save();
@@ -28,5 +29,5 @@ describe("Trainee Model Test", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
