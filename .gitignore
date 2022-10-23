@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Idea project files
+.idea
+
+# AdminJS
+/server/src/.adminjs/
