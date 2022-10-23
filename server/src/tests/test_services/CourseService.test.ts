@@ -1,6 +1,6 @@
 import { courseFactory } from "../test_models/course/factory";
 import { searchCoursesByTitle, searchCoursesByInstructor, searchCoursesBySubject } from "../../services/CourseServices";
-import { connectDBForTesting, disconnectDBForTesting } from "../connectDBForTesting";
+import { connectDBForTesting, disconnectDBForTesting } from "../../utils/testUtilities";
 import Course from "../../models/Course";
 import { instructorFactory } from "../test_models/instructor/factory";
 import Instructor from "../../models/Instructor";

@@ -1,8 +1,8 @@
 import { corporateTraineeFactory, individualTraineeFactory } from "./factory";
-import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
+import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 import IndividualTrainee from "../../../models/IndividualTrainee";
 import CorporateTrainee from "../../../models/CorporateTrainee";
-import { TIME_OUT } from "../../../utils/modelUtilities";
+import { TIME_OUT } from "../../../utils/testUtilities";
 
 describe("Trainee Model Test", () => {
     beforeAll(async () => {

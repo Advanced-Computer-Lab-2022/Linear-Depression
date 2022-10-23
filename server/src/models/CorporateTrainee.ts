@@ -18,7 +18,7 @@ class CorporateTraineeSchema extends TraineeSchema {
         this.add({
             corporate: { type: String, required: true, trim: true },
             status: { type: String, required: true, enum: ["EXPIRED", "ACTIVE"], default: "ACTIVE" },
-            expiredAt: { type: Date, required: true, default: Date.now() }
+            expiredAt: { type: Date, required: true }
         });
     }
 }
