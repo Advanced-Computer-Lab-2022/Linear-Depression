@@ -16,7 +16,7 @@ const createCourse = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const readAll = (req: Request, res: Response, next: NextFunction) => {
-    return Course.find()
+    return Course.find(req.query)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
         .then((courses) => res.status(StatusCodes.OK).json({ courses }))

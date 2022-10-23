@@ -4,6 +4,7 @@ import Logger from "./library/Logger";
 import { config } from "./config/config";
 import courseRouter from "./routes/Course";
 import { loadModels } from "./utils/loadModelsUtil";
+import { parseQueryParams } from "./utils/parseQueryParams";
 
 const app = express();
 
@@ -51,6 +52,10 @@ const startServer = () => {
         }
 
         next();
+    });
+
+    app.use((req, res, next) => {
+        parseQueryParams(req, res, next);
     });
 
     /* Routers*/
