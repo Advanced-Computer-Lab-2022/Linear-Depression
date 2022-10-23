@@ -1,6 +1,7 @@
 import Course from "../../../models/Course";
 import { courseFactory } from "../../test_models/course/factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
+import { StatusCodes } from "http-status-codes";
 import Instructor from "../../../models/Instructor";
 import { instructorFactory } from "../../test_models/instructor/factory";
 import supertest from "supertest";
@@ -21,7 +22,7 @@ describe("GET /courses/", () => {
         await course.save();
 
         const res = await request.get("/courses");
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.courses.length).toBe(1);
         expect(res.body.courses[0].instructor.firstName).toEqual(instructor.firstName);
     });

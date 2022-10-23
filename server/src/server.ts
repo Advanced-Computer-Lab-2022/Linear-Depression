@@ -1,4 +1,5 @@
 import express from "express";
+import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import courseRouter from "./routes/Course";
@@ -32,7 +33,7 @@ app.use((req, res, next) => {
 
     if (req.method == "OPTIONS") {
         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-        return res.status(200).json({});
+        return res.status(StatusCodes.OK).json({});
     }
 
     next();
