@@ -5,7 +5,7 @@ import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForT
 describe("Instructor Model Test", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, 10000);
     it("Should create a new Instructor", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
