@@ -3,6 +3,7 @@ import { instructorFactory } from "../../test_models/instructor/factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 import { StatusCodes } from "http-status-codes";
 import { faker } from "@faker-js/faker";
+import { TIME_OUT } from "../../../utils/testUtilities";
 import supertest from "supertest";
 import app from "../../../server";
 
@@ -23,7 +24,7 @@ describe("GET /instructors/", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
 
 describe("GET /instructors/:instructorId", () => {
@@ -41,7 +42,7 @@ describe("GET /instructors/:instructorId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
 
 describe("POST /instructors/", () => {
@@ -57,7 +58,7 @@ describe("POST /instructors/", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
 
 describe("PUT /instructors/:instructorId", () => {
@@ -76,7 +77,7 @@ describe("PUT /instructors/:instructorId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
 
 describe("DELETE /instructors/:instructorId", () => {
@@ -94,5 +95,5 @@ describe("DELETE /instructors/:instructorId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
