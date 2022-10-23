@@ -3,7 +3,7 @@ import Logger from "./library/Logger";
 import { config } from "./config/config";
 import { CreateAdminJS } from "./admin";
 
-import app from "./server";
+import { app } from "./server";
 
 /*connect to MongoDB*/
 mongoose

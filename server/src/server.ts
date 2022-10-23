@@ -1,44 +1,64 @@
 import express from "express";
 import mongoose from "mongoose";
-import Logger from "./library/Logger";
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
-export const app = express();
+import Logger from "./library/Logger";
+import { config } from "./config/config";
+import { CreateAdminJS } from "./admin";
 
 AdminJS.registerAdapter({ Database, Resource });
 
-/*create server*/
-app.use((req, res, next) => {
-    /* log the request */
-    Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
+export const app = express();
 
-    res.on("finish", () => {
-        /* log the response */
-        Logger.info(
-            `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
-        );
+// Connect to MongoDB
+mongoose
+    .connect(config.mongo.config, {
+        retryWrites: true,
+        w: "majority"
+    })
+    .then(() => {
+        Logger.log("Connected to MongoDB");
+
+        const Admin = CreateAdminJS();
+        app.use(Admin.admin.options.rootPath, Admin.router);
+
+        startServer();
+    })
+    .catch((err) => {
+        Logger.log(err);
     });
 
-    next();
-});
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Create server
+const startServer = () => {
+    app.use((req, res, next) => {
+        /* log the request */
+        Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
 
-/* Routers*/
+        res.on("finish", () => {
+            /* log the response */
+            Logger.info(
+                `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
+            );
+        });
 
-/*Health Check*/
-app.get("/ping", (req, res) => {
-    return res.status(200).json({ message: "pong" });
-});
-app.get("/test", async (_req, res) => {
-    res.status(200).json({ message: "Hello World" });
-});
+        next();
+    });
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
 
-/*404*/
-app.use((req, res) => {
-    const error = new Error("Not Found");
-    Logger.error(error);
-    return res.status(404).json({ message: error.message });
-});
+    // Health Check
+    app.get("/ping", (req, res) => {
+        return res.status(200).json({ message: "pong" });
+    });
 
-export default app;
+    // 404
+    app.use((req, res) => {
+        const error = new Error("Not Found");
+        Logger.error(error);
+        return res.status(404).json({ message: error.message });
+    });
+
+    app.listen(config.server.port, () => {
+        Logger.log(`Server started at port ${config.server.port}`);
+    });
+};

@@ -1,6 +1,5 @@
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
-import app from "../server";
 import { AdminResource } from "./resources/Admin";
 import { InstructorResource } from "./resources/Instructor";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
@@ -22,5 +21,6 @@ export function CreateAdminJS() {
     });
 
     const router = AdminJSExpress.buildRouter(admin);
-    app.use(admin.options.rootPath, router);
+
+    return { admin, router };
 }
