@@ -1,10 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
+import AdminJS from "adminjs";
+import { Database, Resource } from "@adminjs/mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
-const app = express();
+import { CreateAdminJS } from "./admin";
 
-/*connect to MongoDB*/
+AdminJS.registerAdapter({ Database, Resource });
+
+export const app = express();
+
+// Connect to MongoDB
 mongoose
     .connect(config.mongo.config, {
         retryWrites: true,
@@ -12,13 +18,16 @@ mongoose
     })
     .then(() => {
         Logger.log("Connected to MongoDB");
+
+        CreateAdminJS();
+
         startServer();
     })
     .catch((err) => {
         Logger.log(err);
     });
 
-/*create server*/
+// Create server
 const startServer = () => {
     app.use((req, res, next) => {
         /* log the request */
@@ -36,14 +45,12 @@ const startServer = () => {
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
 
-    /* Routers*/
-
-    /*Health Check*/
+    // Health Check
     app.get("/ping", (req, res) => {
         return res.status(200).json({ message: "pong" });
     });
 
-    /*404*/
+    // 404
     app.use((req, res) => {
         const error = new Error("Not Found");
         Logger.error(error);
