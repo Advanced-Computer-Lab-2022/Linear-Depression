@@ -20,14 +20,6 @@ describe("GET /instructors/", () => {
         expect(response.body.instructors).toEqual([]);
     });
     it("Should return all instructors", async () => {
-        const instructor = new Instructor(instructorFactory());
-        await instructor.save();
-
-        const res = await request.get("/instructors");
-        expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.instructors.length).toBe(1);
-    });
-    it("Should return all instructors", async () => {
         const randomLength = faker.datatype.number({ min: 2, max: 10 });
         const instructors = [];
         for (let i = 0; i < randomLength; i++) {
