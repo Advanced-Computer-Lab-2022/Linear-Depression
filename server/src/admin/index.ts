@@ -1,6 +1,6 @@
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
-import { app } from "../server";
+import app from "../server";
 import { AdminResource } from "./resources/Admin";
 import { InstructorResource } from "./resources/Instructor";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";

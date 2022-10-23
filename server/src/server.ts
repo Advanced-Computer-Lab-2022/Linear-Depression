@@ -1,63 +1,44 @@
 import express from "express";
 import mongoose from "mongoose";
+import Logger from "./library/Logger";
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
-import Logger from "./library/Logger";
-import { config } from "./config/config";
-import { CreateAdminJS } from "./admin";
+export const app = express();
 
 AdminJS.registerAdapter({ Database, Resource });
 
-export const app = express();
+/*create server*/
+app.use((req, res, next) => {
+    /* log the request */
+    Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
 
-// Connect to MongoDB
-mongoose
-    .connect(config.mongo.config, {
-        retryWrites: true,
-        w: "majority"
-    })
-    .then(() => {
-        Logger.log("Connected to MongoDB");
-
-        CreateAdminJS();
-
-        startServer();
-    })
-    .catch((err) => {
-        Logger.log(err);
+    res.on("finish", () => {
+        /* log the response */
+        Logger.info(
+            `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
+        );
     });
 
-// Create server
-const startServer = () => {
-    app.use((req, res, next) => {
-        /* log the request */
-        Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
+    next();
+});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-        res.on("finish", () => {
-            /* log the response */
-            Logger.info(
-                `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
-            );
-        });
+/* Routers*/
 
-        next();
-    });
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
+/*Health Check*/
+app.get("/ping", (req, res) => {
+    return res.status(200).json({ message: "pong" });
+});
+app.get("/test", async (_req, res) => {
+    res.status(200).json({ message: "Hello World" });
+});
 
-    // Health Check
-    app.get("/ping", (req, res) => {
-        return res.status(200).json({ message: "pong" });
-    });
+/*404*/
+app.use((req, res) => {
+    const error = new Error("Not Found");
+    Logger.error(error);
+    return res.status(404).json({ message: error.message });
+});
 
-    // 404
-    app.use((req, res) => {
-        const error = new Error("Not Found");
-        Logger.error(error);
-        return res.status(404).json({ message: error.message });
-    });
-
-    app.listen(config.server.port, () => {
-        Logger.log(`Server started at port ${config.server.port}`);
-    });
-};
+export default app;
