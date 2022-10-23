@@ -17,6 +17,8 @@ const createCourse = (req: Request, res: Response, next: NextFunction) => {
 
 const readAll = (req: Request, res: Response, next: NextFunction) => {
     return Course.find()
+        .populate("instructor", "firstName lastName")
+        .populate("ratings")
         .then((courses) => res.status(StatusCodes.OK).json({ courses }))
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
@@ -25,6 +27,8 @@ const readCourse = (req: Request, res: Response, next: NextFunction) => {
     const courseId = req.params.courseId;
 
     return Course.findById(courseId)
+        .populate("instructor", "firstName lastName")
+        .populate("ratings")
         .then((course) =>
             course
                 ? res.status(StatusCodes.OK).json({ course })

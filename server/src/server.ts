@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
 import courseRouter from "./routes/Course";
+import { loadModels } from "./utils/loadModelsUtil";
+
 const app = express();
 
 /*connect to MongoDB*/
@@ -21,6 +23,7 @@ mongoose
 
 /*create server*/
 const startServer = () => {
+    loadModels();
     app.use((req, res, next) => {
         /* log the request */
         Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);

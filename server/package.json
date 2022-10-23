@@ -16,10 +16,12 @@
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "fuzzy-search": "^3.2.1",
+        "http-status-codes": "^2.2.0",
         "joi": "^17.6.3",
         "mongoose": "^6.6.5",
         "mongoose-unique-validator": "^3.1.0",
         "prettier": "^2.7.1",
+        "supertest": "^6.3.0",
         "ts-node": "^10.9.1"
     },
     "devDependencies": {
