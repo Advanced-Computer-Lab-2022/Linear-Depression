@@ -1,7 +1,7 @@
 import Instructor from "../../../models/Instructor";
 import { instructorFactory } from "./factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
-
+import { TIME_OUT } from "../../../utils/modelUtilities";
 describe("Instructor Model Test", () => {
     beforeAll(async () => {
         await connectDBForTesting();
@@ -18,5 +18,5 @@ describe("Instructor Model Test", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });

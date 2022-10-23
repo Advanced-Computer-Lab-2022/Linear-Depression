@@ -1,24 +1,31 @@
 import { faker } from "@faker-js/faker";
-import { ITrainee } from "../../../models/Trainee";
-import { IIndividualTrainee } from "../../../models/IndividualTrainee";
-import { ICorporateTrainee } from "../../../models/CorporateTrainee";
+import { ITraineeModel } from "../../../models/Trainee";
+import { IIndividualTraineeModel } from "../../../models/IndividualTrainee";
+import { ICorporateTraineeModel } from "../../../models/CorporateTrainee";
 import { userFactory } from "../userFactory";
 
-export function traineeFactory(): ITrainee {
-    const trainee = userFactory() as ITrainee;
+export function traineeFactory(): ITraineeModel {
+    const trainee = userFactory() as ITraineeModel;
     trainee["courses"] = [];
     trainee["gender"] = faker.name.sex().toLowerCase();
     return trainee;
 }
 
-export function individualTraineeFactory(): IIndividualTrainee {
-    const IndividualTrainee = traineeFactory() as IIndividualTrainee;
+export function individualTraineeFactory(): IIndividualTraineeModel {
+    const IndividualTrainee = traineeFactory() as IIndividualTraineeModel;
     return IndividualTrainee;
 }
 
-export function corporateTraineeFactory(): ICorporateTrainee {
-    const CorporateTrainee = traineeFactory() as ICorporateTrainee;
+export function corporateTraineeFactory(): ICorporateTraineeModel {
+    const CorporateTrainee = traineeFactory() as ICorporateTraineeModel;
     CorporateTrainee["corporate"] = faker.company.name();
-    CorporateTrainee["expiredAt"] = faker.date.future(2);
+    CorporateTrainee["expiredAt"] = faker.date.between("2000-01-01", "2030-01-01");
+    //check if expired or not
+    if (new Date(CorporateTrainee["expiredAt"]) < new Date()) {
+        CorporateTrainee["status"] = "EXPIRED";
+    } else {
+        CorporateTrainee["status"] = "ACTIVE";
+    }
     return CorporateTrainee;
 }
+console.log(corporateTraineeFactory());

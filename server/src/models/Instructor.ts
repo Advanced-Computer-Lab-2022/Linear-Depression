@@ -7,6 +7,6 @@ export interface IInstructor extends IUser {}
 // inherit from IUserModel
 export interface IInstructorModel extends IInstructor, Document {}
 
-const Instructor = User.discriminator("Instructor", new Schema({}, options));
+const Instructor: mongoose.Model<IInstructorModel> = User.discriminator("Instructor", new Schema({}, options));
 
-export default Instructor;
+export default Instructor<IInstructorModel>;

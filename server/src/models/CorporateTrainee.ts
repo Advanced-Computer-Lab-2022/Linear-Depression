@@ -1,4 +1,4 @@
-import { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import { ITrainee, TraineeSchema } from "./Trainee";
 import User from "./User";
 const options = { discriminatorKey: "kind" };
@@ -10,7 +10,7 @@ export interface ICorporateTrainee extends ITrainee {
 }
 
 // inherit from ITraineeModel
-export interface ICorporateTraineeModel extends ITrainee, Document {}
+export interface ICorporateTraineeModel extends ICorporateTrainee, Document {}
 
 class CorporateTraineeSchema extends TraineeSchema {
     constructor(obj: Object, options: Object) {
@@ -23,6 +23,9 @@ class CorporateTraineeSchema extends TraineeSchema {
     }
 }
 
-const CorporateTrainee = User.discriminator("CorporateTrainee", new CorporateTraineeSchema({}, options));
+const CorporateTrainee: mongoose.Model<ICorporateTraineeModel> = User.discriminator(
+    "CorporateTrainee",
+    new CorporateTraineeSchema({}, options)
+);
 
 export default CorporateTrainee;

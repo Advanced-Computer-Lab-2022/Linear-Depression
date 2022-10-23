@@ -2,9 +2,9 @@ import { corporateTraineeFactory, individualTraineeFactory } from "./factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../connectDBForTesting";
 import IndividualTrainee from "../../../models/IndividualTrainee";
 import CorporateTrainee from "../../../models/CorporateTrainee";
+import { TIME_OUT } from "../../../utils/modelUtilities";
 
 describe("Trainee Model Test", () => {
-    const TIME_OUT = 10000;
     beforeAll(async () => {
         await connectDBForTesting();
     }, TIME_OUT);
@@ -22,9 +22,16 @@ describe("Trainee Model Test", () => {
         await corporateTrainee.save();
         // make sure corporateTrainee exists in db.
         const corporateTrainees = await CorporateTrainee.find({});
+        console.log(corporateTrainees[0]);
         expect(corporateTrainees.length).toBe(1);
         // make sure corporateTrainee has the same id.
         expect(corporateTrainees[0].id).toBe(corporateTrainee.id);
+        //make sure status compatible with expiredAt
+        if (corporateTrainees[0].expiredAt < new Date()) {
+            expect(corporateTrainee.status).toBe("EXPIRED");
+        } else {
+            expect(corporateTrainee.status).toBe("ACTIVE");
+        }
     });
 
     afterAll(async () => {
