@@ -14,21 +14,10 @@ describe("GET /instructors/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-
-    afterAll(async () => {
-        await disconnectDBForTesting();
-    });
-
     it("should return an empty array", async () => {
         const response = await request.get("/instructors");
         expect(response.status).toBe(StatusCodes.OK);
         expect(response.body.instructors).toEqual([]);
-    });
-});
-
-describe("GET /instructors/", () => {
-    beforeAll(async () => {
-        await connectDBForTesting();
     });
     it("Should return all instructors", async () => {
         const instructor = new Instructor(instructorFactory());
@@ -37,16 +26,6 @@ describe("GET /instructors/", () => {
         const res = await request.get("/instructors");
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.instructors.length).toBe(1);
-    });
-
-    afterAll(async () => {
-        await disconnectDBForTesting();
-    }, TIME_OUT);
-});
-
-describe("GET /instructors/", () => {
-    beforeAll(async () => {
-        await connectDBForTesting();
     });
     it("Should return all instructors", async () => {
         const randomLength = faker.datatype.number({ min: 2, max: 10 });
@@ -79,20 +58,18 @@ describe("GET /instructors/:instructorId", () => {
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.instructor.firstName).toEqual(instructor.firstName);
     });
-
-    afterAll(async () => {
-        await disconnectDBForTesting();
-    }, TIME_OUT);
-});
-
-describe("GET /instructors/:instructorId", () => {
-    beforeAll(async () => {
-        await connectDBForTesting();
-    });
     it("Should not return an instructor", async () => {
         const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
         const res = await request.get(`/instructors/${fakeId}`);
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
+    });
+    it("Should return an error if the instructorId is undefined", async () => {
+        const res = await request.get(`/instructors/${undefined}`);
+        expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    });
+    it("Should return an error if instructorId is not a valid ObjectId", async () => {
+        const res = await request.get("/instructors/123");
+        expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });
 
     afterAll(async () => {
@@ -109,16 +86,6 @@ describe("POST /instructors/", () => {
         const res = await request.post("/instructors").send(instructor);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.instructor.firstName).toEqual(instructor.firstName);
-    });
-
-    afterAll(async () => {
-        await disconnectDBForTesting();
-    }, TIME_OUT);
-});
-
-describe("POST /instructors/", () => {
-    beforeAll(async () => {
-        await connectDBForTesting();
     });
     it("Should not create an instructor", async () => {
         const firstInstructor = instructorFactory();
@@ -167,6 +134,16 @@ describe("DELETE /instructors/:instructorId", () => {
         const res = await request.delete(`/instructors/${instructor._id}`);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.instructor.firstName).toEqual(instructor.firstName);
+    });
+    it("Should not delete an instructor", async () => {
+        const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
+        const res = await request.delete(`/instructors/${fakeId}`);
+        expect(res.status).toBe(StatusCodes.NOT_FOUND);
+        expect(res.body.message).toEqual("not found");
+    });
+    it("Should return an error if the instructorId is undefined", async () => {
+        const res = await request.delete(`/instructors/${undefined}`);
+        expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });
 
     afterAll(async () => {
