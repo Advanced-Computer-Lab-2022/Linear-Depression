@@ -127,7 +127,7 @@ describe("DELETE /instructors/:instructorId", () => {
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.instructor.firstName).toEqual(instructor.firstName);
     });
-    it("Should not delete an instructor", async () => {
+    it("Should raise error when invalid id", async () => {
         const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
         const res = await request.delete(`/instructors/${fakeId}`);
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
