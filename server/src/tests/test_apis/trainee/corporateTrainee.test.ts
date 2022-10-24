@@ -100,13 +100,6 @@ describe("CorporateTrainee APIs", () => {
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.corporateTrainee.firstName).toEqual(corporateTrainee.firstName);
         });
-        it("should return error if duplicate userName", async () => {
-            let secondCorporateTrainee = corporateTraineeFactory();
-            secondCorporateTrainee["userName"] = "test";
-            secondCorporateTrainee["firstName"] = "second";
-            const secondRes = await request.post("/corporate-trainees").send(secondCorporateTrainee);
-            expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-        });
 
         afterAll(async () => {
             await disconnectDBForTesting();
