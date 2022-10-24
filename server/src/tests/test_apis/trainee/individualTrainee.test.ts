@@ -90,15 +90,17 @@ describe("IndividualTrainee APIs", () => {
             await connectDBForTesting();
         }, TIME_OUT);
         it("should create an individualTrainee", async () => {
-            const individualTrainee = individualTraineeFactory();
-            individualTrainee.userName = "test";
+            let individualTrainee = individualTraineeFactory();
+            individualTrainee["userName"] = "test";
+            individualTrainee["firstName"] = "first";
             const response = await request.post("/individual-trainees").send(individualTrainee);
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
+            console.log(request.body.individualTrainee);
         });
         it("should return error if duplicate email", async () => {
             const secondIndividualTrainee = individualTraineeFactory();
-            secondIndividualTrainee.userName = "test";
+            secondIndividualTrainee["userName"] = "test";
             secondIndividualTrainee.firstName = "second";
             const res = await IndividualTrainee.find().exec();
             expect(res.length).toBe(1);
