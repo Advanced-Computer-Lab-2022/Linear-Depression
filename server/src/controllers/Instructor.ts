@@ -12,7 +12,7 @@ const createInstructor = (req: Request, res: Response, next: NextFunction) => {
     return instructor
         .save()
         .then((instructor) => res.status(StatusCodes.CREATED).json({ instructor }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+        .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
 const listInstructors = (req: Request, res: Response, next: NextFunction) => {
@@ -44,7 +44,7 @@ const updateInstructor = (req: Request, res: Response, next: NextFunction) => {
                 return instructor
                     .save()
                     .then((instructor) => res.status(StatusCodes.CREATED).json({ instructor }))
-                    .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+                    .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
             } else {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }

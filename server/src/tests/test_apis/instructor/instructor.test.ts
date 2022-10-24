@@ -88,7 +88,7 @@ describe("POST /instructors/", () => {
         const secondInstructor = instructorFactory();
         secondInstructor.userName = firstInstructor.userName;
         const secondRes = await request.post("/instructors").send(secondInstructor);
-        expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+        expect(secondRes.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     afterAll(async () => {
@@ -108,6 +108,11 @@ describe("PUT /instructors/:instructorId", () => {
         const res = await request.put(`/instructors/${instructor._id}`).send({ firstName: fakeFirstName });
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.instructor.firstName).toEqual(fakeFirstName);
+    });
+    it("Should raise 404 when given wrong id", async () => {
+        const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
+        const res = await request.put(`/instructors/${fakeId}`);
+        expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
     afterAll(async () => {
@@ -136,6 +141,27 @@ describe("DELETE /instructors/:instructorId", () => {
     it("Should return an error if the instructorId is undefined", async () => {
         const res = await request.delete(`/instructors/${undefined}`);
         expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    });
+
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    }, TIME_OUT);
+});
+
+// create a test to filter instructors by name
+describe("GET /instructors?name=...", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    });
+
+    it("Should return instructors with the given name", async () => {
+        const instructor = new Instructor(instructorFactory());
+        await instructor.save();
+
+        const res = await request.get(`/instructors?firstName=${instructor.firstName}`);
+        expect(res.status).toBe(StatusCodes.OK);
+        expect(res.body.instructors.length).toBe(1);
+        expect(res.body.instructors[0].firstName).toEqual(instructor.firstName);
     });
 
     afterAll(async () => {
