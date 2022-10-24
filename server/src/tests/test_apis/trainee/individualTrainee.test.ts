@@ -102,6 +102,8 @@ describe("IndividualTrainee APIs", () => {
             secondIndividualTrainee["userName"] = "test";
             secondIndividualTrainee["firstName"] = "second";
             const secondRes = await request.post("/individual-trainees").send(secondIndividualTrainee);
+            const res = IndividualTrainee.find({ userName: "test" });
+            console.log(res);
             expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
         });
 
