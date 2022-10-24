@@ -42,7 +42,7 @@ describe("GET /instructors/:instructorId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-    it("Should return an instructor", async () => {
+    it("Should return an instructor successfully", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 
