@@ -105,7 +105,7 @@ describe("IndividualTrainee APIs", () => {
             console.log(secondIndividualTrainee);
             const res = await IndividualTrainee.find().exec();
             expect(res.length).toBe(1);
-            for (const ind of res1) {
+            for (const ind of res) {
                 console.log(ind);
             }
             const secondRes = await request.post("/individual-trainees").send(secondIndividualTrainee);
