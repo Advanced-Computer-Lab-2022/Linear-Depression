@@ -35,7 +35,7 @@ export interface ILesson {
 }
 
 const lessonSchema = new Schema({
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true },
     exercises: [{ type: mongoose.Types.ObjectId, ref: "Exercise" }],
     totalHours: { type: Number, required: true },
     video: {

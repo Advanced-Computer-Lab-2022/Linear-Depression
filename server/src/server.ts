@@ -1,14 +1,14 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import courseRouter from "./routes/Course";
+import instructorRouter from "./routes/Instructor";
 import { loadModels } from "./utils/loadModelsUtil";
 import { parseQueryParams } from "./utils/parseQueryParams";
 
 const app = express();
 
-/*create server*/
+/* Create Server */
 loadModels();
 app.use((req, res, next) => {
     /* log the request */
@@ -45,30 +45,29 @@ app.use((req, res, next) => {
 
 /* Routers*/
 app.use("/courses", courseRouter);
+app.use("/instructors", instructorRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
-    return res.status(200).json({ message: "pong" });
+    return res.status(StatusCodes.OK).json({ message: "pong" });
 });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-/* Routers*/
-
 /*Health Check*/
 app.get("/ping", (req, res) => {
-    return res.status(200).json({ message: "pong" });
+    return res.status(StatusCodes.OK).json({ message: "pong" });
 });
 app.get("/test", async (_req, res) => {
-    res.status(200).json({ message: "Hello World" });
+    res.status(StatusCodes.OK).json({ message: "Hello World" });
 });
 
 /*404*/
 app.use((req, res) => {
     const error = new Error("Not Found");
     Logger.error(error);
-    return res.status(404).json({ message: error.message });
+    return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
 });
 
 export default app;
