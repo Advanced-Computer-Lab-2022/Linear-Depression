@@ -100,7 +100,7 @@ describe("PUT /instructors/:instructorId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-    it("Should update an instructor", async () => {
+    it("Should update an instructor successfully", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 
