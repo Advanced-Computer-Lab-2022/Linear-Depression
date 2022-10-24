@@ -1,9 +1,5 @@
 import express from "express";
 import Logger from "./library/Logger";
-
-const app = express();
-/*create server*/
-
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
