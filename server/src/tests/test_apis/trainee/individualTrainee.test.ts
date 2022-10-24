@@ -84,7 +84,7 @@ describe("Test GET /individual-trainees/:individualTraineeId", () => {
 });
 
 describe("Test POST /individual-trainees/", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await connectDBForTesting();
     }, TIME_OUT);
 
@@ -98,15 +98,17 @@ describe("Test POST /individual-trainees/", () => {
     it("should not create an individualTrainee", async () => {
         const individualTrainee = individualTraineeFactory();
         const response = await request.post("/individual-trainees").send(individualTrainee);
+        console.log(individualTrainee.email);
         expect(response.status).toBe(StatusCodes.CREATED);
         expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
         const secondIndividualTrainee = individualTraineeFactory();
         secondIndividualTrainee.email = individualTrainee.email;
+        console.log(secondIndividualTrainee.email);
         const secondResponse = await request.post("/individual-trainees").send(secondIndividualTrainee);
         expect(secondResponse.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
         await disconnectDBForTesting();
     }, TIME_OUT);
 });
