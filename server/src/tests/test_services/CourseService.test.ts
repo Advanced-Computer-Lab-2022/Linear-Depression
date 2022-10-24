@@ -1,9 +1,18 @@
 import { courseFactory } from "../test_models/course/factory";
-import { searchCoursesByTitle, searchCoursesByInstructor, searchCoursesBySubject } from "../../services/CourseServices";
+import {
+    searchCoursesByTitle,
+    searchCoursesByInstructor,
+    searchCoursesBySubject,
+    getCurrencyCode,
+    getCurrencyRate
+} from "../../services/CourseServices";
 import { connectDBForTesting, disconnectDBForTesting } from "../../utils/testUtilities";
 import Course from "../../models/Course";
 import { instructorFactory } from "../test_models/instructor/factory";
 import Instructor from "../../models/Instructor";
+
+import axios from "axios";
+jest.mock("axios");
 
 // a function to create a course in the database
 const createCourseByTitle = async (title: string) => {
@@ -45,7 +54,7 @@ describe("CourseServices", () => {
     });
 
     describe("searchCourses by title", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             await Course.deleteMany({});
             const course_titles = [
                 "Introduction to Computer Science",
@@ -91,7 +100,7 @@ describe("CourseServices", () => {
     });
 
     describe("searchCourses by instructor", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             await Course.deleteMany({});
             await Instructor.deleteMany({});
             const instructorNames = ["Ibrahim", "Abdulaziz", "Shimaa", "Elshimaa", "Nasser", "Omar", "Ommar"];
@@ -126,7 +135,7 @@ describe("CourseServices", () => {
     });
 
     describe("searchCourses by subject", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             await Course.deleteMany({});
             const subjects = [
                 "Computer Science",
@@ -156,6 +165,53 @@ describe("CourseServices", () => {
         it("should return a course with  substring subject ", async () => {
             const courses = await searchCoursesBySubject("Engineering");
             expect(courses.length).toBe(5);
+        });
+    });
+
+    describe("Test getCurrencyCode", () => {
+        it("should return the currency code for a valid country", async () => {
+            const currencyCode = await getCurrencyCode("Egypt");
+            expect(currencyCode).toBe("EGP");
+        });
+
+        it("should return the currency code for a valid country", async () => {
+            const currencyCode = await getCurrencyCode("United States");
+            expect(currencyCode).toBe("USD");
+        });
+
+        it("should return the currency code for a valid country", async () => {
+            const currencyCode = await getCurrencyCode("United Kingdom");
+            expect(currencyCode).toBe("GBP");
+        });
+
+        it("should return the currency code for a valid country with different case", async () => {
+            const currencyCode = await getCurrencyCode("egypt");
+            expect(currencyCode).toBe("EGP");
+        });
+
+        it("should throw an error for an invalid country", async () => {
+            expect(() => getCurrencyCode("Egypttttt")).toThrow(new Error("Country not found"));
+        });
+    });
+
+    describe("Test mocked getCurrencyRate", () => {
+        it("should return the currency rate for a valid currency code", async () => {
+            axios.get = jest.fn().mockResolvedValue({
+                data: {
+                    date: "2021-04-01",
+                    egp: 15.7
+                }
+            });
+            const currencyRate = await getCurrencyRate("EGP");
+            expect(currencyRate).toBe(15.7);
+        });
+    });
+
+    describe("Test getCurrencyRate", () => {
+        it("should return the currency rate for a valid currency code", async () => {
+            const axios = require("axios");
+            const currencyRate = await getCurrencyRate("EGP");
+            expect(currencyRate).toBeGreaterThan(10); // don't worry this will be true everyday, if not f*** test. :D
         });
     });
 });
