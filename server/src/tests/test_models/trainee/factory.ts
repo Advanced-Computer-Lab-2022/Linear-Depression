@@ -28,4 +28,3 @@ export function corporateTraineeFactory(): ICorporateTraineeModel {
     }
     return CorporateTrainee;
 }
-console.log(corporateTraineeFactory());

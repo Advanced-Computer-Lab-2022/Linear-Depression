@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
-const app = require("./server");
+import app from "./server";
 
 /*connect to MongoDB*/
 mongoose
@@ -17,5 +17,5 @@ mongoose
         });
     })
     .catch((err) => {
-        Logger.log(err);
+        Logger.error(err);
     });

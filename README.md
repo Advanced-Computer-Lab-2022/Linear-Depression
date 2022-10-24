@@ -27,3 +27,15 @@ npm run test
 ```
 
 You can use vscode to run the tests as well.
+
+---
+
+## Admin Dashboard
+
+Access the admin dashboard by going to the following url
+
+```
+http://localhost:PORT/admin
+```
+
+![Admin Dashboard](docs/AdminDashboard.png)

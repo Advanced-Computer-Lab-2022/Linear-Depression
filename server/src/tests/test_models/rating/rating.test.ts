@@ -1,5 +1,6 @@
 import Rating from "../../../models/Rating";
 import { ratingFactory } from "./factory";
+import { TIME_OUT } from "../../../utils/testUtilities";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 
 describe("Rating Model Test", () => {
@@ -18,5 +19,5 @@ describe("Rating Model Test", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    }, 10000);
+    }, TIME_OUT);
 });
