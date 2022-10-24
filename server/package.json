@@ -13,6 +13,7 @@
     "dependencies": {
         "@adminjs/express": "^5.0.1",
         "@adminjs/mongoose": "^3.0.0",
+        "@types/fuzzy-search": "^2.1.2",
         "@types/mongoose-unique-validator": "^1.0.6",
         "adminjs": "^6.4.1",
         "bcrypt": "^5.1.0",
