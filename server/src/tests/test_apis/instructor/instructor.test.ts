@@ -50,7 +50,7 @@ describe("GET /instructors/:instructorId", () => {
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.instructor.firstName).toEqual(instructor.firstName);
     });
-    it("Should not return an instructor", async () => {
+    it("Should raise 404 when given wrong id", async () => {
         const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
         const res = await request.get(`/instructors/${fakeId}`);
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
