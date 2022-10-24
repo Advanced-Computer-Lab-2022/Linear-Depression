@@ -13,7 +13,7 @@ const request = supertest(app);
 describe("Test GET /individual-trainees/ ", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should return an empty array when database is empty", async () => {
         const response = await request.get("/individual-trainees");
@@ -34,13 +34,13 @@ describe("Test GET /individual-trainees/ ", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test GET /individual-trainees/:individualTraineeId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should return an individualTrainee", async () => {
         const individualTrainee = new IndividualTrainee(individualTraineeFactory());
@@ -80,13 +80,13 @@ describe("Test GET /individual-trainees/:individualTraineeId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test POST /individual-trainees/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should create an individualTrainee", async () => {
         const individualTrainee = individualTraineeFactory();
@@ -108,13 +108,13 @@ describe("Test POST /individual-trainees/", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test PUT /individual-trainees/:individualTraineeId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should update an individualTrainee", async () => {
         const individualTrainee = new IndividualTrainee(individualTraineeFactory());
@@ -135,13 +135,13 @@ describe("Test PUT /individual-trainees/:individualTraineeId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test DELETE /individual-trainees/:individualTraineeId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should delete an individualTrainee", async () => {
         const individualTrainee = new IndividualTrainee(individualTraineeFactory());
@@ -164,5 +164,5 @@ describe("Test DELETE /individual-trainees/:individualTraineeId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
