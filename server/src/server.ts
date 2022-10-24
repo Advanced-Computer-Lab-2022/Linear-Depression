@@ -5,7 +5,6 @@ import courseRouter from "./routes/Course";
 import instructorRouter from "./routes/Instructor";
 import { loadModels } from "./utils/loadModelsUtil";
 import { parseQueryParams } from "./utils/parseQueryParams";
-import Logger from "./library/Logger";
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
