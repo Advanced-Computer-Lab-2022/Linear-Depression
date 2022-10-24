@@ -13,7 +13,7 @@ const request = supertest(app);
 describe("Test GET /corporate-trainees/ ", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should return an empty array when database is empty", async () => {
         const response = await request.get("/corporate-trainees");
@@ -34,21 +34,25 @@ describe("Test GET /corporate-trainees/ ", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test GET /corporate-trainees/:corporateTraineeId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
-    it("should return an corporateTrainee", async () => {
-        const corporateTrainee = new CorporateTrainee(corporateTraineeFactory());
-        await corporateTrainee.save();
-        const response = await request.get(`/corporate-trainees/${corporateTrainee._id}`);
-        expect(response.status).toBe(StatusCodes.OK);
-        expect(response.body.corporateTrainee.firstName).toEqual(corporateTrainee.firstName);
-    });
+    it(
+        "should return an corporateTrainee",
+        async () => {
+            const corporateTrainee = new CorporateTrainee(corporateTraineeFactory());
+            await corporateTrainee.save();
+            const response = await request.get(`/corporate-trainees/${corporateTrainee._id}`);
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.body.corporateTrainee.firstName).toEqual(corporateTrainee.firstName);
+        },
+        TIME_OUT
+    );
 
     it("should populate Courses", async () => {
         const course = new Course(courseFactory());
@@ -80,13 +84,13 @@ describe("Test GET /corporate-trainees/:corporateTraineeId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test POST /corporate-trainees/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should create an corporateTrainee", async () => {
         const corporateTrainee = corporateTraineeFactory();
@@ -108,13 +112,13 @@ describe("Test POST /corporate-trainees/", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test PUT /corporate-trainees/:corporateTraineeId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should update an corporateTrainee", async () => {
         const corporateTrainee = new CorporateTrainee(corporateTraineeFactory());
@@ -135,13 +139,13 @@ describe("Test PUT /corporate-trainees/:corporateTraineeId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
 
 describe("Test DELETE /corporate-trainees/:corporateTraineeId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    });
+    }, TIME_OUT);
 
     it("should delete an corporateTrainee", async () => {
         const corporateTrainee = new CorporateTrainee(corporateTraineeFactory());
@@ -164,5 +168,5 @@ describe("Test DELETE /corporate-trainees/:corporateTraineeId", () => {
 
     afterAll(async () => {
         await disconnectDBForTesting();
-    });
+    }, TIME_OUT);
 });
