@@ -45,7 +45,7 @@ describe("CourseServices", () => {
     });
 
     describe("searchCourses by title", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             await Course.deleteMany({});
             const course_titles = [
                 "Introduction to Computer Science",
@@ -91,7 +91,7 @@ describe("CourseServices", () => {
     });
 
     describe("searchCourses by instructor", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             await Course.deleteMany({});
             await Instructor.deleteMany({});
             const instructorNames = ["Ibrahim", "Abdulaziz", "Shimaa", "Elshimaa", "Nasser", "Omar", "Ommar"];
@@ -126,7 +126,7 @@ describe("CourseServices", () => {
     });
 
     describe("searchCourses by subject", () => {
-        beforeEach(async () => {
+        beforeAll(async () => {
             await Course.deleteMany({});
             const subjects = [
                 "Computer Science",
