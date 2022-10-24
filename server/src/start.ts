@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
-
 import app from "./server";
 
 /*connect to MongoDB*/

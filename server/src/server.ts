@@ -3,6 +3,8 @@ import Logger from "./library/Logger";
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
+import CorporateTraineeRouter from "./routes/CorporateTrainee";
+import IndividualTraineeRouter from "./routes/IndividualTrainee";
 
 const app = express();
 
@@ -22,6 +24,11 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 /* --- End Create Server --- */
+
+/* Routers*/
+app.use("/corporate-trainees", CorporateTraineeRouter);
+app.use("/individual-trainees", IndividualTraineeRouter);
+/*Health Check*/
 
 /* --- Create AdminJS --- */
 AdminJS.registerAdapter({ Database, Resource });
