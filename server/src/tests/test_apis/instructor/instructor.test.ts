@@ -148,13 +148,12 @@ describe("DELETE /instructors/:instructorId", () => {
     }, TIME_OUT);
 });
 
-// create a test to filter instructors by name
 describe("GET /instructors?name=...", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
 
-    it("Should return instructors with the given name", async () => {
+    it("Should return a instructor with the given name", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 
