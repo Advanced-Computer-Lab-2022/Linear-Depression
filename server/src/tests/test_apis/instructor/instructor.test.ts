@@ -119,7 +119,7 @@ describe("DELETE /instructors/:instructorId", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-    it("Should delete an instructor", async () => {
+    it("Should delete an instructor successfully", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 
