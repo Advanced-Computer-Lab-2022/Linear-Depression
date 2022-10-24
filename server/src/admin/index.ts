@@ -5,7 +5,7 @@ import { InstructorResource } from "./resources/Instructor";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import Course from "../models/Course";
 
-export function CreateAdminJS() {
+export function CreateAdminJS(app: any) {
     const admin = new AdminJS({
         resources: [
             InstructorResource,
@@ -21,6 +21,5 @@ export function CreateAdminJS() {
     });
 
     const router = AdminJSExpress.buildRouter(admin);
-
-    return { admin, router };
+    app.use(admin.options.rootPath, router);
 }

@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import Logger from "./library/Logger";
 import { config } from "./config/config";
-import { CreateAdminJS } from "./admin";
 
-import { app } from "./server";
+import app from "./server";
 
 /*connect to MongoDB*/
 mongoose
@@ -13,8 +12,6 @@ mongoose
     })
     .then(() => {
         Logger.log("Connected to MongoDB");
-
-        CreateAdminJS();
 
         app.listen(config.server.port, () => {
             Logger.log(`Server started at port ${config.server.port}`);
