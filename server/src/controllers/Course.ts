@@ -62,7 +62,7 @@ const deleteCourse = (req: Request, res: Response, next: NextFunction) => {
     return Course.findByIdAndDelete(courseId)
         .then((course) =>
             course
-                ? res.status(StatusCodes.CREATED).json({ course, message: "Deleted" })
+                ? res.status(StatusCodes.OK).json({ course, message: "Deleted" })
                 : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" })
         )
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
