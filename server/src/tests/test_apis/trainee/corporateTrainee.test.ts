@@ -101,14 +101,14 @@ describe("CorporateTrainee APIs", () => {
             expect(response.body.corporateTrainee.firstName).toEqual(corporateTrainee.firstName);
         });
 
-        it("should not create an corporateTrainee with duplicate mail", async () => {
-            const secondCorporateTrainee = corporateTraineeFactory();
-            secondCorporateTrainee.email = email;
-            const res = await CorporateTrainee.find();
-            expect(res.length).toBe(1); // should be 1
-            const response = await request.post("/corporate-trainees").send(secondCorporateTrainee);
-            expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-        });
+        //it("should not create an corporateTrainee with duplicate mail", async () => {
+        //    const secondCorporateTrainee = corporateTraineeFactory();
+        //    secondCorporateTrainee.email = email;
+        //    const res = await CorporateTrainee.find();
+        //    expect(res.length).toBe(1); // should be 1
+        //    const response = await request.post("/corporate-trainees").send(secondCorporateTrainee);
+        //    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+        //});
         afterAll(async () => {
             await disconnectDBForTesting();
         }, TIME_OUT);
