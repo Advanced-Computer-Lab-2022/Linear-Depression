@@ -19,7 +19,7 @@ describe("GET /instructors/", () => {
         expect(response.status).toBe(StatusCodes.OK);
         expect(response.body.instructors).toEqual([]);
     });
-    it("Should return all instructors", async () => {
+    it("Should return all instructors correctly", async () => {
         const randomLength = faker.datatype.number({ min: 2, max: 10 });
         const instructors = [];
         for (let i = 0; i < randomLength; i++) {
