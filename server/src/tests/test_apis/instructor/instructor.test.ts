@@ -73,7 +73,7 @@ describe("POST /instructors/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-    it("Should create an instructor", async () => {
+    it("Should create an instructor successfully", async () => {
         const instructor = instructorFactory();
         const res = await request.post("/instructors").send(instructor);
         expect(res.status).toBe(StatusCodes.CREATED);
