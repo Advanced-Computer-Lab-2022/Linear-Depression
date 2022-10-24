@@ -88,18 +88,11 @@ describe("Test GET /corporate-trainees/:corporateTraineeId", () => {
 });
 
 describe("Test POST /corporate-trainees/", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await connectDBForTesting();
     }, TIME_OUT);
 
     it("should create an corporateTrainee", async () => {
-        const corporateTrainee = corporateTraineeFactory();
-        const response = await request.post("/corporate-trainees").send(corporateTrainee);
-        expect(response.status).toBe(StatusCodes.CREATED);
-        expect(response.body.corporateTrainee.firstName).toEqual(corporateTrainee.firstName);
-    });
-
-    it("should not create an corporateTrainee", async () => {
         const corporateTrainee = corporateTraineeFactory();
         const response = await request.post("/corporate-trainees").send(corporateTrainee);
         expect(response.status).toBe(StatusCodes.CREATED);
@@ -110,7 +103,7 @@ describe("Test POST /corporate-trainees/", () => {
         expect(secondResponse.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
         await disconnectDBForTesting();
     }, TIME_OUT);
 });

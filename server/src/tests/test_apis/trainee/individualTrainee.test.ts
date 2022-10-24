@@ -8,6 +8,7 @@ import { courseFactory } from "../../test_models/course/factory";
 import IndividualTrainee from "../../../models/IndividualTrainee";
 import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
+import Logger from "../../../library/Logger";
 const request = supertest(app);
 
 describe("Test GET /individual-trainees/ ", () => {
@@ -93,17 +94,9 @@ describe("Test POST /individual-trainees/", () => {
         const response = await request.post("/individual-trainees").send(individualTrainee);
         expect(response.status).toBe(StatusCodes.CREATED);
         expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
-    });
-
-    it("should not create an individualTrainee", async () => {
-        const individualTrainee = individualTraineeFactory();
-        const response = await request.post("/individual-trainees").send(individualTrainee);
-        console.log(individualTrainee.email);
-        expect(response.status).toBe(StatusCodes.CREATED);
-        expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
         const secondIndividualTrainee = individualTraineeFactory();
         secondIndividualTrainee.email = individualTrainee.email;
-        console.log(secondIndividualTrainee.email);
+        Logger.log(secondIndividualTrainee.email);
         const secondResponse = await request.post("/individual-trainees").send(secondIndividualTrainee);
         expect(secondResponse.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });

@@ -28,3 +28,4 @@ export function corporateTraineeFactory(): ICorporateTraineeModel {
     }
     return CorporateTrainee;
 }
+console.log(JSON.stringify(individualTraineeFactory()));
