@@ -97,15 +97,11 @@ describe("IndividualTrainee APIs", () => {
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
         });
-        it("should return error if duplicate email", async () => {
+        it("should return error if duplicate userName", async () => {
             let secondIndividualTrainee = individualTraineeFactory();
             secondIndividualTrainee["userName"] = "test";
             secondIndividualTrainee["firstName"] = "second";
-            const res = await IndividualTrainee.find().exec();
             const secondRes = await request.post("/individual-trainees").send(secondIndividualTrainee);
-            const res1 = await IndividualTrainee.find().exec();
-            console.log(res1);
-
             expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
         });
 
