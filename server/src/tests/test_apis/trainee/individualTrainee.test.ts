@@ -90,7 +90,7 @@ describe("IndividualTrainee APIs", () => {
         beforeAll(async () => {
             await connectDBForTesting();
         }, TIME_OUT);
-
+        const userName = "test";
         it("should create an individualTrainee", async () => {
             const individualTrainee = individualTraineeFactory();
             individualTrainee.userName = userName;
@@ -101,6 +101,7 @@ describe("IndividualTrainee APIs", () => {
         it("should return error if duplicate email", async () => {
             const secondIndividualTrainee = individualTraineeFactory();
             secondIndividualTrainee.userName = userName;
+            secondIndividualTrainee.firstName = "second";
             const res = await IndividualTrainee.find().exec();
             expect(res.length).toBe(1);
             const secondRes = await request.post("/individual-trainees").send(secondIndividualTrainee);
