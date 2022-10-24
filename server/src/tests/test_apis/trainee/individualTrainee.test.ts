@@ -86,23 +86,25 @@ describe("IndividualTrainee APIs", () => {
     });
 
     describe("Test POST /individual-trainees/", () => {
+        const userName = "test";
         beforeAll(async () => {
             await connectDBForTesting();
         }, TIME_OUT);
 
         it("should create an individualTrainee", async () => {
             const individualTrainee = individualTraineeFactory();
+            individualTrainee.userName = userName;
             const response = await request.post("/individual-trainees").send(individualTrainee);
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
         });
         it("should return error if duplicate email", async () => {
-            const firstIndividualTrainee = individualTraineeFactory();
             const secondIndividualTrainee = individualTraineeFactory();
-            secondIndividualTrainee.email = firstIndividualTrainee.email;
-            await request.post("/individual-trainees").send(firstIndividualTrainee);
-            const response = await request.post("/individual-trainees").send(secondIndividualTrainee);
-            expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+            secondIndividualTrainee.userName = userName;
+            const res = await IndividualTrainee.find().exec();
+            expect(res.length).toBe(1);
+            const secondRes = await request.post("/individual-trainees").send(secondIndividualTrainee);
+            expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
         });
 
         afterAll(async () => {
