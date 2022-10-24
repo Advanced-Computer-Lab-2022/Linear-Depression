@@ -13,7 +13,7 @@ const request = supertest(app);
 describe("Test GET /corporate-trainees/ ", () => {
     beforeAll(async () => {
         await connectDBForTesting();
-    }, TIME_OUT);
+    });
 
     it("should return an empty array when database is empty", async () => {
         const response = await request.get("/corporate-trainees");
