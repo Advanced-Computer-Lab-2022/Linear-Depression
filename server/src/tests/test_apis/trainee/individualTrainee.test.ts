@@ -101,7 +101,7 @@ describe("Test POST /individual-trainees/", () => {
         expect(response.status).toBe(StatusCodes.CREATED);
         expect(response.body.individualTrainee.firstName).toEqual(individualTrainee.firstName);
         const secondIndividualTrainee = individualTraineeFactory();
-        secondIndividualTrainee.userName = individualTrainee.userName;
+        secondIndividualTrainee.email = individualTrainee.email;
         const secondResponse = await request.post("/individual-trainees").send(secondIndividualTrainee);
         expect(secondResponse.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     });
