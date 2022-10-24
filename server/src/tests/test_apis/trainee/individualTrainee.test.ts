@@ -113,7 +113,7 @@ describe("IndividualTrainee APIs", () => {
             for (const ind of res1) {
                 console.log(ind);
             }
-            expect(res.length).toBe(1);
+            expect(res1.length).toBe(1);
 
             expect(secondRes.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
         });
