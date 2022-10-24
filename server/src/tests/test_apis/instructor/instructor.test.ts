@@ -14,7 +14,7 @@ describe("GET /instructors/", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-    it("should return an empty array", async () => {
+    it("should return an empty array when the db is empty", async () => {
         const response = await request.get("/instructors");
         expect(response.status).toBe(StatusCodes.OK);
         expect(response.body.instructors).toEqual([]);
