@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Navbar from "../components/Navbar";
 
 const Temp = styled.div`
     color: red;
@@ -11,9 +12,12 @@ const Temp = styled.div`
 
 const Home: React.FC = () => {
     return (
-        <Temp>
-            <h1>Home</h1>
-        </Temp>
+        <>
+            <Navbar />
+            <Temp>
+                <h1>Home</h1>
+            </Temp>
+        </>
     );
 };
 
