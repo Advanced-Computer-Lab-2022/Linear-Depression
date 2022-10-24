@@ -17,5 +17,5 @@ mongoose
         });
     })
     .catch((err) => {
-        Logger.log(err);
+        Logger.error(err);
     });

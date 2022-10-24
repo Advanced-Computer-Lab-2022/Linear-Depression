@@ -10,7 +10,7 @@ const createExercises = (randomLength: Number): ILesson[] => {
             exercises: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
             totalHours: faker.datatype.number(),
             video: {
-                videoLink: faker.internet.url(),
+                videoLink: `https://www.youtube.com/watch?v=${faker.datatype.number()}`,
                 description: faker.lorem.paragraph()
             }
         });
@@ -33,7 +33,7 @@ export function courseFactory(): ICourse {
         }),
         ratings: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
         totalHours: faker.datatype.number(),
-        preview: faker.internet.url(),
+        preview: `https://www.youtube.com/watch?v=${faker.datatype.number()}`,
         lessons: createExercises(
             faker.datatype.number({
                 min: 1,
