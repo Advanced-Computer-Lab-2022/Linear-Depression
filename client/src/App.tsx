@@ -3,21 +3,25 @@ import "./App.css";
 import CorporateTrainee from "./pages/CorporateTrainee";
 import IndividualTrainee from "./pages/IndividualTrainee";
 import Instructor from "./pages/Instructor";
-import CheckboxLists from "./components/CheckBoxLists";
-import StarRating from "./components/StarRating";
-import Filter from "./components/Filter";
 import Home from "./pages/Home";
+import { CoursesContext } from "./context/CoursesContext";
+import { useState } from "react";
+import ICourseProps from "./types/Course";
 
 function App() {
+    const [coursesResultSet, setCoursesResultSet] = useState<ICourseProps[]>([]);
+
     return (
-        <div className="App">
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/instructor" element={<Instructor />} />
-                <Route path="/corporate-trainee" element={<CorporateTrainee />} />
-                <Route path="/individual-trainee" element={<IndividualTrainee />} />
-            </Routes>
-        </div>
+        <CoursesContext.Provider value={{ coursesResultSet, setCoursesResultSet }}>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/instructor" element={<Instructor />} />
+                    <Route path="/corporate-trainee" element={<CorporateTrainee />} />
+                    <Route path="/individual-trainee" element={<IndividualTrainee />} />
+                </Routes>
+            </div>
+        </CoursesContext.Provider>
     );
 }
 
