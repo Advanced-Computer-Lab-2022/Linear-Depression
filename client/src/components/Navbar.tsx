@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
 import axios from "axios";
+import { CountryContext } from "../context/CountryContext";
 const countries: Country[] = require("../media/country-currency.json");
 
 const Navbar = () => {
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState("");
+    const { country, setCountry } = useContext(CountryContext);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -18,7 +19,7 @@ const Navbar = () => {
 
     const handleClose = async (value: string) => {
         setOpen(false);
-        setSelectedValue(value);
+        setCountry(value);
         // // set cookie for country
         // document.cookie = `country=${value}`;
         // // redirect to home page
@@ -121,7 +122,7 @@ const Navbar = () => {
                         <button className="navbar-item signup-button">Sign Up</button>
                         <button className="navbar-item language-button" onClick={handleClickOpen}>
                             <Flag
-                                code={selectedValue}
+                                code={country}
                                 fallback={
                                     <img
                                         className="language-img"
@@ -134,7 +135,7 @@ const Navbar = () => {
                     </ul>
                 </div>
             </div>
-            <CountrySelect selectedValue={selectedValue} open={open} onClose={handleClose} countries={countries} />
+            <CountrySelect selectedValue={country} open={open} onClose={handleClose} countries={countries} />
         </nav>
     );
 };
