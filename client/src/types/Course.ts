@@ -1,14 +1,16 @@
-interface ICourseCardProps {
-    course?: {
+interface ICourseProps {
+    id: string;
+    title: string;
+    description: string;
+    instructor: {
         id: string;
-        title: string;
-        description: string;
-        instructor: string;
-        rating: number;
-        duration: number;
-        price: number;
-        currency: string;
+        firstName: string;
+        lastName: string;
     };
+    averageRating: number;
+    totalHours: number;
+    price: number;
+    currency: string;
 }
 
-export default ICourseCardProps;
+export default ICourseProps;

@@ -1,17 +1,9 @@
 import React from "react";
+import ICourseProps from "../types/Course";
 import CourseCard from "./CourseCard";
 
 interface CoursesListProps {
-    courses: {
-        id: string;
-        title: string;
-        description: string;
-        instructor: string;
-        rating: number;
-        duration: number;
-        price: number;
-        currency: string;
-    }[];
+    courses: ICourseProps[];
 }
 
 const CoursesList: React.FC<CoursesListProps> = ({ courses }) => {
