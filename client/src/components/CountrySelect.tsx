@@ -15,7 +15,12 @@ export interface CountrySelectProps {
     countries: Country[];
 }
 
-const CountrySelect = ({ open, onClose, selectedValue, countries }: CountrySelectProps) => {
+const CountrySelect: React.FC<CountrySelectProps> = ({
+    open,
+    onClose,
+    selectedValue,
+    countries
+}: CountrySelectProps) => {
     const handleClose = () => {
         onClose(selectedValue);
     };

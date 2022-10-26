@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
+import axios from "axios";
 const countries: Country[] = require("../media/country-currency.json");
 
 const Navbar = () => {
@@ -15,9 +16,15 @@ const Navbar = () => {
         setOpen(true);
     };
 
-    const handleClose = (value: string) => {
+    const handleClose = async (value: string) => {
         setOpen(false);
         setSelectedValue(value);
+        try {
+            await axios.post(`http://localhost:3000/country/${value}`);
+            console.log("Country set");
+        } catch (err) {
+            console.log(err);
+        }
     };
     return (
         <nav className="navbar navbar-expand-lg bg-light">
