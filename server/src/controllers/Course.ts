@@ -2,8 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Course from "../models/Course";
+import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
 
-const createCourse = (req: Request, res: Response, next: NextFunction) => {
+async function getCurrencyRateByCookie(req: Request): Promise<{ currencyRate: number; currency: any }> {
+    const language: string = req.cookies.country || "usaf";
+    const currency: string = getCurrencyCode(language);
+    const currencyRate: number = await getCurrencyRate(currency);
+    return { currencyRate, currency };
+}
+const createCourse = (req: Request, res: Response, _next: NextFunction) => {
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
@@ -15,29 +22,45 @@ const createCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const listCourses = (req: Request, res: Response, next: NextFunction) => {
-    return Course.find(req.query)
-        .populate("instructor", "firstName lastName")
-        .populate("ratings")
-        .then((courses) => res.status(StatusCodes.OK).json({ courses }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+const listCourses = async (req: Request, res: Response, _next: NextFunction) => {
+    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req);
+    try {
+        const courses = await Course.find(req.query).populate("instructor", "firstName lastName").populate("ratings");
+        for (const course of courses) {
+            course.price = course.price * currencyRate;
+            course.price = Math.ceil(course.price * 100) / 100;
+        }
+        const courseWithCurrency = courses.map((course) => {
+            return {
+                ...course.toObject(),
+                currency
+            };
+        });
+        return res.status(StatusCodes.OK).json({ courses: courseWithCurrency });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
 };
 
-const readCourse = (req: Request, res: Response, next: NextFunction) => {
+const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
+    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req);
 
     return Course.findById(courseId)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
-        .then((course) =>
-            course
-                ? res.status(StatusCodes.OK).json({ course })
-                : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" })
-        )
+        .then((course) => {
+            if (course) {
+                course.price = course.price * currencyRate;
+                return res.status(StatusCodes.OK).json({ course: { ...course.toObject(), currency } });
+            } else {
+                return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+            }
+        })
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const updateCourse = (req: Request, res: Response, next: NextFunction) => {
+const updateCourse = (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
 
     return Course.findById(courseId)
@@ -56,7 +79,7 @@ const updateCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deleteCourse = (req: Request, res: Response, next: NextFunction) => {
+const deleteCourse = (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
 
     return Course.findByIdAndDelete(courseId)
@@ -68,7 +91,7 @@ const deleteCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const listSubjects = (req: Request, res: Response, next: NextFunction) => {
+const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
     return Course.find(req.query)
         .distinct("subject")
         .then((subjects) => res.status(StatusCodes.OK).json({ subjects }))
