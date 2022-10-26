@@ -5,7 +5,7 @@ import Course from "../models/Course";
 import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
 
 async function getCurrencyRateByCookie(req: Request): Promise<{ currencyRate: number; currency: any }> {
-    const language: string = req.cookies.language || "usaf";
+    const language: string = req.cookies.country || "usaf";
     const currency: string = getCurrencyCode(language);
     const currencyRate: number = await getCurrencyRate(currency);
     return { currencyRate, currency };
@@ -27,7 +27,8 @@ const listCourses = async (req: Request, res: Response, _next: NextFunction) => 
     try {
         const courses = await Course.find(req.query).populate("instructor", "firstName lastName").populate("ratings");
         for (const course of courses) {
-            course.price = Math.ceil(course.price * currencyRate * 100) / 100;
+            course.price = course.price * currencyRate;
+            course.price = Math.ceil(course.price * 100) / 100;
         }
         const courseWithCurrency = courses.map((course) => {
             return {
