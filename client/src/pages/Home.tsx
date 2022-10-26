@@ -12,7 +12,9 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:3000/courses")
+            .get("http://localhost:3000/courses", {
+                withCredentials: true
+            })
             .then((res) => {
                 console.log(res.data.courses);
                 setCourses({

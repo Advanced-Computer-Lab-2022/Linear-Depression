@@ -19,12 +19,29 @@ const Navbar = () => {
     const handleClose = async (value: string) => {
         setOpen(false);
         setSelectedValue(value);
-        try {
-            await axios.post(`http://localhost:3000/country/${value}`);
-            console.log("Country set");
-        } catch (err) {
-            console.log(err);
-        }
+        // // set cookie for country
+        // document.cookie = `country=${value}`;
+        // // redirect to home page
+        // navigate("/");
+        // try {
+        //     await axios.post(`http://localhost:3000/country/${value}`, {
+        //         withCredentials: true
+        //     });
+
+        //     console.log("Country set");
+        // } catch (err) {
+        //     console.log(err);
+        // }
+        fetch(`http://localhost:3000/country/${value}`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then((res) => res.json())
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
     };
     return (
         <nav className="navbar navbar-expand-lg bg-light">

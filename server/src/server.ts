@@ -12,6 +12,11 @@ import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 import LangRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
+import { instructorFactory } from "./tests/test_models/instructor/factory";
+import Instructor from "./models/Instructor";
+import { courseFactory } from "./tests/test_models/course/factory";
+import Course from "./models/Course";
+const cors = require("cors");
 
 const app = express();
 
@@ -26,10 +31,18 @@ app.use((req, res, next) => {
         Logger.info(
             `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
         );
+        const cookies = req.cookies;
+        Logger.info(`Cookies -> ${JSON.stringify(cookies)}`);
     });
 
     next();
 });
+app.use(
+    cors({
+        origin: true,
+        credentials: true
+    })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -38,8 +51,10 @@ app.use(cookieParser());
 
 /** Rules of our API */
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    // Website you wish to allow to connect, localhost:3001 is the frontend
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
 
     if (req.method == "OPTIONS") {
         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
@@ -47,9 +62,6 @@ app.use((req, res, next) => {
     }
 
     next();
-    if (req.cookies["country"] == undefined) {
-        res.cookie("country", "usaf"); //FIXME: change to user's location
-    }
 });
 
 app.use((req, res, next) => {
@@ -95,5 +107,13 @@ app.use((req, res) => {
 });
 
 /* --- End Routes --- */
+
+const instructorData = instructorFactory();
+const instructor = new Instructor(instructorData);
+instructor.save();
+const courseData = courseFactory();
+courseData.instructor = instructor._id;
+const course = new Course(courseData);
+course.save();
 
 export default app;
