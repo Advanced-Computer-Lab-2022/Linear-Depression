@@ -27,7 +27,7 @@ const listCourses = async (req: Request, res: Response, _next: NextFunction) => 
     try {
         const courses = await Course.find(req.query).populate("instructor", "firstName lastName").populate("ratings");
         for (const course of courses) {
-            course.price = course.price * currencyRate;
+            course.price = Math.ceil(course.price * currencyRate * 100) / 100;
         }
         const courseWithCurrency = courses.map((course) => {
             return {
