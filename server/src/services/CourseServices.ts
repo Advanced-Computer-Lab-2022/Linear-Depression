@@ -52,7 +52,7 @@ export const searchCoursesBySubject = async (name: string) => {
  * @returns currency code
  * @throws Error if country name is not found
  */
-export const getCurrencyCode = (countryName: string) => {
+export const getCurrencyCode = (countryName: string): string => {
     /**
      * [
      *    {
@@ -66,14 +66,14 @@ export const getCurrencyCode = (countryName: string) => {
     const data = fs.readFileSync("src/media/country-currency.json", "utf8");
     const currencies = JSON.parse(data);
     for (const currency of currencies) {
-        if (currency.Country.toLowerCase() === countryName.toLowerCase()) {
+        if (currency.CountryCode.toLowerCase() === countryName.toLowerCase()) {
             return currency.Code;
         }
     }
     throw new Error("Country not found");
 };
 
-export const getCurrencyRate = async (currencyCode: string) => {
+export const getCurrencyRate = async (currencyCode: string): Promise<number> => {
     const BASE_CURRENCY = "usd";
     const API_URl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${BASE_CURRENCY}/${currencyCode.toLowerCase()}.json`;
 

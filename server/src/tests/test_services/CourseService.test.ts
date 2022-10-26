@@ -170,22 +170,22 @@ describe("CourseServices", () => {
 
     describe("Test getCurrencyCode", () => {
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("Egypt");
+            const currencyCode = await getCurrencyCode("Eg");
             expect(currencyCode).toBe("EGP");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("United States");
+            const currencyCode = await getCurrencyCode("Usaf");
             expect(currencyCode).toBe("USD");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("United Kingdom");
+            const currencyCode = await getCurrencyCode("GB");
             expect(currencyCode).toBe("GBP");
         });
 
         it("should return the currency code for a valid country with different case", async () => {
-            const currencyCode = await getCurrencyCode("egypt");
+            const currencyCode = await getCurrencyCode("eg");
             expect(currencyCode).toBe("EGP");
         });
 
