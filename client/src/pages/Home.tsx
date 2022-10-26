@@ -38,28 +38,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-// [
-//     {
-//         id: "1",
-//         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
-//         description:
-//             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
-//         instructor: "Dr. Angela Yu",
-//         rating: 4.3,
-//         duration: 10,
-//         price: 12.99,
-//         currency: "$"
-//     },
-//     {
-//         id: "2",
-//         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
-//         description:
-//             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
-//         instructor: "Dr. Angela Yu",
-//         rating: 4.3,
-//         duration: 10,
-//         price: 12.99,
-//         currency: "$"
-//     }
-// ];
