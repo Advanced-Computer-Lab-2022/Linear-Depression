@@ -1,59 +1,52 @@
-import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
+import * as React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
 import "./CheckBoxLists.css";
 
-export default function CheckboxList() {
-  const [checked, setChecked] = React.useState([0]);
+const CheckBoxLists: React.FC<{ items: string[] }> = ({ items }) => {
+    const [checked, setChecked] = React.useState(-1);
 
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    const handleToggle = (value: number) => () => {
+        if (checked == value) {
+            setChecked(-1);
+        } else {
+            setChecked(value);
+        }
+    };
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+    return (
+        <List className="list">
+            {items.map((value, index) => {
+                const labelId = `checkbox-list-label-${value}`;
 
-    setChecked(newChecked);
-  };
+                return (
+                    <ListItem
+                        key={value}
+                        secondaryAction={<IconButton edge="end" aria-label="comments"></IconButton>}
+                        disablePadding
+                    >
+                        <ListItemButton role={undefined} onClick={handleToggle(index)} dense>
+                            <ListItemIcon>
+                                <Checkbox
+                                    edge="start"
+                                    checked={checked === index}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                />
+                            </ListItemIcon>
+                            <ListItemText id={labelId} primary={`${value}`} />
+                        </ListItemButton>
+                    </ListItem>
+                );
+            })}
+        </List>
+    );
+};
 
-  return (
-    <List className="list" sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {[0, 1, 2, 3].map((value) => {
-        const labelId = `checkbox-list-label-${value}`;
-
-        return (
-          <ListItem
-            key={value}
-            secondaryAction={
-              <IconButton edge="end" aria-label="comments">
-              </IconButton>
-            }
-            className="listItem"
-            disablePadding
-          >
-            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
-  );
-}
+export default CheckBoxLists;

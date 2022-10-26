@@ -1,13 +1,11 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box } from "@chakra-ui/react";
-import CheckboxLists from "./CheckBoxLists";
 import "./Accordion.css";
 
-SimpleAccordion.defaultProps = {
-    title: "azooooz",
-    items: ["Item 1", "Item 2", "Item 3"],
-};
-
-export default function SimpleAccordion({title}: {title?: string}) {
+const SimpleAccordion: React.FC<{ title: string; items: string[]; child: React.FC<{ items: string[] }> }> = ({
+    title,
+    items,
+    child
+}) => {
     return (
         <Accordion allowToggle>
             <AccordionItem>
@@ -17,10 +15,10 @@ export default function SimpleAccordion({title}: {title?: string}) {
                     </Box>
                     <AccordionIcon />
                 </AccordionButton>
-                <AccordionPanel pb={4}>
-                    <CheckboxLists  />
-                </AccordionPanel>
+                <AccordionPanel pb={4}>{child({ items })}</AccordionPanel>
             </AccordionItem>
         </Accordion>
     );
-}
+};
+
+export default SimpleAccordion;
