@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import Course from "../controllers/Course";
 import { validateURL } from "../utils/modelUtilities";
 
 export interface IMCQuestion {
@@ -62,6 +63,7 @@ export interface ICourse {
     totalHours: number;
     preview: string;
     lessons: Array<ILesson>;
+    isFree: boolean;
 }
 
 export interface ICourseModel extends ICourse, Document {}
@@ -89,7 +91,13 @@ const courseSchema = new Schema({
             message: "Invalid URL"
         }
     },
-    lessons: [lessonSchema]
+    lessons: [lessonSchema],
+    isFree: {
+        type: Boolean,
+        default: function (this: ICourseModel) {
+            return this.price === 0;
+        }
+    }
 });
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
