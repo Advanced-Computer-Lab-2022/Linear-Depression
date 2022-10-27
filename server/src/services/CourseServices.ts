@@ -72,7 +72,7 @@ export const getCurrencyCode = (countryName: string): string => {
     }
     // throw new Error("Country not found");
     // instead of throwing an error, return USD as default
-    return "us";
+    return "US";
 };
 
 export const getCurrencyRate = async (currencyCode: string, baseCurrency: string): Promise<number> => {
