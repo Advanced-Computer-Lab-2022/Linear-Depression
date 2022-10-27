@@ -1,9 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import Home from "./pages/Home";
 import CorporateTrainee from "./pages/CorporateTrainee";
 import IndividualTrainee from "./pages/IndividualTrainee";
 import Instructor from "./pages/Instructor";
-import Home from "./pages/Home";
 import { CoursesContext } from "./context/CoursesContext";
 import { useState } from "react";
 import ICourseProps from "./types/Course";
