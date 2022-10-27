@@ -1,21 +1,33 @@
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box } from "@chakra-ui/react";
-import "./Accordion.css";
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
+import styled from "styled-components";
 
-const SimpleAccordion: React.FC<{ title: string; items: string[]; child: React.FC<{ items: string[] }> }> = ({
-    title,
-    items,
-    child
-}) => {
+const AccordionButtonContainer = styled(AccordionButton)`
+    border: none;
+    height: 50px;
+    margin: 0;
+    width: 100%;
+    background: none;
+`;
+
+const Item = styled.div`
+    text-align: left;
+    flex: 1;
+    font-weight: 700;
+`;
+
+const SimpleAccordion: React.FC<{
+    title: string;
+    items: string[];
+    child: React.FC<{ title: string; items: string[] }>;
+}> = ({ title, items, child }) => {
     return (
         <Accordion allowToggle>
             <AccordionItem>
-                <AccordionButton className="accordionButton">
-                    <Box flex="1" textAlign="left">
-                        {title}
-                    </Box>
+                <AccordionButtonContainer>
+                    <Item>{title}</Item>
                     <AccordionIcon />
-                </AccordionButton>
-                <AccordionPanel pb={4}>{child({ items })}</AccordionPanel>
+                </AccordionButtonContainer>
+                <AccordionPanel pb={4}>{child({ title, items })}</AccordionPanel>
             </AccordionItem>
         </Accordion>
     );

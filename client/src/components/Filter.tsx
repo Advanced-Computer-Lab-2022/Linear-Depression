@@ -1,12 +1,18 @@
 import Accordion from "./Accordion";
+import styled from "styled-components";
 
-const Filter: React.FC<{ titles: string[]; items: string[]; children: { checkbox: React.FC<{items: string[]}>; rating: React.FC } }> = ({
-    titles,
-    items,
-    children
-}) => {
+const FilterContainer = styled.div`
+    width: 20%;
+    margin-right: 20px;
+`;
+
+const Filter: React.FC<{
+    titles: string[];
+    items: string[];
+    children: { checkbox: React.FC<{ title: string; items: string[] }>; rating: React.FC };
+}> = ({ titles, items, children }) => {
     return (
-        <div>
+        <FilterContainer>
             {titles.map((title) => {
                 return (
                     <Accordion
@@ -16,7 +22,7 @@ const Filter: React.FC<{ titles: string[]; items: string[]; children: { checkbox
                     />
                 );
             })}
-        </div>
+        </FilterContainer>
     );
 };
 

@@ -6,7 +6,7 @@ interface ICourseProps {
         id: string;
         firstName: string;
         lastName: string;
-    };
+    } | null;
     averageRating: number;
     totalHours: number;
     price: number;
