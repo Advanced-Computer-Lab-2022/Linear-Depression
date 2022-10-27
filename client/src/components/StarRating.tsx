@@ -1,20 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
-import "./StarRating.css";
-import { CoursesContext } from "../context/CoursesContext";
-import { useContext } from "react";
-import axios from "axios";
+import styled from "styled-components";
+
+const RatingContainer = styled(Rating)`
+    float: left;
+    margin-top: 10px;
+    margin-left: 10px;
+`;
 
 const StarRating: React.FC = () => {
-    const { coursesResultSet, setCoursesResultSet } = useContext(CoursesContext);
-    const [value, setValue] = React.useState<number | null>(2);
+    const [value, setValue] = useState<number | null>(2);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    useEffect(() => {
-        axios.get(`http://localhost:8080/courses?averageRating[lt]=${value}`).then((res) => {
-            setCoursesResultSet(res.data.courses);
-        });
-    }, [value]);
+    const handleChange = (_event: React.SyntheticEvent<{}>, newValue: number | null) => {
+        setValue(newValue);
+        if (newValue) {
+            setSearchParams({ "averageRating[lte]": newValue.toString() });
+        } else {
+            searchParams.delete("averageRating[lte]");
+            setSearchParams(searchParams);
+        }
+    };
 
     return (
         <Box
@@ -22,14 +30,7 @@ const StarRating: React.FC = () => {
                 "& > legend": { mt: 2 }
             }}
         >
-            <Rating
-                className="rating"
-                name="simple-controlled"
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                }}
-            />
+            <RatingContainer name="simple-controlled" value={value} onChange={handleChange} />
         </Box>
     );
 };

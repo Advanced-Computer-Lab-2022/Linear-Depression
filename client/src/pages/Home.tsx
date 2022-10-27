@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Filter from "../components/Filter";
 import CheckBoxLists from "../components/CheckBoxLists";
@@ -6,16 +7,15 @@ import StarRating from "../components/StarRating";
 import CoursesList from "../components/CoursesList";
 import Navbar from "../components/Navbar";
 import axios from "axios";
+import { config } from "../config/config";
 
-const Temp = styled.div`
-    color: red;
+const CoursesContainer = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 `;
 
 const Home: React.FC = () => {
+    const [searchParams] = useSearchParams();
+
     const [courses, setCourses] = useState({
         data: [],
         loading: true,
@@ -27,11 +27,19 @@ const Home: React.FC = () => {
         error: null
     });
 
+    const constructFilterURL = () => {
+        let apiURL = `${config.API_URL}/courses`;
+        const params = searchParams.toString();
+        if (params.length > 0) {
+            apiURL += `?${params}`;
+        }
+        return apiURL;
+    };
+
     useEffect(() => {
         axios
-            .get("http://localhost:8080/courses")
+            .get(constructFilterURL())
             .then((res) => {
-                console.log(res.data.courses);
                 setCourses({
                     data: res.data.courses,
                     loading: false,
@@ -46,9 +54,8 @@ const Home: React.FC = () => {
                 });
             });
         axios
-            .get("http://localhost:8080/courses/subjects")
+            .get(`${config.API_URL}/courses/subjects`)
             .then((res) => {
-                console.log(res.data.subjects);
                 setSubjects({
                     data: res.data.subjects,
                     loading: false,
@@ -62,19 +69,19 @@ const Home: React.FC = () => {
                     error: err
                 });
             });
-    }, []);
+    }, [searchParams]);
 
     return (
         <div>
             <Navbar />
-            <div>
-                <CoursesList courses={courses.data} />
+            <CoursesContainer>
                 <Filter
                     titles={["Subject", "Price", "Rating"]}
                     items={subjects.data}
                     children={{ checkbox: CheckBoxLists, rating: StarRating }}
                 />
-            </div>
+                <CoursesList courses={courses.data} />
+            </CoursesContainer>
         </div>
     );
 };
