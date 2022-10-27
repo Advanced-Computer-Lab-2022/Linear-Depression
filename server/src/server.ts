@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 
     next();
     if (req.cookies["country"] == undefined) {
-        res.cookie("country", "usaf"); //FIXME: change to user's location
+        res.cookie("country", "us"); //FIXME: change to user's location
     }
 });
 
