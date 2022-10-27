@@ -170,27 +170,27 @@ describe("CourseServices", () => {
 
     describe("Test getCurrencyCode", () => {
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("Eg");
+            const currencyCode = getCurrencyCode("Eg");
             expect(currencyCode).toBe("EGP");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("us");
+            const currencyCode = getCurrencyCode("us");
             expect(currencyCode).toBe("USD");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("GB");
+            const currencyCode = getCurrencyCode("GB");
             expect(currencyCode).toBe("GBP");
         });
 
         it("should return the currency code for a valid country with different case", async () => {
-            const currencyCode = await getCurrencyCode("eg");
+            const currencyCode = getCurrencyCode("eg");
             expect(currencyCode).toBe("EGP");
         });
 
-        it("should throw an error for an invalid country", async () => {
-            expect(() => getCurrencyCode("Egypttttt")).toThrow(new Error("Country not found"));
+        it("should return default an invalid country", async () => {
+            expect(getCurrencyCode("Egypttttt")).toBe("US"); // default currency code
         });
     });
 
