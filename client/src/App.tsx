@@ -1,17 +1,20 @@
 import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { FilterContext } from "./context/FilterContext";
 import Home from "./pages/Home";
 import CorporateTrainee from "./pages/CorporateTrainee";
 import IndividualTrainee from "./pages/IndividualTrainee";
 import Instructor from "./pages/Instructor";
-import { CoursesContext } from "./context/CoursesContext";
-import { useState } from "react";
-import ICourseProps from "./types/Course";
 
 function App() {
-    const [coursesResultSet, setCoursesResultSet] = useState<ICourseProps[]>([]);
+    const [subjectFilter, setSubjectFilter] = useState<string>("");
+    const [ratingFilter, setRatingFilter] = useState<number>(0);
+    const [priceFilter, setPriceFilter] = useState<string>("");
 
     return (
-        <CoursesContext.Provider value={{ coursesResultSet, setCoursesResultSet }}>
+        <FilterContext.Provider
+            value={{ subjectFilter, setSubjectFilter, ratingFilter, setRatingFilter, priceFilter, setPriceFilter }}
+        >
             <div className="App">
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -20,7 +23,7 @@ function App() {
                     <Route path="/individual-trainee" element={<IndividualTrainee />} />
                 </Routes>
             </div>
-        </CoursesContext.Provider>
+        </FilterContext.Provider>
     );
 }
 
