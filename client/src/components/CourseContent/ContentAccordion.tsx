@@ -2,21 +2,10 @@ import React from "react";
 import ContentItem from "./ContentItem";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import "./ContentAccordion.css";
+import ILessonProps from "../../types/Lesson";
 
 const ContentAccordion: React.FC<{
-    lesson: {
-        id: string;
-        title: string;
-        totalDuration: number;
-        video?: {
-            videoLink: string;
-            description: string;
-        };
-        exercises: {
-            id: string;
-            question: string;
-        }[];
-    };
+    lesson: ILessonProps;
 }> = ({ lesson: { id, title, totalDuration, video, exercises } }) => {
     return (
         <>
