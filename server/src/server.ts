@@ -14,6 +14,7 @@ import LangRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 const cors = require("cors");
+import * as path from "path";
 
 const app = express();
 
@@ -84,6 +85,7 @@ app.use(express.json());
 
 /* --- Create AdminJS --- */
 AdminJS.registerAdapter({ Database, Resource });
+app.use(express.static(path.join(__dirname, "../public")));
 CreateAdminJS(app);
 /* --- End Create AdminJS --- */
 
