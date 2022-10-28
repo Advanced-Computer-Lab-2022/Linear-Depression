@@ -73,9 +73,11 @@
     height: 40px;
     width: 40px;
     margin-left: 5px;
+    display: inline-block;
 }
 
 .language-img {
     width: 20px;
     height: 20px;
+    margin: right 2px;
 }

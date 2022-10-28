@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
+import CountrySelect from "./CountrySelect";
+import { Country } from "../types/Country";
+import Flag from "react-world-flags";
+import { CountryContext } from "../context/CountryContext";
+import { config } from "../config/config";
+const countries: Country[] = require("../media/country-currency.json");
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const [open, setOpen] = React.useState(false);
+    const { country, setCountry } = useContext(CountryContext);
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = async (value: string) => {
+        setOpen(false);
+        setCountry(value);
+        fetch(`${config.API_URL}/country/${value}`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then((res) => res.json())
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
+    };
     return (
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
@@ -42,10 +68,10 @@ const Navbar = () => {
                                     alt="search icon"
                                     onClick={() => {
                                         const searchField = document.querySelector(".search-box");
-                                        const searchTerm = searchField.value;
+                                        //const searchTerm = searchField.value;
                                         navigate({
-                                            pathname: "/",
-                                            search: `search-term=${searchTerm}`
+                                            pathname: "/"
+                                            //search: `search-term=${searchTerm}`
                                         });
                                     }}
                                 />
@@ -81,16 +107,22 @@ const Navbar = () => {
                         </li>
                         <button className="navbar-item login-button">Log In</button>
                         <button className="navbar-item signup-button">Sign Up</button>
-                        <button className="navbar-item language-button">
-                            <img
-                                className="language-img"
-                                src="https://img.icons8.com/material-outlined/344/globe--v2.png"
-                                alt="language icon"
+                        <button className="navbar-item language-button" onClick={handleClickOpen}>
+                            <Flag
+                                code={country}
+                                fallback={
+                                    <img
+                                        className="language-img"
+                                        src="https://img.icons8.com/material-outlined/344/globe--v2.png"
+                                        alt="language icon"
+                                    />
+                                }
                             />
                         </button>
                     </ul>
                 </div>
             </div>
+            <CountrySelect selectedValue={country} open={open} onClose={handleClose} countries={countries} />
         </nav>
     );
 };

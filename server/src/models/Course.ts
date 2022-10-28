@@ -1,56 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
-import Course from "../controllers/Course";
 import { validateURL } from "../utils/modelUtilities";
-
-export interface IMCQuestion {
-    question: string;
-    choices: Array<string>;
-    answerIndex?: number;
-}
-
-export const questionSchema = new Schema({
-    question: {
-        type: String,
-        required: true
-    },
-    choices: {
-        type: Array<String>,
-        required: true,
-        validate: {
-            validator: (choices: Array<string>) => choices.length === 4,
-            message: "Choices must be an array of 4 strings"
-        }
-    },
-    answerIndex: Number
-});
-
-export interface ILesson {
-    title: string;
-    exercises: Array<mongoose.Types.ObjectId>;
-    totalHours: number;
-    video?: {
-        videoLink: string;
-        description: string;
-    };
-}
-
-const lessonSchema = new Schema({
-    title: { type: String, required: true },
-    exercises: [{ type: mongoose.Types.ObjectId, ref: "Exercise" }],
-    totalHours: { type: Number, required: true },
-    video: {
-        videoLink: {
-            type: String,
-            required: true,
-            validate: {
-                validator: validateURL,
-                message: "Invalid URL"
-            }
-        },
-        description: { type: String, required: true }
-    }
-});
 
 export interface ICourse {
     title: string;
@@ -63,7 +13,7 @@ export interface ICourse {
     totalHours: number;
     discount?: number;
     preview: string;
-    lessons: Array<ILesson>;
+    lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
 }
 
@@ -81,7 +31,7 @@ const courseSchema = new Schema({
         min: 0,
         max: 5,
         default: 0
-    } /* calculate average rating - use hook */,
+    } /* FIXME: calculate average rating - use hook */,
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
     totalHours: { type: Number, required: true },
     discount: { type: Number, min: 0, max: 100, default: 0 },
@@ -93,7 +43,7 @@ const courseSchema = new Schema({
             message: "Invalid URL"
         }
     },
-    lessons: [lessonSchema],
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
     isFree: {
         type: Boolean,
         default: function (this: ICourseModel) {

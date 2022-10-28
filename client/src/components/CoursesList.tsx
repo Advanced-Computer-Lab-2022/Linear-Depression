@@ -13,7 +13,7 @@ const CoursesList: React.FC<{ courses: ICourseProps[] }> = ({ courses }) => {
     return (
         <CoursesListContainer>
             {courses.map((course) => (
-                <CourseCard key={course.id} course={course} />
+                <CourseCard key={course._id} course={course} />
             ))}
         </CoursesListContainer>
     );
