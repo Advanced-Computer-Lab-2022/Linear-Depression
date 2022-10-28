@@ -61,6 +61,7 @@ export interface ICourse {
     averageRating: number;
     ratings: Array<mongoose.Types.ObjectId>;
     totalHours: number;
+    discount?: number;
     preview: string;
     lessons: Array<ILesson>;
     isFree: boolean;
@@ -83,6 +84,7 @@ const courseSchema = new Schema({
     } /* calculate average rating - use hook */,
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
     totalHours: { type: Number, required: true },
+    discount: { type: Number, min: 0, max: 100, default: 0 },
     preview: {
         type: String,
         required: true,

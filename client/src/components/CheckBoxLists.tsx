@@ -20,11 +20,21 @@ const CheckBoxLists: React.FC<{ title: string; items: string[] }> = ({ title, it
     const handleToggle = (value: string, index: number) => () => {
         if (checked == index) {
             setChecked(-1);
-            searchParams.delete(title.toLowerCase());
+            if (title == "Price") {
+                searchParams.delete("isFree");
+            } else {
+                searchParams.delete(title.toLowerCase());
+            }
             setSearchParams(searchParams);
         } else {
             setChecked(index);
-            setSearchParams({ [title.toLowerCase()]: value });
+            if (title == "Price" && value == "Free") {
+                setSearchParams({ isFree: "true" });
+            } else if (title == "Price" && value == "Paid") {
+                setSearchParams({ isFree: "false" });
+            } else {
+                setSearchParams({ [title.toLowerCase()]: value });
+            }
         }
     };
 
