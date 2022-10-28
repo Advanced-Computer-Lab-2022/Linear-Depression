@@ -1,13 +1,14 @@
 interface ILessonProps {
     id: string;
     title: string;
-    totalDuration: number;
+    totalHours: number;
     video?: {
         videoLink: string;
         description: string;
     };
     exercises: {
         id: string;
+        title: string;
         question: string;
     }[];
 }
