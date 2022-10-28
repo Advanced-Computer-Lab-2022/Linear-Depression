@@ -5,6 +5,7 @@ import CountrySelect from "./CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
 import { CountryContext } from "../context/CountryContext";
+import { config } from "../config/config";
 const countries: Country[] = require("../media/country-currency.json");
 
 const Navbar = () => {
@@ -19,7 +20,7 @@ const Navbar = () => {
     const handleClose = async (value: string) => {
         setOpen(false);
         setCountry(value);
-        fetch(`http://localhost:3000/country/${value}`, {
+        fetch(`${config.API_URL}/country/${value}`, {
             method: "POST",
             credentials: "include",
             headers: {
