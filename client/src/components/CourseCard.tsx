@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import StarRatings from "react-star-ratings";
 import ICourseProps from "../types/Course";
+import { useNavigate } from "react-router-dom";
 
 const HorizontalLayout = styled.div`
     display: flex;
@@ -75,7 +76,7 @@ const CoursePrice = styled.p`
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { title, description, instructor, averageRating, totalHours, price, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -90,8 +91,13 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         currency: "$"
     }
 }) => {
+    const navigate = useNavigate();
     return (
-        <CardContainer>
+        <CardContainer
+            onClick={() => {
+                navigate(`/course/${_id}`);
+            }}
+        >
             <HorizontalLayout>
                 <CourseImage>
                     <img alt="" src="https://img-c.udemycdn.com/course/240x135/2776760_f176_10.jpg" />
