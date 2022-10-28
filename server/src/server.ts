@@ -10,6 +10,8 @@ import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
+import LangRouter from "./routes/Currency";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.use((req, res, next) => {
 });
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
+
 /* --- End Create Server --- */
 
 /** Rules of our API */
@@ -43,6 +47,9 @@ app.use((req, res, next) => {
     }
 
     next();
+    if (req.cookies["country"] == undefined) {
+        res.cookie("country", "us"); //FIXME: change to user's location
+    }
 });
 
 app.use((req, res, next) => {
@@ -54,6 +61,7 @@ app.use("/courses", courseRouter);
 app.use("/instructors", instructorRouter);
 app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
+app.use("/country", LangRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
@@ -85,6 +93,7 @@ app.use((req, res) => {
     Logger.error(error);
     return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
 });
+
 /* --- End Routes --- */
 
 export default app;

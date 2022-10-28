@@ -170,27 +170,27 @@ describe("CourseServices", () => {
 
     describe("Test getCurrencyCode", () => {
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("Egypt");
+            const currencyCode = getCurrencyCode("Eg");
             expect(currencyCode).toBe("EGP");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("United States");
+            const currencyCode = getCurrencyCode("us");
             expect(currencyCode).toBe("USD");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = await getCurrencyCode("United Kingdom");
+            const currencyCode = getCurrencyCode("GB");
             expect(currencyCode).toBe("GBP");
         });
 
         it("should return the currency code for a valid country with different case", async () => {
-            const currencyCode = await getCurrencyCode("egypt");
+            const currencyCode = getCurrencyCode("eg");
             expect(currencyCode).toBe("EGP");
         });
 
-        it("should throw an error for an invalid country", async () => {
-            expect(() => getCurrencyCode("Egypttttt")).toThrow(new Error("Country not found"));
+        it("should return default an invalid country", async () => {
+            expect(getCurrencyCode("Egypttttt")).toBe("US"); // default currency code
         });
     });
 
@@ -202,7 +202,7 @@ describe("CourseServices", () => {
                     egp: 15.7
                 }
             });
-            const currencyRate = await getCurrencyRate("EGP");
+            const currencyRate = await getCurrencyRate("EGP", "usd");
             expect(currencyRate).toBe(15.7);
         });
     });
@@ -210,7 +210,7 @@ describe("CourseServices", () => {
     describe("Test getCurrencyRate", () => {
         it("should return the currency rate for a valid currency code", async () => {
             const axios = require("axios");
-            const currencyRate = await getCurrencyRate("EGP");
+            const currencyRate = await getCurrencyRate("EGP", "usd");
             expect(currencyRate).toBeGreaterThan(10); // don't worry this will be true everyday, if not f*** test. :D
         });
     });
