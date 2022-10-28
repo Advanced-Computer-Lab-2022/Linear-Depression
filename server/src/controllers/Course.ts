@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
+import mongoose, { ObjectId, Query } from "mongoose";
 import { StatusCodes } from "http-status-codes";
-import Course from "../models/Course";
+import Course, { ICourse } from "../models/Course";
+import Instructor, { IInstructor, IInstructorModel } from "../models/Instructor";
 
 const createCourse = (req: Request, res: Response, next: NextFunction) => {
     const course = new Course({
@@ -15,12 +16,32 @@ const createCourse = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const listCourses = (req: Request, res: Response, next: NextFunction) => {
-    return Course.find(req.query)
-        .populate("instructor", "firstName lastName")
-        .populate("ratings")
-        .then((courses) => res.status(StatusCodes.OK).json({ courses }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+const listCourses = async (req: Request, res: Response, next: NextFunction) => {
+    const searchTerm = req.query.searchTerm as string;
+    console.log(req.query);
+    delete req.query.searchTerm;
+    console.log(searchTerm);
+    if (searchTerm) {
+        // search by instructor
+        // try to find instructor by name
+        await Instructor.fuzzySearch(searchTerm).then((instructors) => {
+            if (instructors.length > 0) {
+                // if instructor found, search by instructor
+                return Course.find({ instructor: { $in: instructors.map((instructor) => instructor._id) } })
+                    .populate("instructor", "firstName lastName")
+                    .then((courses) => res.status(StatusCodes.OK).json({ courses }));
+            }
+        });
+        return Course.fuzzySearch(searchTerm, req.query)
+            .populate("instructor", "firstName lastName")
+            .then((courses) => res.status(StatusCodes.OK).json({ courses }))
+            .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    } else {
+        return Course.find(req.query)
+            .populate("instructor", "firstName lastName")
+            .then((courses) => res.status(StatusCodes.OK).json({ courses }))
+            .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    }
 };
 
 const readCourse = (req: Request, res: Response, next: NextFunction) => {

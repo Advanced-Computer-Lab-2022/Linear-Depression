@@ -6,15 +6,23 @@ import fs from "fs";
 import axios from "axios";
 
 export const searchCoursesByTitle = async (name: string) => {
+    if (name === undefined) {
+        return [];
+    }
     const courses = await Course.find();
     const searcher = new FuzzySearch(courses, ["title"], {
         caseSensitive: false,
         sort: true // sort by score
     });
+    console.log(searcher.search(name));
+
     return searcher.search(name);
 };
 
 export const searchCoursesByInstructor = async (name: string) => {
+    if (name === undefined) {
+        return [];
+    }
     const courses = await Course.find();
     const instructorIds = courses.map((course) => course.instructor);
     const instructors = await Instructor.find({ _id: { $in: instructorIds } });
@@ -37,6 +45,9 @@ export const searchCoursesByInstructor = async (name: string) => {
 };
 
 export const searchCoursesBySubject = async (name: string) => {
+    if (name === undefined) {
+        return [];
+    }
     const courses = await Course.find();
     const searcher = new FuzzySearch(courses, ["subject"], {
         caseSensitive: false,

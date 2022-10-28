@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+import mongoose_fuzzy_searching, { MongoosePluginModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
 import uniqueValidator from "mongoose-unique-validator";
 import { validateURL } from "../utils/modelUtilities";
 
@@ -93,5 +94,19 @@ const courseSchema = new Schema({
 });
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
+courseSchema.plugin(mongoose_fuzzy_searching, {
+    fields: [
+        {
+            name: "title",
+            minSize: 3,
+            prefixOnly: true
+        },
+        {
+            name: "subject",
+            minSize: 3,
+            prefixOnly: true
+        }
+    ]
+});
 
-export default mongoose.model<ICourseModel>("Course", courseSchema);
+export default mongoose.model<ICourseModel>("Course", courseSchema) as MongoosePluginModel<ICourseModel>;
