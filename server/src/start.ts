@@ -13,7 +13,7 @@ mongoose
         Logger.log("Connected to MongoDB");
 
         app.listen(config.server.port, () => {
-            Logger.log(`Server started at port ${config.server.port}`);
+            Logger.log(`Server started at http://localhost:${config.server.port}`);
         });
     })
     .catch((err) => {
