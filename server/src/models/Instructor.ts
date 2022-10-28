@@ -10,4 +10,8 @@ export interface IInstructorModel extends IInstructor, Document {}
 
 const Instructor: mongoose.Model<IInstructorModel> = User.discriminator("Instructor", new Schema({}, options));
 
-export default Instructor<IInstructorModel> as MongoosePluginModel<IInstructorModel>;
+export default Instructor<IInstructorModel>;
+// write equivalent of this:
+// export default mongoose.model<IInstructorModel>("Instructor", instructorSchema) as MongoosePluginModel<IInstructorModel>;
+// without using as
+//

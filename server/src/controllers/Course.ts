@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Course, { ICourse } from "../models/Course";
-import Instructor from "../models/Instructor";
+import Instructor, { IInstructorModel } from "../models/Instructor";
 import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
 
 async function getCurrencyRateByCookie(
@@ -56,10 +56,14 @@ const listCourses = async (req: Request, res: Response, next: NextFunction) => {
     if (searchTerm) {
         // search by instructor
         // try to find instructor by name
+        // @ts-ignore
         await Instructor.fuzzySearch(searchTerm).then((instructors) => {
             if (instructors.length > 0) {
                 // if instructor found, search by instructor
-                return Course.find({ instructor: { $in: instructors.map((instructor) => instructor._id) } })
+                return Course.find({
+                    instructor: { $in: instructors.map((instructor: IInstructorModel) => instructor._id) },
+                    ...req.query
+                })
                     .populate("instructor", "firstName lastName")
                     .populate("ratings")
                     .populate("lessons")
@@ -72,27 +76,28 @@ const listCourses = async (req: Request, res: Response, next: NextFunction) => {
                     })
                     .then((courses) => {
                         adjustCoursePrice(courses, currencyRate);
-                        return res.status(StatusCodes.OK).json({ courses, currency });
+                        res.status(StatusCodes.OK).json({ courses, currency });
+                    })
+                    .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+            } else {
+                return Course.fuzzySearch(searchTerm, req.query)
+                    .populate("instructor", "firstName lastName")
+                    .populate("ratings")
+                    .populate("lessons")
+                    .populate({
+                        path: "lessons",
+                        populate: {
+                            path: "exercises",
+                            model: "Exercise"
+                        }
+                    })
+                    .then((courses) => {
+                        adjustCoursePrice(courses, currencyRate);
+                        res.status(StatusCodes.OK).json({ courses, currency });
                     })
                     .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
             }
         });
-        return Course.fuzzySearch(searchTerm, req.query)
-            .populate("instructor", "firstName lastName")
-            .populate("ratings")
-            .populate("lessons")
-            .populate({
-                path: "lessons",
-                populate: {
-                    path: "exercises",
-                    model: "Exercise"
-                }
-            })
-            .then((courses) => {
-                adjustCoursePrice(courses, currencyRate);
-                return res.status(StatusCodes.OK).json({ courses, currency });
-            })
-            .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
     } else {
         return Course.find(req.query)
             .populate("instructor", "firstName lastName")
@@ -107,7 +112,7 @@ const listCourses = async (req: Request, res: Response, next: NextFunction) => {
             })
             .then((courses) => {
                 adjustCoursePrice(courses, currencyRate);
-                return res.status(StatusCodes.OK).json({ courses, currency });
+                res.status(StatusCodes.OK).json({ courses, currency });
             })
             .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
     }
@@ -133,9 +138,9 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
-                return res.status(StatusCodes.OK).json({ course: { ...course.toObject(), currency } });
+                res.status(StatusCodes.OK).json({ course: { ...course.toObject(), currency } });
             } else {
-                return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+                res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }
         })
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
