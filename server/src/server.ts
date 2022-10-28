@@ -12,6 +12,7 @@ import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 import LangRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
+import { config } from "./config/config";
 const cors = require("cors");
 
 const app = express();
@@ -48,7 +49,7 @@ app.use(cookieParser());
 /** Rules of our API */
 app.use((req, res, next) => {
     // Website you wish to allow to connect, localhost:3001 is the frontend
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+    res.setHeader("Access-Control-Allow-Origin", config.FRONT_END_URL);
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
 

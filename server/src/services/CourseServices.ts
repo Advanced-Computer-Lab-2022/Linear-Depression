@@ -70,12 +70,13 @@ export const getCurrencyCode = (countryName: string): string => {
             return currency.Code;
         }
     }
-    throw new Error("Country not found");
+    // throw new Error("Country not found");
+    // instead of throwing an error, return USD as default
+    return "US";
 };
 
-export const getCurrencyRate = async (currencyCode: string): Promise<number> => {
-    const BASE_CURRENCY = "usd";
-    const API_URl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${BASE_CURRENCY}/${currencyCode.toLowerCase()}.json`;
+export const getCurrencyRate = async (currencyCode: string, baseCurrency: string): Promise<number> => {
+    const API_URl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${baseCurrency.toLowerCase()}/${currencyCode.toLowerCase()}.json`;
 
     const response = await axios.get(API_URl);
     return response.data[currencyCode.toLowerCase()];

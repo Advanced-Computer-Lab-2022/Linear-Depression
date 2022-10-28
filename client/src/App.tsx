@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import CorporateTrainee from "./pages/CorporateTrainee";
@@ -6,9 +6,22 @@ import IndividualTrainee from "./pages/IndividualTrainee";
 import Instructor from "./pages/Instructor";
 import { CountryContext } from "./context/CountryContext";
 import { useState } from "react";
+import Course from "./pages/Course";
 
 function App() {
-    const [country, setCountry] = useState("US");
+    let defaultCountry = "US";
+
+    const [country, setCountry] = useState(defaultCountry);
+    useEffect(() => {
+        fetch(`http://localhost:3000/country`, { credentials: "include" }).then((res) => {
+            if (res.status === 200) {
+                res.json().then((data) => {
+                    console.log(data.language);
+                    setCountry(data.language);
+                });
+            }
+        });
+    }, []);
     return (
         <CountryContext.Provider value={{ country, setCountry }}>
             <div className="App">

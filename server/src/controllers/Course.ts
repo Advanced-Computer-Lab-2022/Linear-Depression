@@ -4,26 +4,43 @@ import { StatusCodes } from "http-status-codes";
 import Course from "../models/Course";
 import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
 
-async function getCurrencyRateByCookie(req: Request): Promise<{ currencyRate: number; currency: any }> {
-    const language: string = req.cookies.country || "usaf";
-    const currency: string = getCurrencyCode(language);
-    const currencyRate: number = await getCurrencyRate(currency);
+async function getCurrencyRateByCookie(
+    req: Request,
+    baseCountry: string
+): Promise<{ currencyRate: number; currency: any }> {
+    const country: string = req.cookies.country || "us";
+    const currency: string = getCurrencyCode(country);
+    const baseCurrency: string = getCurrencyCode(baseCountry);
+    const currencyRate: number = await getCurrencyRate(currency, baseCurrency);
     return { currencyRate, currency };
 }
-const createCourse = (req: Request, res: Response, _next: NextFunction) => {
+const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
+    // check his cookie
+    const country: string = req.cookies.country || "us";
+    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
+        req,
+        country
+    );
+
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
     });
 
-    return course
-        .save()
-        .then((course) => res.status(StatusCodes.CREATED).json({ course }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    course.price = course.price / currencyRate;
+    try {
+        await course.save();
+        return res.status(StatusCodes.CREATED).json({ course });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
 };
 
 const listCourses = async (req: Request, res: Response, _next: NextFunction) => {
-    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req);
+    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
+        req,
+        "us"
+    );
     try {
         const courses = await Course.find(req.query).populate("instructor", "firstName lastName").populate("ratings");
         for (const course of courses) {
@@ -44,7 +61,10 @@ const listCourses = async (req: Request, res: Response, _next: NextFunction) => 
 
 const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
-    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req);
+    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
+        req,
+        "us"
+    );
 
     return Course.findById(courseId)
         .populate("instructor", "firstName lastName")

@@ -12,6 +12,17 @@ const Home: React.FC = () => {
         loading: true,
         error: null
     });
+    //get request using fetch
+    useEffect(() => {
+        fetch(`http://localhost:3000/country`, { credentials: "include" }).then((res) => {
+            if (res.status === 200) {
+                res.json().then((data) => {
+                    console.log(data.language);
+                    setCountry(data.language);
+                });
+            }
+        });
+    }, []);
 
     useEffect(() => {
         axios
