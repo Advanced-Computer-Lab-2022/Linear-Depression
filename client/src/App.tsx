@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Home from "./pages/Home";
 import CorporateTrainee from "./pages/CorporateTrainee";
 import IndividualTrainee from "./pages/IndividualTrainee";
 import Instructor from "./pages/Instructor";
 import { CountryContext } from "./context/CountryContext";
-import { useState } from "react";
 import Course from "./pages/Course";
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
             <div className="App">
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/course/:courseId" element={<Course />} />
                     <Route path="/instructor" element={<Instructor />} />
                     <Route path="/corporate-trainee" element={<CorporateTrainee />} />
                     <Route path="/individual-trainee" element={<IndividualTrainee />} />

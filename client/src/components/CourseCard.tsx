@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import StarRatings from "react-star-ratings";
 import ICourseProps from "../types/Course";
+import { useNavigate } from "react-router-dom";
 
 const HorizontalLayout = styled.div`
     display: flex;
@@ -36,6 +37,12 @@ const CourseDescription = styled.p`
     font-weight: 500;
     margin-bottom: 5px;
     margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 `;
 
 const CourseInstructor = styled.p`
@@ -75,7 +82,7 @@ const CoursePrice = styled.p`
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { title, description, instructor, averageRating, totalHours, price, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -90,16 +97,23 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         currency: "$"
     }
 }) => {
+    const navigate = useNavigate();
     return (
-        <CardContainer>
+        <CardContainer
+            onClick={() => {
+                navigate(`/course/${_id}`);
+            }}
+        >
             <HorizontalLayout>
                 <CourseImage>
                     <img alt="" src="https://img-c.udemycdn.com/course/240x135/2776760_f176_10.jpg" />
                 </CourseImage>
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
-                    <CourseDescription>{description}</CourseDescription>
-                    <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                    <CourseDescription>{description + "  ..."}</CourseDescription>
+                    {instructor && (
+                        <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                    )}
                     <CourseRatingContainer>
                         <CourseRatingText>{averageRating}</CourseRatingText>
                         <StarRatings
