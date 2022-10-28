@@ -23,12 +23,17 @@ export const questionSchema = new mongoose.Schema({
 });
 
 export interface IExercise {
+    title: string;
     questions: Array<IMCQuestion>;
 }
 
 export interface IExerciseModel extends IExercise, Document {}
 
 const exerciseSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
     questions: {
         type: [questionSchema],
         required: true

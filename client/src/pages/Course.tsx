@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
 import CourseContent from "../components/CourseContent/CourseContent";
-import ILessonProps from "../types/Lesson";
 
 const Course: React.FC = () => {
     const [lessons, setLessons] = useState({
@@ -13,11 +11,24 @@ const Course: React.FC = () => {
     });
     const courseId = useParams().courseId;
     useEffect(() => {
-        axios.get(`http://localhost:3000/courses/${courseId}`).then((res) => {
-            console.log(res.data.course.lessons);
-            setLessons(res.data.course.lessons);
-        });
+        axios
+            .get(`http://localhost:8080/courses/${courseId}`)
+            .then((response) => {
+                setLessons({
+                    data: response.data.course.lessons,
+                    loading: false,
+                    error: null
+                });
+            })
+            .catch((error) => {
+                setLessons({
+                    data: [],
+                    loading: false,
+                    error: error
+                });
+            });
     }, []);
+
     return <CourseContent lessons={lessons.data} />;
 };
 
