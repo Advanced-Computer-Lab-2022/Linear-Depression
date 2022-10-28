@@ -42,7 +42,16 @@ const listCourses = async (req: Request, res: Response, _next: NextFunction) => 
         "us"
     );
     try {
-        const courses = await Course.find(req.query).populate("instructor", "firstName lastName").populate("ratings");
+        const courses = await Course.find(req.query)
+            .populate("instructor", "firstName lastName")
+            .populate("ratings")
+            .populate({
+                path: "lessons",
+                populate: {
+                    path: "exercises",
+                    model: "Exercise"
+                }
+            });
         for (const course of courses) {
             course.price = course.price * currencyRate;
             course.price = Math.ceil(course.price * 100) / 100;
@@ -69,6 +78,14 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     return Course.findById(courseId)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
+        .populate("lessons")
+        .populate({
+            path: "lessons",
+            populate: {
+                path: "exercises",
+                model: "Exercise"
+            }
+        })
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
