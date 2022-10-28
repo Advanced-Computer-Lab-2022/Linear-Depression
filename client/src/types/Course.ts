@@ -10,6 +10,7 @@ interface ICourseProps {
     averageRating: number;
     totalHours: number;
     price: number;
+    discount: number;
     currency: string;
 }
 

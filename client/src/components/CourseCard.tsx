@@ -9,20 +9,22 @@ const HorizontalLayout = styled.div`
 `;
 
 const CardContainer = styled.div`
-    width: 75%;
     height: 150px;
     margin-bottom: 20px;
+    padding: 10px;
 `;
 
 const CourseImage = styled.div`
     width: 260px;
     height: 100%;
+    flex: 1;
 `;
 
 const CourseDetails = styled.div`
     width: 100%;
     height: 100%;
     padding-left: 20px;
+    flex: 4;
 `;
 
 const CourseTitle = styled.p`
@@ -33,6 +35,7 @@ const CourseTitle = styled.p`
 `;
 
 const CourseDescription = styled.p`
+    width: 90%;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
@@ -75,14 +78,20 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CoursePrice = styled.p`
-    font-weight: 800;
+const CoursePriceSection = styled.div`
     padding-left: 10px;
     padding-right: 10px;
+    width: 100%;
+    flex: 1;
+`;
+
+const CoursePrice = styled.p<{ isDiscounted?: boolean }>`
+    font-weight: 800;
+    text-decoration: ${(props) => (props.isDiscounted ? "line-through" : "none")};
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { _id, title, description, instructor, averageRating, totalHours, price, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, discount, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -97,6 +106,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         currency: "$"
     }
 }) => {
+    discount = 50;
     const navigate = useNavigate();
     return (
         <CardContainer
@@ -125,7 +135,12 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePrice>{`${currency}${price}`}</CoursePrice>
+                <CoursePriceSection>
+                    <CoursePrice isDiscounted={(discount as number) > 0}>{`${currency} ${price}`}</CoursePrice>
+                    {(discount as number) > 0 && (
+                        <CoursePrice>{`${currency} ${price - (price * (discount as number)) / 100}`}</CoursePrice>
+                    )}
+                </CoursePriceSection>
             </HorizontalLayout>
             <hr />
         </CardContainer>
