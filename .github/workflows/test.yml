@@ -7,7 +7,7 @@ jobs:
             # set environment variables
             - uses: actions/checkout@v2
             - name: Install modules
-              run: cd server; npm install
+              run: cd server; npm install --legacy-peer-deps
             - name: Run test
               env:
                   MONGO_TEST_URL: ${{ secrets.MONGO_TEST_URL }}
