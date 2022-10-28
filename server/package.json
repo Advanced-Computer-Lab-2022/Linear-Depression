@@ -36,7 +36,7 @@
         "request": "^2.81.0",
         "supertest": "^6.3.0",
         "ts-node": "^10.9.1",
-        "tslib": "^2.4.0"
+        "tslib": "^2.4.0",
         "superagent": "^8.0.3",
         "supertest": "^6.3.0",
         "ts-node": "^10.9.1"
