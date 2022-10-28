@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
-import axios from "axios";
 import { CountryContext } from "../context/CountryContext";
 const countries: Country[] = require("../media/country-currency.json");
 
@@ -20,19 +19,6 @@ const Navbar = () => {
     const handleClose = async (value: string) => {
         setOpen(false);
         setCountry(value);
-        // // set cookie for country
-        // document.cookie = `country=${value}`;
-        // // redirect to home page
-        // navigate("/");
-        // try {
-        //     await axios.post(`http://localhost:3000/country/${value}`, {
-        //         withCredentials: true
-        //     });
-
-        //     console.log("Country set");
-        // } catch (err) {
-        //     console.log(err);
-        // }
         fetch(`http://localhost:3000/country/${value}`, {
             method: "POST",
             credentials: "include",

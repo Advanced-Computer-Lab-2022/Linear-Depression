@@ -12,10 +12,6 @@ import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 import LangRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
-import { instructorFactory } from "./tests/test_models/instructor/factory";
-import Instructor from "./models/Instructor";
-import { courseFactory } from "./tests/test_models/course/factory";
-import Course from "./models/Course";
 const cors = require("cors");
 
 const app = express();
@@ -107,13 +103,5 @@ app.use((req, res) => {
 });
 
 /* --- End Routes --- */
-
-const instructorData = instructorFactory();
-const instructor = new Instructor(instructorData);
-instructor.save();
-const courseData = courseFactory();
-courseData.instructor = instructor._id;
-const course = new Course(courseData);
-course.save();
 
 export default app;
