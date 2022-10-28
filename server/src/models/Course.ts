@@ -11,8 +11,10 @@ export interface ICourse {
     averageRating: number;
     ratings: Array<mongoose.Types.ObjectId>;
     totalHours: number;
+    discount?: number;
     preview: string;
     lessons: Array<mongoose.Types.ObjectId>;
+    isFree: boolean;
 }
 
 export interface ICourseModel extends ICourse, Document {}
@@ -32,6 +34,7 @@ const courseSchema = new Schema({
     } /* FIXME: calculate average rating - use hook */,
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
     totalHours: { type: Number, required: true },
+    discount: { type: Number, min: 0, max: 100, default: 0 },
     preview: {
         type: String,
         required: true,
@@ -40,7 +43,13 @@ const courseSchema = new Schema({
             message: "Invalid URL"
         }
     },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }]
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
+    isFree: {
+        type: Boolean,
+        default: function (this: ICourseModel) {
+            return this.price === 0;
+        }
+    }
 });
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });

@@ -37,6 +37,12 @@ const CourseDescription = styled.p`
     font-weight: 500;
     margin-bottom: 5px;
     margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 `;
 
 const CourseInstructor = styled.p`
@@ -104,8 +110,10 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                 </CourseImage>
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
-                    <CourseDescription>{description}</CourseDescription>
-                    <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                    <CourseDescription>{description + "  ..."}</CourseDescription>
+                    {instructor && (
+                        <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                    )}
                     <CourseRatingContainer>
                         <CourseRatingText>{averageRating}</CourseRatingText>
                         <StarRatings

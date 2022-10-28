@@ -1,18 +1,21 @@
 import React from "react";
+import styled from "styled-components";
 import ICourseProps from "../types/Course";
 import CourseCard from "./CourseCard";
 
-interface CoursesListProps {
-    courses: ICourseProps[];
-}
+const CoursesListContainer = styled.div`
+    width: 80%;
+    margin-left: auto !important;
+    justify-content: right;
+`;
 
-const CoursesList: React.FC<CoursesListProps> = ({ courses }) => {
+const CoursesList: React.FC<{ courses: ICourseProps[] }> = ({ courses }) => {
     return (
-        <div>
+        <CoursesListContainer>
             {courses.map((course) => (
                 <CourseCard key={course._id} course={course} />
             ))}
-        </div>
+        </CoursesListContainer>
     );
 };
 
