@@ -107,4 +107,4 @@ dist
 .idea
 
 # AdminJs
-server/src/.adminjs/*
+.adminjs

@@ -12,6 +12,9 @@ import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 import LangRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
+import { config } from "./config/config";
+const cors = require("cors");
+import * as path from "path";
 
 const app = express();
 
@@ -26,10 +29,18 @@ app.use((req, res, next) => {
         Logger.info(
             `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
         );
+        const cookies = req.cookies;
+        Logger.info(`Cookies -> ${JSON.stringify(cookies)}`);
     });
 
     next();
 });
+app.use(
+    cors({
+        origin: true,
+        credentials: true
+    })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -38,8 +49,10 @@ app.use(cookieParser());
 
 /** Rules of our API */
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    // Website you wish to allow to connect, localhost:3001 is the frontend
+    res.setHeader("Access-Control-Allow-Origin", config.FRONT_END_URL);
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
 
     if (req.method == "OPTIONS") {
         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
@@ -47,9 +60,6 @@ app.use((req, res, next) => {
     }
 
     next();
-    if (req.cookies["country"] == undefined) {
-        res.cookie("country", "us"); //FIXME: change to user's location
-    }
 });
 
 app.use((req, res, next) => {
@@ -75,6 +85,7 @@ app.use(express.json());
 
 /* --- Create AdminJS --- */
 AdminJS.registerAdapter({ Database, Resource });
+app.use(express.static(path.join(__dirname, "../public")));
 CreateAdminJS(app);
 /* --- End Create AdminJS --- */
 

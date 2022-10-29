@@ -6,7 +6,7 @@ import ILessonProps from "../../types/Lesson";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;
-}> = ({ lesson: { id, title, totalDuration, video, exercises } }) => {
+}> = ({ lesson: { id, title, totalHours, video, exercises } }) => {
     return (
         <>
             <h2 className="accordion-header" id={`panelsStayOpen-heading${id}`}>
@@ -19,7 +19,7 @@ const ContentAccordion: React.FC<{
                 >
                     <MdKeyboardArrowDown className="accordion-icon" />
                     <div className="accordion-title">{title}</div>
-                    <div className="accordion-subtitle">{`${totalDuration} hours`}</div>
+                    <div className="accordion-subtitle">{`${totalHours} hours`}</div>
                 </button>
             </h2>
             <div
@@ -37,7 +37,7 @@ const ContentAccordion: React.FC<{
 
                     <ul>
                         {exercises.map((exercise) => (
-                            <ContentItem key={exercise.id} title={exercise.question} />
+                            <ContentItem key={exercise.id} title={exercise.title} />
                         ))}
                     </ul>
                 </div>

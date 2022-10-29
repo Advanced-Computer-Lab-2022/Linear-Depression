@@ -2,26 +2,29 @@ import React from "react";
 import styled from "styled-components";
 import StarRatings from "react-star-ratings";
 import ICourseProps from "../types/Course";
+import { useNavigate } from "react-router-dom";
 
 const HorizontalLayout = styled.div`
     display: flex;
 `;
 
 const CardContainer = styled.div`
-    width: 75%;
     height: 150px;
     margin-bottom: 20px;
+    padding: 10px;
 `;
 
 const CourseImage = styled.div`
     width: 260px;
     height: 100%;
+    flex: 1;
 `;
 
 const CourseDetails = styled.div`
     width: 100%;
     height: 100%;
     padding-left: 20px;
+    flex: 4;
 `;
 
 const CourseTitle = styled.p`
@@ -32,10 +35,17 @@ const CourseTitle = styled.p`
 `;
 
 const CourseDescription = styled.p`
+    width: 90%;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
     margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 `;
 
 const CourseInstructor = styled.p`
@@ -68,14 +78,20 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CoursePrice = styled.p`
-    font-weight: 800;
+const CoursePriceSection = styled.div`
     padding-left: 10px;
     padding-right: 10px;
+    width: 100%;
+    flex: 1;
+`;
+
+const CoursePrice = styled.p<{ isDiscounted?: boolean }>`
+    font-weight: 800;
+    text-decoration: ${(props) => (props.isDiscounted ? "line-through" : "none")};
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { title, description, instructor, averageRating, totalHours, price, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, discount, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -90,16 +106,24 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         currency: "$"
     }
 }) => {
+    discount = 50;
+    const navigate = useNavigate();
     return (
-        <CardContainer>
+        <CardContainer
+            onClick={() => {
+                navigate(`/course/${_id}`);
+            }}
+        >
             <HorizontalLayout>
                 <CourseImage>
                     <img alt="" src="https://img-c.udemycdn.com/course/240x135/2776760_f176_10.jpg" />
                 </CourseImage>
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
-                    <CourseDescription>{description}</CourseDescription>
-                    <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                    <CourseDescription>{description + "  ..."}</CourseDescription>
+                    {instructor && (
+                        <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                    )}
                     <CourseRatingContainer>
                         <CourseRatingText>{averageRating}</CourseRatingText>
                         <StarRatings
@@ -111,7 +135,12 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePrice>{`${currency}${price}`}</CoursePrice>
+                <CoursePriceSection>
+                    <CoursePrice isDiscounted={(discount as number) > 0}>{`${currency} ${price}`}</CoursePrice>
+                    {(discount as number) > 0 && (
+                        <CoursePrice>{`${currency} ${price - (price * (discount as number)) / 100}`}</CoursePrice>
+                    )}
+                </CoursePriceSection>
             </HorizontalLayout>
             <hr />
         </CardContainer>

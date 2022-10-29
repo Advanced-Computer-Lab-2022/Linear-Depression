@@ -1,22 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { ICourse, ILesson } from "../../../models/Course";
+import { ICourse } from "../../../models/Course";
+import { ILesson } from "../../../models/Lesson";
 import mongoose from "mongoose";
-
-const createExercises = (randomLength: Number): ILesson[] => {
-    const exercises: ILesson[] = [];
-    for (let i = 0; i < randomLength; i++) {
-        exercises.push({
-            title: faker.lorem.words(),
-            exercises: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
-            totalHours: faker.datatype.number(),
-            video: {
-                videoLink: `https://www.youtube.com/watch?v=${faker.datatype.number()}`,
-                description: faker.lorem.paragraph()
-            }
-        });
-    }
-    return exercises;
-};
 
 export function courseFactory(): ICourse {
     return {
@@ -34,11 +19,6 @@ export function courseFactory(): ICourse {
         ratings: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
         totalHours: faker.datatype.number(),
         preview: `https://www.youtube.com/watch?v=${faker.datatype.number()}`,
-        lessons: createExercises(
-            faker.datatype.number({
-                min: 1,
-                max: 5
-            })
-        )
+        lessons: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())]
     };
 }

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { IMCQuestion } from "../../../models/Course";
 import { IExercise } from "../../../models/Exercise";
+import { IMCQuestion } from "../../../models/Exercise";
 
 const createQuestions = (randomLength: Number): IMCQuestion[] => {
     const questions: IMCQuestion[] = [];
@@ -19,6 +19,7 @@ const createQuestions = (randomLength: Number): IMCQuestion[] => {
 
 export const exerciseFactory = (): IExercise => {
     return {
+        title: faker.lorem.words(),
         questions: createQuestions(
             faker.datatype.number({
                 min: 1,
