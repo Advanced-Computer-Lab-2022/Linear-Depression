@@ -92,9 +92,9 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="/">
-                                Teach on Udemy
-                            </a>
+                            <Link className="nav-link" to="my-courses" relative="path">
+                                My Courses
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <a className="navbar-brand" href="/">

@@ -1,16 +1,19 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Route, Routes, useSearchParams } from "react-router-dom";
-import AllCourses from "../components/AllCourses";
-import MyCourses from "../components/MyCourses";
-import Navbar from "../components/Navbar";
+import { useSearchParams } from "react-router-dom";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
+import { constructFilterURL } from "../services/constructFilterURL";
 import { fetchCourses } from "../services/fetchCourses";
 import { fetchSubjects } from "../services/fetchSubjects";
 import { User } from "../types/User";
+import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
 
-const Instructor: React.FC = () => {
-    const [searchParams] = useSearchParams();
+const MyCourses: React.FC<{
+    id: string;
+    type: User;
+}> = ({ id, type }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const { country, setCountry } = useContext(CountryContext);
     const [courses, setCourses] = useState({
@@ -24,8 +27,7 @@ const Instructor: React.FC = () => {
         error: null
     });
 
-    const instructorId = "635cef84dfbca82a3d585769";
-
+    //get request using fetch
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
             if (res.status === 200) {
@@ -38,7 +40,9 @@ const Instructor: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetchCourses(searchParams).then((fetchedCoursesData) => {
+        setSearchParams({ instructor: id });
+        fetchCourses(searchParams, id, type).then((fetchedCoursesData) => {
+            console.log("Hereeeeee");
             setCourses(fetchedCoursesData);
         });
         fetchSubjects().then((fetchedSubjectsData) => {
@@ -46,11 +50,10 @@ const Instructor: React.FC = () => {
         });
     }, [searchParams, country]);
     return (
-        <Routes>
-            <Route path="/" element={<AllCourses />} />
-            <Route path="/my-courses" element={<MyCourses id={instructorId} type={User.INSTRUCTOR} />} />
-        </Routes>
+        <div>
+            <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} />
+        </div>
     );
 };
 
-export default Instructor;
+export default MyCourses;

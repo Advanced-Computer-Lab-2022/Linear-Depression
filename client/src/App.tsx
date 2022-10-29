@@ -7,6 +7,10 @@ import IndividualTrainee from "./pages/IndividualTrainee";
 import Instructor from "./pages/Instructor";
 import { CountryContext } from "./context/CountryContext";
 import Course from "./pages/Course";
+import Navbar from "./components/Navbar";
+import AllCourses from "./components/AllCourses";
+import MyCourses from "./components/MyCourses";
+import { User } from "./types/User";
 
 function App() {
     let defaultCountry = "US";
@@ -22,15 +26,23 @@ function App() {
             }
         });
     }, []);
+    const instructorId = "635cef84dfbca82a3d585769";
     return (
         <CountryContext.Provider value={{ country, setCountry }}>
             <div className="App">
+                <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/course/:courseId" element={<Course />} />
-                    <Route path="/instructor" element={<Instructor />} />
-                    <Route path="/corporate-trainee" element={<CorporateTrainee />} />
-                    <Route path="/individual-trainee" element={<IndividualTrainee />} />
+                    <Route path="course/:courseId" element={<Course />} />
+                    <Route path="instructor" element={<Instructor />}>
+                        <Route path="instructor/" element={<AllCourses />} />
+                        <Route
+                            path="/instructor/my-courses"
+                            element={<MyCourses id={instructorId} type={User.INSTRUCTOR} />}
+                        />
+                    </Route>
+                    <Route path="corporate-trainee" element={<CorporateTrainee />} />
+                    <Route path="individual-trainee" element={<IndividualTrainee />} />
                 </Routes>
             </div>
         </CountryContext.Provider>
