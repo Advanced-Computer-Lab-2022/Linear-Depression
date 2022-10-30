@@ -61,7 +61,7 @@ const CourseContent: React.FC<{
             </CourseContentInfo>
             <div className="accordion accordion-flush" id="accordionFlushExample">
                 {(showMore ? lessons : lessons.slice(0, MAX_COUNT_SECTIONS)).map((lesson) => (
-                    <ContentAccordion key={lesson.id} lesson={lesson} />
+                    <ContentAccordion key={lesson._id} lesson={lesson} />
                 ))}
             </div>
             {lessons.length > MAX_COUNT_SECTIONS && (

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
@@ -35,11 +35,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">
-                    <img
-                        height="34"
-                        src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
-                        alt="udemy logo"
-                    />
+                    <img height="34" src="" alt="Linear Depression" />
                 </Link>
                 <button
                     className="navbar-toggler"
@@ -67,7 +63,7 @@ const Navbar = () => {
                                     src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
                                     alt="search icon"
                                     onClick={() => {
-                                        const searchField = document.querySelector(".search-box");
+                                        // const searchField = document.querySelector(".search-box");
                                         //const searchTerm = searchField.value;
                                         navigate({
                                             pathname: "/"
@@ -92,9 +88,9 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="/">
-                                Teach on Udemy
-                            </a>
+                            <Link className="nav-link" to="my-courses" relative="path">
+                                My Courses
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <a className="navbar-brand" href="/">

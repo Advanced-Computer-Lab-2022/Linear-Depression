@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Course from "../models/Course";
 import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
+import Lesson from "../models/Lesson";
 
 async function getCurrencyRateByCookie(
     req: Request,
@@ -135,4 +136,19 @@ const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse, listSubjects };
+const createLesson = async (req: Request, res: Response, next: NextFunction) => {
+    const courseId = req.params.courseId;
+    const lesson = new Lesson({
+        ...req.body
+    });
+    lesson
+        .save()
+        .then((lesson) => {
+            Course.findByIdAndUpdate(courseId, { $push: { lessons: lesson._id } }).then(() => {
+                res.status(StatusCodes.CREATED).json({ lesson });
+            });
+        })
+        .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+};
+
+export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse, listSubjects, createLesson };
