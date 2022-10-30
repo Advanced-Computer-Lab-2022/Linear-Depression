@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
 import AllCourses from "../components/AllCourses";
@@ -31,9 +32,8 @@ const Instructor: React.FC = () => {
 
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
-            if (res.status === 200) {
+            if (res.status === StatusCodes.OK) {
                 res.json().then((data) => {
-                    console.log(data.language);
                     setCountry(data.language);
                 });
             }

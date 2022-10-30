@@ -13,7 +13,7 @@ const Course: React.FC = () => {
         loading: true,
         error: null
     });
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);

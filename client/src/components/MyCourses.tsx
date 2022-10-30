@@ -9,6 +9,7 @@ import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
 import AddIcon from "@mui/icons-material/Add";
 import AddCourseForm from "./AddCourseForm";
 import FloatingButton from "./StyledComponents/FloatingButton";
+import { StatusCodes } from "http-status-codes";
 
 const MyCourses: React.FC<{
     id: string;
@@ -27,7 +28,7 @@ const MyCourses: React.FC<{
         loading: true,
         error: null
     });
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -38,7 +39,7 @@ const MyCourses: React.FC<{
 
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
-            if (res.status === 200) {
+            if (res.status === StatusCodes.OK) {
                 res.json().then((data) => {
                     setCountry(data.language);
                 });

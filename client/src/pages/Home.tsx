@@ -6,6 +6,7 @@ import { useContext } from "react";
 import AllCourses from "../components/AllCourses";
 import { fetchCourses } from "../services/fetchCourses";
 import { fetchSubjects } from "../services/fetchSubjects";
+import { StatusCodes } from "http-status-codes";
 
 const Home: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -22,10 +23,9 @@ const Home: React.FC = () => {
         error: null
     });
 
-    //get request using fetch
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
-            if (res.status === 200) {
+            if (res.status === StatusCodes.OK) {
                 res.json().then((data) => {
                     setCountry(data.language);
                 });

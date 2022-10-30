@@ -21,7 +21,6 @@ const AllCourses = () => {
         error: null
     });
 
-    //get request using fetch
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
             if (res.status === 200) {

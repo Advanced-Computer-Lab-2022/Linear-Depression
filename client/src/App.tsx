@@ -24,7 +24,6 @@ function App() {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
             if (res.status === StatusCodes.OK) {
                 res.json().then((data) => {
-                    console.log(data.language);
                     setCountry(data.language);
                 });
             }
