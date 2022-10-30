@@ -1,38 +1,29 @@
-import { StatusCodes } from "http-status-codes";
-import React, { useContext, useEffect, useState } from "react";
-import { Route, Routes, useSearchParams } from "react-router-dom";
-import AllCourses from "../components/AllCourses";
-import MyCourses from "../components/MyCourses";
+import { useContext, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
-import { UserContext } from "../context/UserContext";
 import { fetchCourses } from "../services/fetchCourses";
 import { fetchSubjects } from "../services/fetchSubjects";
-import { User } from "../types/User";
+import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
 
-const Instructor: React.FC = () => {
+const AllCourses = () => {
     const [searchParams] = useSearchParams();
 
     const { country, setCountry } = useContext(CountryContext);
-    const { userId, setUserId, userType, setUserType } = useContext(UserContext);
-
-    const [_courses, setCourses] = useState({
+    const [courses, setCourses] = useState({
         data: [],
         loading: true,
         error: null
     });
-    const [_subjects, setSubjects] = useState({
+    const [subjects, setSubjects] = useState({
         data: [],
         loading: true,
         error: null
     });
-
-    setUserId("635ee87d5891ae20afc2a821");
-    setUserType(User.INSTRUCTOR);
 
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
-            if (res.status === StatusCodes.OK) {
+            if (res.status === 200) {
                 res.json().then((data) => {
                     setCountry(data.language);
                 });
@@ -49,11 +40,10 @@ const Instructor: React.FC = () => {
         });
     }, [searchParams, country]);
     return (
-        <Routes>
-            <Route path="/" element={<AllCourses />} />
-            <Route path="/my-courses" element={<MyCourses id={userId} type={userType} />} />
-        </Routes>
+        <div>
+            <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} />
+        </div>
     );
 };
 
-export default Instructor;
+export default AllCourses;

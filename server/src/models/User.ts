@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import mongoose_fuzzy_searching, { MongoosePluginModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
 
 export interface IUser {
     firstName: string;
@@ -31,4 +32,19 @@ export class UserSchema extends Schema {
 }
 const userSchema = new UserSchema({}, {});
 userSchema.plugin(uniqueValidator, { message: "is already taken." });
-export default mongoose.model<IUserModel>("User", userSchema);
+userSchema.plugin(mongoose_fuzzy_searching, {
+    fields: [
+        {
+            name: "firstName",
+            minSize: 3,
+            prefixOnly: true
+        },
+        {
+            name: "lastName",
+            minSize: 3,
+            prefixOnly: true
+        }
+    ]
+});
+
+export default mongoose.model<IUserModel>("User", userSchema) as MongoosePluginModel<IUserModel>;

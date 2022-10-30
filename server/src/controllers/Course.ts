@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
-import Course from "../models/Course";
+import Course, { ICourse, ICourseModel } from "../models/Course";
+import Instructor, { IInstructorModel } from "../models/Instructor";
 import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
+import Lesson from "../models/Lesson";
 
 async function getCurrencyRateByCookie(
     req: Request,
@@ -36,38 +40,38 @@ const createCourse = async (req: Request, res: Response, _next: NextFunction) =>
     }
 };
 
-const listCourses = async (req: Request, res: Response, _next: NextFunction) => {
+const adjustCoursePrice = (courses: ICourse[], currencyRate: number) => {
+    courses.forEach((course) => {
+        course.price = course.price * currencyRate;
+        course.price = Math.ceil(course.price * 100) / 100;
+    });
+};
+
+const listCourses = async (req: Request, res: Response, next: NextFunction) => {
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
         "us"
     );
-    try {
-        const courses = await Course.find(req.query)
-            .populate("instructor", "firstName lastName")
-            .populate("ratings")
-            .populate({
-                path: "lessons",
-                populate: {
-                    path: "exercises",
-                    model: "Exercise"
-                }
-            });
-        for (const course of courses) {
-            course.price = course.price * currencyRate;
-            course.price = Math.ceil(course.price * 100) / 100;
-        }
-        const courseWithCurrency = courses.map((course) => {
-            return {
-                ...course.toObject(),
-                currency
-            };
+    const searchTerm = req.query.searchTerm as string;
+    console.log(req.query);
+    delete req.query.searchTerm;
+    console.log(searchTerm);
+    if (searchTerm) {
+        // search by instructor
+        // try to find instructor by name
+        // @ts-ignore
+        await Instructor.fuzzySearch(searchTerm).then((instructors) => {
+            if (instructors.length > 0) {
+                // if instructor found, search by instructor
+                return searchWithInstructors(instructors, req, currencyRate, res, currency);
+            } else {
+                return searchWithTitleSubject(searchTerm, req, currencyRate, res, currency);
+            }
         });
-        return res.status(StatusCodes.OK).json({ courses: courseWithCurrency });
-    } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    } else {
+        return listCoursesOnlyFilter(req, currencyRate, res, currency);
     }
 };
-
 const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
@@ -78,7 +82,6 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     return Course.findById(courseId)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
-        .populate("lessons")
         .populate({
             path: "lessons",
             populate: {
@@ -89,9 +92,9 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
-                return res.status(StatusCodes.OK).json({ course: { ...course.toObject(), currency } });
+                res.status(StatusCodes.OK).json({ course: { ...course.toObject(), currency } });
             } else {
-                return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+                res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }
         })
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
@@ -135,4 +138,100 @@ const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse, listSubjects };
+const createLesson = async (req: Request, res: Response, next: NextFunction) => {
+    const courseId = req.params.courseId;
+    const lesson = new Lesson({
+        ...req.body
+    });
+    lesson
+        .save()
+        .then((lesson) => {
+            Course.findByIdAndUpdate(courseId, { $push: { lessons: lesson._id } }).then(() => {
+                res.status(StatusCodes.CREATED).json({ lesson });
+            });
+        })
+        .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+};
+
+function searchWithTitleSubject(
+    searchTerm: string,
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    currencyRate: number,
+    res: Response<any, Record<string, any>>,
+    currency: string
+) {
+    return Course.fuzzySearch(searchTerm, req.query)
+        .populate("instructor", "firstName lastName")
+        .populate("ratings")
+        .populate({
+            path: "lessons",
+            populate: {
+                path: "exercises",
+                model: "Exercise"
+            }
+        })
+        .then((courses) => {
+            adjustCoursePrice(courses, currencyRate);
+            const coursesWithCurrency = courses.map((course) => ({ ...course.toObject(), currency }));
+            res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
+        })
+        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+}
+
+function searchWithInstructors(
+    instructors: IInstructorModel[],
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    currencyRate: number,
+    res: Response<any, Record<string, any>>,
+    currency: string
+) {
+    return Course.find({
+        instructor: { $in: instructors.map((instructor: IInstructorModel) => instructor._id) },
+        ...req.query
+    })
+        .populate("instructor", "firstName lastName")
+        .populate("ratings")
+        .populate({
+            path: "lessons",
+            populate: {
+                path: "exercises",
+                model: "Exercise"
+            }
+        })
+        .then((courses) => {
+            adjustCoursePrice(courses, currencyRate);
+            const coursesWithCurrency = courses.map((course: ICourseModel) => {
+                return { ...course.toObject(), currency };
+            });
+            res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
+        })
+        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+}
+
+function listCoursesOnlyFilter(
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    currencyRate: number,
+    res: Response<any, Record<string, any>>,
+    currency: string
+) {
+    return Course.find(req.query)
+        .populate("instructor", "firstName lastName")
+        .populate("ratings")
+        .populate({
+            path: "lessons",
+            populate: {
+                path: "exercises",
+                model: "Exercise"
+            }
+        })
+        .then((courses) => {
+            adjustCoursePrice(courses, currencyRate);
+            const coursesWithCurrency = courses.map((course: ICourseModel) => {
+                return { ...course.toObject(), currency };
+            });
+            res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
+        })
+        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+}
+
+export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse, listSubjects, createLesson };

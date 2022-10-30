@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import "./Navbar.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
@@ -9,8 +9,9 @@ import { config } from "../config/config";
 const countries: Country[] = require("../media/country-currency.json");
 
 const Navbar = () => {
-    const navigate = useNavigate();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
     const { country, setCountry } = useContext(CountryContext);
 
     const handleClickOpen = () => {
@@ -35,11 +36,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">
-                    <img
-                        height="34"
-                        src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
-                        alt="udemy logo"
-                    />
+                    <img height="34" src="" alt="Linear Depression" />
                 </Link>
                 <button
                     className="navbar-toggler"
@@ -67,12 +64,11 @@ const Navbar = () => {
                                     src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
                                     alt="search icon"
                                     onClick={() => {
-                                        const searchField = document.querySelector(".search-box");
-                                        //const searchTerm = searchField.value;
-                                        navigate({
-                                            pathname: "/"
-                                            //search: `search-term=${searchTerm}`
-                                        });
+                                        if (searchTerm.length !== 0) {
+                                            searchParams.delete("searchTerm");
+                                            searchParams.append("searchTerm", searchTerm);
+                                            setSearchParams(searchParams);
+                                        }
                                     }}
                                 />
                             </button>
@@ -82,6 +78,9 @@ const Navbar = () => {
                                 type="text"
                                 placeholder="Search for anything"
                                 aria-label="Search"
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                }}
                             />
                         </li>
                     </ul>
@@ -92,9 +91,9 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="/">
-                                Teach on Udemy
-                            </a>
+                            <Link className="nav-link" to="my-courses" relative="path">
+                                My Courses
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <a className="navbar-brand" href="/">
