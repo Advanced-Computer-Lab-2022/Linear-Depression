@@ -1,5 +1,3 @@
-import { config } from "../config/config";
-
 const constructFilterURL = (url: string, searchParams: URLSearchParams) => {
     let apiURL = url;
     const params = searchParams.toString();

@@ -26,7 +26,6 @@ const AllCourses = () => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
             if (res.status === 200) {
                 res.json().then((data) => {
-                    console.log(data.language);
                     setCountry(data.language);
                 });
             }
@@ -35,7 +34,6 @@ const AllCourses = () => {
 
     useEffect(() => {
         fetchCourses(searchParams).then((fetchedCoursesData) => {
-            console.log("AlLLLLLLLLLLLLL");
             setCourses(fetchedCoursesData);
         });
         fetchSubjects().then((fetchedSubjectsData) => {

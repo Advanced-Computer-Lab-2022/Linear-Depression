@@ -1,9 +1,7 @@
 import Button from "@mui/material/Button";
 import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } from "@mui/material";
 import React from "react";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import styled from "styled-components";
-import Instructor from "../pages/Instructor";
 import { config } from "../config/config";
 
 const HorizontalView = styled.div`

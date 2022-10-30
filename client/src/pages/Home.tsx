@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
 import { useContext } from "react";
@@ -12,12 +11,12 @@ const Home: React.FC = () => {
     const [searchParams] = useSearchParams();
 
     const { country, setCountry } = useContext(CountryContext);
-    const [courses, setCourses] = useState({
+    const [, setCourses] = useState({
         data: [],
         loading: true,
         error: null
     });
-    const [subjects, setSubjects] = useState({
+    const [, setSubjects] = useState({
         data: [],
         loading: true,
         error: null
@@ -28,7 +27,6 @@ const Home: React.FC = () => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
             if (res.status === 200) {
                 res.json().then((data) => {
-                    console.log(data.language);
                     setCountry(data.language);
                 });
             }
