@@ -3,7 +3,6 @@ import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } fr
 import React from "react";
 import styled from "styled-components";
 import { config } from "../config/config";
-import { useNavigate } from "react-router-dom";
 
 const HorizontalView = styled.div`
     display: flex;
@@ -19,7 +18,6 @@ const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
     const [subject, setSubject] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [price, setPrice] = React.useState("");
-    const navigate = useNavigate();
     const handleClose = () => {};
     const handleSubmit = () => {
         const request = {

@@ -1,4 +1,3 @@
-import { Fab } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { config } from "../config/config";
@@ -9,6 +8,7 @@ import { User } from "../types/User";
 import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
 import AddIcon from "@mui/icons-material/Add";
 import AddCourseForm from "./AddCourseForm";
+import FloatingButton from "./StyledComponents/FloatingButton";
 
 const MyCourses: React.FC<{
     id: string;
@@ -57,9 +57,9 @@ const MyCourses: React.FC<{
     return (
         <div>
             <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} addCourse={true} />
-            <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
+            <FloatingButton color="primary" aria-label="add" onClick={handleClickOpen}>
                 <AddIcon />
-            </Fab>
+            </FloatingButton>
             <AddCourseForm open={open} onClose={handleClose} />
         </div>
     );
