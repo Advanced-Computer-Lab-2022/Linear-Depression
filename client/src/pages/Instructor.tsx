@@ -16,18 +16,18 @@ const Instructor: React.FC = () => {
     const { country, setCountry } = useContext(CountryContext);
     const { userId, setUserId, userType, setUserType } = useContext(UserContext);
 
-    const [, setCourses] = useState({
+    const [_courses, setCourses] = useState({
         data: [],
         loading: true,
         error: null
     });
-    const [, setSubjects] = useState({
+    const [_subjects, setSubjects] = useState({
         data: [],
         loading: true,
         error: null
     });
 
-    setUserId("635ec64a0bd86009979f26a2");
+    setUserId("635ee87d5891ae20afc2a821");
     setUserType(User.INSTRUCTOR);
 
     useEffect(() => {

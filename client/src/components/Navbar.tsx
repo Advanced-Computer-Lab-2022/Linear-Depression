@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import { useContext, useState } from "react";
 import "./Navbar.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
@@ -9,8 +9,9 @@ import { config } from "../config/config";
 const countries: Country[] = require("../media/country-currency.json");
 
 const Navbar = () => {
-    const navigate = useNavigate();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
     const { country, setCountry } = useContext(CountryContext);
 
     const handleClickOpen = () => {
@@ -63,12 +64,11 @@ const Navbar = () => {
                                     src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
                                     alt="search icon"
                                     onClick={() => {
-                                        // const searchField = document.querySelector(".search-box");
-                                        //const searchTerm = searchField.value;
-                                        navigate({
-                                            pathname: "/"
-                                            //search: `search-term=${searchTerm}`
-                                        });
+                                        if (searchTerm.length !== 0) {
+                                            searchParams.delete("searchTerm");
+                                            searchParams.append("searchTerm", searchTerm);
+                                            setSearchParams(searchParams);
+                                        }
                                     }}
                                 />
                             </button>
@@ -78,6 +78,9 @@ const Navbar = () => {
                                 type="text"
                                 placeholder="Search for anything"
                                 aria-label="Search"
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                }}
                             />
                         </li>
                     </ul>
