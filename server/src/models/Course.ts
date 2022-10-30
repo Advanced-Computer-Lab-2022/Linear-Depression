@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import { validateURL } from "../utils/modelUtilities";
+import Lesson, { ILessonModel } from "./Lesson";
 
 export interface ICourse {
     title: string;
@@ -33,17 +34,27 @@ const courseSchema = new Schema({
         default: 0
     } /* FIXME: calculate average rating - use hook */,
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
-    totalHours: { type: Number, required: true },
+    totalHours: {
+        type: Number,
+        required: true,
+        default: function (this: ICourseModel) {
+            return this.lessons.reduce((acc, lessonId) => {
+                Lesson.findById(lessonId).then((lesson) => {
+                    acc += lesson.duration;
+                    return acc;
+                });
+            }, 0);
+        }
+    },
     discount: { type: Number, min: 0, max: 100, default: 0 },
     preview: {
         type: String,
-        required: true,
         validate: {
             validator: validateURL,
             message: "Invalid URL"
         }
     },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
     isFree: {
         type: Boolean,
         default: function (this: ICourseModel) {

@@ -26,7 +26,7 @@ function App() {
             }
         });
     }, []);
-    const instructorId = "635cef84dfbca82a3d585769";
+    const instructorId = "63595d451adfd7849591624a";
     return (
         <CountryContext.Provider value={{ country, setCountry }}>
             <div className="App">
@@ -34,13 +34,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="course/:courseId" element={<Course />} />
-                    <Route path="instructor" element={<Instructor />}>
-                        <Route path="instructor/" element={<AllCourses />} />
-                        <Route
-                            path="/instructor/my-courses"
-                            element={<MyCourses id={instructorId} type={User.INSTRUCTOR} />}
-                        />
-                    </Route>
+                    <Route path="instructor/*" element={<Instructor />} />
                     <Route path="corporate-trainee" element={<CorporateTrainee />} />
                     <Route path="individual-trainee" element={<IndividualTrainee />} />
                 </Routes>

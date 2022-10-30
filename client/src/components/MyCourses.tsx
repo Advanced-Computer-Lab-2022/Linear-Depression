@@ -1,3 +1,4 @@
+import { Fab } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -8,6 +9,8 @@ import { fetchCourses } from "../services/fetchCourses";
 import { fetchSubjects } from "../services/fetchSubjects";
 import { User } from "../types/User";
 import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
+import AddIcon from "@mui/icons-material/Add";
+import AddCourseForm from "./AddCourseForm";
 
 const MyCourses: React.FC<{
     id: string;
@@ -26,6 +29,14 @@ const MyCourses: React.FC<{
         loading: true,
         error: null
     });
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     //get request using fetch
     useEffect(() => {
@@ -40,7 +51,8 @@ const MyCourses: React.FC<{
     }, []);
 
     useEffect(() => {
-        setSearchParams({ instructor: id });
+        //searchParams.append("instructorId", id);
+        //setSearchParams(searchParams);
         fetchCourses(searchParams, id, type).then((fetchedCoursesData) => {
             console.log("Hereeeeee");
             setCourses(fetchedCoursesData);
@@ -51,7 +63,11 @@ const MyCourses: React.FC<{
     }, [searchParams, country]);
     return (
         <div>
-            <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} />
+            <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} addCourse={true} />
+            <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
+                <AddIcon />
+            </Fab>
+            <AddCourseForm open={open} onClose={handleClose} />
         </div>
     );
 };

@@ -2,7 +2,6 @@ import Accordion from "./Accordion";
 import styled from "styled-components";
 
 const FilterContainer = styled.div`
-    width: 20%;
     margin-right: 20px;
 `;
 

@@ -9,10 +9,14 @@ const fetchCourses = (
     id?: string,
     type?: User
 ): Promise<{ data: never[]; loading: boolean; error: null }> => {
-    let apiURL = `${config.API_URL}/courses`;
+    let apiURL = `${config.API_URL}/courses?`;
+    apiURL = constructFilterURL(apiURL, searchParams);
+    if (type == User.INSTRUCTOR && id) {
+        apiURL += `&instructor=${id}`;
+    }
     return new Promise((resolve, reject) => {
         axios
-            .get(constructFilterURL(searchParams), {
+            .get(apiURL, {
                 withCredentials: true
             })
             .then((res) => {
