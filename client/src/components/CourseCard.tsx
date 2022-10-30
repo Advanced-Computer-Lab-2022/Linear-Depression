@@ -85,10 +85,30 @@ const CoursePriceSection = styled.div`
     flex: 1;
 `;
 
-const CoursePrice = styled.p<{ isDiscounted?: boolean }>`
+const Price = styled.p<{ isDiscounted?: boolean }>`
     font-weight: 800;
     text-decoration: ${(props) => (props.isDiscounted ? "line-through" : "none")};
 `;
+
+const CoursePrice: React.FC<{ currency: string; price: number; discount?: number }> = ({
+    currency,
+    price,
+    discount
+}) => {
+    let discountedPrice = price;
+    discount = price === 0 || !discount ? 0 : discount;
+    if (discount) {
+        discountedPrice = price - (price * discount) / 100;
+    }
+    const priceString = price === 0 ? "Free" : `${currency} ${price}`;
+    const discountedPriceString = discountedPrice === 0 ? "Free" : `${currency} ${discountedPrice.toFixed(2)}`;
+    return (
+        <CoursePriceSection>
+            <Price isDiscounted={discount ? true : false}>{priceString}</Price>
+            {discount > 0 && <Price isDiscounted={false}>{discountedPriceString}</Price>}
+        </CoursePriceSection>
+    );
+};
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
     course: { _id, title, description, instructor, averageRating, totalHours, price, discount, currency } = {
@@ -106,7 +126,6 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         currency: "$"
     }
 }) => {
-    discount = 50;
     const navigate = useNavigate();
     return (
         <CardContainer
@@ -135,12 +154,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePriceSection>
-                    <CoursePrice isDiscounted={(discount as number) > 0}>{`${currency} ${price}`}</CoursePrice>
-                    {(discount as number) > 0 && (
-                        <CoursePrice>{`${currency} ${price - (price * (discount as number)) / 100}`}</CoursePrice>
-                    )}
-                </CoursePriceSection>
+                <CoursePrice currency={currency} price={price} discount={discount} />
             </HorizontalLayout>
             <hr />
         </CardContainer>
