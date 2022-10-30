@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
-import { useContext } from "react";
-import AllCourses from "../components/AllCourses";
 import { fetchCourses } from "../services/fetchCourses";
 import { fetchSubjects } from "../services/fetchSubjects";
-import { StatusCodes } from "http-status-codes";
+import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
 
-const Home: React.FC = () => {
+const AllCourses = () => {
     const [searchParams] = useSearchParams();
 
     const { country, setCountry } = useContext(CountryContext);
-    const [, setCourses] = useState({
+    const [courses, setCourses] = useState({
         data: [],
         loading: true,
         error: null
     });
-    const [, setSubjects] = useState({
+    const [subjects, setSubjects] = useState({
         data: [],
         loading: true,
         error: null
@@ -25,7 +23,7 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
-            if (res.status === StatusCodes.OK) {
+            if (res.status === 200) {
                 res.json().then((data) => {
                     setCountry(data.language);
                 });
@@ -41,8 +39,11 @@ const Home: React.FC = () => {
             setSubjects(fetchedSubjectsData);
         });
     }, [searchParams, country]);
-
-    return <AllCourses />;
+    return (
+        <div>
+            <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} />
+        </div>
+    );
 };
 
-export default Home;
+export default AllCourses;

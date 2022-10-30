@@ -18,24 +18,24 @@ const CheckBoxLists: React.FC<{ title: string; items: string[] }> = ({ title, it
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleToggle = (value: string, index: number) => () => {
-        if (checked == index) {
+        if (title === "Price") {
+            searchParams.delete("isFree");
+        } else {
+            searchParams.delete(title.toLowerCase());
+        }
+        if (checked === index) {
             setChecked(-1);
-            if (title == "Price") {
-                searchParams.delete("isFree");
-            } else {
-                searchParams.delete(title.toLowerCase());
-            }
-            setSearchParams(searchParams);
         } else {
             setChecked(index);
-            if (title == "Price" && value == "Free") {
-                setSearchParams({ isFree: "true" });
-            } else if (title == "Price" && value == "Paid") {
-                setSearchParams({ isFree: "false" });
+            if (title === "Price" && value === "Free") {
+                searchParams.append("isFree", "true");
+            } else if (title === "Price" && value === "Paid") {
+                searchParams.append("isFree", "false");
             } else {
-                setSearchParams({ [title.toLowerCase()]: value });
+                searchParams.append(title.toLowerCase(), value);
             }
         }
+        setSearchParams(searchParams);
     };
 
     return (

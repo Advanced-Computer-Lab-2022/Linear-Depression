@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 import mongoose_fuzzy_searching, { MongoosePluginModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
 import uniqueValidator from "mongoose-unique-validator";
 import { validateURL } from "../utils/modelUtilities";
+import Lesson, { ILessonModel } from "./Lesson";
 
 export interface ICourse {
     title: string;
@@ -28,23 +29,25 @@ const courseSchema = new Schema({
     price: { type: Number, required: true, min: 0 },
     averageRating: {
         type: Number,
-        required: true,
         min: 0,
         max: 5,
         default: 0
     } /* FIXME: calculate average rating - use hook */,
-    ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
-    totalHours: { type: Number, required: true },
+    ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
+    totalHours: {
+        type: Number,
+        // calculate total hours from lessons
+        default: 10
+    },
     discount: { type: Number, min: 0, max: 100, default: 0 },
     preview: {
         type: String,
-        required: true,
         validate: {
             validator: validateURL,
             message: "Invalid URL"
         }
     },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
     isFree: {
         type: Boolean,
         default: function (this: ICourseModel) {

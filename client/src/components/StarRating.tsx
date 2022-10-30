@@ -16,12 +16,11 @@ const StarRating: React.FC = () => {
 
     const handleChange = (_event: React.SyntheticEvent<{}>, newValue: number | null) => {
         setValue(newValue);
+        searchParams.delete("averageRating[lte]");
         if (newValue) {
-            setSearchParams({ "averageRating[lte]": newValue.toString() });
-        } else {
-            searchParams.delete("averageRating[lte]");
-            setSearchParams(searchParams);
+            searchParams.append("averageRating[lte]", newValue.toString());
         }
+        setSearchParams(searchParams);
     };
 
     return (
