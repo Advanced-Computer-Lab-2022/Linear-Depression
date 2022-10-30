@@ -4,6 +4,7 @@ import AllCourses from "../components/AllCourses";
 import MyCourses from "../components/MyCourses";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
+import { UserContext } from "../context/UserContext";
 import { fetchCourses } from "../services/fetchCourses";
 import { fetchSubjects } from "../services/fetchSubjects";
 import { User } from "../types/User";
@@ -12,6 +13,8 @@ const Instructor: React.FC = () => {
     const [searchParams] = useSearchParams();
 
     const { country, setCountry } = useContext(CountryContext);
+    const { userId, setUserId, userType, setUserType } = useContext(UserContext);
+
     const [, setCourses] = useState({
         data: [],
         loading: true,
@@ -23,7 +26,8 @@ const Instructor: React.FC = () => {
         error: null
     });
 
-    const instructorId = "63595d451adfd7849591624a";
+    setUserId("635ec64a0bd86009979f26a2");
+    setUserType(User.INSTRUCTOR);
 
     useEffect(() => {
         fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
@@ -47,7 +51,7 @@ const Instructor: React.FC = () => {
     return (
         <Routes>
             <Route path="/" element={<AllCourses />} />
-            <Route path="/my-courses" element={<MyCourses id={instructorId} type={User.INSTRUCTOR} />} />
+            <Route path="/my-courses" element={<MyCourses id={userId} type={userType} />} />
         </Routes>
     );
 };

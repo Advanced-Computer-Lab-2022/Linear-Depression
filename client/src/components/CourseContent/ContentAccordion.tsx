@@ -6,16 +6,16 @@ import ILessonProps from "../../types/Lesson";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;
-}> = ({ lesson: { id, title, totalHours, video, exercises } }) => {
+}> = ({ lesson: { _id, title, totalHours, video, exercises } }) => {
     return (
         <>
-            <h2 className="accordion-header" id={`panelsStayOpen-heading${id}`}>
+            <h2 className="accordion-header" id={`panelsStayOpen-heading${_id}`}>
                 <button
                     className="accordion-header-button collapsed"
                     data-bs-toggle="collapse"
-                    data-bs-target={`#panelsStayOpen-collapse${id}`}
+                    data-bs-target={`#panelsStayOpen-collapse${_id}`}
                     aria-expanded="false"
-                    aria-controls={`panelsStayOpen-collapse${id}`}
+                    aria-controls={`panelsStayOpen-collapse${_id}`}
                 >
                     <MdKeyboardArrowDown className="accordion-icon" />
                     <div className="accordion-title">{title}</div>
@@ -23,9 +23,9 @@ const ContentAccordion: React.FC<{
                 </button>
             </h2>
             <div
-                id={`panelsStayOpen-collapse${id}`}
+                id={`panelsStayOpen-collapse${_id}`}
                 className="accordion-collapse collapse"
-                aria-labelledby={`panelsStayOpen-heading${id}`}
+                aria-labelledby={`panelsStayOpen-heading${_id}`}
                 data-bs-parent="#accordionpanelsStayOpenExample"
             >
                 <div className="accordion-body">
@@ -37,7 +37,7 @@ const ContentAccordion: React.FC<{
 
                     <ul>
                         {exercises.map((exercise) => (
-                            <ContentItem key={exercise.id} title={exercise.title} />
+                            <ContentItem key={exercise._id} title={exercise.title} />
                         ))}
                     </ul>
                 </div>
