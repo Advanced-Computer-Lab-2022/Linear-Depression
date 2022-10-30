@@ -4,8 +4,8 @@ import axios from "axios";
 import CourseContent from "../components/CourseContent/CourseContent";
 import { config } from "../config/config";
 import AddIcon from "@mui/icons-material/Add";
-import { Fab } from "@mui/material";
 import AddLessonForm from "../components/AddLessonForm";
+import FloatingButton from "../components/StyledComponents/FloatingButton";
 
 const Course: React.FC = () => {
     const [lessons, setLessons] = useState({
@@ -45,9 +45,9 @@ const Course: React.FC = () => {
     return (
         <>
             <CourseContent lessons={lessons.data} />
-            <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
+            <FloatingButton onClick={handleClickOpen}>
                 <AddIcon />
-            </Fab>
+            </FloatingButton>
             <AddLessonForm open={open} onClose={handleClose} />
         </>
     );
