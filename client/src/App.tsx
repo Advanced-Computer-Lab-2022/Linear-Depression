@@ -8,16 +8,14 @@ import Instructor from "./pages/Instructor";
 import { CountryContext } from "./context/CountryContext";
 import Course from "./pages/Course";
 import Navbar from "./components/Navbar";
-import AllCourses from "./components/AllCourses";
-import MyCourses from "./components/MyCourses";
-import { User } from "./types/User";
+import { config } from "./config/config";
 
 function App() {
     let defaultCountry = "US";
 
     const [country, setCountry] = useState(defaultCountry);
     useEffect(() => {
-        fetch(`http://localhost:3000/country`, { credentials: "include" }).then((res) => {
+        fetch(`${config.API_URL}/country`, { credentials: "include" }).then((res) => {
             if (res.status === 200) {
                 res.json().then((data) => {
                     console.log(data.language);
@@ -26,7 +24,6 @@ function App() {
             }
         });
     }, []);
-    const instructorId = "63595d451adfd7849591624a";
     return (
         <CountryContext.Provider value={{ country, setCountry }}>
             <div className="App">

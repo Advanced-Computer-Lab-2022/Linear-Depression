@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes, useSearchParams } from "react-router-dom";
 import AllCourses from "../components/AllCourses";
 import MyCourses from "../components/MyCourses";
-import Navbar from "../components/Navbar";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
 import { fetchCourses } from "../services/fetchCourses";
@@ -13,12 +12,12 @@ const Instructor: React.FC = () => {
     const [searchParams] = useSearchParams();
 
     const { country, setCountry } = useContext(CountryContext);
-    const [courses, setCourses] = useState({
+    const [, setCourses] = useState({
         data: [],
         loading: true,
         error: null
     });
-    const [subjects, setSubjects] = useState({
+    const [, setSubjects] = useState({
         data: [],
         loading: true,
         error: null

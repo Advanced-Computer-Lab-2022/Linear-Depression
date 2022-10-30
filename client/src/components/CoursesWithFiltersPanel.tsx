@@ -5,17 +5,11 @@ import styled from "styled-components";
 import ICourseProps from "../types/Course";
 import CheckBoxLists from "./CheckBoxLists";
 import StarRating from "./StarRating";
-import { Fab } from "@mui/material";
 
 const CoursesContainer = styled.div`
     display: flex;
 `;
-const AddCourse = styled(Fab)`
-    position: fixed;
-    bottom: 30px;
-    right: 16px;
-    z-index: 5;
-`;
+
 const SideMenu = styled.div`
     width: 20%;
 `;

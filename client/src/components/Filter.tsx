@@ -15,9 +15,10 @@ const Filter: React.FC<{
             {titles.map((title) => {
                 return (
                     <Accordion
+                        key={title}
                         title={title}
-                        items={title == "Price" ? ["Free", "Paid"] : items}
-                        child={title == "Rating" ? children.rating : children.checkbox}
+                        items={title === "Price" ? ["Free", "Paid"] : items}
+                        child={title === "Rating" ? children.rating : children.checkbox}
                     />
                 );
             })}

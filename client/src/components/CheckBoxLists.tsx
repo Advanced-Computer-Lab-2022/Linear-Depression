@@ -18,18 +18,18 @@ const CheckBoxLists: React.FC<{ title: string; items: string[] }> = ({ title, it
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleToggle = (value: string, index: number) => () => {
-        if (title == "Price") {
+        if (title === "Price") {
             searchParams.delete("isFree");
         } else {
             searchParams.delete(title.toLowerCase());
         }
-        if (checked == index) {
+        if (checked === index) {
             setChecked(-1);
         } else {
             setChecked(index);
-            if (title == "Price" && value == "Free") {
+            if (title === "Price" && value === "Free") {
                 searchParams.append("isFree", "true");
-            } else if (title == "Price" && value == "Paid") {
+            } else if (title === "Price" && value === "Paid") {
                 searchParams.append("isFree", "false");
             } else {
                 searchParams.append(title.toLowerCase(), value);

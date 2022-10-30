@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import CountrySelect from "./CountrySelect";
@@ -63,7 +63,7 @@ const Navbar = () => {
                                     src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
                                     alt="search icon"
                                     onClick={() => {
-                                        const searchField = document.querySelector(".search-box");
+                                        // const searchField = document.querySelector(".search-box");
                                         //const searchTerm = searchField.value;
                                         navigate({
                                             pathname: "/"
