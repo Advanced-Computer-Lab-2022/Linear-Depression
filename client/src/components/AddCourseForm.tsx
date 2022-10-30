@@ -3,6 +3,8 @@ import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } fr
 import React from "react";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import styled from "styled-components";
+import Instructor from "../pages/Instructor";
+import { config } from "../config/config";
 
 const HorizontalView = styled.div`
     display: flex;
@@ -14,14 +16,36 @@ export interface AddCourseProps {
 }
 
 const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
+    const [title, setTitle] = React.useState("");
+    const [subject, setSubject] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [price, setPrice] = React.useState("");
+
     const handleClose = () => {};
+    const handleSubmit = () => {
+        const request = {
+            title: title,
+            subject: subject,
+            description: description,
+            price: price,
+            instructor: "635e82effbf5446a173977c6"
+        };
+        fetch(config.API_URL + "/courses", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(request)
+        })
+            .then((r) => r.json())
+            .then((data) => console.log(data));
+
+        onClose("submit");
+    };
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogContent>
-                <DialogContentText>
-                    To subscribe to this website, please enter your email address here. We will send updates
-                    occasionally.
-                </DialogContentText>
+                <DialogContentText>Add a new Course</DialogContentText>
                 <TextField
                     required
                     autoFocus
@@ -31,16 +55,8 @@ const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
                     type="text"
                     fullWidth
                     variant="outlined"
-                />
-                <TextField
-                    required
-                    autoFocus
-                    margin="dense"
-                    id="subject"
-                    label="Subject"
-                    type="text"
-                    fullWidth
-                    variant="outlined"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
                 <TextField
                     required
@@ -52,10 +68,24 @@ const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
                     fullWidth
                     variant="outlined"
                     multiline
-                    rows={2}
+                    minRows={2}
                     maxRows={4}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                 />
                 <HorizontalView>
+                    <TextField
+                        required
+                        autoFocus
+                        margin="dense"
+                        id="price"
+                        label="Subject"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
+                    />
                     <TextField
                         required
                         autoFocus
@@ -65,22 +95,14 @@ const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
                         type="number"
                         fullWidth
                         variant="outlined"
-                    />
-                    <TextField
-                        required
-                        autoFocus
-                        margin="dense"
-                        id="totalHours"
-                        label="Duration"
-                        type="number"
-                        fullWidth
-                        variant="outlined"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
                     />
                 </HorizontalView>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Subscribe</Button>
+                <Button onClick={handleSubmit}>Submit</Button>
             </DialogActions>
         </Dialog>
     );

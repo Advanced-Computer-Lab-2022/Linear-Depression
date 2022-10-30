@@ -28,23 +28,15 @@ const courseSchema = new Schema({
     price: { type: Number, required: true, min: 0 },
     averageRating: {
         type: Number,
-        required: true,
         min: 0,
         max: 5,
         default: 0
     } /* FIXME: calculate average rating - use hook */,
-    ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating" }],
+    ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
     totalHours: {
         type: Number,
-        required: true,
-        default: function (this: ICourseModel) {
-            return this.lessons.reduce((acc, lessonId) => {
-                Lesson.findById(lessonId).then((lesson) => {
-                    acc += lesson.duration;
-                    return acc;
-                });
-            }, 0);
-        }
+        // calculate total hours from lessons
+        default: 10
     },
     discount: { type: Number, min: 0, max: 100, default: 0 },
     preview: {
