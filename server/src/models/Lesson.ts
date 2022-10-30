@@ -15,18 +15,17 @@ export interface ILessonModel extends ILesson, Document {}
 
 const lessonSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    exercises: [{ type: mongoose.Types.ObjectId, ref: "Exercise" }],
+    exercises: [{ type: mongoose.Types.ObjectId, ref: "Exercise", default: [] }],
     totalHours: { type: Number, required: true },
     video: {
         videoLink: {
             type: String,
-            required: true,
             validate: {
                 validator: validateURL,
                 message: "Invalid URL"
             }
         },
-        description: { type: String, required: true }
+        description: { type: String }
     }
 });
 

@@ -1,31 +1,32 @@
 import Button from "@mui/material/Button";
 import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { config } from "../config/config";
+import { UserContext } from "../context/UserContext";
+import { FormProps } from "../types/FormProps";
 
 const HorizontalView = styled.div`
     display: flex;
 `;
 
-export interface AddCourseProps {
-    open: boolean;
-    onClose: (value: string) => void;
-}
-
-const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
+const AddCourseForm: React.FC<FormProps> = ({ open, onClose }) => {
     const [title, setTitle] = React.useState("");
     const [subject, setSubject] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [price, setPrice] = React.useState("");
-    const handleClose = () => {};
+    const { userId } = useContext(UserContext);
+
+    const handleClose = () => {
+        onClose("Close");
+    };
     const handleSubmit = () => {
         const request = {
             title: title,
             subject: subject,
             description: description,
             price: price,
-            instructor: "63595d451adfd7849591624a"
+            instructor: userId
         };
         fetch(config.API_URL + "/courses", {
             method: "POST",

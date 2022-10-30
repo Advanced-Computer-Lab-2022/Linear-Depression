@@ -1,5 +1,5 @@
 interface ILessonProps {
-    id: string;
+    _id: string;
     title: string;
     totalHours: number;
     video?: {
@@ -7,7 +7,7 @@ interface ILessonProps {
         description: string;
     };
     exercises: {
-        id: string;
+        _id: string;
         title: string;
         question: string;
     }[];
