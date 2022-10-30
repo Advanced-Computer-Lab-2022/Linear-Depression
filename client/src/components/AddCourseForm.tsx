@@ -5,6 +5,7 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import styled from "styled-components";
 import Instructor from "../pages/Instructor";
 import { config } from "../config/config";
+import { useNavigate } from "react-router-dom";
 
 const HorizontalView = styled.div`
     display: flex;
@@ -20,7 +21,7 @@ const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
     const [subject, setSubject] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [price, setPrice] = React.useState("");
-
+    const navigate = useNavigate();
     const handleClose = () => {};
     const handleSubmit = () => {
         const request = {
@@ -28,17 +29,20 @@ const AddCourseForm: React.FC<AddCourseProps> = ({ open, onClose }) => {
             subject: subject,
             description: description,
             price: price,
-            instructor: "635e82effbf5446a173977c6"
+            instructor: "63595d451adfd7849591624a"
         };
         fetch(config.API_URL + "/courses", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify(request)
         })
             .then((r) => r.json())
-            .then((data) => console.log(data));
+            .then((data) => {
+                console.log(data);
+            });
 
         onClose("submit");
     };

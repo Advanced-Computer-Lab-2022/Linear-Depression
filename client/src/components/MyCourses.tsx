@@ -60,7 +60,7 @@ const MyCourses: React.FC<{
         fetchSubjects().then((fetchedSubjectsData) => {
             setSubjects(fetchedSubjectsData);
         });
-    }, [searchParams, country]);
+    }, [searchParams, country, open]);
     return (
         <div>
             <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} addCourse={true} />

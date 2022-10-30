@@ -35,11 +35,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">
-                    <img
-                        height="34"
-                        src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
-                        alt="udemy logo"
-                    />
+                    <img height="34" src="" alt="Linear Depression" />
                 </Link>
                 <button
                     className="navbar-toggler"
