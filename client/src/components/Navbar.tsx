@@ -65,6 +65,7 @@ const Navbar = () => {
                                     alt="search icon"
                                     onClick={() => {
                                         if (searchTerm.length !== 0) {
+                                            searchParams.delete("searchTerm");
                                             searchParams.append("searchTerm", searchTerm);
                                             setSearchParams(searchParams);
                                         }

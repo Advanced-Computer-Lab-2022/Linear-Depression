@@ -82,7 +82,6 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     return Course.findById(courseId)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
-        .populate("lessons")
         .populate({
             path: "lessons",
             populate: {
@@ -164,7 +163,6 @@ function searchWithTitleSubject(
     return Course.fuzzySearch(searchTerm, req.query)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
-        .populate("lessons")
         .populate({
             path: "lessons",
             populate: {
@@ -193,7 +191,6 @@ function searchWithInstructors(
     })
         .populate("instructor", "firstName lastName")
         .populate("ratings")
-        .populate("lessons")
         .populate({
             path: "lessons",
             populate: {
@@ -220,7 +217,6 @@ function listCoursesOnlyFilter(
     return Course.find(req.query)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
-        .populate("lessons")
         .populate({
             path: "lessons",
             populate: {
