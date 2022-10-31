@@ -1,35 +1,58 @@
 import { Button, InputAdornment, TextField } from "@mui/material";
 import React, { useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { CountryContext } from "../context/CountryContext";
 
 const HorizontalLayout = styled.div`
     display: flex;
 `;
+
 const PriceFilter: React.FC = () => {
-    // const [value, setValue] = React.useState('')
+    const [minValue, setMinValue] = React.useState("");
+    const [maxValue, setMaxValue] = React.useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const handleClick = () => {
+        searchParams.delete("price[gte]");
+        searchParams.delete("price[lte]");
+        if (minValue !== "") {
+            searchParams.append("price[gte]", minValue);
+        }
+        if (maxValue !== "") {
+            searchParams.append("price[lte]", maxValue);
+        }
+        setSearchParams(searchParams);
+    };
+
     const { currency } = useContext(CountryContext);
     return (
         <HorizontalLayout>
             <TextField
+                style={{ width: "45%", margin: "2px", marginTop: "4px" }}
                 label="min "
                 id="outlined-start-adornment"
                 type="number"
-                sx={{ m: 1 }}
                 InputProps={{
                     startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                 }}
+                onChange={(e) => setMinValue(e.target.value)}
             />
             <TextField
+                style={{ width: "45%", margin: "2px", marginTop: "4px" }}
                 label="max "
                 id="outlined-start-adornment"
                 type="number"
-                sx={{ m: 1 }}
                 InputProps={{
-                    startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
+                    startAdornment: (
+                        <InputAdornment position="start" style={{ fontSize: "0.5em" }}>
+                            {currency}
+                        </InputAdornment>
+                    )
                 }}
+                onChange={(e) => setMaxValue(e.target.value)}
             />
-            <Button variant="outlined" color="primary" sx={{ m: 1 }} style={{ width: "5px" }}>
+            <Button variant="outlined" size="small" style={{ margin: "2px", marginTop: "4px" }} onClick={handleClick}>
                 set
             </Button>
         </HorizontalLayout>

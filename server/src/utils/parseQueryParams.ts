@@ -5,6 +5,7 @@ const parseQueryParams = (req: Request, res: Response, next: NextFunction) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|eq|ne)\b/g, (match) => `$${match}`);
     req.query = JSON.parse(queryStr);
+    //adjust price in query
 
     next();
 };

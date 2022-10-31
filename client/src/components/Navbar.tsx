@@ -87,7 +87,7 @@ const Navbar = () => {
                     <ul className="navbar-nav ">
                         <li className="nav-item">
                             <a className="nav-link" href="/">
-                                Udemy Business
+                                LD Business
                             </a>
                         </li>
                         <li className="nav-item">

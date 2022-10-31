@@ -12,7 +12,7 @@ const CoursesContainer = styled.div`
 `;
 
 const SideMenu = styled.div`
-    width: 20%;
+    width: 25%;
 `;
 
 const CoursesWithFiltersPanel: React.FC<{
