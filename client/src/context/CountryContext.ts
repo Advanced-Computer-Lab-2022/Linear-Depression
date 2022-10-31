@@ -3,4 +3,9 @@ import { Dispatch } from "react";
 import { SetStateAction } from "react";
 //assign value of get country request to a variable
 
-export const CountryContext = createContext({ country: "us", setCountry: {} as Dispatch<SetStateAction<string>> });
+export const CountryContext = createContext({
+    country: "us",
+    setCountry: {} as Dispatch<SetStateAction<string>>,
+    currency: "USD",
+    setCurrency: {} as Dispatch<SetStateAction<string>>
+});

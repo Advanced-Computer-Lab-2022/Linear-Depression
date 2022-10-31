@@ -17,6 +17,7 @@ function App() {
     let defaultCountry = "US";
 
     const [country, setCountry] = useState(defaultCountry);
+    const [currency, setCurrency] = useState("USD");
     const [userId, setUserId] = useState("");
     const [userType, setUserType] = useState(User.GUEST);
 
@@ -31,7 +32,7 @@ function App() {
     }, []);
     return (
         <UserContext.Provider value={{ userId, setUserId, userType, setUserType }}>
-            <CountryContext.Provider value={{ country, setCountry }}>
+            <CountryContext.Provider value={{ country, setCountry, currency, setCurrency }}>
                 <div className="App">
                     <Navbar />
                     <Routes>

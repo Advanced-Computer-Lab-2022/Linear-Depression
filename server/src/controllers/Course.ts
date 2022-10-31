@@ -21,17 +21,18 @@ async function getCurrencyRateByCookie(
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
     // check his cookie
     const country: string = req.cookies.country || "us";
+    console.log(country);
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
-        country
+        "us"
     );
 
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
     });
-
     course.price = course.price / currencyRate;
+
     try {
         await course.save();
         return res.status(StatusCodes.CREATED).json({ course });
