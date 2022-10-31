@@ -12,11 +12,13 @@ import { config } from "./config/config";
 import { UserContext } from "./context/UserContext";
 import { User } from "./types/User";
 import { StatusCodes } from "http-status-codes";
+import getCurrency from "./services/getCurrency";
 
 function App() {
-    let defaultCountry = "US";
+    let defaultCountry = "";
 
     const [country, setCountry] = useState(defaultCountry);
+    const [currency, setCurrency] = useState("USD");
     const [userId, setUserId] = useState("");
     const [userType, setUserType] = useState(User.GUEST);
 
@@ -25,13 +27,15 @@ function App() {
             if (res.status === StatusCodes.OK) {
                 res.json().then((data) => {
                     setCountry(data.language);
+                    setCurrency(getCurrency(data.language));
+                    console.log(currency);
                 });
             }
         });
     }, []);
     return (
         <UserContext.Provider value={{ userId, setUserId, userType, setUserType }}>
-            <CountryContext.Provider value={{ country, setCountry }}>
+            <CountryContext.Provider value={{ country, setCountry, currency, setCurrency }}>
                 <div className="App">
                     <Navbar />
                     <Routes>

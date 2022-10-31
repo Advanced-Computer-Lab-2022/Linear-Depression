@@ -27,7 +27,7 @@ const Instructor: React.FC = () => {
         error: null
     });
 
-    setUserId("635ee87d5891ae20afc2a821");
+    setUserId("63595d451adfd7849591624a");
     setUserType(User.INSTRUCTOR);
 
     useEffect(() => {
