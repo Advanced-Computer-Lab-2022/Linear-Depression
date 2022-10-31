@@ -21,17 +21,18 @@ async function getCurrencyRateByCookie(
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
     // check his cookie
     const country: string = req.cookies.country || "us";
+    console.log(country);
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
-        country
+        "us"
     );
 
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
     });
-
     course.price = course.price / currencyRate;
+
     try {
         await course.save();
         return res.status(StatusCodes.CREATED).json({ course });
@@ -53,9 +54,14 @@ const listCourses = async (req: Request, res: Response, next: NextFunction) => {
         "us"
     );
     const searchTerm = req.query.searchTerm as string;
-    console.log(req.query);
     delete req.query.searchTerm;
-    console.log(searchTerm);
+    //adjust price in query
+    if (req.query.price) {
+        const price = JSON.parse(JSON.stringify(req.query.price));
+        const minPrice = price["$gte"] ? price["$gte"] / currencyRate : 0;
+        const maxPrice = price["$lte"] ? price["$lte"] / currencyRate : 100000;
+        req.query.price = { $gte: minPrice, $lte: maxPrice } as any;
+    }
     if (searchTerm) {
         // search by instructor
         // try to find instructor by name

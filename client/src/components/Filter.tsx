@@ -8,7 +8,7 @@ const FilterContainer = styled.div`
 const Filter: React.FC<{
     titles: string[];
     items: string[];
-    children: { checkbox: React.FC<{ title: string; items: string[] }>; rating: React.FC };
+    children: { checkbox: React.FC<{ title: string; items: string[] }>; rating: React.FC; price: React.FC };
 }> = ({ titles, items, children }) => {
     return (
         <FilterContainer>
@@ -17,8 +17,10 @@ const Filter: React.FC<{
                     <Accordion
                         key={title}
                         title={title}
-                        items={title === "Price" ? ["Free", "Paid"] : items}
-                        child={title === "Rating" ? children.rating : children.checkbox}
+                        items={items}
+                        child={
+                            title === "Rating" ? children.rating : title == "Price" ? children.price : children.checkbox
+                        }
                     />
                 );
             })}
