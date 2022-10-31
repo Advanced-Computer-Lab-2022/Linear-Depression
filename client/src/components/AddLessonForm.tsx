@@ -31,9 +31,8 @@ const AddLessonForm: React.FC<FormProps> = ({ open, onClose }) => {
             .then((r) => r.json())
             .then((data) => {
                 console.log(data);
+                onClose("submit");
             });
-
-        onClose("submit");
     };
 
     return (

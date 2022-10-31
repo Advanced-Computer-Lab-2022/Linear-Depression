@@ -36,7 +36,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">
-                    <img height="34" src="" alt="Linear Depression" />
+                    Linear Depression
                 </Link>
                 <button
                     className="navbar-toggler"
@@ -64,11 +64,11 @@ const Navbar = () => {
                                     src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
                                     alt="search icon"
                                     onClick={() => {
+                                        searchParams.delete("searchTerm");
                                         if (searchTerm.length !== 0) {
-                                            searchParams.delete("searchTerm");
                                             searchParams.append("searchTerm", searchTerm);
-                                            setSearchParams(searchParams);
                                         }
+                                        setSearchParams(searchParams);
                                     }}
                                 />
                             </button>

@@ -39,9 +39,8 @@ const AddCourseForm: React.FC<FormProps> = ({ open, onClose }) => {
             .then((r) => r.json())
             .then((data) => {
                 console.log(data);
+                onClose("submit");
             });
-
-        onClose("submit");
     };
     return (
         <Dialog open={open} onClose={handleClose}>

@@ -26,8 +26,8 @@ export function CreateAdminJS(app: any) {
             styles: ["css/dashboard.css"]
         },
         branding: {
-            companyName: "Canadian Chamber of Commerce",
-            logo: false, // TODO: Add logo
+            companyName: "Linear Depression",
+            logo: false, //TODO: Add logo
             withMadeWithLove: false
         }
     });
