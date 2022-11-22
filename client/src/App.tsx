@@ -1,12 +1,9 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
-import Home from "./pages/Home";
-import CorporateTrainee from "./pages/CorporateTrainee";
-import IndividualTrainee from "./pages/IndividualTrainee";
-import Instructor from "./pages/Instructor";
+
+import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course } from "@internals/pages";
+
 import { CountryContext } from "./context/CountryContext";
-import Course from "./pages/Course";
 import Navbar from "./components/Navbar";
 import { config } from "./config/config";
 import { UserContext } from "./context/UserContext";

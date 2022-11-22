@@ -20,5 +20,5 @@
         "noImplicitAny": true
     },
     "rules": { "only-arrow-functions": true },
-    "include": ["src"]
+    "extends": "./tsconfig.paths.json"
 }
