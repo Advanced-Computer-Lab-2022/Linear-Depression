@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
-import AllCourses from "../components/AllCourses";
+import AllCourses from "./home/AllCourses";
 import MyCourses from "../components/MyCourses";
 import { UserContext } from "../context/UserContext";
 import { User } from "../types/User";
