@@ -13,7 +13,7 @@ export interface ICourse {
     averageRating: number;
     ratings: Array<mongoose.Types.ObjectId>;
     totalHours: number;
-    discount?: number;
+    activePromotion?: mongoose.Types.ObjectId;
     preview: string;
     lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
@@ -40,6 +40,7 @@ const courseSchema = new Schema({
         default: 10
     },
     discount: { type: Number, min: 0, max: 100, default: 0 },
+    activePromotion: { type: mongoose.Types.ObjectId, ref: "Promotion", default: null },
     preview: {
         type: String,
         validate: {

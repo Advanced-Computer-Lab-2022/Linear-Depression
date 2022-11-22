@@ -111,7 +111,7 @@ const CoursePrice: React.FC<{ currency: string; price: number; discount?: number
 };
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { _id, title, description, instructor, averageRating, totalHours, price, discount, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, activePromotion, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -154,7 +154,11 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePrice currency={currency} price={price} discount={discount} />
+                <CoursePrice
+                    currency={currency}
+                    price={price}
+                    discount={activePromotion ? activePromotion.discountPercent : 0}
+                />
             </HorizontalLayout>
             <hr />
         </CardContainer>
