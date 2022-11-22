@@ -3,6 +3,7 @@ import mongoose_fuzzy_searching, { MongoosePluginModel } from "@imranbarbhuiya/m
 import uniqueValidator from "mongoose-unique-validator";
 import { validateURL } from "../utils/modelUtilities";
 import Lesson, { ILessonModel } from "./Lesson";
+import Rating from "./Rating";
 
 export interface ICourse {
     title: string;
@@ -70,6 +71,26 @@ courseSchema.plugin(mongoose_fuzzy_searching, {
             prefixOnly: true
         }
     ]
+});
+
+// FIXME: updating a lesson should update the total hours of the course (Also for ratings)
+// This doesn't right now, this just a notice of we ever need to implement this
+courseSchema.pre<ICourseModel>("save", async function (next) {
+    const course = this as ICourseModel;
+    const lessons = await Lesson.find({ _id: { $in: course.lessons } });
+    const ratings = await Rating.find({ _id: { $in: course.ratings } });
+    if (lessons.length == 0) {
+        course.totalHours = 0;
+    } else {
+        course.totalHours = lessons.reduce((totalHours, lesson) => totalHours + lesson.totalHours, 0);
+    }
+    course.totalHours = lessons.reduce((acc, lesson) => acc + lesson.totalHours, 0);
+    if (ratings.length == 0) {
+        course.averageRating = 0;
+    } else {
+        course.averageRating = ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
+    }
+    next();
 });
 
 export default mongoose.model<ICourseModel>("Course", courseSchema) as MongoosePluginModel<ICourseModel>;
