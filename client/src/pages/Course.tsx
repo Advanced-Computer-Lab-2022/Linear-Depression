@@ -1,54 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import useFetchCourseById from "../hooks/useFetchCourseById";
 import CourseContent from "../components/CourseContent/CourseContent";
-import { config } from "../config/config";
 import AddIcon from "@mui/icons-material/Add";
 import AddLessonForm from "../components/AddLessonForm";
 import FloatingButton from "../components/StyledComponents/FloatingButton";
 
 const Course: React.FC = () => {
-    const [lessons, setLessons] = useState({
-        data: [],
-        loading: true,
-        error: null
-    });
+    const { courseId } = useParams();
+    const { course, updateCourse } = useFetchCourseById(courseId);
+
     const [open, setOpen] = useState(false);
 
-    const handleClickOpen = () => {
+    const onAddLessonClicked = () => {
         setOpen(true);
     };
-    const handleClose = () => {
-        setOpen(false);
-    };
 
-    const courseId = useParams().courseId;
-    useEffect(() => {
-        axios
-            .get(`${config.API_URL}/courses/${courseId}`)
-            .then((response) => {
-                setLessons({
-                    data: response.data.course.lessons,
-                    loading: false,
-                    error: null
-                });
-            })
-            .catch((error) => {
-                setLessons({
-                    data: [],
-                    loading: false,
-                    error: error
-                });
-            });
-    }, [open]);
+    const onClose = (state: string) => {
+        setOpen(false);
+        if (state === "submit") {
+            updateCourse();
+        }
+    };
 
     return (
         <>
-            <CourseContent lessons={lessons.data} />
-            <FloatingButton onClick={handleClickOpen}>
+            {course.data != null && <CourseContent lessons={course.data.lessons} />}
+            <FloatingButton onClick={onAddLessonClicked}>
                 <AddIcon />
             </FloatingButton>
-            <AddLessonForm open={open} onClose={handleClose} />
+            <AddLessonForm open={open} onClose={onClose} />
         </>
     );
 };

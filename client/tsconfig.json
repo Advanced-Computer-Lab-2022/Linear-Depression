@@ -17,7 +17,8 @@
         "jsx": "react-jsx",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "strictNullChecks": false
     },
     "rules": { "only-arrow-functions": true },
     "include": ["src"]

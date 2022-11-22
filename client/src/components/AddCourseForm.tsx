@@ -2,9 +2,9 @@ import Button from "@mui/material/Button";
 import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } from "@mui/material";
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { config } from "../config/config";
 import { UserContext } from "../context/UserContext";
 import { FormProps } from "../types/FormProps";
+import addCourse from "../services/addCourse";
 
 const HorizontalView = styled.div`
     display: flex;
@@ -21,27 +21,11 @@ const AddCourseForm: React.FC<FormProps> = ({ open, onClose }) => {
         onClose("Close");
     };
     const handleSubmit = () => {
-        const request = {
-            title: title,
-            subject: subject,
-            description: description,
-            price: price,
-            instructor: userId
-        };
-        fetch(config.API_URL + "/courses", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(request)
-        })
-            .then((r) => r.json())
-            .then((data) => {
-                console.log(data);
-                onClose("submit");
-            });
+        addCourse({ title, subject, description, price, instructor: userId }).then(() => {
+            onClose("submit");
+        });
     };
+
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogContent>

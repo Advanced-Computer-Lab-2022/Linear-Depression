@@ -1,3 +1,5 @@
+import ILessonProps from "./Lesson";
+
 interface ICourseProps {
     _id: string;
     title: string;
@@ -12,6 +14,7 @@ interface ICourseProps {
     price: number;
     discount: number;
     currency: string;
+    lessons: ILessonProps[];
 }
 
 export default ICourseProps;
