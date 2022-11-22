@@ -3,9 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import { config } from "../config/config";
 import { CountryContext } from "../context/CountryContext";
 import { fetchCourses } from "../services/fetchCourses";
-import { fetchSubjects } from "../services/fetchSubjects";
 import { User } from "../types/User";
-import CoursesWithFiltersPanel from "./CoursesWithFiltersPanel";
+import CoursesListWithFilters from "./CoursesListWithFilters";
 import AddIcon from "@mui/icons-material/Add";
 import AddCourseForm from "./AddCourseForm";
 import FloatingButton from "./StyledComponents/FloatingButton";
@@ -23,11 +22,11 @@ const MyCourses: React.FC<{
         loading: true,
         error: null
     });
-    const [subjects, setSubjects] = useState({
-        data: [],
-        loading: true,
-        error: null
-    });
+    // const [subjects, setSubjects] = useState({
+    //     data: [],
+    //     loading: true,
+    //     error: null
+    // });
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -51,13 +50,13 @@ const MyCourses: React.FC<{
         fetchCourses(searchParams, id, type).then((fetchedCoursesData) => {
             setCourses(fetchedCoursesData);
         });
-        fetchSubjects().then((fetchedSubjectsData) => {
-            setSubjects(fetchedSubjectsData);
-        });
+        // fetchSubjects().then((fetchedSubjectsData) => {
+        //     setSubjects(fetchedSubjectsData);
+        // });
     }, [searchParams, country, open]);
     return (
         <div>
-            <CoursesWithFiltersPanel courses={courses.data} subjects={subjects.data} addCourse={true} />
+            <CoursesListWithFilters courses={courses.data} addCourse={true} />
             <FloatingButton color="primary" aria-label="add" onClick={handleClickOpen}>
                 <AddIcon />
             </FloatingButton>
