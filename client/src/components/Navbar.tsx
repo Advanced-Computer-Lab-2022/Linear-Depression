@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import "./Navbar.css";
+import "./navbar/Navbar.css";
 import { Link, useSearchParams } from "react-router-dom";
-import CountrySelect from "./CountrySelect";
+import CountrySelect from "./navbar/CountrySelect";
 import { Country } from "../types/Country";
 import Flag from "react-world-flags";
 import { CountryContext } from "../context/CountryContext";
