@@ -1,10 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CountryContext } from "../context/CountryContext";
-import { config } from "../config/config";
-import axios from "axios";
+import fetchAllCourses from "../services/fetchAllCourses";
 
-const useFetchCourses = () => {
+const useFetchAllCourses = () => {
     const [searchParams] = useSearchParams();
     const { country } = useContext(CountryContext);
     const [courses, setCourses] = useState({
@@ -15,7 +14,7 @@ const useFetchCourses = () => {
 
     useEffect(() => {
         setCourses({ data: [], loading: true, error: null });
-        fetchCourses(searchParams)
+        fetchAllCourses(searchParams)
             .then((data) => {
                 setCourses({ data: data, loading: false, error: null });
             })
@@ -27,21 +26,4 @@ const useFetchCourses = () => {
     return courses;
 };
 
-const fetchCourses = (searchParams: URLSearchParams): Promise<never[]> => {
-    const FILTERS = searchParams.toString();
-    const API_URL = `${config.API_URL}/courses?${FILTERS}`;
-    return new Promise((resolve, reject) => {
-        axios
-            .get(API_URL, {
-                withCredentials: true
-            })
-            .then((res) => {
-                resolve(res.data.courses);
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
-};
-
-export default useFetchCourses;
+export default useFetchAllCourses;

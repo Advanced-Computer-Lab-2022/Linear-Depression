@@ -1,8 +1,8 @@
-import useFetchCourses from "../../hooks/useFetchCourses";
+import useFetchAllCourses from "../../hooks/useFetchAllCourses";
 import CoursesListWithFilters from "../../components/CoursesListWithFilters";
 
 const AllCourses = () => {
-    const courses = useFetchCourses();
+    const courses = useFetchAllCourses();
 
     return (
         <div>
