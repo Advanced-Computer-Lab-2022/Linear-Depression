@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ILessonProps from "../../types/Lesson";
-import ContentAccordion from "./ContentAccordion";
+import ILessonProps from "../types/Lesson";
+import ContentAccordion from "./CourseContent/ContentAccordion";
 
 const MAX_COUNT_SECTIONS = 3;
 

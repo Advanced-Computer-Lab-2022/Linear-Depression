@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import CoursesListWithFilters from "../../components/CoursesListWithFilters";
+import CoursesListWithFilters from "../components/CoursesListWithFilters";
 import AddIcon from "@mui/icons-material/Add";
-import AddCourseForm from "../../components/AddCourseForm";
-import FloatingButton from "../../components/StyledComponents/FloatingButton";
-import useFetchMyCourses from "../../hooks/useFetchMyCourses";
+import AddCourseForm from "./myCourses/AddCourseForm";
+import FloatingButton from "../components/FloatingButton";
+import useFetchMyCourses from "../hooks/useFetchMyCourses";
 
 const MyCourses: React.FC = () => {
     const { courses, updateCourses } = useFetchMyCourses();
