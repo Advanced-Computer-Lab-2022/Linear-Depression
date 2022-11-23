@@ -1,8 +1,9 @@
 import React from "react";
-import styled from "styled-components";
-import StarRatings from "react-star-ratings";
-import { Course as ICourseProps } from "@internals/types";
 import { useNavigate } from "react-router-dom";
+import StarRatings from "react-star-ratings";
+import styled from "styled-components";
+
+import { Course as ICourseProps } from "@internals/types";
 
 const HorizontalLayout = styled.div`
     display: flex;

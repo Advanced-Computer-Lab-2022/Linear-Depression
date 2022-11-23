@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { CoursesListWithFilters } from "@internals/components";
 import AddIcon from "@mui/icons-material/Add";
+import React, { useState } from "react";
+
 import AddCourseForm from "./myCourses/AddCourseForm";
-import { FloatingButton } from "@internals/components";
+import { CoursesListWithFilters, FloatingButton } from "@internals/components";
 import { useFetchMyCourses } from "@internals/hooks";
 
 const MyCourses: React.FC = () => {

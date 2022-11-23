@@ -41,13 +41,26 @@
         "start": "craco start",
         "build": "craco build",
         "test": "craco test",
-        "eject": "craco eject"
+        "eject": "craco eject",
+        "pretty": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
     },
     "eslintConfig": {
         "extends": [
             "react-app",
             "react-app/jest"
         ]
+    },
+    "prettier": {
+        "singleQuote": true,
+        "trailingComma": "all",
+        "printWidth": 120,
+        "tabWidth": 4,
+        "importOrder": [
+            "(^@|^[A-Za-z])(?!internals)(.*(?<!tyles)$)",
+            "(^[.]|^@internals)(?!^[A-Za-z])(.*(?<!tyles)$)",
+            "tyles"
+        ],
+        "importOrderSeparation": true
     },
     "browserslist": {
         "production": [
@@ -62,7 +75,9 @@
         ]
     },
     "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^3.4.0",
         "@types/react-star-ratings": "^2.3.0",
-        "@types/react-world-flags": "^1.4.2"
+        "@types/react-world-flags": "^1.4.2",
+        "prettier": "2.8.0"
     }
 }

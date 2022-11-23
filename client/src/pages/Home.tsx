@@ -1,4 +1,5 @@
 import React from "react";
+
 import AllCourses from "./home/AllCourses";
 
 const Home: React.FC = () => {

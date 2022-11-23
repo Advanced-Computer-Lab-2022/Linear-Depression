@@ -1,7 +1,7 @@
 import React from "react";
-import styled from "styled-components";
 import { MdPlayCircleFilled } from "react-icons/md";
 import { MdInsertDriveFile } from "react-icons/md";
+import styled from "styled-components";
 
 const Item = styled.li`
     height: 35px;

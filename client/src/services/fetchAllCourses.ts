@@ -1,5 +1,6 @@
-import { config } from "@internals/config";
 import axios from "axios";
+
+import { config } from "@internals/config";
 
 const fetchAllCourses = (searchParams: URLSearchParams): Promise<never[]> => {
     const FILTERS = searchParams.toString();

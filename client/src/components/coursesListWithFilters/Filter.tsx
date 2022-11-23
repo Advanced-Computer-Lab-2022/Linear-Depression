@@ -1,8 +1,9 @@
-import { SimpleAccordion } from "@internals/components";
 import styled from "styled-components";
+
 import PriceFilter from "./filter/PriceFilter";
 import StarRating from "./filter/RatingFilter";
 import CheckBoxLists from "./filter/SubjectsFilter";
+import { SimpleAccordion } from "@internals/components";
 
 const FilterContainer = styled.div`
     margin-right: 20px;

@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
+
 import { User } from "@internals/types";
 
 const UserContext = createContext({

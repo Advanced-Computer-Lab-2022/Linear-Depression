@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { fetchCourseById } from "@internals/services";
 
 const useFetchCourseById = (id: string) => {

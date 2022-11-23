@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home, MyCourses } from "@internals/pages";
+
 import { UserContext } from "@internals/contexts";
+import { Home, MyCourses } from "@internals/pages";
 import { User } from "@internals/types";
 
 const Instructor: React.FC = () => {

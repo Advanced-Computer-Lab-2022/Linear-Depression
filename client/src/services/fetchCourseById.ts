@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { config } from "@internals/config";
 import { Course as ICourseProps } from "@internals/types";
 

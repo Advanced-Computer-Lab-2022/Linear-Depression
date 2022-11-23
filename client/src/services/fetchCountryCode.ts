@@ -1,6 +1,7 @@
-import { config } from "@internals/config";
-import { StatusCodes } from "http-status-codes";
 import axios from "axios";
+import { StatusCodes } from "http-status-codes";
+
+import { config } from "@internals/config";
 
 const fetchCountryCode = (): Promise<string> => {
     const COUNTRY_URL = `${config.API_URL}/country`;
