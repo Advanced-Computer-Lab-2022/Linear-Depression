@@ -4,7 +4,7 @@ import { TIME_OUT } from "../../../utils/testUtilities";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 
 describe("Rating Model Test", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await connectDBForTesting();
     });
     it("Should create a new Rating", async () => {
@@ -34,7 +34,7 @@ describe("Rating Model Test", () => {
         await expect(rating.save()).rejects.toThrow();
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
         await disconnectDBForTesting();
     }, TIME_OUT);
 });
