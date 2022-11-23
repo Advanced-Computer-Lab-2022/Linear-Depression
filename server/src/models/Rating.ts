@@ -8,13 +8,35 @@ export interface IRating {
 
 export interface IRatingModel extends IRating, Document {}
 
-const ratingSchema = new mongoose.Schema({
-    comment: { type: String },
-    rating: { type: Number, required: true, min: 1, max: 5 },
-    traineeID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Trainee"
+const ratingSchema = new mongoose.Schema(
+    {
+        comment: { type: String, required: false, trim: true },
+        rating: { type: Number, required: true, min: 1, max: 5 },
+        traineeID: {
+            type: mongoose.Schema.Types.ObjectId,
+            // reference to the IndividualTrainee model or CorporateTrainee model
+            // refPath: "traineeModel",
+            required: true
+        }
+    },
+    {
+        toJSON: {
+            virtuals: true
+        }
     }
+);
+
+ratingSchema.virtual("IndividualTrainee", {
+    ref: "IndividualTrainee",
+    localField: "traineeID",
+    foreignField: "_id",
+    justOne: true
 });
 
+ratingSchema.virtual("CorporateTrainee", {
+    ref: "CorporateTrainee",
+    localField: "traineeID",
+    foreignField: "_id",
+    justOne: true
+});
 export default mongoose.model<IRatingModel>("Rating", ratingSchema);

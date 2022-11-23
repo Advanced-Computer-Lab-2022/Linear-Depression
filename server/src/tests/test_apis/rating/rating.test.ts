@@ -7,8 +7,9 @@ import { faker } from "@faker-js/faker";
 import { TIME_OUT } from "../../../utils/testUtilities";
 import supertest from "supertest";
 import app from "../../../server";
-import { individualTraineeFactory } from "../../test_models/trainee/factory";
+import { corporateTraineeFactory, individualTraineeFactory } from "../../test_models/trainee/factory";
 import IndividualTrainee from "../../../models/IndividualTrainee";
+import CorporateTrainee from "../../../models/CorporateTrainee";
 
 const request = supertest(app);
 
@@ -99,6 +100,39 @@ describe("GET /ratings/:ratingId", () => {
     it("Should return a 400 error if the rating id is invalid", async () => {
         const res = await request.get(`/ratings/invalidId`);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+    });
+
+    it("Should return IndividualTrainee fields", async () => {
+        const trainee = new IndividualTrainee(individualTraineeFactory());
+        await trainee.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        console.log(ratingData);
+        const rating = new Rating(ratingData);
+        await rating.save();
+
+        const res = await request.get(`/ratings/${rating._id}`);
+        expect(res.status).toBe(StatusCodes.OK);
+        expect(res.body.rating.IndividualTrainee._id).toBe(trainee._id.toString());
+        expect(res.body.rating.IndividualTrainee.firstName).toBe(trainee.firstName);
+        expect(res.body.rating.IndividualTrainee.lastName).toBe(trainee.lastName);
+    });
+
+    it("Should return CorporateTrainee fields", async () => {
+        const trainee = new CorporateTrainee(corporateTraineeFactory());
+        await trainee.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        const rating = new Rating(ratingData);
+        await rating.save();
+
+        const res = await request.get(`/ratings/${rating._id}`);
+        expect(res.status).toBe(StatusCodes.OK);
+        expect(res.body.rating.CorporateTrainee._id).toBe(trainee._id.toString());
+        expect(res.body.rating.CorporateTrainee.firstName).toBe(trainee.firstName);
+        expect(res.body.rating.CorporateTrainee.lastName).toBe(trainee.lastName);
     });
 
     afterEach(async () => {

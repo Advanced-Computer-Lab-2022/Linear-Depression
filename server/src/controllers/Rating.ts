@@ -39,7 +39,10 @@ const createRating = async (req: Request, res: Response, next: NextFunction) => 
 
 const listRatings = (req: Request, res: Response, next: NextFunction) => {
     // filter only ratings that are have comments
+    // get trinee data
     return Rating.find({ comment: { $exists: true } })
+        .populate("IndividualTrainee", "firstName lastName")
+        .populate("CorporateTrainee", "firstName lastName")
         .then((ratings) => res.status(StatusCodes.OK).json({ ratings }))
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
@@ -48,6 +51,8 @@ const readRating = (req: Request, res: Response, next: NextFunction) => {
     const ratingId = req.params.ratingId;
 
     return Rating.findById(ratingId)
+        .populate("IndividualTrainee", "firstName lastName")
+        .populate("CorporateTrainee", "firstName lastName")
         .then((rating) =>
             rating
                 ? res.status(StatusCodes.OK).json({ rating })
