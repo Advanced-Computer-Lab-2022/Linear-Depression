@@ -79,11 +79,6 @@ courseSchema.pre<ICourseModel>("save", async function (next) {
     const course = this as ICourseModel;
     const lessons = await Lesson.find({ _id: { $in: course.lessons } });
     const ratings = await Rating.find({ _id: { $in: course.ratings } });
-    if (lessons.length == 0) {
-        course.totalHours = 0;
-    } else {
-        course.totalHours = lessons.reduce((totalHours, lesson) => totalHours + lesson.totalHours, 0);
-    }
     course.totalHours = lessons.reduce((acc, lesson) => acc + lesson.totalHours, 0);
     if (ratings.length == 0) {
         course.averageRating = 0;
