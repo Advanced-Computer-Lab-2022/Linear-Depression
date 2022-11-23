@@ -1,16 +1,19 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 import Logger from "./library/Logger";
+
 import courseRouter from "./routes/Course";
 import instructorRouter from "./routes/Instructor";
+import CorporateTraineeRouter from "./routes/CorporateTrainee";
+import ratingRouter from "./routes/Rating";
+import IndividualTraineeRouter from "./routes/IndividualTrainee";
+
 import { loadModels } from "./utils/loadModelsUtil";
 import { parseQueryParams } from "./utils/parseQueryParams";
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
-import CorporateTraineeRouter from "./routes/CorporateTrainee";
-import IndividualTraineeRouter from "./routes/IndividualTrainee";
-import LangRouter from "./routes/Currency";
+import langRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 const cors = require("cors");
@@ -21,20 +24,6 @@ const app = express();
 /* --- Create Server --- */
 loadModels();
 
-app.use((req, res, next) => {
-    /* log the request */
-    Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
-    res.on("finish", () => {
-        /* log the response */
-        Logger.info(
-            `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
-        );
-        const cookies = req.cookies;
-        Logger.info(`Cookies -> ${JSON.stringify(cookies)}`);
-    });
-
-    next();
-});
 app.use(
     cors({
         origin: true,
@@ -71,7 +60,8 @@ app.use("/courses", courseRouter);
 app.use("/instructors", instructorRouter);
 app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
-app.use("/country", LangRouter);
+app.use("/country", langRouter);
+app.use("/ratings", ratingRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {

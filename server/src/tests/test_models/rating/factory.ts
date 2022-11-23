@@ -6,7 +6,7 @@ export function ratingFactory(): IRating {
     return {
         comment: faker.lorem.words(),
         rating: faker.datatype.number({
-            min: 0,
+            min: 1,
             max: 5
         }),
         traineeID: new mongoose.Types.ObjectId(faker.database.mongodbObjectId())
