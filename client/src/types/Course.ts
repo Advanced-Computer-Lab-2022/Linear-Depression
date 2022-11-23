@@ -1,4 +1,4 @@
-import ILessonProps from "./Lesson";
+import { Lesson as ILessonProps } from "@internals/types";
 
 interface ICourseProps {
     _id: string;

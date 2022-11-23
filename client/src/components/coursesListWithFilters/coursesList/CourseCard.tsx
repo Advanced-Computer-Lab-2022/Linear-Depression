@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import StarRatings from "react-star-ratings";
-import ICourseProps from "../../../types/Course";
+import { Course as ICourseProps } from "@internals/types";
 import { useNavigate } from "react-router-dom";
 
 const HorizontalLayout = styled.div`

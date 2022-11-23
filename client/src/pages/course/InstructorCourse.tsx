@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import useFetchCourseById from "../../hooks/useFetchCourseById";
-import CourseContent from "../../components/CourseContent";
+import { useFetchCourseById } from "@internals/hooks";
+import { CourseContent, FloatingButton } from "@internals/components";
 import AddIcon from "@mui/icons-material/Add";
 import AddLessonForm from "./instructorCourse/AddLessonForm";
-import FloatingButton from "../../components/FloatingButton";
 
 const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();

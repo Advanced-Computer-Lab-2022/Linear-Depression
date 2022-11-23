@@ -2,7 +2,7 @@ import React from "react";
 import ContentItem from "./ContentItem";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import "./ContentAccordion.css";
-import ILessonProps from "../../types/Lesson";
+import { Lesson as ILessonProps } from "@internals/types";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;

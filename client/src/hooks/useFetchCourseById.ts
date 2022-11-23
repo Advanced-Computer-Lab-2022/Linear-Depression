@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchCourseById from "../services/fetchCourseById";
+import { fetchCourseById } from "@internals/services";
 
 const useFetchCourseById = (id: string) => {
     const [course, setCourse] = useState({

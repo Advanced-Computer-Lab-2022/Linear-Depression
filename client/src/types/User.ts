@@ -1,6 +1,8 @@
-export enum User {
+enum User {
     INDIVIDUAL_TRAINEE = "INDIVIDUAL_TRAINEE",
     CORPORATE_TRAINEE = "CORPORATE_TRAINEE",
     INSTRUCTOR = "INSTRUCTOR",
     GUEST = "GUEST"
 }
+
+export default User;

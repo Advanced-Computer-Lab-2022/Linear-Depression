@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ICourseProps from "../../types/Course";
+import { Course as ICourseProps } from "@internals/types";
 import CourseCard from "./coursesList/CourseCard";
 
 const CoursesListContainer = styled.div`

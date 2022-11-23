@@ -2,7 +2,7 @@ import React from "react";
 import CoursesList from "./coursesListWithFilters/CoursesList";
 import Filter from "./coursesListWithFilters/Filter";
 import styled from "styled-components";
-import ICourseProps from "../types/Course";
+import { Course as ICourseProps } from "@internals/types";
 
 const CoursesContainer = styled.div`
     display: flex;

@@ -1,4 +1,4 @@
-import SimpleAccordion from "../SimpleAccordion";
+import { SimpleAccordion } from "@internals/components";
 import styled from "styled-components";
 import PriceFilter from "./filter/PriceFilter";
 import StarRating from "./filter/RatingFilter";

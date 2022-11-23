@@ -1,6 +1,6 @@
 import axios from "axios";
-import { config } from "../config/config";
-import ICourseProps from "../types/Course";
+import { config } from "@internals/config";
+import { Course as ICourseProps } from "@internals/types";
 
 const fetchCourseById = (id: string): Promise<ICourseProps> => {
     const COURSE_FETCH_URL = `${config.API_URL}/courses/${id}`;

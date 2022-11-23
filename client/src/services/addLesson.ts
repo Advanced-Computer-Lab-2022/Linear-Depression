@@ -1,5 +1,5 @@
 import axios from "axios";
-import { config } from "../config/config";
+import { config } from "@internals/config";
 
 const addLesson = (courseId: string, lesson: {}) => {
     const ADD_LESSON_URL = `${config.API_URL}/courses/${courseId}/add-lesson`;

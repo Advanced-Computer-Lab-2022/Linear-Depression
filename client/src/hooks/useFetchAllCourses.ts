@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CountryContext } from "../context/CountryContext";
-import fetchAllCourses from "../services/fetchAllCourses";
+import { CountryContext } from "@internals/contexts";
+import { fetchAllCourses } from "@internals/services";
 
 const useFetchAllCourses = () => {
     const [searchParams] = useSearchParams();

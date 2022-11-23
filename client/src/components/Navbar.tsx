@@ -2,11 +2,10 @@ import { useContext, useState } from "react";
 import "./navbar/Navbar.css";
 import { Link, useSearchParams } from "react-router-dom";
 import CountrySelect from "./navbar/CountrySelect";
-import { Country } from "../types/Country";
 import Flag from "react-world-flags";
-import { CountryContext } from "../context/CountryContext";
-import { config } from "../config/config";
-const countries: Country[] = require("../media/country-currency.json");
+import { CountryContext } from "@internals/contexts";
+import { config } from "@internals/config";
+import countries from "../media/country-currency.json";
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);

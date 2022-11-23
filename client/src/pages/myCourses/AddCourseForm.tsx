@@ -2,9 +2,9 @@ import Button from "@mui/material/Button";
 import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } from "@mui/material";
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { UserContext } from "../../context/UserContext";
-import { FormProps } from "../../types/FormProps";
-import addCourse from "../../services/addCourse";
+import { UserContext } from "@internals/contexts";
+import { FormProps } from "@internals/types";
+import { addCourse } from "@internals/services";
 
 const HorizontalView = styled.div`
     display: flex;

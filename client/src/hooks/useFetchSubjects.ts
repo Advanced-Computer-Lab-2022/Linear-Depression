@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { config } from "../config/config";
+import { fetchSubjects } from "@internals/services";
 
 const useFetchSubjects = () => {
     const [subjects, setSubjects] = useState({
@@ -20,20 +19,6 @@ const useFetchSubjects = () => {
             });
     }, []);
     return subjects;
-};
-
-const fetchSubjects = (): Promise<never[]> => {
-    const API_URL = `${config.API_URL}/courses/subjects`;
-    return new Promise((resolve, reject) => {
-        axios
-            .get(API_URL)
-            .then((res) => {
-                resolve(res.data.subjects);
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
 };
 
 export default useFetchSubjects;
