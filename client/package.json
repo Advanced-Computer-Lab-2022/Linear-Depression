@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "@chakra-ui/react": "^2.3.6",
+        "@craco/craco": "^7.0.0",
         "@emotion/core": "^11.0.0",
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
@@ -37,10 +38,11 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "start": "craco start",
+        "build": "craco build",
+        "test": "craco test",
+        "eject": "craco eject",
+        "pretty": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
     },
     "eslintConfig": {
         "extends": [
@@ -61,7 +63,9 @@
         ]
     },
     "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^3.4.0",
         "@types/react-star-ratings": "^2.3.0",
-        "@types/react-world-flags": "^1.4.2"
+        "@types/react-world-flags": "^1.4.2",
+        "prettier": "2.8.0"
     }
 }

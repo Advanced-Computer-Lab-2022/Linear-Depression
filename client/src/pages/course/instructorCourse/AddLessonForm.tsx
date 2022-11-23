@@ -1,38 +1,25 @@
 import { Dialog, DialogContent, DialogContentText, TextField, DialogActions } from "@mui/material";
 import Button from "@mui/material/Button";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { config } from "../config/config";
-import { FormProps } from "../types/FormProps";
+
+import { addLesson } from "@internals/services";
+import { FormProps } from "@internals/types";
 
 const AddLessonForm: React.FC<FormProps> = ({ open, onClose }) => {
-    const [title, setTitle] = React.useState("");
-    const [totalHours, setTotalHours] = React.useState("");
+    const [title, setTitle] = useState("");
+    const [totalHours, setTotalHours] = useState(0);
 
-    const courseId = useParams().courseId;
+    const { courseId } = useParams();
 
     const handleClose = () => {
         onClose("Close");
     };
 
     const handleSubmit = () => {
-        const request = {
-            title: title,
-            totalHours: totalHours
-        };
-        fetch(config.API_URL + `/courses/${courseId}/add-lesson`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(request)
-        })
-            .then((r) => r.json())
-            .then((data) => {
-                console.log(data);
-                onClose("submit");
-            });
+        addLesson(courseId, { title, totalHours }).then(() => {
+            onClose("submit");
+        });
     };
 
     return (
@@ -61,7 +48,7 @@ const AddLessonForm: React.FC<FormProps> = ({ open, onClose }) => {
                     fullWidth
                     variant="outlined"
                     value={totalHours}
-                    onChange={(e) => setTotalHours(e.target.value)}
+                    onChange={(e) => setTotalHours(e.target.value as unknown as number)}
                 />
             </DialogContent>
             <DialogActions>

@@ -1,13 +1,14 @@
-import * as React from "react";
+import { DialogContent } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Dialog from "@mui/material/Dialog";
-import { DialogContent } from "@mui/material";
+import * as React from "react";
 import Flag from "react-world-flags";
-import { Country } from "../types/Country";
-import { CountryContext } from "../context/CountryContext";
+
+import { CountryContext } from "@internals/contexts";
+import { Country } from "@internals/types";
 
 export interface CountrySelectProps {
     open: boolean;

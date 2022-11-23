@@ -17,9 +17,8 @@ const Item = styled.div`
 
 const SimpleAccordion: React.FC<{
     title: string;
-    items: string[];
-    child: React.FC<{ title: string; items: string[] }>;
-}> = ({ title, items, child }) => {
+    children: React.ReactNode;
+}> = ({ title, children }) => {
     return (
         <Accordion allowToggle>
             <AccordionItem>
@@ -27,7 +26,7 @@ const SimpleAccordion: React.FC<{
                     <Item>{title}</Item>
                     <AccordionIcon />
                 </AccordionButtonContainer>
-                <AccordionPanel pb={4}>{child({ title, items })}</AccordionPanel>
+                <AccordionPanel pb={4}>{children}</AccordionPanel>
             </AccordionItem>
         </Accordion>
     );

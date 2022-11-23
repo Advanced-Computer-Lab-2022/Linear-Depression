@@ -1,5 +1,11 @@
 {
     "trailingComma": "none",
     "printWidth": 120,
-    "tabWidth": 4
+    "tabWidth": 4,
+    "importOrder": [
+        "(^@|^[A-Za-z])(?!internals)(.*(?<!tyles)$)",
+        "(^[.]|^@internals)(?!^[A-Za-z])(.*(?<!tyles)$)",
+        "tyles"
+    ],
+    "importOrderSeparation": true
 }

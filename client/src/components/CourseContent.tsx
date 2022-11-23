@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ILessonProps from "../../types/Lesson";
-import ContentAccordion from "./ContentAccordion";
 
-const MAX_COUNT_SECTIONS = 3;
+import ContentAccordion from "./CourseContent/ContentAccordion";
+import { Lesson as ILessonProps } from "@internals/types";
+
+const MAX_COUNT_SECTIONS = 10;
 
 const CourseContentInfo = styled.div`
     display: flex;

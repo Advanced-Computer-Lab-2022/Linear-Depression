@@ -5,4 +5,4 @@ interface Country {
     Code: string;
 }
 
-export { type Country };
+export default Country;

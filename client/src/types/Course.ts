@@ -1,3 +1,5 @@
+import { Lesson as ILessonProps } from "@internals/types";
+
 interface ICourseProps {
     _id: string;
     title: string;
@@ -17,6 +19,7 @@ interface ICourseProps {
         endDate: Date;
     } | null;
     currency: string;
+    lessons: ILessonProps[];
 }
 
 export default ICourseProps;

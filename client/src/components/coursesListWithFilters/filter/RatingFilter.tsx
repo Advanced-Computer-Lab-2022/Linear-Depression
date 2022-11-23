@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
+import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 const RatingContainer = styled(Rating)`
