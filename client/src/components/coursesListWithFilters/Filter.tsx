@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import PriceFilter from "./filter/PriceFilter";
-import StarRating from "./filter/RatingFilter";
+import RatingFilter from "./filter/RatingFilter";
 import CheckBoxLists from "./filter/SubjectsFilter";
 import { SimpleAccordion } from "@internals/components";
 
@@ -13,7 +13,7 @@ const Filter: React.FC = () => {
     const filters = [
         { Section: "Subject", Component: <CheckBoxLists /> },
         { Section: "Price", Component: <PriceFilter /> },
-        { Section: "Rating", Component: <StarRating /> }
+        { Section: "Rating", Component: <RatingFilter /> }
     ];
 
     return (
