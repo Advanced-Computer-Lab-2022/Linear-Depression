@@ -161,6 +161,13 @@ describe("POST /ratings/", () => {
         expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
     });
 
+    it("Should return a 400 error if the rating is missing", async () => {
+        const ratingData = ratingFactory();
+        delete ratingData.rating;
+        const res = await request.post("/ratings").send(ratingData);
+        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+    });
+
     afterEach(async () => {
         await disconnectDBForTesting();
     });
