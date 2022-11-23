@@ -1,18 +1,21 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 import Logger from "./library/Logger";
-import courseRouter from "./routes/Course";
-import instructorRouter from "./routes/Instructor";
 import { loadModels } from "./utils/loadModelsUtil";
 import { parseQueryParams } from "./utils/parseQueryParams";
 import AdminJS from "adminjs";
 import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
-import CorporateTraineeRouter from "./routes/CorporateTrainee";
-import IndividualTraineeRouter from "./routes/IndividualTrainee";
-import LangRouter from "./routes/Currency";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
+
+import CorporateTraineeRouter from "./routes/CorporateTrainee";
+import IndividualTraineeRouter from "./routes/IndividualTrainee";
+import InstructorRouter from "./routes/Instructor";
+import CourseRouter from "./routes/Course";
+import LangRouter from "./routes/Currency";
+import PromotionRouter from "./routes/Promotion";
+
 const cors = require("cors");
 import * as path from "path";
 
@@ -67,11 +70,12 @@ app.use((req, res, next) => {
 });
 
 /* Routers*/
-app.use("/courses", courseRouter);
-app.use("/instructors", instructorRouter);
+app.use("/courses", CourseRouter);
+app.use("/instructors", InstructorRouter);
 app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
 app.use("/country", LangRouter);
+app.use("/promotions", PromotionRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
