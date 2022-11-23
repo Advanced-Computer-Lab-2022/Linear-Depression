@@ -1,5 +1,5 @@
-import useFetchAllCourses from "../../hooks/useFetchAllCourses";
-import CoursesListWithFilters from "../../components/CoursesListWithFilters";
+import { CoursesListWithFilters } from "@internals/components";
+import { useFetchAllCourses } from "@internals/hooks";
 
 const AllCourses = () => {
     const courses = useFetchAllCourses();

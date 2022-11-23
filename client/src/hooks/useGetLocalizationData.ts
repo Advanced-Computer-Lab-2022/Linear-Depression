@@ -1,8 +1,7 @@
-import { config } from "../config/config";
-import { StatusCodes } from "http-status-codes";
-import axios from "axios";
-import getCurrency from "../services/getCurrency";
 import { useState } from "react";
+
+import { getCurrency } from "@internals/services";
+import { fetchCountryCode } from "@internals/services";
 
 const useGetLocalizationData = () => {
     const [country, setCountry] = useState("US");
@@ -18,24 +17,6 @@ const useGetLocalizationData = () => {
             console.log(err);
         });
     return { country, setCountry, currency, setCurrency };
-};
-
-const fetchCountryCode = (): Promise<string> => {
-    const COUNTRY_URL = `${config.API_URL}/country`;
-    return new Promise((resolve, reject) => {
-        axios
-            .get(COUNTRY_URL, { withCredentials: true })
-            .then((res) => {
-                if (res.status === StatusCodes.OK) {
-                    resolve(res.data.language);
-                } else {
-                    resolve("");
-                }
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
 };
 
 export default useGetLocalizationData;

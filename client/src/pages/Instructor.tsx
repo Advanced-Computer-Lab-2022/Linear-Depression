@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
-import AllCourses from "./home/AllCourses";
-import MyCourses from "./MyCourses";
-import { UserContext } from "../context/UserContext";
-import { User } from "../types/User";
+
+import { UserContext } from "@internals/contexts";
+import { Home, MyCourses } from "@internals/pages";
+import { User } from "@internals/types";
 
 const Instructor: React.FC = () => {
     // TODO: TO BE REMOVED WHEN AUTHENTICATION IS IMPLEMENTED
@@ -14,7 +14,7 @@ const Instructor: React.FC = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<AllCourses />} />
+            <Route path="/" element={<Home />} />
             <Route path="/my-courses" element={<MyCourses />} />
         </Routes>
     );

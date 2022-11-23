@@ -1,15 +1,11 @@
-import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import Home from "./pages/Home";
-import CorporateTrainee from "./pages/CorporateTrainee";
-import IndividualTrainee from "./pages/IndividualTrainee";
-import Instructor from "./pages/Instructor";
-import { CountryContext } from "./context/CountryContext";
-import Course from "./pages/Course";
-import Navbar from "./components/Navbar";
-import { UserContext } from "./context/UserContext";
-import { User } from "./types/User";
-import useGetLocalizationData from "./hooks/useGetLocalizationData";
+import { Routes, Route } from "react-router-dom";
+
+import { Navbar } from "@internals/components";
+import { CountryContext, UserContext } from "@internals/contexts";
+import { useGetLocalizationData } from "@internals/hooks";
+import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course } from "@internals/pages";
+import { User } from "@internals/types";
 
 function App() {
     const { country, setCountry, currency, setCurrency } = useGetLocalizationData();

@@ -2,8 +2,9 @@ import { Dialog, DialogContent, DialogContentText, TextField, DialogActions } fr
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import addLesson from "../../../services/addLesson";
-import { FormProps } from "../../../types/FormProps";
+
+import { addLesson } from "@internals/services";
+import { FormProps } from "@internals/types";
 
 const AddLessonForm: React.FC<FormProps> = ({ open, onClose }) => {
     const [title, setTitle] = useState("");

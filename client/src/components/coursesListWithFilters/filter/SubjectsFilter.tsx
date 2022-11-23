@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import useFetchSubjects from "../../../hooks/useFetchSubjects";
+
+import { useFetchSubjects } from "@internals/hooks";
 
 const CheckboxItem = styled(Checkbox)`
     color: red;
