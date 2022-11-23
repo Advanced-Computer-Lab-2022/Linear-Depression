@@ -18,6 +18,9 @@ const CourseImage = styled.div`
     width: 260px;
     height: 100%;
     flex: 1;
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const CourseDetails = styled.div`
@@ -32,6 +35,11 @@ const CourseTitle = styled.p`
     font-weight: 800;
     margin-bottom: 3px;
     line-height: 100%;
+
+    &:hover {
+        cursor: pointer;
+        color: grey;
+    }
 `;
 
 const CourseDescription = styled.p`
@@ -52,15 +60,20 @@ const CourseInstructor = styled.p`
     font-size: 12px;
     font-weight: 400;
     line-height: 100%;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-top: 5px;
+
+    &:hover {
+        cursor: pointer;
+        color: grey;
+    }
 `;
 
 const CourseRatingContainer = styled.div`
     display: flex;
     height: 25px;
-    margin-bottom: 0px;
-    margin-top: 0px;
+    margin-bottom: 0;
+    margin-top: 0;
 `;
 
 const CourseRatingText = styled.p`
@@ -104,7 +117,7 @@ const CoursePrice: React.FC<{ currency: string; price: number; discount?: number
     const discountedPriceString = discountedPrice === 0 ? "Free" : `${currency} ${discountedPrice.toFixed(2)}`;
     return (
         <CoursePriceSection>
-            <Price isDiscounted={discount ? true : false}>{priceString}</Price>
+            <Price isDiscounted={!!discount}>{priceString}</Price>
             {discount > 0 && <Price isDiscounted={false}>{discountedPriceString}</Price>}
         </CoursePriceSection>
     );
@@ -128,23 +141,25 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
 }) => {
     const navigate = useNavigate();
     return (
-        <CardContainer
-            onClick={() => {
-                navigate(`/course/${_id}`);
-            }}
-        >
+        <CardContainer>
             <HorizontalLayout>
-                <CourseImage>
+                <CourseImage onClick={() => navigate(`/course/${_id}`)}>
                     <img alt="" src="https://img-c.udemycdn.com/course/240x135/2776760_f176_10.jpg" />
                 </CourseImage>
+
                 <CourseDetails>
-                    <CourseTitle>{title}</CourseTitle>
+                    <CourseTitle onClick={() => navigate(`/course/${_id}`)}>{title}</CourseTitle>
+
                     <CourseDescription>{description + "  ..."}</CourseDescription>
                     {instructor && (
-                        <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
+                        <CourseInstructor
+                            onClick={() => navigate(`/instructors/${instructor.id}`)}
+                        >{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
                     )}
+
                     <CourseRatingContainer>
                         <CourseRatingText>{averageRating}</CourseRatingText>
+
                         <StarRatings
                             rating={averageRating}
                             starDimension="14px"
@@ -152,10 +167,13 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                             starRatedColor="#E59719"
                         />
                     </CourseRatingContainer>
+
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
+
                 <CoursePrice currency={currency} price={price} discount={discount} />
             </HorizontalLayout>
+
             <hr />
         </CardContainer>
     );
