@@ -6,8 +6,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import { DialogContent } from "@mui/material";
 import Flag from "react-world-flags";
-import { Country } from "../types/Country";
-import { CountryContext } from "../context/CountryContext";
+import { Country } from "../../types/Country";
+import { CountryContext } from "../../context/CountryContext";
 
 export interface CountrySelectProps {
     open: boolean;

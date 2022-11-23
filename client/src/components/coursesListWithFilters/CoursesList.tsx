@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import ICourseProps from "../types/Course";
-import CourseCard from "./CourseCard";
+import ICourseProps from "../../types/Course";
+import CourseCard from "./coursesList/CourseCard";
 
 const CoursesListContainer = styled.div`
     width: 80%;

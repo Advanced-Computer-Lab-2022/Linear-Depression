@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -8,48 +8,40 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import useFetchSubjects from "../../../hooks/useFetchSubjects";
 
 const CheckboxItem = styled(Checkbox)`
     color: red;
 `;
 
-const CheckBoxLists: React.FC<{ title: string; items: string[] }> = ({ title, items }) => {
-    const [checked, setChecked] = React.useState(-1);
+const SubjectsFilter: React.FC = () => {
+    const [checked, setChecked] = useState(-1);
     const [searchParams, setSearchParams] = useSearchParams();
+    const subjects = useFetchSubjects();
 
     const handleToggle = (value: string, index: number) => () => {
-        if (title === "Price") {
-            searchParams.delete("isFree");
-        } else {
-            searchParams.delete(title.toLowerCase());
-        }
+        searchParams.delete("subject");
         if (checked === index) {
             setChecked(-1);
         } else {
             setChecked(index);
-            if (title === "Price" && value === "Free") {
-                searchParams.append("isFree", "true");
-            } else if (title === "Price" && value === "Paid") {
-                searchParams.append("isFree", "false");
-            } else {
-                searchParams.append(title.toLowerCase(), value);
-            }
+            searchParams.append("subject", value);
         }
         setSearchParams(searchParams);
     };
 
     return (
         <List>
-            {items.map((value, index) => {
-                const labelId = `checkbox-list-label-${value}`;
+            {subjects.data.map((subject, index) => {
+                const labelId = `checkbox-list-label-${subject}`;
 
                 return (
                     <ListItem
-                        key={value}
+                        key={subject}
                         secondaryAction={<IconButton edge="end" aria-label="comments"></IconButton>}
                         disablePadding
                     >
-                        <ListItemButton role={undefined} onClick={handleToggle(value, index)} dense>
+                        <ListItemButton role={undefined} onClick={handleToggle(subject, index)} dense>
                             <ListItemIcon>
                                 <CheckboxItem
                                     edge="start"
@@ -59,7 +51,7 @@ const CheckBoxLists: React.FC<{ title: string; items: string[] }> = ({ title, it
                                     inputProps={{ "aria-labelledby": labelId }}
                                 />
                             </ListItemIcon>
-                            <ListItemText id={labelId} primary={`${value}`} />
+                            <ListItemText id={labelId} primary={`${subject}`} />
                         </ListItemButton>
                     </ListItem>
                 );
@@ -68,4 +60,4 @@ const CheckBoxLists: React.FC<{ title: string; items: string[] }> = ({ title, it
     );
 };
 
-export default CheckBoxLists;
+export default SubjectsFilter;

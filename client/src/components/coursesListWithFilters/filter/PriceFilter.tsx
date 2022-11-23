@@ -2,7 +2,7 @@ import { Button, InputAdornment, TextField } from "@mui/material";
 import React, { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { CountryContext } from "../context/CountryContext";
+import { CountryContext } from "../../../context/CountryContext";
 
 const HorizontalLayout = styled.div`
     display: flex;
