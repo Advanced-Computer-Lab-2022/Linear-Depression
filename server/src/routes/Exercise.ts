@@ -3,8 +3,12 @@ import controller from "../controllers/Exercise";
 
 const router = express.Router();
 
-router.get("/:exerciseId", controller.readExercise);
-router.put("/:exerciseId", controller.updateExercise);
-router.get("/:exerciseId/evaluate", controller.evaluateExercise);
+router.get("/exercises", controller.listExercises);
+router.get("/exercises/:exerciseId", controller.readExercise);
+router.get("/exercises/:exerciseId/answers", controller.evaluateExercise);
+router.post("/exercise", controller.createExercise);
+router.post("/exercises/:exerciseId/answers", controller.submitExercise);
+router.put("/exercises/:exerciseId", controller.updateExercise);
+router.delete("/exercises/:exerciseId", controller.deleteExercise);
 
 export default router;

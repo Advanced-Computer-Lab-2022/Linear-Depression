@@ -16,7 +16,6 @@ import CourseRouter from "./routes/Course";
 import LangRouter from "./routes/Currency";
 import PromotionRouter from "./routes/Promotion";
 import ExerciseRouter from "./routes/Exercise";
-import LessonRouter from "./routes/Lesson";
 
 const cors = require("cors");
 import * as path from "path";
@@ -78,8 +77,7 @@ app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
 app.use("/country", LangRouter);
 app.use("/promotions", PromotionRouter);
-app.use("/exercises", ExerciseRouter);
-app.use("/lessons", LessonRouter);
+app.use("/courses/:courseId/lessons/:lessonId", ExerciseRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {

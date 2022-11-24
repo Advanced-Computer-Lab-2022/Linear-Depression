@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Exercise from "../models/Exercise";
 import Lesson from "../models/Lesson";
+import Answer from "../models/Answer";
 
 const createExercise = (req: Request, res: Response, next: NextFunction) => {
     const lessonId = req.params.lessonId;
@@ -76,29 +77,36 @@ const deleteExercise = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const evaluateExercise = (req: Request, res: Response, next: NextFunction) => {
+const evaluateExercise = async (req: Request, res: Response, next: NextFunction) => {
+    const traineeId = req.body.traineeId; // FIXME: It is assumed that the traineeId is already in the request body
     const exerciseId = req.params.exerciseId;
+
+    const answerObject = await Answer.findOne({ exercise: exerciseId, user: traineeId });
+    let userAnswers: number[];
+
+    if (answerObject) {
+        userAnswers = answerObject.answers;
+    }
 
     return Exercise.findById(exerciseId)
         .then((exercise) => {
-            if (exercise) {
-                const { answers } = req.body;
+            if (exercise && userAnswers) {
                 const questions = exercise.questions;
 
-                const results = answers.map((answer: number, index: number) => {
+                const results = userAnswers.map((userAnswer: number, index: number) => {
                     const question = questions[index];
                     const correctAnswer = question.answerIndex;
-                    const isCorrect = correctAnswer === answer;
+                    const isCorrect = correctAnswer === userAnswer;
 
                     return {
                         isCorrect,
+                        userAnswer,
                         correctAnswer
                     };
                 });
 
-                // calculate correct answers
                 const correctAnswers = results.filter(
-                    (result: { isCorrect: boolean; correctAnswer: number }) => result.isCorrect
+                    (result: { isCorrect: boolean; userAnswer: number; correctAnswer: number }) => result.isCorrect
                 ).length;
 
                 const totalGrade = (correctAnswers / questions.length) * 100;
@@ -111,11 +119,41 @@ const evaluateExercise = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
+const submitExercise = (req: Request, res: Response, next: NextFunction) => {
+    const exerciseId = req.params.exerciseId;
+
+    // FIXME: It is assumed that the traineeId is already in the request body
+    return Answer.findOne({ exercise: exerciseId, user: req.body.userId })
+        .then((answer) => {
+            if (answer) {
+                answer.set({ answers: req.body.answers });
+
+                return answer
+                    .save()
+                    .then((answer) => res.status(StatusCodes.CREATED).json({ answer }))
+                    .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+            } else {
+                const answer = new Answer({
+                    _id: new mongoose.Types.ObjectId(),
+                    exerciseId: exerciseId,
+                    ...req.body
+                });
+
+                return answer
+                    .save()
+                    .then((answer) => res.status(StatusCodes.CREATED).json({ answer }))
+                    .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+            }
+        })
+        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+};
+
 export default {
     createExercise,
     listExercises,
     readExercise,
     updateExercise,
     deleteExercise,
-    evaluateExercise
+    evaluateExercise,
+    submitExercise
 };
