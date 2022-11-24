@@ -1,22 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { IAnswer } from "../../../models/Answer";
-import { exerciseFactory } from "../exercise/factory";
-import { traineeFactory } from "../trainee/factory";
-import Exercise from "../../../models/Exercise";
-import IndividualTrainee from "../../../models/IndividualTrainee";
+import mongoose from "mongoose";
 
-export async function answerFactory(): Promise<IAnswer> {
+export function answerFactory(): IAnswer {
     const answers = [0, 1, 2, 3].map(() => faker.datatype.number({ min: 0, max: 3 }));
-
-    const exercise = new Exercise(exerciseFactory());
-    await exercise.save();
-
-    const trainee = new IndividualTrainee(traineeFactory());
-    await trainee.save();
 
     return {
         answers: answers,
-        exerciseId: exercise._id,
-        traineeId: trainee._id
+        exerciseId: new mongoose.Types.ObjectId(faker.database.mongodbObjectId()),
+        traineeId: new mongoose.Types.ObjectId(faker.database.mongodbObjectId())
     };
 }
