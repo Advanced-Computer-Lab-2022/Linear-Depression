@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import AddLessonForm from "./instructorCourse/AddLessonForm";
-import { CourseContent, FloatingButton } from "@internals/components";
+import { CourseContent, CourseHeader, FloatingButton } from "@internals/components";
 import { useFetchCourseById } from "@internals/hooks";
 
 const InstructorCourse: React.FC = () => {
@@ -23,9 +23,22 @@ const InstructorCourse: React.FC = () => {
         }
     };
 
+    if (!course.data) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
-            {course.data != null && <CourseContent lessons={course.data.lessons} />}
+            <CourseHeader
+                title={course.data.title}
+                description={course.data.description}
+                rating={course.data.averageRating}
+                instructor={course.data.instructor.firstName + " " + course.data.instructor.lastName}
+                price={course.data.price}
+                currency={course.data.currency}
+                promotion={course.data.promotion}
+            />
+            <CourseContent lessons={course.data.lessons} />
             <FloatingButton onClick={onAddLessonClicked}>
                 <AddIcon />
             </FloatingButton>
