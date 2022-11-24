@@ -22,10 +22,8 @@ export const questionSchema = new mongoose.Schema({
     answerIndex: {
         type: Number,
         required: true,
-        validate: {
-            validator: (answerIndex: number) => answerIndex >= 0 && answerIndex <= 3,
-            message: "Answer index must be between 0 and 3"
-        }
+        min: 0,
+        max: 3
     }
 });
 

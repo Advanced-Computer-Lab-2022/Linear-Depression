@@ -81,7 +81,7 @@ const evaluateExercise = async (req: Request, res: Response, next: NextFunction)
     const traineeId = req.body.traineeId; // FIXME: It is assumed that the traineeId is already in the request body
     const exerciseId = req.params.exerciseId;
 
-    const answerObject = await Answer.findOne({ exercise: exerciseId, user: traineeId });
+    const answerObject = await Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId });
     let userAnswers: number[];
 
     if (answerObject) {
@@ -123,7 +123,7 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
 
     // FIXME: It is assumed that the traineeId is already in the request body
-    return Answer.findOne({ exercise: exerciseId, user: req.body.userId })
+    return Answer.findOne({ exerciseId: exerciseId, traineeId: req.body.traineeId })
         .then((answer) => {
             if (answer) {
                 answer.set({ answers: req.body.answers });
