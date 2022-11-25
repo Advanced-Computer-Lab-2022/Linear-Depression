@@ -15,6 +15,11 @@ export class TraineeSchema extends UserSchema {
         this.add({
             courses: [{ type: mongoose.Types.ObjectId, ref: "Course" }],
             gender: { type: String, required: true, trim: true, enum: ["male", "female"] }
-        });
+        }),
+            {
+                toJSON: {
+                    virtuals: true
+                }
+            };
     }
 }

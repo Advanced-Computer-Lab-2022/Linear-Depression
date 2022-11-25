@@ -184,7 +184,7 @@ describe("POST /courses/:courseId/ratings", () => {
         await connectDBForTesting();
     });
 
-    it.only("Should create a new rating Successfully", async () => {
+    it("Should create a new rating Successfully", async () => {
         const traineeData = individualTraineeFactory();
         const trainee = new IndividualTrainee(traineeData);
         await trainee.save();
