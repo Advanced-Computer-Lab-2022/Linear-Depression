@@ -5,7 +5,7 @@ async function connectDBForTesting() {
     try {
         dotenv.config();
         const dbUri = process.env.MONGO_TEST_URL || "";
-        const dbName = "test";
+        const dbName = "testa";
         await mongoose.connect(dbUri, {
             dbName,
             autoCreate: true
