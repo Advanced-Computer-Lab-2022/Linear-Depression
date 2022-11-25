@@ -25,20 +25,6 @@ const app = express();
 /* --- Create Server --- */
 loadModels();
 
-app.use((req, res, next) => {
-    /* log the request */
-    Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
-    res.on("finish", () => {
-        /* log the response */
-        Logger.info(
-            `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
-        );
-        const cookies = req.cookies;
-        Logger.info(`Cookies -> ${JSON.stringify(cookies)}`);
-    });
-
-    next();
-});
 app.use(
     cors({
         origin: true,
