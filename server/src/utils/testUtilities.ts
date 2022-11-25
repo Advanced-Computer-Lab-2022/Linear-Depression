@@ -5,7 +5,6 @@ async function connectDBForTesting() {
     try {
         dotenv.config();
         const dbUri = process.env.MONGO_TEST_URL || "";
-        console.log(dbUri);
         const dbName = "test";
         await mongoose.connect(dbUri, {
             dbName,
