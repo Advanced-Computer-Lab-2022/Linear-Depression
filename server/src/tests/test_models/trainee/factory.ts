@@ -20,11 +20,5 @@ export function corporateTraineeFactory(): ICorporateTraineeModel {
     const CorporateTrainee = traineeFactory() as ICorporateTraineeModel;
     CorporateTrainee["corporate"] = faker.company.name();
     CorporateTrainee["expiredAt"] = faker.date.between("2000-01-01", "2030-01-01");
-    //check if expired or not
-    if (new Date(CorporateTrainee["expiredAt"]) < new Date()) {
-        CorporateTrainee["status"] = status.expired;
-    } else {
-        CorporateTrainee["status"] = status.active;
-    }
     return CorporateTrainee;
 }
