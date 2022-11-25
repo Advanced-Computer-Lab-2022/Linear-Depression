@@ -9,7 +9,7 @@ router.post("/exercise", controller.createExercise);
 router.put("/exercises/:exerciseId", controller.updateExercise);
 router.delete("/exercises/:exerciseId", controller.deleteExercise);
 
-router.get("/exercises/:exerciseId/answers", controller.evaluateExercise);
-router.post("/exercises/:exerciseId/answers", controller.submitExercise);
+router.get("/exercises/:exerciseId/submissions", controller.readSubmission);
+router.post("/exercises/:exerciseId/submissions", controller.submitExercise);
 
 export default router;
