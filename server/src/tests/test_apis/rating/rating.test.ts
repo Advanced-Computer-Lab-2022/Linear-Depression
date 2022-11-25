@@ -122,7 +122,7 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
         const course = new Course(courseFactory());
         await course.save();
 
-        const response = await request.get(`/courses/${course._id}/ratings/${mongoose.Types.ObjectId()}`);
+        const response = await request.get(`/courses/${course._id}/ratings/${new mongoose.Types.ObjectId()}`);
         expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -184,7 +184,7 @@ describe("POST /courses/:courseId/ratings", () => {
         await connectDBForTesting();
     });
 
-    it("Should create a new rating Successfully", async () => {
+    it.only("Should create a new rating Successfully", async () => {
         const traineeData = individualTraineeFactory();
         const trainee = new IndividualTrainee(traineeData);
         await trainee.save();
@@ -200,6 +200,10 @@ describe("POST /courses/:courseId/ratings", () => {
         expect(res.body.rating.comment).toBe(rating.comment);
         expect(res.body.rating.rating).toBe(rating.rating);
         expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
+
+        const courseRes = await request.get(`/courses/${course._id}`);
+        expect(courseRes.status).toBe(StatusCodes.OK);
+        expect(courseRes.body.course.ratings).toHaveLength(2);
     });
 
     it("Should return a 400 error if the traineeID is not found", async () => {
@@ -232,7 +236,7 @@ describe("POST /courses/:courseId/ratings", () => {
 
         const { course, rating } = await createCourseWithRatings();
         rating.traineeID = trainee._id;
-        rating.rating = undefined;
+        rating.rating = undefined!;
         const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });

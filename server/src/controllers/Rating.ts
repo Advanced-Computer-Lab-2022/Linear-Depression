@@ -8,6 +8,7 @@ import Course, { ICourse } from "../models/Course";
 
 const createRating = async (req: Request, res: Response, next: NextFunction) => {
     const courseId = req.params.courseId;
+
     // if traineeId is provided, make sure it exists in the db in either IndividualTrainee or CorporateTrainee
     if (req.body.traineeID) {
         const traineeId = req.body.traineeID;
@@ -51,16 +52,16 @@ const listRatings = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const readRating = async (req: Request, res: Response, next: NextFunction) => {
-    const ratingId = req.params.ratingId;
+    const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
-    const course = await Course.findById(courseId).then((course) => {
+    const course = (await Course.findById(courseId).then((course) => {
         if (!course) {
             return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Course not found"
             });
         }
         return course as ICourse;
-    });
+    })) as ICourse;
     return Rating.findById(ratingId)
         .populate("IndividualTrainee", "firstName lastName")
         .populate("CorporateTrainee", "firstName lastName")
@@ -81,17 +82,17 @@ const readRating = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const updateRating = async (req: Request, res: Response, next: NextFunction) => {
-    const ratingId = req.params.ratingId;
+    const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
 
-    const course = await Course.findById(courseId).then((course) => {
+    const course: ICourse = (await Course.findById(courseId).then((course) => {
         if (!course) {
             return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Course not found"
             });
         }
-        return course as ICourse;
-    });
+        return course;
+    })) as ICourse;
     if (!course.ratings.includes(ratingId)) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             message: "Rating does not belong to this course"
