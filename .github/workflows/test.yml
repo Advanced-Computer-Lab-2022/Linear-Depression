@@ -10,5 +10,6 @@ jobs:
               run: cd server; npm install --legacy-peer-deps
             - name: Run test
               env:
-                  MONGO_TEST_URL: ${{ secrets.MONGO_TEST_URL }}${{ github.run_id }}
+                  MONGO_TEST_URL: ${{ secrets.MONGO_TEST_URL }}{{ secrets.MONGO_TEST_DB }}?retryWrites=true&w=majority
+
               run: cd server; npm test
