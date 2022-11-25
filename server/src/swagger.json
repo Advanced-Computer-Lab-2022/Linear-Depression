@@ -1,0 +1,714 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "API Documentation",
+        "description": "API Documentation"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/ping": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/test": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/courses/": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "searchTerm",
+                        "in": "query",
+                        "type": "string"
+                    },
+                    {
+                        "name": "price",
+                        "in": "query",
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/lesson": {
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/subjects": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/ratings": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "traineeID": {
+                                    "example": "any"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/ratings/{ratingId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "ratingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "ratingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "traineeID": {
+                                    "example": "any"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "ratingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/instructors/": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            },
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/instructors/{instructorId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "instructorId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "instructorId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "instructorId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/corporate-trainees/": {
+            "get": {
+                "tags": ["CorporateTrainee"],
+                "description": "Endpoint to get list of CorporateTrainee.",
+                "produces": [null],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "List of CorporateTrainee",
+                        "schema": {
+                            "$ref": "#/components/CorporateTrainee"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["CorporateTrainee"],
+                "description": "Endpoint to create a CorporateTrainee.",
+                "consumes": ["application/json"],
+                "produces": [null],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "CorporateTrainee created",
+                        "schema": {
+                            "$ref": "#/components/CorporateTrainee"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/corporate-trainees/{corporateTraineeId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "corporateTraineeId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "corporateTraineeId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "corporateTraineeId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/individual-trainees/": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            },
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/individual-trainees/{individualTraineeId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "individualTraineeId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "individualTraineeId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "individualTraineeId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/country/": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/country/{country}": {
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/promotions/": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            },
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/promotions/{promotionId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "promotionId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "promotionId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "promotionId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/lessons/{lessonId}/exercises": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/lessons/{lessonId}/exercises/{exerciseId}": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exerciseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exerciseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exerciseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/lessons/{lessonId}/exercise": {
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/courses/{courseId}/lessons/{lessonId}/exercises/{exerciseId}/answers": {
+            "get": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exerciseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {}
+            },
+            "post": {
+                "description": "",
+                "produces": [null],
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exerciseId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "traineeId": {
+                                    "example": "any"
+                                },
+                                "answers": {
+                                    "example": "any"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    },
+    "components": {
+        "CorporateTrainee": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "hashPassword": {
+                    "type": "string"
+                },
+                "_id": {
+                    "type": "string"
+                },
+                "corporate": {
+                    "type": "string"
+                },
+                "expiredAt": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
