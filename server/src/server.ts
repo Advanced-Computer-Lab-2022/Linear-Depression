@@ -8,6 +8,7 @@ import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
+import swaggerUi from "swagger-ui-express";
 
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
@@ -34,6 +35,8 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+const swaggerFile = require("./swagger.json");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
 

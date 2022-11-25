@@ -108,3 +108,6 @@ dist
 
 # AdminJs
 .adminjs
+
+#swagger
+swagger.json
