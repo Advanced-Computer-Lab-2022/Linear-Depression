@@ -77,41 +77,54 @@ const deleteExercise = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const evaluateExercise = async (req: Request, res: Response, next: NextFunction) => {
-    const traineeId = req.body.traineeId; // FIXME: It is assumed that the traineeId is already in the request body
-    const exerciseId = req.params.exerciseId;
-
+const evaluateExercise = async (traineeId: string, exerciseId: string) => {
     const answerObject = await Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId });
-    let userAnswers: number[];
+    let userAnswers: number[] = [];
 
     if (answerObject) {
         userAnswers = answerObject.answers;
     }
 
-    return Exercise.findById(exerciseId)
-        .then((exercise) => {
-            if (exercise && userAnswers) {
-                const questions = exercise.questions;
+    const exerciseObject = await Exercise.findById(exerciseId);
 
-                const results = userAnswers.map((userAnswer: number, index: number) => {
-                    const question = questions[index];
-                    const correctAnswer = question.answerIndex;
-                    const isCorrect = correctAnswer === userAnswer;
+    if (exerciseObject && userAnswers) {
+        const questions = exerciseObject.questions;
 
-                    return {
-                        isCorrect,
-                        userAnswer,
-                        correctAnswer
-                    };
-                });
+        const results = userAnswers.map((userAnswer: number, index: number) => {
+            const question = questions[index];
+            const correctAnswer = question.answerIndex;
+            const isCorrect = userAnswer === correctAnswer;
 
-                const correctAnswers = results.filter(
-                    (result: { isCorrect: boolean; userAnswer: number; correctAnswer: number }) => result.isCorrect
-                ).length;
+            return {
+                isCorrect,
+                correctAnswer,
+                userAnswer
+            };
+        });
 
-                const totalGrade = (correctAnswers / questions.length) * 100;
+        const correctAnswers = results.filter(
+            (result: { isCorrect: boolean; userAnswer: number; correctAnswer: number }) => result.isCorrect
+        ).length;
 
-                return res.status(StatusCodes.OK).json({ results, totalGrade });
+        const totalGrade = (correctAnswers / questions.length) * 100;
+
+        return { totalGrade, results };
+    } else {
+        return { totalGrade: 0, results: [] };
+    }
+};
+
+const readSubmission = (req: Request, res: Response, next: NextFunction) => {
+    const exerciseId = req.params.exerciseId;
+    const traineeId = req.body.traineeId;
+
+    return Answer.findOne({
+        exerciseId: exerciseId,
+        traineeId: traineeId
+    })
+        .then((answer) => {
+            if (answer) {
+                return res.status(StatusCodes.OK).json({ answer });
             } else {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }
@@ -121,16 +134,21 @@ const evaluateExercise = async (req: Request, res: Response, next: NextFunction)
 
 const submitExercise = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
+    const traineeId = req.body.traineeId;
 
     // FIXME: It is assumed that the traineeId is already in the request body
-    return Answer.findOne({ exerciseId: exerciseId, traineeId: req.body.traineeId })
+    return Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId })
         .then((answer) => {
             if (answer) {
                 answer.set({ answers: req.body.answers });
 
                 return answer
                     .save()
-                    .then((answer) => res.status(StatusCodes.CREATED).json({ answer }))
+                    .then((answer) => {
+                        evaluateExercise(traineeId, exerciseId).then((evaluation) => {
+                            res.status(StatusCodes.CREATED).json({ evaluation });
+                        });
+                    })
                     .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
             } else {
                 const answer = new Answer({
@@ -141,7 +159,11 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
 
                 return answer
                     .save()
-                    .then((answer) => res.status(StatusCodes.CREATED).json({ answer }))
+                    .then((answer) => {
+                        evaluateExercise(traineeId, exerciseId).then((evaluation) => {
+                            res.status(StatusCodes.CREATED).json({ evaluation });
+                        });
+                    })
                     .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
             }
         })
@@ -154,6 +176,6 @@ export default {
     readExercise,
     updateExercise,
     deleteExercise,
-    evaluateExercise,
+    readSubmission,
     submitExercise
 };
