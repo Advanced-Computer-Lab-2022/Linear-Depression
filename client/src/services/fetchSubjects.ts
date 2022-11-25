@@ -1,26 +1,19 @@
 import axios from "axios";
-import { config } from "../config/config";
 
-const fetchSubjects = (): Promise<{ data: never[]; loading: boolean; error: null }> => {
-    let apiURL = `${config.API_URL}/courses/subjects`;
+import { config } from "@internals/config";
+
+const fetchSubjects = (): Promise<never[]> => {
+    const API_URL = `${config.API_URL}/courses/subjects`;
     return new Promise((resolve, reject) => {
         axios
-            .get(apiURL)
+            .get(API_URL)
             .then((res) => {
-                resolve({
-                    data: res.data.subjects,
-                    loading: false,
-                    error: null
-                });
+                resolve(res.data.subjects);
             })
             .catch((err) => {
-                reject({
-                    data: [],
-                    loading: false,
-                    error: err
-                });
+                reject(err);
             });
     });
 };
 
-export { fetchSubjects };
+export default fetchSubjects;

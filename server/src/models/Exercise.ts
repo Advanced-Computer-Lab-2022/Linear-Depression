@@ -3,7 +3,7 @@ import mongoose, { Document } from "mongoose";
 export interface IMCQuestion {
     question: string;
     choices: Array<string>;
-    answerIndex?: number;
+    answerIndex: number;
 }
 
 export const questionSchema = new mongoose.Schema({
@@ -19,7 +19,12 @@ export const questionSchema = new mongoose.Schema({
             message: "Choices must be an array of 4 strings"
         }
     },
-    answerIndex: Number
+    answerIndex: {
+        type: Number,
+        required: true,
+        min: 0,
+        max: 3
+    }
 });
 
 export interface IExercise {

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@internals/components": ["src/components"],
+            "@internals/config": ["src/config/config.ts"],
+            "@internals/contexts": ["src/contexts"],
+            "@internals/hooks": ["src/hooks"],
+            "@internals/media/*": ["src/media/*"],
+            "@internals/pages": ["src/pages"],
+            "@internals/pages/*": ["src/pages/*"],
+            "@internals/services": ["src/services"],
+            "@internals/types": ["src/types"]
+        }
+    }
+}
