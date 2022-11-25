@@ -5,7 +5,6 @@ import Logger from "./library/Logger";
 import courseRouter from "./routes/Course";
 import instructorRouter from "./routes/Instructor";
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
-import ratingRouter from "./routes/Rating";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 
 import { loadModels } from "./utils/loadModelsUtil";
@@ -61,7 +60,6 @@ app.use("/instructors", instructorRouter);
 app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
 app.use("/country", langRouter);
-app.use("/ratings", ratingRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {

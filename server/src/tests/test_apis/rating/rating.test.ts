@@ -1,4 +1,4 @@
-import Rating from "../../../models/Rating";
+import Rating, { IRating } from "../../../models/Rating";
 import mongoose from "mongoose";
 import { ratingFactory } from "../../test_models/rating/factory";
 import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
@@ -10,67 +10,87 @@ import app from "../../../server";
 import { corporateTraineeFactory, individualTraineeFactory } from "../../test_models/trainee/factory";
 import IndividualTrainee from "../../../models/IndividualTrainee";
 import CorporateTrainee from "../../../models/CorporateTrainee";
+import Course, { ICourse } from "../../../models/Course";
+import { courseFactory } from "../../test_models/course/factory";
 
+const createCourseWithRatings = async () => {
+    const courseData = courseFactory();
+    const rating = new Rating(ratingFactory());
+    await rating.save();
+    courseData.ratings = [rating._id];
+    const course = new Course(courseData);
+    await course.save();
+    return { course, rating };
+};
+
+function getRatingData(rating: IRating) {
+    const ratingData = rating.toJSON();
+    delete ratingData.id;
+    delete ratingData._id;
+    return ratingData;
+}
 const request = supertest(app);
 
-describe("GET /ratings/", () => {
+describe("GET /courses/:courseId/ratings", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
     it("should return an empty array when the db is empty", async () => {
-        const response = await request.get("/ratings");
+        const response = await request.get("/courses/1/ratings");
         expect(response.status).toBe(StatusCodes.OK);
         expect(response.body.ratings).toEqual([]);
     });
 
     it("Should skip ratings having no comments", async () => {
-        const randomLength = faker.datatype.number({ min: 2, max: 10 });
-        const ratings = [];
-        for (let i = 0; i < randomLength; i++) {
-            const ratingData = ratingFactory();
-            ratingData.comment = undefined;
-            const rating = new Rating(ratingData);
-            await rating.save();
-            ratings.push(rating);
-        }
+        const { course, rating } = await createCourseWithRatings();
 
-        const res = await request.get("/ratings");
-        expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.ratings.length).toBe(0);
+        const rating2 = new Rating(ratingFactory());
+        rating2.comment = undefined;
+        await rating2.save();
+        course.ratings.push(rating2._id);
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(1);
     });
 
     it("Should return all ratings correctly with comments", async () => {
-        const randomLength = faker.datatype.number({ min: 2, max: 10 });
+        const course = new Course(courseFactory());
+
+        const randomLength = faker.datatype.number({ min: 1, max: 10 });
         const ratings = [];
         for (let i = 0; i < randomLength; i++) {
             const rating = new Rating(ratingFactory());
+            course.ratings.push(rating._id);
             await rating.save();
             ratings.push(rating);
         }
-
-        const res = await request.get("/ratings");
-        expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.ratings.length).toBe(ratings.length);
+        await course.save();
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(randomLength);
     });
 
     it("Should return all ratings correctly with comments and skip ratings having no comments", async () => {
-        const randomLength = faker.datatype.number({ min: 2, max: 10 });
+        const course = new Course(courseFactory());
+
+        const randomLength = faker.datatype.number({ min: 1, max: 10 });
         const ratings = [];
         for (let i = 0; i < randomLength; i++) {
             const rating = new Rating(ratingFactory());
+            course.ratings.push(rating._id);
             await rating.save();
             ratings.push(rating);
         }
 
-        const ratingData = ratingFactory();
-        ratingData.comment = undefined;
-        const rating = new Rating(ratingData);
+        const rating = new Rating(ratingFactory());
+        rating.comment = undefined;
+        course.ratings.push(rating._id);
         await rating.save();
-        ratings.push(rating);
+        await course.save();
 
-        const res = await request.get("/ratings");
-        expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.ratings.length).toBe(randomLength);
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(randomLength);
     });
 
     afterEach(async () => {
@@ -78,7 +98,7 @@ describe("GET /ratings/", () => {
     }, TIME_OUT);
 });
 
-describe("GET /ratings/:ratingId", () => {
+describe("GET /courses/:courseId/ratings/:ratingId", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
@@ -87,19 +107,31 @@ describe("GET /ratings/:ratingId", () => {
         const rating = new Rating(ratingFactory());
         await rating.save();
 
-        const res = await request.get(`/ratings/${rating._id}`);
-        expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.rating._id).toBe(rating._id.toString());
+        const courseData = courseFactory();
+        courseData.ratings.push(rating._id);
+        const course = new Course(courseData);
+        await course.save();
+
+        const response = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.rating).toBeDefined();
+        expect(response.body.rating._id).toEqual(rating._id.toString());
     });
 
     it("Should return a 404 error if the rating does not exist", async () => {
-        const res = await request.get(`/ratings/${new mongoose.Types.ObjectId()}`);
-        expect(res.status).toBe(StatusCodes.NOT_FOUND);
+        const course = new Course(courseFactory());
+        await course.save();
+
+        const response = await request.get(`/courses/${course._id}/ratings/${mongoose.Types.ObjectId()}`);
+        expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
     it("Should return a 400 error if the rating id is invalid", async () => {
-        const res = await request.get(`/ratings/invalidId`);
-        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+        const course = new Course(courseFactory());
+        await course.save();
+
+        const response = await request.get(`/courses/${course._id}/ratings/123`);
+        expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it("Should return IndividualTrainee fields", async () => {
@@ -108,11 +140,14 @@ describe("GET /ratings/:ratingId", () => {
 
         const ratingData = ratingFactory();
         ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
-        console.log(ratingData);
         const rating = new Rating(ratingData);
+        const courseData = courseFactory();
+        courseData.ratings.push(rating._id);
+        const course = new Course(courseData);
+        await course.save();
         await rating.save();
 
-        const res = await request.get(`/ratings/${rating._id}`);
+        const res = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.rating.IndividualTrainee._id).toBe(trainee._id.toString());
         expect(res.body.rating.IndividualTrainee.firstName).toBe(trainee.firstName);
@@ -126,9 +161,13 @@ describe("GET /ratings/:ratingId", () => {
         const ratingData = ratingFactory();
         ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
         const rating = new Rating(ratingData);
+        const courseData = courseFactory();
+        courseData.ratings.push(rating._id);
+        const course = new Course(courseData);
+        await course.save();
         await rating.save();
 
-        const res = await request.get(`/ratings/${rating._id}`);
+        const res = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.rating.CorporateTrainee._id).toBe(trainee._id.toString());
         expect(res.body.rating.CorporateTrainee.firstName).toBe(trainee.firstName);
@@ -140,7 +179,7 @@ describe("GET /ratings/:ratingId", () => {
     });
 });
 
-describe("POST /ratings/", () => {
+describe("POST /courses/:courseId/ratings", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
@@ -149,34 +188,24 @@ describe("POST /ratings/", () => {
         const traineeData = individualTraineeFactory();
         const trainee = new IndividualTrainee(traineeData);
         await trainee.save();
-        const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id;
-        const res = await request.post("/ratings").send(ratingData);
+        const { course, rating } = await createCourseWithRatings();
+        rating.traineeID = trainee._id;
+        rating.save();
+
+        const ratingData = getRatingData(rating);
+
+        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
-        expect(res.body.rating.comment).toBe(ratingData.comment);
-        expect(res.body.rating.rating).toBe(ratingData.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
-    });
-
-    it("Should return a 400 error if the rating is invalid", async () => {
-        const ratingData = ratingFactory();
-        ratingData.rating = 6;
-        const res = await request.post("/ratings").send(ratingData);
-        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
-    });
-
-    it("Should return a 400 error if the traineeID is invalid", async () => {
-        const ratingData = ratingFactory();
-        ratingData.traineeID = "invalidId";
-        const res = await request.post("/ratings").send(ratingData);
-        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+        expect(res.body.rating.comment).toBe(rating.comment);
+        expect(res.body.rating.rating).toBe(rating.rating);
+        expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
     });
 
     it("Should return a 400 error if the traineeID is not found", async () => {
-        const ratingData = ratingFactory();
-        ratingData.traineeID = new mongoose.Types.ObjectId();
-        const res = await request.post("/ratings").send(ratingData);
+        const { course, rating } = await createCourseWithRatings();
+        rating.traineeID = new mongoose.Types.ObjectId();
+        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
@@ -184,21 +213,27 @@ describe("POST /ratings/", () => {
         const traineeData = individualTraineeFactory();
         const trainee = new IndividualTrainee(traineeData);
         await trainee.save();
-        const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id;
-        ratingData.comment = undefined;
-        const res = await request.post("/ratings").send(ratingData);
+
+        const { course, rating } = await createCourseWithRatings();
+        rating.traineeID = trainee._id;
+        rating.comment = undefined;
+        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBeUndefined();
-        expect(res.body.rating.rating).toBe(ratingData.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+        expect(res.body.rating.rating).toBe(rating.rating);
+        expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
     });
 
     it("Should return a 400 error if the rating is missing", async () => {
-        const ratingData = ratingFactory();
-        delete ratingData.rating;
-        const res = await request.post("/ratings").send(ratingData);
+        const traineeData = individualTraineeFactory();
+        const trainee = new IndividualTrainee(traineeData);
+        await trainee.save();
+
+        const { course, rating } = await createCourseWithRatings();
+        rating.traineeID = trainee._id;
+        rating.rating = undefined;
+        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
@@ -207,16 +242,18 @@ describe("POST /ratings/", () => {
     });
 });
 
-describe("PUT /ratings/:ratingId", () => {
+describe("PUT /courses/:courseId/ratings/:ratingId", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
 
     it("Should update a rating Successfully", async () => {
-        const rating = new Rating(ratingFactory());
-        await rating.save();
-        const ratingData = ratingFactory();
-        const res = await request.put(`/ratings/${rating._id}`).send(ratingData);
+        const { course, rating } = await createCourseWithRatings();
+        const ratingData = getRatingData(rating);
+        ratingData.comment = "New Comment";
+        ratingData.rating = 5;
+
+        const res = await request.put(`/courses/${course._id}/ratings/${rating._id}`).send(ratingData);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.rating._id).toBe(rating._id.toString());
         expect(res.body.rating.comment).toBe(ratingData.comment);
@@ -225,20 +262,20 @@ describe("PUT /ratings/:ratingId", () => {
     });
 
     it("Should return a 400 error if the rating is invalid", async () => {
-        const rating = new Rating(ratingFactory());
-        await rating.save();
-        const ratingData = ratingFactory();
+        const { course, rating } = await createCourseWithRatings();
+        const ratingData = getRatingData(rating);
         ratingData.rating = 6;
-        const res = await request.put(`/ratings/${rating._id}`).send(ratingData);
+
+        const res = await request.put(`/courses/${course._id}/ratings/${rating._id}`).send(ratingData);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it("Should return a 400 error if the traineeID is invalid", async () => {
-        const rating = new Rating(ratingFactory());
-        await rating.save();
-        const ratingData = ratingFactory();
-        ratingData.traineeID = "invalidId";
-        const res = await request.put(`/ratings/${rating._id}`).send(ratingData);
+        const { course, rating } = await createCourseWithRatings();
+        const ratingData = getRatingData(rating);
+        ratingData.traineeID = "invalid";
+
+        const res = await request.put(`/courses/${course._id}/ratings/${rating._id}`).send(ratingData);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
@@ -247,33 +284,34 @@ describe("PUT /ratings/:ratingId", () => {
     });
 });
 
-describe("DELETE /ratings/:ratingId", () => {
+describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
 
     it("Should delete a rating Successfully", async () => {
-        const rating = new Rating(ratingFactory());
-        await rating.save();
+        const { course, rating } = await createCourseWithRatings();
 
-        const res = await request.delete(`/ratings/${rating._id}`);
+        const res = await request.delete(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.rating._id).toBe(rating._id.toString());
         expect(res.body.rating.comment).toBe(rating.comment);
         expect(res.body.rating.rating).toBe(rating.rating);
         expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
 
-        const deletedRating = await Rating.findById(rating._id);
-        expect(deletedRating).toBeNull();
+        expect(await Rating.findById(rating._id)).toBeNull();
+        const courseAfterDelete = (await Course.findById(course._id)) as ICourse;
+        expect(courseAfterDelete.ratings).not.toContain(rating._id);
     });
 
     it("Should return a 404 error if the rating is not found", async () => {
-        const res = await request.delete(`/ratings/${new mongoose.Types.ObjectId()}`);
+        const { course } = await createCourseWithRatings();
+        const res = await request.delete(`/courses/${course._id}/ratings/${new mongoose.Types.ObjectId()}`);
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
     it("Should return a 400 error if the ratingId is invalid", async () => {
-        const res = await request.delete(`/ratings/invalidId`);
+        const res = await request.delete(`/courses/${new mongoose.Types.ObjectId()}/ratings/invalid`);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
