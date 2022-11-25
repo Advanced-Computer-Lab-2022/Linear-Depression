@@ -144,7 +144,7 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
 
                 return answer
                     .save()
-                    .then((answer) => {
+                    .then(() => {
                         evaluateExercise(traineeId, exerciseId).then((evaluation) => {
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
@@ -159,7 +159,7 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
 
                 return answer
                     .save()
-                    .then((answer) => {
+                    .then(() => {
                         evaluateExercise(traineeId, exerciseId).then((evaluation) => {
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
