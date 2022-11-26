@@ -1,9 +1,9 @@
 import { useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { getCourseList } from "../features/courseList/coursesListSlice";
-import { useAppDispatch } from "../store";
 import { CountryContext } from "@internals/contexts";
+import { useAppDispatch } from "@internals/redux";
+import { getCourseList } from "@internals/redux";
 
 const useFetchAllCourses = () => {
     const [searchParams] = useSearchParams();

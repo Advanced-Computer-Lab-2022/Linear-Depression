@@ -1,7 +1,8 @@
-import { fetchSubjects } from "@internals/services";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
-export const getSubjects = createAsyncThunk("subject/getSubjects", async (_, thunkapi) => {
+import { fetchSubjects } from "@internals/services";
+
+const getSubjects = createAsyncThunk("subject/getSubjects", async (_, thunkapi) => {
     try {
         const data = await fetchSubjects();
         return data;
@@ -21,7 +22,7 @@ const initialState = {
     error: null
 } as SubjectsState;
 
-export const subjectsSlice = createSlice({
+const subjectsSlice = createSlice({
     name: "coursesList",
     initialState: initialState,
     reducers: {},
@@ -40,4 +41,4 @@ export const subjectsSlice = createSlice({
     }
 });
 
-export default subjectsSlice.reducer;
+export { subjectsSlice, getSubjects };

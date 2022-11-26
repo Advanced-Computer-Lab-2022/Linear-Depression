@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "../store";
-import { getSubjects } from "../features/subjects/subjectSlice";
+
+import { useAppDispatch, getSubjects } from "@internals/redux";
 
 const useFetchSubjects = () => {
     const dispatch = useAppDispatch();

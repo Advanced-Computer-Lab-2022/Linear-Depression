@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { getCourse } from "../features/course/courseSlice";
-import { useAppDispatch } from "../store";
+
+import { useAppDispatch, getCourse } from "@internals/redux";
 
 const useFetchCourseById = (id: string) => {
     const dispatch = useAppDispatch();
