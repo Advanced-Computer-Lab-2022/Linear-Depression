@@ -1,9 +1,5 @@
-import { courseFactory } from "../test_models/course/factory";
 import { getCurrencyCode, getCurrencyRate } from "../../services/CourseServices";
 import { connectDBForTesting, disconnectDBForTesting } from "../../utils/testUtilities";
-import Course from "../../models/Course";
-import { instructorFactory } from "../test_models/instructor/factory";
-import Instructor from "../../models/Instructor";
 
 import axios from "axios";
 jest.mock("axios");
@@ -19,27 +15,27 @@ describe("CourseServices", () => {
 
     describe("Test getCurrencyCode", () => {
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = getCurrencyCode("Eg");
+            const currencyCode = await getCurrencyCode("Eg");
             expect(currencyCode).toBe("EGP");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = getCurrencyCode("us");
+            const currencyCode = await getCurrencyCode("us");
             expect(currencyCode).toBe("USD");
         });
 
         it("should return the currency code for a valid country", async () => {
-            const currencyCode = getCurrencyCode("GB");
+            const currencyCode = await getCurrencyCode("GB");
             expect(currencyCode).toBe("GBP");
         });
 
         it("should return the currency code for a valid country with different case", async () => {
-            const currencyCode = getCurrencyCode("eg");
+            const currencyCode = await getCurrencyCode("eg");
             expect(currencyCode).toBe("EGP");
         });
 
         it("should return default an invalid country", async () => {
-            expect(getCurrencyCode("Egypttttt")).toBe("US"); // default currency code
+            expect(await getCurrencyCode("Egypttttt")).toBe("US"); // default currency code
         });
     });
 

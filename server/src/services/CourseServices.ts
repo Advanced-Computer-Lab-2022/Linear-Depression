@@ -1,7 +1,6 @@
 // search for courses by name
 import fs from "fs";
 import axios from "axios";
-import { defaultCountry } from "../server";
 
 /**
  * Given a country name, return it's currency code
@@ -10,7 +9,7 @@ import { defaultCountry } from "../server";
  * @returns currency code
  * @throws Error if country name is not found
  */
-export const getCurrencyCode = (countryName: string): string => {
+export const getCurrencyCode = async (countryName: string): Promise<string> => {
     /**
      * [
      *    {
@@ -30,6 +29,10 @@ export const getCurrencyCode = (countryName: string): string => {
     }
     // throw new Error("Country not found");
     // instead of throwing an error, return USD as default
+    const defaultCountry = await axios
+        .get("https://https://ipapi.co/json/")
+        .then((res) => res.data.country_name)
+        .catch((err) => "US");
     return defaultCountry.toUpperCase();
 };
 

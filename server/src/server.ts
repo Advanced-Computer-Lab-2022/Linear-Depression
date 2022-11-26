@@ -21,7 +21,6 @@ import getCurrencyRatesTask from "./tasks/cacheCurrencyRates";
 
 const cors = require("cors");
 import * as path from "path";
-import axios from "axios";
 
 const app = express();
 
@@ -41,7 +40,7 @@ const swaggerFile = require("./swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
-let defaultCountry = "unknown";
+
 /** Rules of our API */
 app.use((req, res, next) => {
     // Website you wish to allow to connect, localhost:3001 is the frontend
@@ -54,16 +53,6 @@ app.use((req, res, next) => {
         return res.status(StatusCodes.OK).json({});
     }
 
-    if (defaultCountry == "unknown") {
-        axios
-            .get("https://ipapi.co/json/")
-            .then((response) => {
-                defaultCountry = response.data.country_name;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
     next();
 });
 
