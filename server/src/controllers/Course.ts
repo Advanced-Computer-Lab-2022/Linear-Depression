@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Course, { ICourse, ICourseModel } from "../models/Course";
 import Instructor, { IInstructorModel } from "../models/Instructor";
-import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
+import { getCurrencyCode, getCurrencyRateFromCache } from "../services/CourseServices";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import Lesson from "../models/Lesson";
@@ -15,7 +15,7 @@ async function getCurrencyRateByCookie(
     const country: string = req.cookies.country || "us";
     const currency: string = getCurrencyCode(country);
     const baseCurrency: string = getCurrencyCode(baseCountry);
-    const currencyRate: number = await getCurrencyRate(currency, baseCurrency);
+    const currencyRate: number = await getCurrencyRateFromCache(currency, baseCurrency);
     return { currencyRate, currency };
 }
 
