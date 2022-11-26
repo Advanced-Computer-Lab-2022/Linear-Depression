@@ -1,8 +1,9 @@
-import { fetchCourseById } from "@internals/services";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import ICourseProps from "src/types/Course";
 
-export const getCourse = createAsyncThunk("course/getCourse", async (courseId: string, thunkapi) => {
+import { fetchCourseById } from "@internals/services";
+
+const getCourse = createAsyncThunk("course/getCourse", async (courseId: string, thunkapi) => {
     try {
         const data = await fetchCourseById(courseId);
         return data;
@@ -22,7 +23,7 @@ const initialState = {
     error: null
 } as CourseState;
 
-export const courseSlice = createSlice({
+const courseSlice = createSlice({
     name: "course",
     initialState: initialState,
     reducers: {},
@@ -41,4 +42,4 @@ export const courseSlice = createSlice({
     }
 });
 
-export default courseSlice.reducer;
+export { courseSlice, getCourse };
