@@ -30,14 +30,6 @@ const CoursePrice: React.FC<{ currency: string; price: number; promotion?: Promo
     promotion,
     horizontalView
 }) => {
-    // for testing purposes
-    promotion = {
-        name: "50% off",
-        discountPercent: 50,
-        startDate: new Date(),
-        endDate: new Date()
-    };
-
     let discount = promotion ? promotion.discountPercent : 0;
     let discountedPrice = price;
     discount = price === 0 || !discount ? 0 : discount;
