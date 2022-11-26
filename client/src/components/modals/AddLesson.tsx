@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getCourse, useAppDispatch } from "@internals/redux";
 import { addLesson } from "@internals/services";
 
 const AddLesson: React.FC<{
@@ -24,10 +25,12 @@ const AddLesson: React.FC<{
     const [title, setTitle] = useState("");
     const [totalHours, setTotalHours] = useState(0);
 
+    const dispatch = useAppDispatch();
+
     const handleSubmit = () => {
         addLesson(courseId, { title, totalHours }).then(() => {
+            dispatch(getCourse(courseId));
             closeModal();
-            // TODO: refresh the page on submit to show the new lesson (Redux)
         });
     };
 
