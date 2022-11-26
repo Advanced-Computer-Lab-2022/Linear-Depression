@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { UserContext } from "@internals/contexts";
+import { getMyCourses, getSubjects, useAppDispatch } from "@internals/redux";
 import { addCourse } from "@internals/services";
 
 const HorizontalView = styled.div`
@@ -27,10 +28,14 @@ const AddCourse: React.FC = () => {
     const [price, setPrice] = useState("");
     const { userId } = useContext(UserContext);
 
+    const dispatch = useAppDispatch();
+    const [searchParams] = useSearchParams();
+
     const handleSubmit = () => {
         addCourse({ title, subject, description, price, instructor: userId }).then(() => {
+            dispatch(getSubjects());
+            dispatch(getMyCourses(searchParams));
             closeModal();
-            // TODO: refresh the page on submit to show the new lesson (Redux)
         });
     };
 
