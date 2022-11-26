@@ -1,28 +1,25 @@
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
+import { openModal } from "react-url-modal";
 
-import AddLessonForm from "./instructorCourse/AddLessonForm";
 import { CourseContent, CourseHeader, FloatingButton } from "@internals/components";
 import { useFetchCourseById } from "@internals/hooks";
 
 const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();
-    const { course, updateCourse } = useFetchCourseById(courseId);
+    const { course } = useFetchCourseById(courseId);
 
-    const [open, setOpen] = useState(false);
-
-    const onAddLessonClicked = () => {
-        setOpen(true);
+    const onClick = () => {
+        openModal({
+            name: "addLesson",
+            params: {
+                courseId
+            }
+        });
     };
 
-    const onClose = (state: string) => {
-        setOpen(false);
-        if (state === "submit") {
-            updateCourse();
-        }
-    };
-
+    // TODO: To be replaced with suspense
     if (!course.data) {
         return <div>Loading...</div>;
     }
@@ -39,10 +36,9 @@ const InstructorCourse: React.FC = () => {
                 promotion={course.data.promotion}
             />
             <CourseContent lessons={course.data.lessons} />
-            <FloatingButton onClick={onAddLessonClicked}>
+            <FloatingButton onClick={onClick}>
                 <AddIcon />
             </FloatingButton>
-            <AddLessonForm open={open} onClose={onClose} />
         </>
     );
 };

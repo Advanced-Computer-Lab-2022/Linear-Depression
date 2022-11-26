@@ -10,7 +10,8 @@
             "@internals/pages": ["src/pages"],
             "@internals/pages/*": ["src/pages/*"],
             "@internals/services": ["src/services"],
-            "@internals/types": ["src/types"]
+            "@internals/types": ["src/types"],
+            "@internals/modals": ["src/components/modals"]
         }
     }
 }

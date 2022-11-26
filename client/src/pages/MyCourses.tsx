@@ -1,32 +1,25 @@
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
+import React from "react";
+import { openModal } from "react-url-modal";
 
-import AddCourseForm from "./myCourses/AddCourseForm";
 import { CoursesListWithFilters, FloatingButton } from "@internals/components";
 import { useFetchMyCourses } from "@internals/hooks";
 
 const MyCourses: React.FC = () => {
-    const { courses, updateCourses } = useFetchMyCourses();
+    const { courses } = useFetchMyCourses();
 
-    const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = (state: string) => {
-        setOpen(false);
-        if (state === "submit") {
-            updateCourses();
-        }
+    const onClick = () => {
+        openModal({
+            name: "addCourse"
+        });
     };
 
     return (
         <div>
             <CoursesListWithFilters courses={courses.data} addCourse={true} />
-            <FloatingButton color="primary" aria-label="add" onClick={handleClickOpen}>
+            <FloatingButton color="primary" aria-label="add" onClick={onClick}>
                 <AddIcon />
             </FloatingButton>
-            <AddCourseForm open={open} onClose={handleClose} />
         </div>
     );
 };

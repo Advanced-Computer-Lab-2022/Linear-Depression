@@ -1,34 +1,41 @@
-import { DialogContent, DialogContentText, TextField, DialogActions, Dialog } from "@mui/material";
+import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { UserContext } from "@internals/contexts";
 import { addCourse } from "@internals/services";
-import { FormProps } from "@internals/types";
 
 const HorizontalView = styled.div`
     display: flex;
 `;
 
-const AddCourseForm: React.FC<FormProps> = ({ open, onClose }) => {
-    const [title, setTitle] = React.useState("");
-    const [subject, setSubject] = React.useState("");
-    const [description, setDescription] = React.useState("");
-    const [price, setPrice] = React.useState("");
-    const { userId } = useContext(UserContext);
+const AddCourse: React.FC = () => {
+    const navigate = useNavigate();
+    const closeModal = () => {
+        navigate(-1);
+    };
 
     const handleClose = () => {
-        onClose("Close");
+        closeModal();
     };
+
+    const [title, setTitle] = useState("");
+    const [subject, setSubject] = useState("");
+    const [description, setDescription] = useState("");
+    const [price, setPrice] = useState("");
+    const { userId } = useContext(UserContext);
+
     const handleSubmit = () => {
         addCourse({ title, subject, description, price, instructor: userId }).then(() => {
-            onClose("submit");
+            closeModal();
+            // TODO: refresh the page on submit to show the new lesson (Redux)
         });
     };
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={true}>
             <DialogContent>
                 <DialogContentText>Add a new Course</DialogContentText>
                 <TextField
@@ -93,4 +100,4 @@ const AddCourseForm: React.FC<FormProps> = ({ open, onClose }) => {
     );
 };
 
-export default AddCourseForm;
+export default AddCourse;
