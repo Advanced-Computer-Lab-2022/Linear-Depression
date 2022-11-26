@@ -33,7 +33,6 @@ const MoreSectionsButton = styled.button`
 const CourseContent: React.FC<{
     lessons: ILessonProps[];
 }> = ({ lessons }) => {
-    console.log(lessons);
     const [sectionsExpanded, setSectionsExpanded] = useState(false);
     const [showMore, setShowMore] = useState(false);
     const toggleSectionsExpanded = () => {
