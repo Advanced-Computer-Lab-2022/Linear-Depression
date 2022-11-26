@@ -31,7 +31,7 @@ export const getCurrencyCode = async (countryName: string): Promise<string> => {
     // instead of throwing an error, return USD as default
     const defaultCountry = await axios
         .get("https://https://ipapi.co/json/")
-        .then((res) => res.data.country_name)
+        .then((res) => res.data.country_code)
         .catch((err) => "US");
     return defaultCountry.toUpperCase();
 };
