@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import Course, { ICourse, ICourseModel } from "../models/Course";
 import Instructor, { IInstructorModel } from "../models/Instructor";
-import { getCurrencyCode, getCurrencyRate } from "../services/CourseServices";
+import { getCurrencyCode, getCurrencyRateFromCache } from "../services/CourseServices";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import Lesson from "../models/Lesson";
@@ -13,11 +13,12 @@ async function getCurrencyRateByCookie(
     baseCountry: string
 ): Promise<{ currencyRate: number; currency: any }> {
     const country: string = req.cookies.country || "us";
-    const currency: string = getCurrencyCode(country);
-    const baseCurrency: string = getCurrencyCode(baseCountry);
-    const currencyRate: number = await getCurrencyRate(currency, baseCurrency);
+    const currency: string = await getCurrencyCode(country);
+    const baseCurrency: string = await getCurrencyCode(baseCountry);
+    const currencyRate: number = await getCurrencyRateFromCache(currency, baseCurrency);
     return { currencyRate, currency };
 }
+
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
     // check his cookie
     const country: string = req.cookies.country || "us";
@@ -78,6 +79,7 @@ const listCourses = async (req: Request, res: Response, next: NextFunction) => {
         return listCoursesOnlyFilter(req, currencyRate, res, currency);
     }
 };
+
 const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
@@ -95,6 +97,7 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
                 model: "Exercise"
             }
         })
+        .populate("activePromotion", "name discountPercent startDate endDate")
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
@@ -176,6 +179,7 @@ function searchWithTitleSubject(
                 model: "Exercise"
             }
         })
+        .populate("activePromotion", "name discountPercent startDate endDate")
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course) => ({ ...course.toObject(), currency }));
@@ -204,6 +208,7 @@ function searchWithInstructors(
                 model: "Exercise"
             }
         })
+        .populate("activePromotion", "name discountPercent startDate endDate")
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
@@ -230,6 +235,7 @@ function listCoursesOnlyFilter(
                 model: "Exercise"
             }
         })
+        .populate("activePromotion", "name discountPercent startDate endDate")
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
