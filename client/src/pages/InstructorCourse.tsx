@@ -5,7 +5,7 @@ import { openModal } from "react-url-modal";
 
 import { CourseContent, CourseHeader, FloatingButton } from "@internals/components";
 import { useFetchCourseById } from "@internals/hooks";
-import { useAppSelector } from "@internals/store";
+import { useAppSelector } from "@internals/redux";
 
 const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();

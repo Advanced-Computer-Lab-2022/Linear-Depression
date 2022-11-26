@@ -1,6 +1,6 @@
-import { useAppSelector } from "../../store";
 import { CoursesListWithFilters } from "@internals/components";
 import { useFetchAllCourses } from "@internals/hooks";
+import { useAppSelector } from "@internals/redux";
 
 const AllCourses = () => {
     useFetchAllCourses();

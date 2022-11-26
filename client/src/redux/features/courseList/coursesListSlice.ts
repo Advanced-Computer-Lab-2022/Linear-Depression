@@ -1,30 +1,25 @@
-import { fetchAllCourses, fetchMyCourses } from "@internals/services";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import ICourseProps from "src/types/Course";
 
-export const getCourseList = createAsyncThunk(
-    "course/getCourses",
-    async (searchParameters: URLSearchParams, thunkapi) => {
-        try {
-            const data = await fetchAllCourses(searchParameters);
-            return data;
-        } catch (err) {
-            return thunkapi.rejectWithValue(err);
-        }
-    }
-);
+import { fetchAllCourses, fetchMyCourses } from "@internals/services";
 
-export const getMyCourses = createAsyncThunk(
-    "course/getCourses",
-    async (searchParameters: URLSearchParams, thunkapi) => {
-        try {
-            const data = await fetchMyCourses(searchParameters);
-            return data;
-        } catch (err) {
-            return thunkapi.rejectWithValue(err);
-        }
+const getCourseList = createAsyncThunk("course/getCourses", async (searchParameters: URLSearchParams, thunkapi) => {
+    try {
+        const data = await fetchAllCourses(searchParameters);
+        return data;
+    } catch (err) {
+        return thunkapi.rejectWithValue(err);
     }
-);
+});
+
+const getMyCourses = createAsyncThunk("course/getCourses", async (searchParameters: URLSearchParams, thunkapi) => {
+    try {
+        const data = await fetchMyCourses(searchParameters);
+        return data;
+    } catch (err) {
+        return thunkapi.rejectWithValue(err);
+    }
+});
 
 interface CourseListState {
     data: null | ICourseProps[];
@@ -37,7 +32,7 @@ const initialState = {
     error: null
 } as CourseListState;
 
-export const CoursesListSlice = createSlice({
+const CoursesListSlice = createSlice({
     name: "coursesList",
     initialState: initialState,
     reducers: {},
@@ -56,4 +51,4 @@ export const CoursesListSlice = createSlice({
     }
 });
 
-export default CoursesListSlice.reducer;
+export { CoursesListSlice, getCourseList, getMyCourses };
