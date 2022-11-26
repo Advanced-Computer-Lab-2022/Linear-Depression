@@ -9,7 +9,6 @@ import { CreateAdminJS } from "./admin";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
-import axios from "axios";
 
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
@@ -41,7 +40,6 @@ const swaggerFile = require("./swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
-export let defaultCountry = "US";
 
 /** Rules of our API */
 app.use((req, res, next) => {
@@ -54,17 +52,7 @@ app.use((req, res, next) => {
         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
         return res.status(StatusCodes.OK).json({});
     }
-    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-    Logger.log(`Request from ${ip} to ${req.originalUrl}`);
-    axios
-        .get("https://ipapi.co/json/")
-        .then((response) => {
-            defaultCountry = response.data.country;
-            console.log("defaultCountry", defaultCountry);
-        })
-        .catch((err) => {
-            Logger.error(err);
-        });
+
     next();
 });
 
