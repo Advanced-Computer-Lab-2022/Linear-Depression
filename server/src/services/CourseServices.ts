@@ -38,3 +38,13 @@ export const getCurrencyRate = async (currencyCode: string, baseCurrency: string
     const response = await axios.get(API_URl);
     return response.data[currencyCode.toLowerCase()];
 };
+
+export const getCurrencyRateFromCache = async (currencyCode: string, baseCurrency: string): Promise<number> => {
+    const data = fs.readFileSync("src/media/currency-rates.json", "utf8");
+    const currencyRates = JSON.parse(data);
+    if (currencyRates[currencyCode]) {
+        return currencyRates[currencyCode];
+    } else {
+        return await getCurrencyRate(currencyCode, baseCurrency);
+    }
+};
