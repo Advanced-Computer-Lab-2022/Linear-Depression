@@ -13,8 +13,8 @@ async function getCurrencyRateByCookie(
     baseCountry: string
 ): Promise<{ currencyRate: number; currency: any }> {
     const country: string = req.cookies.country || "us";
-    const currency: string = getCurrencyCode(country);
-    const baseCurrency: string = getCurrencyCode(baseCountry);
+    const currency: string = await getCurrencyCode(country);
+    const baseCurrency: string = await getCurrencyCode(baseCountry);
     const currencyRate: number = await getCurrencyRateFromCache(currency, baseCurrency);
     return { currencyRate, currency };
 }
