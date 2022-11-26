@@ -1,6 +1,7 @@
 // search for courses by name
 import fs from "fs";
 import axios from "axios";
+import { defaultCountry } from "../server";
 
 /**
  * Given a country name, return it's currency code
@@ -29,7 +30,7 @@ export const getCurrencyCode = (countryName: string): string => {
     }
     // throw new Error("Country not found");
     // instead of throwing an error, return USD as default
-    return "US";
+    return defaultCountry.toUpperCase();
 };
 
 export const getCurrencyRate = async (currencyCode: string, baseCurrency: string): Promise<number> => {
