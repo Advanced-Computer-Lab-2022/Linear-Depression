@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import AddCourseForm from "./myCourses/AddCourseForm";
 import { CoursesListWithFilters, FloatingButton } from "@internals/components";
 import { useFetchMyCourses } from "@internals/hooks";
+import { useAppSelector } from "../store";
 
 const MyCourses: React.FC = () => {
-    const { courses, updateCourses } = useFetchMyCourses();
-
+    const { data, loading } = useAppSelector((state) => state.coursesList);
+    useFetchMyCourses();
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -16,13 +17,13 @@ const MyCourses: React.FC = () => {
     const handleClose = (state: string) => {
         setOpen(false);
         if (state === "submit") {
-            updateCourses();
+            //updateCourses();
         }
     };
 
     return (
         <div>
-            <CoursesListWithFilters courses={courses.data} addCourse={true} />
+            {!loading && <CoursesListWithFilters courses={data} addCourse={true} />}
             <FloatingButton color="primary" aria-label="add" onClick={handleClickOpen}>
                 <AddIcon />
             </FloatingButton>
