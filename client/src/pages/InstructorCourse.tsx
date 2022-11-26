@@ -28,15 +28,7 @@ const InstructorCourse: React.FC = () => {
 
     return (
         <>
-            <CourseHeader
-                title={data.title}
-                description={data.description}
-                rating={data.averageRating}
-                instructor={data.instructor.firstName + " " + data.instructor.lastName}
-                price={data.price}
-                currency={data.currency}
-                promotion={data.promotion}
-            />
+            <CourseHeader />
             <CourseContent lessons={data.lessons} />
             <FloatingButton onClick={onClick}>
                 <AddIcon />
