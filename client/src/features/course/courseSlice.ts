@@ -31,7 +31,6 @@ export const courseSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(getCourse.fulfilled, (state, action: PayloadAction<ICourseProps>) => {
-            console.log("action.payload");
             state.data = action.payload;
             state.loading = false;
         });
