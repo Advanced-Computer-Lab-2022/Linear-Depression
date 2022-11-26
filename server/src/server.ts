@@ -17,6 +17,7 @@ import CourseRouter from "./routes/Course";
 import LangRouter from "./routes/Currency";
 import PromotionRouter from "./routes/Promotion";
 import ExerciseRouter from "./routes/Exercise";
+import getCurrencyRatesTask from "./tasks/cacheCurrencyRates";
 
 const cors = require("cors");
 import * as path from "path";
@@ -100,6 +101,7 @@ app.use((req, res) => {
     return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
 });
 
+getCurrencyRatesTask.start();
 /* --- End Routes --- */
 
 export default app;
