@@ -8,6 +8,7 @@ import { Database, Resource } from "@adminjs/mongoose";
 import { CreateAdminJS } from "./admin";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
+import swaggerUi from "swagger-ui-express";
 
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
@@ -15,6 +16,8 @@ import InstructorRouter from "./routes/Instructor";
 import CourseRouter from "./routes/Course";
 import LangRouter from "./routes/Currency";
 import PromotionRouter from "./routes/Promotion";
+import ExerciseRouter from "./routes/Exercise";
+import getCurrencyRatesTask from "./tasks/cacheCurrencyRates";
 
 const cors = require("cors");
 import * as path from "path";
@@ -24,20 +27,6 @@ const app = express();
 /* --- Create Server --- */
 loadModels();
 
-app.use((req, res, next) => {
-    /* log the request */
-    Logger.info(`Incoming -> Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`);
-    res.on("finish", () => {
-        /* log the response */
-        Logger.info(
-            `Outgoing -> Status [${res.statusCode}] - Method [${req.method}] - URL [${req.url}] - IP [${req.socket.remoteAddress}]`
-        );
-        const cookies = req.cookies;
-        Logger.info(`Cookies -> ${JSON.stringify(cookies)}`);
-    });
-
-    next();
-});
 app.use(
     cors({
         origin: true,
@@ -47,6 +36,8 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+const swaggerFile = require("./swagger.json");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
 
@@ -76,6 +67,7 @@ app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
 app.use("/country", LangRouter);
 app.use("/promotions", PromotionRouter);
+app.use("/courses/:courseId/lessons/:lessonId", ExerciseRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
@@ -109,6 +101,8 @@ app.use((req, res) => {
     return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
 });
 
+// FIXME: should be removed in Test environment. This is for production only.
+// getCurrencyRatesTask.start();
 /* --- End Routes --- */
 
 export default app;
