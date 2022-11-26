@@ -33,10 +33,6 @@ describe("CourseServices", () => {
             const currencyCode = await getCurrencyCode("eg");
             expect(currencyCode).toBe("EGP");
         });
-
-        it("should return default an invalid country", async () => {
-            expect(await getCurrencyCode("Egypttttt")).toBe("US"); // default currency code
-        });
     });
 
     describe("Test mocked getCurrencyRate", () => {

@@ -101,7 +101,8 @@ app.use((req, res) => {
     return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
 });
 
-getCurrencyRatesTask.start();
+// FIXME: should be removed in Test environment. This is for production only.
+// getCurrencyRatesTask.start();
 /* --- End Routes --- */
 
 export default app;
