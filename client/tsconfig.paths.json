@@ -11,7 +11,8 @@
             "@internals/pages/*": ["src/pages/*"],
             "@internals/services": ["src/services"],
             "@internals/types": ["src/types"],
-            "@internals/modals": ["src/components/modals"]
+            "@internals/modals": ["src/components/modals"],
+            "@internals/store": ["src/store.ts"]
         }
     }
 }

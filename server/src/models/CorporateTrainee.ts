@@ -21,8 +21,13 @@ class CorporateTraineeSchema extends TraineeSchema {
         super(obj, options);
         this.add({
             corporate: { type: String, required: true, trim: true },
-            status: { type: String, required: true, enum: Object.values(status), default: "ACTIVE" },
             expiredAt: { type: Date, required: true }
+        });
+        this.virtual("status").get(function () {
+            if (this.expiredAt < new Date()) {
+                return status.expired;
+            }
+            return status.active;
         });
     }
 }

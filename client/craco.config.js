@@ -11,7 +11,8 @@ module.exports = {
             "@internals/pages/*": path.resolve(__dirname, "src/pages/*"),
             "@internals/services": path.resolve(__dirname, "src/services"),
             "@internals/types": path.resolve(__dirname, "src/types"),
-            "@internals/modals": path.resolve(__dirname, "src/components/modals")
+            "@internals/modals": path.resolve(__dirname, "src/components/modals"),
+            "@internals/store": path.resolve(__dirname, "src/store.ts")
         }
     }
 };

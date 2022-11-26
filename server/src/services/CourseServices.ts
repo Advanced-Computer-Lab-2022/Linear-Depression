@@ -9,7 +9,7 @@ import axios from "axios";
  * @returns currency code
  * @throws Error if country name is not found
  */
-export const getCurrencyCode = (countryName: string): string => {
+export const getCurrencyCode = async (countryName: string): Promise<string> => {
     /**
      * [
      *    {
@@ -29,7 +29,16 @@ export const getCurrencyCode = (countryName: string): string => {
     }
     // throw new Error("Country not found");
     // instead of throwing an error, return USD as default
-    return "US";
+    const defaultCountry = await axios
+        .get("https://https://ipapi.co/json/")
+        .then((res) => {
+            return res.data.country;
+        })
+        .catch((err) => {
+            console.log(err);
+            return "us";
+        });
+    return defaultCountry.toUpperCase();
 };
 
 export const getCurrencyRate = async (currencyCode: string, baseCurrency: string): Promise<number> => {
@@ -37,4 +46,14 @@ export const getCurrencyRate = async (currencyCode: string, baseCurrency: string
 
     const response = await axios.get(API_URl);
     return response.data[currencyCode.toLowerCase()];
+};
+
+export const getCurrencyRateFromCache = async (currencyCode: string, baseCurrency: string): Promise<number> => {
+    const data = fs.readFileSync("src/media/currency-rates.json", "utf8");
+    const currencyRates = JSON.parse(data);
+    if (currencyRates[currencyCode]) {
+        return currencyRates[currencyCode];
+    } else {
+        return await getCurrencyRate(currencyCode, baseCurrency);
+    }
 };

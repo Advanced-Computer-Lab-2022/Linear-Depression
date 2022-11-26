@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { useFetchSubjects } from "@internals/hooks";
-
+import { useAppSelector } from "../../../store";
 const CheckboxItem = styled(Checkbox)`
     color: red;
 `;
@@ -18,7 +18,8 @@ const CheckboxItem = styled(Checkbox)`
 const SubjectsFilter: React.FC = () => {
     const [checked, setChecked] = useState(-1);
     const [searchParams, setSearchParams] = useSearchParams();
-    const subjects = useFetchSubjects();
+    const { data } = useAppSelector((state) => state.subjects);
+    useFetchSubjects();
 
     const handleToggle = (value: string, index: number) => () => {
         searchParams.delete("subject");
@@ -32,32 +33,36 @@ const SubjectsFilter: React.FC = () => {
     };
 
     return (
-        <List>
-            {subjects.data.map((subject, index) => {
-                const labelId = `checkbox-list-label-${subject}`;
+        <>
+            {data != null && (
+                <List>
+                    {data.map((subject, index) => {
+                        const labelId = `checkbox-list-label-${subject}`;
 
-                return (
-                    <ListItem
-                        key={subject}
-                        secondaryAction={<IconButton edge="end" aria-label="comments"></IconButton>}
-                        disablePadding
-                    >
-                        <ListItemButton role={undefined} onClick={handleToggle(subject, index)} dense>
-                            <ListItemIcon>
-                                <CheckboxItem
-                                    edge="start"
-                                    checked={checked === index}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ "aria-labelledby": labelId }}
-                                />
-                            </ListItemIcon>
-                            <ListItemText id={labelId} primary={`${subject}`} />
-                        </ListItemButton>
-                    </ListItem>
-                );
-            })}
-        </List>
+                        return (
+                            <ListItem
+                                key={subject}
+                                secondaryAction={<IconButton edge="end" aria-label="comments"></IconButton>}
+                                disablePadding
+                            >
+                                <ListItemButton role={undefined} onClick={handleToggle(subject, index)} dense>
+                                    <ListItemIcon>
+                                        <CheckboxItem
+                                            edge="start"
+                                            checked={checked === index}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{ "aria-labelledby": labelId }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText id={labelId} primary={`${subject}`} />
+                                </ListItemButton>
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            )}
+        </>
     );
 };
 

@@ -5,10 +5,12 @@ import { openModal } from "react-url-modal";
 
 import { CourseContent, CourseHeader, FloatingButton } from "@internals/components";
 import { useFetchCourseById } from "@internals/hooks";
+import { useAppSelector } from "@internals/store";
 
 const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();
-    const { course } = useFetchCourseById(courseId);
+    useFetchCourseById(courseId);
+    const { data } = useAppSelector((state) => state.course);
 
     const onClick = () => {
         openModal({
@@ -20,22 +22,22 @@ const InstructorCourse: React.FC = () => {
     };
 
     // TODO: To be replaced with suspense
-    if (!course.data) {
+    if (!data) {
         return <div>Loading...</div>;
     }
 
     return (
         <>
             <CourseHeader
-                title={course.data.title}
-                description={course.data.description}
-                rating={course.data.averageRating}
-                instructor={course.data.instructor.firstName + " " + course.data.instructor.lastName}
-                price={course.data.price}
-                currency={course.data.currency}
-                promotion={course.data.promotion}
+                title={data.title}
+                description={data.description}
+                rating={data.averageRating}
+                instructor={data.instructor.firstName + " " + data.instructor.lastName}
+                price={data.price}
+                currency={data.currency}
+                promotion={data.promotion}
             />
-            <CourseContent lessons={course.data.lessons} />
+            <CourseContent lessons={data.lessons} />
             <FloatingButton onClick={onClick}>
                 <AddIcon />
             </FloatingButton>
