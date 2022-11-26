@@ -21,6 +21,7 @@ import getCurrencyRatesTask from "./tasks/cacheCurrencyRates";
 
 const cors = require("cors");
 import * as path from "path";
+import axios from "axios";
 
 const app = express();
 
@@ -40,6 +41,7 @@ const swaggerFile = require("./swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
+export let defaultCountry = undefined as unknown as String;
 
 /** Rules of our API */
 app.use((req, res, next) => {
@@ -51,6 +53,19 @@ app.use((req, res, next) => {
     if (req.method == "OPTIONS") {
         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
         return res.status(StatusCodes.OK).json({});
+    }
+    if (defaultCountry == undefined) {
+        const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+        Logger.log("IP: " + ip);
+        axios
+            .get("http://ip-api.com/json/" + ip)
+            .then((response) => {
+                defaultCountry = response.data.countryCode;
+                Logger.log("Country: " + defaultCountry);
+            })
+            .catch((error) => {
+                defaultCountry = "US";
+            });
     }
 
     next();
