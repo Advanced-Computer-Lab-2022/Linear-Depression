@@ -5,8 +5,6 @@ import ICourseProps from "src/types/Course";
 export const getCourse = createAsyncThunk("course/getCourse", async (courseId: string, thunkapi) => {
     try {
         const data = await fetchCourseById(courseId);
-        console.log("hhhhhh");
-        console.log(data);
         return data;
     } catch (err) {
         return thunkapi.rejectWithValue(err);
