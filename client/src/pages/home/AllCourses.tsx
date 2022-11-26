@@ -1,12 +1,13 @@
 import { CoursesListWithFilters } from "@internals/components";
 import { useFetchAllCourses } from "@internals/hooks";
+import { useAppSelector } from "../../store";
 
 const AllCourses = () => {
-    const courses = useFetchAllCourses();
-
+    const { data } = useAppSelector((state) => state.coursesList);
+    useFetchAllCourses();
     return (
         <div>
-            <CoursesListWithFilters courses={courses.data} />
+            <CoursesListWithFilters courses={data} />
         </div>
     );
 };

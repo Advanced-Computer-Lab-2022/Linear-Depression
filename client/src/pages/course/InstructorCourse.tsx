@@ -5,10 +5,12 @@ import { useParams } from "react-router-dom";
 import AddLessonForm from "./instructorCourse/AddLessonForm";
 import { CourseContent, FloatingButton } from "@internals/components";
 import { useFetchCourseById } from "@internals/hooks";
+import { useAppSelector } from "../../store";
 
 const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();
-    const { course, updateCourse } = useFetchCourseById(courseId);
+    useFetchCourseById(courseId);
+    const { data } = useAppSelector((state) => state.course);
 
     const [open, setOpen] = useState(false);
 
@@ -19,13 +21,13 @@ const InstructorCourse: React.FC = () => {
     const onClose = (state: string) => {
         setOpen(false);
         if (state === "submit") {
-            updateCourse();
+            //updateCourse();
         }
     };
 
     return (
         <>
-            {course.data != null && <CourseContent lessons={course.data.lessons} />}
+            {data != null && <CourseContent lessons={data.lessons} />}
             <FloatingButton onClick={onAddLessonClicked}>
                 <AddIcon />
             </FloatingButton>

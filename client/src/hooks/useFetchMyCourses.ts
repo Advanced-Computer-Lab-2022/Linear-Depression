@@ -1,34 +1,18 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { CountryContext } from "@internals/contexts";
-import { fetchMyCourses } from "@internals/services";
+import { useAppDispatch } from "../store";
+import { getMyCourses } from "../features/courseList/coursesListSlice";
 
 const useFetchMyCourses = () => {
     const [searchParams] = useSearchParams();
     const { country } = useContext(CountryContext);
-    const [courses, setCourses] = useState({
-        data: [],
-        loading: false,
-        error: null
-    });
-
-    const fetchAndSetCourses = () => {
-        setCourses({ data: [], loading: true, error: null });
-        fetchMyCourses(searchParams)
-            .then((data) => {
-                setCourses({ data: data, loading: false, error: null });
-            })
-            .catch((err) => {
-                setCourses({ data: [], loading: false, error: err });
-            });
-    };
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        fetchAndSetCourses();
+        dispatch(getMyCourses(searchParams));
     }, [searchParams, country]);
-
-    return { courses, updateCourses: fetchAndSetCourses };
 };
 
 export default useFetchMyCourses;
