@@ -5,6 +5,7 @@ import BadgeRatedEnrolled from "./courseInfo/BadgeRatedEnrolled";
 
 const Container = styled.div`
     margin: 0 40px;
+    flex: 1;
 `;
 
 const Title = styled.div`

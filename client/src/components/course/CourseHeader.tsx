@@ -8,8 +8,7 @@ import { useAppSelector } from "@internals/redux";
 const Header = styled.div`
     height: 370px;
     background-color: #1e1f1f;
-    justify-content: center;
-    padding: 32px 0;
+    padding: 32px 96px;
     color: white;
     display: flex;
 `;
