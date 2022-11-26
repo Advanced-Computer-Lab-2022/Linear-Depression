@@ -41,8 +41,7 @@ const swaggerFile = require("./swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
-export let defaultCountry = undefined as unknown as String;
-
+let defaultCountry = "unknown";
 /** Rules of our API */
 app.use((req, res, next) => {
     // Website you wish to allow to connect, localhost:3001 is the frontend
@@ -54,20 +53,17 @@ app.use((req, res, next) => {
         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
         return res.status(StatusCodes.OK).json({});
     }
-    if (defaultCountry == undefined) {
-        const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-        Logger.log("IP: " + ip);
+
+    if (defaultCountry == "unknown") {
         axios
-            .get("http://ip-api.com/json/" + ip)
+            .get("https://ipapi.co/json/")
             .then((response) => {
-                defaultCountry = response.data.countryCode;
-                Logger.log("Country: " + defaultCountry);
+                defaultCountry = response.data.country_name;
             })
             .catch((error) => {
-                defaultCountry = "US";
+                console.log(error);
             });
     }
-
     next();
 });
 
