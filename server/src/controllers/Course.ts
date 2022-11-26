@@ -97,7 +97,11 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
                 model: "Exercise"
             }
         })
-        .populate("activePromotion", "name discountPercent startDate endDate")
+        .populate({
+            path: "activePromotion",
+            select: "name discountPercent startDate endDate",
+            match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
+        })
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
@@ -179,7 +183,11 @@ function searchWithTitleSubject(
                 model: "Exercise"
             }
         })
-        .populate("activePromotion", "name discountPercent startDate endDate")
+        .populate({
+            path: "activePromotion",
+            select: "name discountPercent startDate endDate",
+            match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
+        })
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course) => ({ ...course.toObject(), currency }));
@@ -208,7 +216,11 @@ function searchWithInstructors(
                 model: "Exercise"
             }
         })
-        .populate("activePromotion", "name discountPercent startDate endDate")
+        .populate({
+            path: "activePromotion",
+            select: "name discountPercent startDate endDate",
+            match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
+        })
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
@@ -235,7 +247,11 @@ function listCoursesOnlyFilter(
                 model: "Exercise"
             }
         })
-        .populate("activePromotion", "name discountPercent startDate endDate")
+        .populate({
+            path: "activePromotion",
+            select: "name discountPercent startDate endDate",
+            match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
+        })
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
