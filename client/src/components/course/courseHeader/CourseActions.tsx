@@ -52,10 +52,11 @@ const CourseActions: React.FC<{
                 <PriceSection>
                     <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />
                 </PriceSection>
-                {(userType == User.INDIVIDUAL_TRAINEE || userType == User.CORPORATE_TRAINEE) && (
+                {userType == User.INSTRUCTOR ? (
+                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
+                ) : (
                     <Button>Enroll now</Button>
                 )}
-                {userType == User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
             </SubContainer>
         </MainContainer>
     );
