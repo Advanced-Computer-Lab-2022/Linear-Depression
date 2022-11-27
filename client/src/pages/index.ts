@@ -4,3 +4,4 @@ export { default as MyCourses } from "./MyCourses";
 export { default as CorporateTrainee } from "./CorporateTrainee";
 export { default as IndividualTrainee } from "./IndividualTrainee";
 export { default as Instructor } from "./Instructor";
+export { default as Login } from "./auth/Login";

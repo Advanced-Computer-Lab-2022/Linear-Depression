@@ -1,7 +1,5 @@
 import Admin from "../../models/Admin";
 
-const HashPasswordInPayload = require("../services/HashPasswordInPayload");
-
 export const AdminResource = {
     resource: Admin,
     options: {
@@ -18,13 +16,6 @@ export const AdminResource = {
                     show: false
                 },
                 isRequired: true
-            }
-        },
-        actions: {
-            new: {
-                before: async (request: any) => {
-                    return await HashPasswordInPayload.execute(request);
-                }
             }
         },
         parent: {
