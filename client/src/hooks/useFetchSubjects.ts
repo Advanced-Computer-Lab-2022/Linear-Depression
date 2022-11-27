@@ -1,25 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { fetchSubjects } from "@internals/services";
+import { useAppDispatch, getSubjects } from "@internals/redux";
 
 const useFetchSubjects = () => {
-    const [subjects, setSubjects] = useState({
-        data: [],
-        loading: false,
-        error: null
-    });
-
+    const dispatch = useAppDispatch();
     useEffect(() => {
-        setSubjects({ data: [], loading: true, error: null });
-        fetchSubjects()
-            .then((data) => {
-                setSubjects({ data: data, loading: false, error: null });
-            })
-            .catch((err) => {
-                setSubjects({ data: [], loading: false, error: err });
-            });
+        dispatch(getSubjects());
     }, []);
-    return subjects;
 };
 
 export default useFetchSubjects;

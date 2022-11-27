@@ -19,7 +19,9 @@ const Filter: React.FC = () => {
     return (
         <FilterContainer>
             {filters.map((filter) => (
-                <SimpleAccordion title={filter.Section}>{filter.Component}</SimpleAccordion>
+                <SimpleAccordion key={filter.Section} title={filter.Section}>
+                    {filter.Component}
+                </SimpleAccordion>
             ))}
         </FilterContainer>
     );

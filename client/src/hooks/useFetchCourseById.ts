@@ -1,30 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { fetchCourseById } from "@internals/services";
+import { useAppDispatch, getCourse } from "@internals/redux";
 
 const useFetchCourseById = (id: string) => {
-    const [course, setCourse] = useState({
-        data: null,
-        loading: false,
-        error: null
-    });
-
-    const fetchAndSetCourse = () => {
-        setCourse({ data: null, loading: true, error: null });
-        fetchCourseById(id)
-            .then((data) => {
-                setCourse({ data: data, loading: false, error: null });
-            })
-            .catch((err) => {
-                setCourse({ data: null, loading: false, error: err });
-            });
-    };
-
+    const dispatch = useAppDispatch();
     useEffect(() => {
-        fetchAndSetCourse();
-    }, []);
-
-    return { course, updateCourse: fetchAndSetCourse };
+        dispatch(getCourse(id));
+    }, [id]);
 };
 
 export default useFetchCourseById;
