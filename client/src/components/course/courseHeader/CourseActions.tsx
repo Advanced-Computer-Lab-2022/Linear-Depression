@@ -36,7 +36,6 @@ const CourseActions: React.FC<{
     courseId: string;
 }> = ({ price, promotion, currency, courseId }) => {
     const { userType } = useContext(UserContext);
-    console.log(userType);
     const openAddPromotionModal = () => {
         openModal({
             name: "addPromotion",
