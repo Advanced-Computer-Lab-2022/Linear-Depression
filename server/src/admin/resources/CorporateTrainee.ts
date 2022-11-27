@@ -1,7 +1,5 @@
 import CorporateTrainee from "../../models/CorporateTrainee";
 
-const HashPasswordInPayload = require("../services/HashPasswordInPayload");
-
 export const CorporateTraineeResource = {
     resource: CorporateTrainee,
     options: {
@@ -22,8 +20,11 @@ export const CorporateTraineeResource = {
         },
         actions: {
             new: {
-                before: async (request: any) => {
-                    return await HashPasswordInPayload.execute(request);
+                before: (request: any) => {
+                    if (request.payload.password) {
+                        request.payload.passwordHash = request.payload.password;
+                    }
+                    return request;
                 }
             }
         },

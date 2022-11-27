@@ -1,7 +1,5 @@
 import Instructor from "../../models/Instructor";
 
-const HashPasswordInPayload = require("../services/HashPasswordInPayload");
-
 export const InstructorResource = {
     resource: Instructor,
     options: {
@@ -22,8 +20,11 @@ export const InstructorResource = {
         },
         actions: {
             new: {
-                before: async (request: any) => {
-                    return await HashPasswordInPayload.execute(request);
+                before: (request: any) => {
+                    if (request.payload.password) {
+                        request.payload.passwordHash = request.payload.password;
+                    }
+                    return request;
                 }
             }
         },

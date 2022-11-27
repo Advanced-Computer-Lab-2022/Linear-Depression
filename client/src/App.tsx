@@ -6,7 +6,7 @@ import { Navbar } from "@internals/components";
 import { CountryContext, UserContext } from "@internals/contexts";
 import { useGetLocalizationData } from "@internals/hooks";
 import { AddLesson, AddCourse, AddPromotion, AddReview } from "@internals/modals";
-import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course } from "@internals/pages";
+import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course, Login } from "@internals/pages";
 import { User } from "@internals/types";
 
 function App() {
@@ -34,6 +34,7 @@ function App() {
                         <Route path="instructor/*" element={<Instructor />} />
                         <Route path="corporate-trainee" element={<CorporateTrainee />} />
                         <Route path="individual-trainee" element={<IndividualTrainee />} />
+                        <Route path="login" element={<Login />} />
                     </Routes>
                 </div>
             </CountryContext.Provider>

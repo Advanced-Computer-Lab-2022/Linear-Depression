@@ -17,7 +17,7 @@ import CourseRouter from "./routes/Course";
 import LangRouter from "./routes/Currency";
 import PromotionRouter from "./routes/Promotion";
 import ExerciseRouter from "./routes/Exercise";
-import getCurrencyRatesTask from "./tasks/cacheCurrencyRates";
+import AuthRouter from "./routes/Auth";
 
 const cors = require("cors");
 import * as path from "path";
@@ -68,6 +68,7 @@ app.use("/individual-trainees", IndividualTraineeRouter);
 app.use("/country", LangRouter);
 app.use("/promotions", PromotionRouter);
 app.use("/courses/:courseId/lessons/:lessonId", ExerciseRouter);
+app.use("/auth", AuthRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
