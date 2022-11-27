@@ -12,7 +12,7 @@ interface ICourseProps {
     averageRating: number;
     totalHours: number;
     price: number;
-    promotion: {
+    activePromotion: {
         name: string;
         discountPercent: number;
         startDate: Date;

@@ -5,7 +5,7 @@ import { URLModal } from "react-url-modal";
 import { Navbar } from "@internals/components";
 import { CountryContext, UserContext } from "@internals/contexts";
 import { useGetLocalizationData } from "@internals/hooks";
-import { AddLesson, AddCourse, AddReview } from "@internals/modals";
+import { AddLesson, AddCourse, AddPromotion, AddReview } from "@internals/modals";
 import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course } from "@internals/pages";
 import { User } from "@internals/types";
 
@@ -23,7 +23,8 @@ function App() {
                         modals={{
                             addLesson: AddLesson,
                             addCourse: AddCourse,
-                            addReview: AddReview
+                            addReview: AddReview,
+                            addPromotion: AddPromotion
                         }}
                     />
                     <Navbar />
