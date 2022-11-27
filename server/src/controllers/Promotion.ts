@@ -24,18 +24,15 @@ const getPromotion = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-function addPromotionToCourse(courseId: mongoose.Types.ObjectId, promotionId: mongoose.Types.ObjectId) {
-    Course.findById(courseId)
-        .then((course) => {
-            if (course) {
-                course.activePromotion = promotionId;
-                course.save();
-            }
-        })
-        .catch((error) => console.log(error));
+async function addPromotionToCourse(courseId: mongoose.Types.ObjectId, promotionId: mongoose.Types.ObjectId) {
+    const course = await Course.findById(courseId);
+    if (course) {
+        course.activePromotion = promotionId;
+        await course.save();
+    }
 }
 
-const createPromotion = (req: Request, res: Response, next: NextFunction) => {
+const createPromotion = async (req: Request, res: Response, next: NextFunction) => {
     const promotion = new Promotion({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
@@ -43,8 +40,10 @@ const createPromotion = (req: Request, res: Response, next: NextFunction) => {
 
     return promotion
         .save()
-        .then((promotion) => {
-            promotion.courses.forEach((courseId) => addPromotionToCourse(courseId, promotion._id));
+        .then(async (promotion) => {
+            for (const courseId of promotion.courses) {
+                await addPromotionToCourse(courseId, promotion._id);
+            }
             res.status(StatusCodes.CREATED).json({ promotion });
         })
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));

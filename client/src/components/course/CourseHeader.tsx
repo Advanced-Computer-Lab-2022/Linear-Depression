@@ -16,12 +16,13 @@ const Header = styled.div`
 const CourseHeader: React.FC = () => {
     const { data, loading } = useAppSelector((state) => state.course);
     const {
+        _id,
         title,
         description,
         averageRating,
         instructor: { firstName, lastName },
         price,
-        promotion,
+        activePromotion,
         currency
     } = data;
 
@@ -37,7 +38,7 @@ const CourseHeader: React.FC = () => {
                 instructor={`${firstName} ${lastName}`}
                 rating={averageRating}
             />
-            <CourseActions price={price} currency={currency} promotion={promotion} />
+            <CourseActions price={price} currency={currency} promotion={activePromotion} courseId={_id} />
         </Header>
     );
 };
