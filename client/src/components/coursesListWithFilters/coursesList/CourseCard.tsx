@@ -81,7 +81,7 @@ const CourseDuration = styled.p`
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { _id, title, description, instructor, averageRating, totalHours, price, promotion, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, activePromotion, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -124,7 +124,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePrice currency={currency} price={price} promotion={promotion} />
+                <CoursePrice currency={currency} price={price} promotion={activePromotion} />
             </HorizontalLayout>
             <hr />
         </CardContainer>
