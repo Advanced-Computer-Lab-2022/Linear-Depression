@@ -23,7 +23,7 @@ const initialState = {
 } as SubjectsState;
 
 const subjectsSlice = createSlice({
-    name: "coursesList",
+    name: "subjectsList",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
