@@ -7,6 +7,10 @@ export function userFactory(): IUser {
         lastName: faker.name.lastName(),
         email: faker.internet.email(),
         userName: faker.internet.userName(),
-        passwordHash: faker.internet.password()
+        passwordHash: faker.internet.password(),
+        __t: "User",
+        isCorrectPassword(passwordHash: string): boolean {
+            return passwordHash === this.passwordHash;
+        }
     };
 }

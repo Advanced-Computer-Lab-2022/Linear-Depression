@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import mongoose_fuzzy_searching, { MongoosePluginModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
+import bcrypt from "bcrypt";
 
 export interface IUser {
     firstName: string;
@@ -8,6 +9,9 @@ export interface IUser {
     email: string;
     userName: string;
     passwordHash: string;
+    __t: string;
+
+    isCorrectPassword(passwordHash: string): boolean;
 }
 export interface IUserModel extends IUser, Document {}
 
@@ -30,7 +34,9 @@ export class UserSchema extends Schema {
         });
     }
 }
+
 const userSchema = new UserSchema({}, {});
+
 userSchema.plugin(uniqueValidator, { message: "is already taken." });
 userSchema.plugin(mongoose_fuzzy_searching, {
     fields: [
@@ -46,5 +52,17 @@ userSchema.plugin(mongoose_fuzzy_searching, {
         }
     ]
 });
+
+userSchema.pre("save", function (next) {
+    if (this.isModified("passwordHash")) {
+        this.passwordHash = bcrypt.hashSync(this.passwordHash, 10);
+    }
+
+    next();
+});
+
+userSchema.methods.isCorrectPassword = function (passwordHash: string): boolean {
+    return bcrypt.compareSync(passwordHash, this.passwordHash);
+};
 
 export default mongoose.model<IUserModel>("User", userSchema) as MongoosePluginModel<IUserModel>;
