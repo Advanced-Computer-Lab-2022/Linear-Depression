@@ -10,7 +10,8 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { useFetchSubjects } from "@internals/hooks";
-import { useAppSelector } from "../../../store";
+import { useAppSelector } from "@internals/redux";
+
 const CheckboxItem = styled(Checkbox)`
     color: red;
 `;

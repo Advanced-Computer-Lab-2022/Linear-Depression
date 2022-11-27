@@ -1,5 +1,6 @@
 import React from "react";
-import InstructorCourse from "./course/InstructorCourse";
+
+import { InstructorCourse } from "@internals/pages";
 
 const Course: React.FC = () => {
     return <InstructorCourse />;

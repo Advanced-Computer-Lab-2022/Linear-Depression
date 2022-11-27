@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
+import { CoursePrice } from "@internals/components";
 import { Course as ICourseProps } from "@internals/types";
 
 const HorizontalLayout = styled.div`
@@ -79,40 +80,8 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CoursePriceSection = styled.div`
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 100%;
-    flex: 1;
-`;
-
-const Price = styled.p<{ isDiscounted?: boolean }>`
-    font-weight: 800;
-    text-decoration: ${(props) => (props.isDiscounted ? "line-through" : "none")};
-`;
-
-const CoursePrice: React.FC<{ currency: string; price: number; discount?: number }> = ({
-    currency,
-    price,
-    discount
-}) => {
-    let discountedPrice = price;
-    discount = price === 0 || !discount ? 0 : discount;
-    if (discount) {
-        discountedPrice = price - (price * discount) / 100;
-    }
-    const priceString = price === 0 ? "Free" : `${currency} ${price}`;
-    const discountedPriceString = discountedPrice === 0 ? "Free" : `${currency} ${discountedPrice.toFixed(2)}`;
-    return (
-        <CoursePriceSection>
-            <Price isDiscounted={discount ? true : false}>{priceString}</Price>
-            {discount > 0 && <Price isDiscounted={false}>{discountedPriceString}</Price>}
-        </CoursePriceSection>
-    );
-};
-
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { _id, title, description, instructor, averageRating, totalHours, price, activePromotion, currency } = {
+    course: { _id, title, description, instructor, averageRating, totalHours, price, promotion, currency } = {
         title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
         description:
             "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
@@ -155,11 +124,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePrice
-                    currency={currency}
-                    price={price}
-                    discount={activePromotion ? activePromotion.discountPercent : 0}
-                />
+                <CoursePrice currency={currency} price={price} promotion={promotion} />
             </HorizontalLayout>
             <hr />
         </CardContainer>

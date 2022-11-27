@@ -1,29 +1,41 @@
-import { Dialog, DialogContent, DialogContentText, TextField, DialogActions } from "@mui/material";
+import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+import { getCourse, useAppDispatch } from "@internals/redux";
 import { addLesson } from "@internals/services";
-import { FormProps } from "@internals/types";
 
-const AddLessonForm: React.FC<FormProps> = ({ open, onClose }) => {
+const AddLesson: React.FC<{
+    params: {
+        courseId: string;
+    };
+}> = ({ params }) => {
+    const navigate = useNavigate();
+    const closeModal = () => {
+        navigate(-1);
+    };
+
+    const { courseId } = params;
+
+    const handleClose = () => {
+        closeModal();
+    };
+
     const [title, setTitle] = useState("");
     const [totalHours, setTotalHours] = useState(0);
 
-    const { courseId } = useParams();
-
-    const handleClose = () => {
-        onClose("Close");
-    };
+    const dispatch = useAppDispatch();
 
     const handleSubmit = () => {
         addLesson(courseId, { title, totalHours }).then(() => {
-            onClose("submit");
+            dispatch(getCourse(courseId));
+            closeModal();
         });
     };
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={true}>
             <DialogContent>
                 <DialogContentText>Add a new Lesson</DialogContentText>
                 <TextField
@@ -59,4 +71,4 @@ const AddLessonForm: React.FC<FormProps> = ({ open, onClose }) => {
     );
 };
 
-export default AddLessonForm;
+export default AddLesson;
