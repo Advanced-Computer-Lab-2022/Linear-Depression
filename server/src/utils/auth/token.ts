@@ -29,3 +29,11 @@ export const verifyToken = async (token: string): Promise<TokenPayload | jwt.Jso
         });
     });
 };
+
+export const decodeToken = (token: string): TokenPayload | null => {
+    try {
+        return jwt.decode(token) as TokenPayload;
+    } catch (e) {
+        return null;
+    }
+}

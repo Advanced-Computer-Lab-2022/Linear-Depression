@@ -1,4 +1,5 @@
 export enum UserTypes {
+    GUEST,
     ADMIN,
     INSTRUCTOR,
     INDIVIDUAL_TRAINEE,
@@ -6,6 +7,7 @@ export enum UserTypes {
 }
 
 export const UserTypesNames = new Map<String, UserTypes>([
+    ["GUEST", UserTypes.GUEST],
     ["Admin", UserTypes.ADMIN],
     ["Instructor", UserTypes.INSTRUCTOR],
     ["IndividualTrainee", UserTypes.INDIVIDUAL_TRAINEE],
