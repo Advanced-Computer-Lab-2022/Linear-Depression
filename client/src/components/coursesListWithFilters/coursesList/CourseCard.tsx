@@ -97,6 +97,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
     }
 }) => {
     const navigate = useNavigate();
+    averageRating = Number(averageRating.toFixed(1));
     return (
         <CardContainer
             onClick={() => {
