@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IPasswordResetToken {
@@ -19,18 +20,16 @@ const passResetTokenSchema = new Schema(
     { timestamps: true }
 );
 
-// TODO: Deal with hashed tokens instead
-// passResetTokenSchema.pre("save", async function (next) {
-//     if (this.isModified("token")) {
-//         this.token = await bcrypt.hash(this.token, 10);
-//     }
+passResetTokenSchema.pre("save", async function (next) {
+    if (this.isModified("token")) {
+        this.token = crypto.createHash("sha256").update(this.token).digest("hex");
+    }
 
-//     next();
-// });
+    next();
+});
 
 passResetTokenSchema.methods.isValid = async function () {
     return this.expiredBy > new Date();
-}
-
+};
 
 export default mongoose.model<IPasswordResetTokenModel>("PasswordResetToken", passResetTokenSchema);

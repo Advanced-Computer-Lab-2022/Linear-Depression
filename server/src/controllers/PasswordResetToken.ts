@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import PasswordResetToken from "../models/PasswordResetToken";
@@ -14,20 +15,22 @@ const sendPasswordResetToken = async (req: Request, res: Response, next: NextFun
             return res.status(StatusCodes.NOT_FOUND).json({ error: "User not found" });
         }
 
+        const token = PasswordResetTokenServices.generateToken();
         const passwordResetToken = new PasswordResetToken({
             userId: user._id,
-            token: PasswordResetTokenServices.generateToken(),
+            token,
             expiredBy: new Date(Date.now() + 3_600_000)
         });
 
-        passwordResetToken.save()
-        .then(() => {
-            sendPasswordResetEmail(email, passwordResetToken.token);
-            return res.status(StatusCodes.OK).json({ success: true });
-        })
-        .catch((error) => {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
-        });
+        passwordResetToken
+            .save()
+            .then(() => {
+                sendPasswordResetEmail(email, token);
+                return res.status(StatusCodes.OK).json({ success: true });
+            })
+            .catch((error) => {
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+            });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
@@ -36,7 +39,12 @@ const sendPasswordResetToken = async (req: Request, res: Response, next: NextFun
 const validatePasswordResetToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { token } = req.query;
-        const passwordResetToken = await PasswordResetToken.findOne({ token });
+        const passwordResetToken = await PasswordResetToken.findOne({
+            token: crypto
+                .createHash("sha256")
+                .update(token as string)
+                .digest("hex")
+        });
 
         if (!passwordResetToken) {
             return res.status(StatusCodes.UNAUTHORIZED).json({ error: "Unauthorized" });
