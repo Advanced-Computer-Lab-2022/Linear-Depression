@@ -42,13 +42,28 @@ const createRating = async (req: Request, res: Response, next: NextFunction) => 
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
-const listRatings = (req: Request, res: Response, next: NextFunction) => {
+const listRatings = async (req: Request, res: Response, next: NextFunction) => {
     // filter only ratings that are have comments
-    return Rating.find({ courseID: req.params.courseId, comment: { $ne: null } })
-        .populate("IndividualTrainee", "firstName lastName")
-        .populate("CorporateTrainee", "firstName lastName")
-        .then((ratings) => res.status(StatusCodes.OK).json({ ratings }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    const courseId = req.params.courseId;
+    await Course.findById(courseId).then((course) => {
+        if (!course) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Course not found"
+            });
+        }
+        const ratings = course?.ratings;
+        if (ratings) {
+            Rating.find({ _id: { $in: ratings }, comment: { $exists: true } })
+                .populate("IndividualTrainee")
+                .populate("CorporateTrainee")
+                .then((ratings) => {
+                    res.status(StatusCodes.OK).json({ ratings });
+                })
+                .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+        } else {
+            res.status(StatusCodes.OK).json({ ratings: [] });
+        }
+    });
 };
 
 const readRating = async (req: Request, res: Response, next: NextFunction) => {
