@@ -1,18 +1,22 @@
-import * as React from "react";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Grid, Link } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import * as React from "react";
 
-const theme = createTheme();
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+    typography: {
+        fontFamily: ["Montserrat", "sans-serif"].join(",")
+    }
+});
 
 export default function SignIn() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -47,7 +51,7 @@ export default function SignIn() {
                     <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
                         Sign in
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -71,10 +75,21 @@ export default function SignIn() {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, fontWeight: "bold" }}>
                             Sign In
                         </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="/auth/forgot" variant="body2" fontWeight={"bold"}>
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="#" variant="body2" fontWeight={"bold"}>
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Box>
             </Container>

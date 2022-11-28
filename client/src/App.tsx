@@ -6,7 +6,7 @@ import { Navbar } from "@internals/components";
 import { CountryContext, UserContext } from "@internals/contexts";
 import { useGetLocalizationData } from "@internals/hooks";
 import { AddLesson, AddCourse, AddPromotion } from "@internals/modals";
-import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course, Login } from "@internals/pages";
+import { Home, CorporateTrainee, IndividualTrainee, Instructor, Course, Login, PasswordReset, ForgotPassword } from "@internals/pages";
 import { User } from "@internals/types";
 
 function App() {
@@ -33,7 +33,10 @@ function App() {
                         <Route path="instructor/*" element={<Instructor />} />
                         <Route path="corporate-trainee" element={<CorporateTrainee />} />
                         <Route path="individual-trainee" element={<IndividualTrainee />} />
-                        <Route path="login" element={<Login />} />
+
+                        <Route path="/auth/login" element={<Login />} />
+                        <Route path="/auth/reset" element={<PasswordReset />} />
+                        <Route path="/auth/forgot" element={<ForgotPassword />} />
                     </Routes>
                 </div>
             </CountryContext.Provider>

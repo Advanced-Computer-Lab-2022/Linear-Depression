@@ -6,3 +6,5 @@ export { default as IndividualTrainee } from "./IndividualTrainee";
 export { default as Instructor } from "./Instructor";
 export { default as InstructorCourse } from "./InstructorCourse";
 export { default as Login } from "./auth/Login";
+export { default as PasswordReset } from "./auth/PasswordReset";
+export { default as ForgotPassword } from "./auth/ForgotPassword";
