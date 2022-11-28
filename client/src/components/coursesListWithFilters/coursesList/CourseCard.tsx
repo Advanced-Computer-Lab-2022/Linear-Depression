@@ -4,6 +4,7 @@ import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
 import { CoursePrice } from "@internals/components";
+import { getVideoThumbnailUrl } from "@internals/services";
 import { Course as ICourseProps } from "@internals/types";
 
 const HorizontalLayout = styled.div`
@@ -11,15 +12,14 @@ const HorizontalLayout = styled.div`
 `;
 
 const CardContainer = styled.div`
-    height: 150px;
+    height: 170px;
     margin-bottom: 20px;
     padding: 10px;
 `;
 
-const CourseImage = styled.div`
+const Image = styled.img`
+    height: 160px;
     width: 260px;
-    height: 100%;
-    flex: 1;
 `;
 
 const CourseDetails = styled.div`
@@ -81,19 +81,17 @@ const CourseDuration = styled.p`
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
-    course: { _id, title, description, instructor, averageRating, totalHours, price, activePromotion, currency } = {
-        title: "100 Days of Code: The Complete Python Pro Bootcamp for 2022",
-        description:
-            "Learn Python like a Professional! Start from the basics and go all the way to creating your own applications and games!",
-        instructor: {
-            id: "1",
-            firstName: "Dr. Angela",
-            lastName: "Yu"
-        },
-        averageRating: 4.3,
-        totalHours: 10,
-        price: 12.99,
-        currency: "$"
+    course: {
+        _id,
+        title,
+        description,
+        instructor,
+        averageRating,
+        totalHours,
+        price,
+        activePromotion,
+        currency,
+        preview
     }
 }) => {
     const navigate = useNavigate();
@@ -105,9 +103,11 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
             }}
         >
             <HorizontalLayout>
-                <CourseImage>
-                    <img alt="" src="https://img-c.udemycdn.com/course/240x135/2776760_f176_10.jpg" />
-                </CourseImage>
+                {preview ? (
+                    <Image src={getVideoThumbnailUrl(preview)} />
+                ) : (
+                    <Image src="https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg" />
+                )}
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
                     <CourseDescription>{description + "  ..."}</CourseDescription>
