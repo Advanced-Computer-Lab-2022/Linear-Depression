@@ -5,7 +5,7 @@ interface ICourseProps {
     title: string;
     description: string;
     instructor: {
-        id: string;
+        _id: string;
         firstName: string;
         lastName: string;
     } | null;
