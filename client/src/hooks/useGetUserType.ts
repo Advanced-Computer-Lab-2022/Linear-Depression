@@ -3,7 +3,7 @@ import { useState } from "react";
 import { fetchUserType } from "@internals/services";
 import { User } from "@internals/types";
 
-const useGetLocalizationData = () => {
+const useGetUserType = () => {
     const [userType, setUserType] = useState(User.GUEST);
 
     fetchUserType()
