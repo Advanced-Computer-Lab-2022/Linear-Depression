@@ -13,7 +13,6 @@ export default class UserServices {
 
             return createToken(user);
         } catch (error) {
-            console.log(error);
             throw new Error("Wrong email or password");
         }
     }

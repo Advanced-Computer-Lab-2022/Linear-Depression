@@ -17,7 +17,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
 const getRole = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
-    console.log(token);
     return UserServices.getUserType(token)
         .then((type: UserTypes) => {
             res.status(StatusCodes.OK).json({ type });

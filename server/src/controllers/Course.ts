@@ -25,8 +25,6 @@ async function getCurrencyRateByCookie(
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
     // check his cookie
     const country: string = req.cookies.country || "us";
-    console.log(country);
-    console.log(req.body);
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
         "us"
