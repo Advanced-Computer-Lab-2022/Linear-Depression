@@ -22,13 +22,13 @@ const Title = styled.div`
     flex: 1;
 `;
 
-/*const Preview = styled.a`
+const Preview = styled.a`
     font-size: 14px;
     font-weight: 400;
     color: #5624d0;
     text-decoration: underline;
     margin-right: 10px;
-`;*/
+`;
 
 const ContentItem: React.FC<{
     title?: string;
@@ -38,7 +38,7 @@ const ContentItem: React.FC<{
         <Item>
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
-            {/*link && <Preview href={link}>Preview</Preview>*/}
+            {link && <Preview href={link}>Preview</Preview>}
         </Item>
     );
 };
