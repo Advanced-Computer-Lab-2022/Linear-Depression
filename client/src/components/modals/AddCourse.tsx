@@ -1,10 +1,9 @@
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { UserContext } from "@internals/contexts";
 import { getMyCourses, getSubjects, useAppDispatch } from "@internals/redux";
 import { addCourse } from "@internals/services";
 
@@ -26,13 +25,11 @@ const AddCourse: React.FC = () => {
     const [subject, setSubject] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
-    const { userId } = useContext(UserContext);
-
     const dispatch = useAppDispatch();
     const [searchParams] = useSearchParams();
 
     const handleSubmit = () => {
-        addCourse({ title, subject, description, price, instructor: userId }).then(() => {
+        addCourse({ title, subject, description, price }).then(() => {
             dispatch(getSubjects());
             dispatch(getMyCourses(searchParams));
             closeModal();
