@@ -18,4 +18,4 @@ const useGetUserType = () => {
     return { userType, setUserType };
 };
 
-export default useGetLocalizationData;
+export default useGetUserType;
