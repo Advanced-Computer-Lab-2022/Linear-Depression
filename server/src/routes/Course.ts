@@ -18,5 +18,4 @@ router.post("/:courseId/ratings", ratingController.createRating);
 router.get("/:courseId/ratings/:ratingId", ratingController.readRating);
 router.put("/:courseId/ratings/:ratingId", ratingController.updateRating);
 router.delete("/:courseId/ratings/:ratingId", ratingController.deleteRating);
-router.get("/me", controller.listMyCourses);
 export default router;
