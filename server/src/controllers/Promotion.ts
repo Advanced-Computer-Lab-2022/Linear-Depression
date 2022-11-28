@@ -25,17 +25,24 @@ const getPromotion = (req: Request, res: Response, next: NextFunction) => {
 };
 
 function addPromotionToCourse(courseId: mongoose.Types.ObjectId, promotionId: mongoose.Types.ObjectId) {
-    Course.findById(courseId)
-        .then((course) => {
-            if (course) {
-                course.activePromotion = promotionId;
-                course.save();
-            }
-        })
-        .catch((error) => console.log(error));
+    return new Promise((resolve, reject) => {
+        Course.findById(courseId)
+            .then((course) => {
+                if (course) {
+                    course.activePromotion = promotionId;
+                    course
+                        .save()
+                        .then(() => resolve("success"))
+                        .catch((error) => reject(error));
+                } else {
+                    reject(new Error("Course not found"));
+                }
+            })
+            .catch((error) => reject(error));
+    });
 }
 
-const createPromotion = (req: Request, res: Response, next: NextFunction) => {
+const createPromotion = async (req: Request, res: Response, next: NextFunction) => {
     const promotion = new Promotion({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
@@ -43,9 +50,14 @@ const createPromotion = (req: Request, res: Response, next: NextFunction) => {
 
     return promotion
         .save()
-        .then((promotion) => {
-            promotion.courses.forEach((courseId) => addPromotionToCourse(courseId, promotion._id));
-            res.status(StatusCodes.CREATED).json({ promotion });
+        .then(async (promotion) => {
+            Promise.all(promotion.courses.map((courseId) => addPromotionToCourse(courseId, promotion._id)))
+                .then(() => {
+                    res.status(StatusCodes.CREATED).json({ promotion });
+                })
+                .catch((error) => {
+                    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+                });
         })
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };

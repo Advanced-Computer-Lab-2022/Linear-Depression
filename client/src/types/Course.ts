@@ -5,14 +5,14 @@ interface ICourseProps {
     title: string;
     description: string;
     instructor: {
-        id: string;
+        _id: string;
         firstName: string;
         lastName: string;
     } | null;
     averageRating: number;
     totalHours: number;
     price: number;
-    promotion: {
+    activePromotion: {
         name: string;
         discountPercent: number;
         startDate: Date;
