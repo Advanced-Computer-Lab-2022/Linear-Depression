@@ -4,7 +4,7 @@ import { config } from "@internals/config";
 
 const fetchMyCourses = (searchParams: URLSearchParams): Promise<never[]> => {
     const FILTERS = searchParams.toString();
-    const API_URL = `${config.API_URL}/courses?instructor=636020ca8701caab59e5dc30&${FILTERS}`;
+    const API_URL = `${config.API_URL}/me/courses?${FILTERS}`;
     return new Promise((resolve, reject) => {
         axios
             .get(API_URL, {

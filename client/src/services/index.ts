@@ -10,3 +10,4 @@ export { default as fetchCourseReviews } from "./fetchCourseReviews";
 export { default as addCourseReview } from "./addCourseReview";
 export { default as addInstructorReview } from "./addInstructorReview";
 export { default as addPromotion } from "./addPromotion";
+export { default as fetchUserType } from "./fetchUserType";
