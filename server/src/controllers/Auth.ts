@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import UserServices from "../services/UserServices";
 import { UserTypes } from "../enums/UserTypes";
+import UserServices from "../services/UserServices";
 import { decodeToken } from "../utils/auth/token";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +27,6 @@ const getRole = async (req: Request, res: Response, next: NextFunction) => {
 
 const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     const { token, newPassword } = req.body;
-
 
     return UserServices.resetPassword(token, newPassword)
         .then(() => res.status(StatusCodes.OK).json({ success: true }))
