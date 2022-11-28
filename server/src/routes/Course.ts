@@ -1,11 +1,12 @@
 import express from "express";
 import controller from "../controllers/Course";
 import ratingController from "../controllers/Rating";
+import authenticated from "../middleware/authenticated";
 
 const router = express.Router();
 
 router.get("/", controller.listCourses);
-router.post("/", controller.createCourse);
+router.post("/", authenticated, controller.createCourse);
 router.post("/:courseId/lesson", controller.createLesson);
 router.get("/subjects", controller.listSubjects);
 router.get("/:courseId", controller.readCourse);
@@ -17,5 +18,5 @@ router.post("/:courseId/ratings", ratingController.createRating);
 router.get("/:courseId/ratings/:ratingId", ratingController.readRating);
 router.put("/:courseId/ratings/:ratingId", ratingController.updateRating);
 router.delete("/:courseId/ratings/:ratingId", ratingController.deleteRating);
-
+router.get("/me", controller.listMyCourses);
 export default router;
