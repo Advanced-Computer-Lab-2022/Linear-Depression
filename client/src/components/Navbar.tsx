@@ -91,7 +91,7 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="my-courses" relative="path">
+                            <Link className="nav-link" to="me/courses">
                                 My Courses
                             </Link>
                         </li>
