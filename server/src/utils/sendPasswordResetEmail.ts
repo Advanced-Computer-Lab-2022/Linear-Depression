@@ -24,7 +24,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     const message = {
         from: process.env.PASSWORD_RESET_EMAIL_FROM,
         to: email,
-        subject: 'Password Reset',
+        subject: process.env.PASSWORD_RESET_EMAIL_SUBJECT,
         html: htmlToSend
     };
 
