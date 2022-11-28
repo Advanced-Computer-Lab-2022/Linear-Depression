@@ -35,10 +35,9 @@ describe("GET /courses/:courseId/ratings", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
-    it("should return an empty array when the db is empty", async () => {
-        const response = await request.get("/courses/1/ratings");
-        expect(response.status).toBe(StatusCodes.OK);
-        expect(response.body.ratings).toEqual([]);
+    it("It should return 404 if course is not found", async () => {
+        const response = await request.get(`/courses/${new mongoose.Types.ObjectId()}/ratings`);
+        expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
     it("Should skip ratings having no comments", async () => {
@@ -91,6 +90,30 @@ describe("GET /courses/:courseId/ratings", () => {
         const response = await request.get(`/courses/${course._id}/ratings`);
         expect(response.status).toBe(StatusCodes.OK);
         expect(response.body.ratings).toHaveLength(randomLength);
+    });
+
+    it("Should return only this course's ratings", async () => {
+        const { course, rating } = await createCourseWithRatings();
+        const course2 = new Course(courseFactory());
+        const rating2 = new Rating(ratingFactory());
+        await rating2.save();
+        course2.ratings.push(rating2._id);
+        await course2.save();
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(1);
+    });
+
+    it("Should return empty array if no ratings", async () => {
+        const course = new Course(courseFactory());
+        await course.save();
+
+        const rating = new Rating(ratingFactory());
+        await rating.save();
+
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(0);
     });
 
     afterEach(async () => {
