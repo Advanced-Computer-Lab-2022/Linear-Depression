@@ -23,7 +23,8 @@ const CourseHeader: React.FC = () => {
         instructor: { firstName, lastName },
         price,
         activePromotion,
-        currency
+        currency,
+        preview
     } = data;
 
     if (loading) {
@@ -38,7 +39,13 @@ const CourseHeader: React.FC = () => {
                 instructor={`${firstName} ${lastName}`}
                 rating={averageRating}
             />
-            <CourseActions price={price} currency={currency} promotion={activePromotion} courseId={_id} />
+            <CourseActions
+                videoUrl={preview}
+                price={price}
+                currency={currency}
+                promotion={activePromotion}
+                courseId={_id}
+            />
         </Header>
     );
 };

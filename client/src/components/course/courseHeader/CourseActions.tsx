@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
+import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import CourseVideo from "./courseActions/CourseVideo";
 import { CoursePrice } from "@internals/components";
-import { Promotion, User } from "@internals/types";
 import { UserContext } from "@internals/contexts";
-import { openModal } from "react-url-modal";
+import { Promotion, User } from "@internals/types";
 
 const MainContainer = styled.div``;
 
@@ -34,7 +34,8 @@ const CourseActions: React.FC<{
     currency: string;
     promotion: Promotion;
     courseId: string;
-}> = ({ price, promotion, currency, courseId }) => {
+    videoUrl?: string;
+}> = ({ price, promotion, currency, courseId, videoUrl }) => {
     const { userType } = useContext(UserContext);
     const openAddPromotionModal = () => {
         openModal({
@@ -46,12 +47,12 @@ const CourseActions: React.FC<{
     };
     return (
         <MainContainer>
-            <CourseVideo />
+            <CourseVideo videoUrl={videoUrl} />
             <SubContainer>
                 <PriceSection>
                     <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />
                 </PriceSection>
-                {userType == User.INSTRUCTOR ? (
+                {userType === User.INSTRUCTOR ? (
                     <Button onClick={openAddPromotionModal}>Add Promotion</Button>
                 ) : (
                     <Button>Enroll now</Button>
