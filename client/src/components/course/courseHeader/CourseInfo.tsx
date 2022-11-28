@@ -1,4 +1,6 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import BadgeRatedEnrolled from "./courseInfo/BadgeRatedEnrolled";
@@ -32,12 +34,37 @@ const Instructor = styled.span`
     text-decoration: underline;
 `;
 
+const Button = styled.button`
+    width: 240px;
+    height: 48px;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top: 16px;
+    background-color: #a435f0;
+    border: none;
+    color: white;
+`;
+
 const CourseInfo: React.FC<{
     title: string;
     description: string;
     instructor: string;
     rating: number;
 }> = ({ title, description, rating, instructor }) => {
+    rating = Number(rating.toFixed(1));
+
+    const { courseId } = useParams();
+
+    const onClick = () => {
+        openModal({
+            name: "addReview",
+            params: {
+                courseId
+            }
+        });
+    };
+
     return (
         <Container>
             <Title>{title}</Title>
@@ -46,6 +73,7 @@ const CourseInfo: React.FC<{
             <div>
                 Created by <Instructor>{instructor}</Instructor>
             </div>
+            <Button onClick={onClick}>Add Review</Button>
         </Container>
     );
 };

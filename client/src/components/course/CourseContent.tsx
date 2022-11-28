@@ -6,6 +6,13 @@ import { Lesson as ILessonProps } from "@internals/types";
 
 const MAX_COUNT_SECTIONS = 10;
 
+const Title = styled.div`
+    font-size: 30px;
+    font-weight: bold;
+    padding: 8px;
+    margin-top: 24px;
+`;
+
 const CourseContentInfo = styled.div`
     display: flex;
     margin-bottom: 10px;
@@ -55,6 +62,7 @@ const CourseContent: React.FC<{
 
     return (
         <>
+            <Title>Course Content</Title>
             <CourseContentInfo>
                 <ExpandAllButton onClick={toggleSectionsExpanded}>
                     {sectionsExpanded ? "Collapse all sections" : "Expand all sections"}
