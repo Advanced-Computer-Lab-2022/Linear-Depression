@@ -29,7 +29,18 @@ const createRating = async (req: Request, res: Response, next: NextFunction) => 
             message: "traineeId is required"
         });
     }
-
+    // if there's existing rating for this trainee and course, return error
+    const existingRatings = (await Course.find({ courseId }).populate({
+        path: "ratings",
+        match: { traineeID: req.body.traineeID }
+    })) as ICourse[];
+    for (const course of existingRatings) {
+        if (course.ratings.length > 0) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                message: "Rating already exists for this trainee and course"
+            });
+        }
+    }
     return new Rating(req.body)
         .save()
         .then((rating) => {
@@ -42,13 +53,28 @@ const createRating = async (req: Request, res: Response, next: NextFunction) => 
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
-const listRatings = (req: Request, res: Response, next: NextFunction) => {
+const listRatings = async (req: Request, res: Response, next: NextFunction) => {
     // filter only ratings that are have comments
-    return Rating.find({ courseID: req.params.courseId, comment: { $ne: null } })
-        .populate("IndividualTrainee", "firstName lastName")
-        .populate("CorporateTrainee", "firstName lastName")
-        .then((ratings) => res.status(StatusCodes.OK).json({ ratings }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    const courseId = req.params.courseId;
+    await Course.findById(courseId).then((course) => {
+        if (!course) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Course not found"
+            });
+        }
+        const ratings = course?.ratings;
+        if (ratings) {
+            Rating.find({ _id: { $in: ratings }, comment: { $exists: true } })
+                .populate("IndividualTrainee")
+                .populate("CorporateTrainee")
+                .then((ratings) => {
+                    res.status(StatusCodes.OK).json({ ratings });
+                })
+                .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+        } else {
+            res.status(StatusCodes.OK).json({ ratings: [] });
+        }
+    });
 };
 
 const readRating = async (req: Request, res: Response, next: NextFunction) => {
@@ -132,22 +158,44 @@ const updateRating = async (req: Request, res: Response, next: NextFunction) => 
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deleteRating = (req: Request, res: Response, next: NextFunction) => {
-    const ratingId = req.params.ratingId;
+const deleteRating = async (req: Request, res: Response, next: NextFunction) => {
+    const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
 
-    return Rating.findByIdAndDelete(ratingId)
-        .then((rating) =>
-            rating
-                ? res.status(StatusCodes.OK).json({ rating })
-                : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" })
-        )
-        .then(() => {
-            Course.findByIdAndUpdate(courseId, { $pull: { ratings: ratingId } }).catch((error) =>
-                res.status(StatusCodes.BAD_REQUEST).json({ error })
-            );
-        })
-        .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    const course: ICourse = (await Course.findById(courseId).then((course) => {
+        if (!course) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Course not found"
+            });
+        }
+        return course;
+    })) as ICourse;
+
+    if (mongoose.Types.ObjectId.isValid(ratingId)) {
+        if (!course.ratings.includes(ratingId)) {
+            res.status(StatusCodes.NOT_FOUND).json({
+                message: "Rating does not belong to this course"
+            });
+        } else {
+            await Rating.findByIdAndDelete(ratingId)
+                .then((rating) => {
+                    if (rating) {
+                        Course.findByIdAndUpdate(courseId, { $pull: { ratings: ratingId } })
+                            .then(() => {
+                                res.status(StatusCodes.OK).json({ rating });
+                            })
+                            .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+                    } else {
+                        return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+                    }
+                })
+                .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+        }
+    } else {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Invalid ratingId"
+        });
+    }
 };
 
 export default {

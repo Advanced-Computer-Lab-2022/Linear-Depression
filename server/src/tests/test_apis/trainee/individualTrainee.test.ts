@@ -60,7 +60,6 @@ describe("IndividualTrainee APIs", () => {
             await individualTrainee.save();
             const response = await request.get(`/individual-trainees/${individualTrainee._id}`);
             expect(response.status).toBe(StatusCodes.OK);
-            console.log(response.body);
             expect(response.body.individualTrainee.courses[0].title).toEqual(course.title);
         });
 

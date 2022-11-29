@@ -612,7 +612,7 @@
                 "responses": {}
             }
         },
-        "/courses/{courseId}/lessons/{lessonId}/exercises/{exerciseId}/answers": {
+        "/courses/{courseId}/lessons/{lessonId}/exercises/{exerciseId}/submissions": {
             "get": {
                 "description": "",
                 "produces": [null],

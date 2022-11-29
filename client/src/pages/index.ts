@@ -9,3 +9,5 @@ export { default as Exercise } from "./Exercise";
 export { default as InstructorCourse } from "./InstructorCourse";
 export { default as Login } from "./auth/Login";
 export { default as CreateExercise } from "./CreateExercise";
+export { default as PasswordReset } from "./auth/PasswordReset";
+export { default as ForgotPassword } from "./auth/ForgotPassword";

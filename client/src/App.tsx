@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
 import { Navbar } from "@internals/components";
@@ -13,7 +13,9 @@ import {
     Login,
     MyCourses,
     CreateExercise,
-    Exercise
+    Exercise,
+    PasswordReset,
+    ForgotPassword
 } from "@internals/pages";
 
 function App() {
@@ -38,6 +40,11 @@ function App() {
                         <Route path="courses/:courseId" element={<Course />} />
                         <Route path="corporate-trainee" element={<CorporateTrainee />} />
                         <Route path="individual-trainee" element={<IndividualTrainee />} />
+
+                        <Route path="/auth/login" element={<Login />} />
+                        <Route path="/auth/reset" element={<PasswordReset />} />
+                        <Route path="/auth/forgot" element={<ForgotPassword />} />
+
                         <Route path="login" element={<Login />} />
                         <Route path="me/courses" element={<MyCourses />} />
                         <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />

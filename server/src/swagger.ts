@@ -2,6 +2,8 @@ const swaggerAutogen = require("swagger-autogen")();
 
 const outputFile = "./swagger.json";
 const endpointsFiles = ["./src/server.ts"];
+const dotenv = require("dotenv");
+dotenv.config();
 
 const doc = {
     info: {
@@ -9,7 +11,7 @@ const doc = {
         title: "API Documentation",
         description: "API Documentation"
     },
-    host: "localhost:3000",
+    host: `localhost:${process.env.SERVER_PORT}`,
     basePath: "/",
     schemes: ["http"],
     consumes: ["application/json"],

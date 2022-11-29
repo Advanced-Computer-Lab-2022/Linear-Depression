@@ -1,12 +1,14 @@
-import Course from "../../../models/Course";
-import mongoose from "mongoose";
-import { courseFactory } from "../../test_models/course/factory";
 import { faker } from "@faker-js/faker";
-import { connectDBForTesting, disconnectDBForTesting } from "../../../utils/testUtilities";
 import { StatusCodes } from "http-status-codes";
-import { TIME_OUT } from "../../../utils/testUtilities";
+import mongoose from "mongoose";
 import supertest from "supertest";
+import Course from "../../../models/Course";
+import Instructor from "../../../models/Instructor";
 import app from "../../../server";
+import { connectDBForTesting, disconnectDBForTesting, TIME_OUT } from "../../../utils/testUtilities";
+import { courseFactory } from "../../test_models/course/factory";
+import { instructorFactory } from "../../test_models/instructor/factory";
+import { lessonFactory } from "../../test_models/lesson/factory";
 const request = supertest(app);
 
 describe("GET /courses/", () => {
@@ -93,10 +95,14 @@ describe("POST /courses/", () => {
         await connectDBForTesting();
     });
     it("Should create a course successfully", async () => {
+        const token = await getInstructorToken();
+
         const course = courseFactory();
-        const res = await request.post("/courses").send(course);
-        expect(res.status).toBe(StatusCodes.CREATED);
-        expect(res.body.course.title).toEqual(course.title);
+        const response = await request.post("/courses").set("Cookie", token).send(course);
+        expect(response.status).toBe(StatusCodes.CREATED);
+        expect(response.body.course.title).toEqual(course.title);
+        expect(response.body.course.description).toEqual(course.description);
+        expect(response.body.course.price).toEqual(course.price);
     });
 
     afterAll(async () => {
@@ -175,3 +181,69 @@ describe("GET /courses?name=...", () => {
         await disconnectDBForTesting();
     }, TIME_OUT);
 });
+
+describe("Post /courses/:courseId/lessons", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    });
+
+    it("Should create a lesson successfully", async () => {
+        const course = new Course(courseFactory());
+        course.lessons = [];
+        await course.save();
+        expect(course.lessons.length).toBe(0);
+        const lesson = lessonFactory();
+        const res = await request.post(`/courses/${course._id}/lessons`).send(lesson);
+        expect(res.status).toBe(StatusCodes.CREATED);
+        expect(res.body.lesson.title).toEqual(lesson.title);
+        expect(res.body.lesson.video).toEqual(lesson.video);
+
+        const courseFromDB = await Course.findById(course._id);
+        expect(courseFromDB?.lessons.length).toBe(1);
+    });
+
+    // TODO: fix this @Abdulaziz
+    it.todo("Should raise 404 when given wrong id");
+    //     const fakeId = new mongoose.Types.ObjectId(faker.database.mongodbObjectId());
+    //     const res = await request.post(`/courses/${fakeId}/lessons`);
+    //     expect(res.status).toBe(StatusCodes.NOT_FOUND);
+
+    it("Should return an error if the courseId is undefined", async () => {
+        const res = await request.post(`/courses/${undefined}/lessons`);
+        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+    });
+
+    it("Should update course total hours when a lesson is created", async () => {
+        const course = new Course(courseFactory());
+        course.lessons = [];
+        course.totalHours = 0;
+        await course.save();
+        console.log(`course._id`, course._id);
+
+        const lesson = lessonFactory();
+        const res = await request.post(`/courses/${course._id}/lessons`).send(lesson);
+        expect(res.status).toBe(StatusCodes.CREATED);
+
+        const updatedCourse = await Course.findById(course._id);
+        expect(updatedCourse?.lessons).toHaveLength(1);
+        expect(updatedCourse?.totalHours).toEqual(lesson.totalHours);
+    });
+
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    }, TIME_OUT);
+});
+
+async function getInstructorToken() {
+    const instructor = new Instructor(instructorFactory());
+    const password = faker.internet.password();
+    instructor.passwordHash = password;
+    await instructor.save();
+
+    const res = await request.post("/auth/login").send({
+        email: instructor.email,
+        password: password
+    });
+    const token = res.header["set-cookie"][0];
+    return token;
+}
