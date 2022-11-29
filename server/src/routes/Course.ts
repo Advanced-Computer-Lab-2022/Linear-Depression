@@ -26,6 +26,14 @@ router.post("/:courseId/lessons/:lessonId/exercises", exerciseController.createE
 router.put("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.updateExercise);
 router.delete("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.deleteExercise);
 
-router.get("/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions", exerciseController.readSubmission);
-router.post("/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions", exerciseController.submitExercise);
+router.get(
+    "/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions",
+    authenticated,
+    exerciseController.readSubmission
+);
+router.post(
+    "/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions",
+    authenticated,
+    exerciseController.submitExercise
+);
 export default router;
