@@ -68,7 +68,12 @@ const ContentAccordion: React.FC<{
 
                     <ul>
                         {exercises.map((exercise) => (
-                            <ContentItem key={exercise._id} title={exercise.title} />
+                            <ContentItem
+                                key={exercise._id}
+                                title={exercise.title}
+                                exerciseId={exercise._id}
+                                lessonId={lessonId}
+                            />
                         ))}
                     </ul>
                 </div>
