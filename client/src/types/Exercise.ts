@@ -5,7 +5,7 @@ interface IExerciseProps {
         _id: string;
         question: string;
         choices: string[];
-        answerIndex: number;
+        answerIndex?: number;
     }>;
 }
 
