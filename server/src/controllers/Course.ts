@@ -24,7 +24,6 @@ async function getCurrencyRateByCookie(
 
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const { currencyRate }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req, "us");
-    console.log(req.body);
 
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
