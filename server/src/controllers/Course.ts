@@ -197,7 +197,7 @@ const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const createLesson = async (req: Request, res: Response) => {
+const createLesson = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
     const lesson = new Lesson({
         ...req.body

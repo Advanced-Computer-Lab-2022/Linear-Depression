@@ -385,11 +385,6 @@ describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
-    it("Should return a 400 error if the ratingId is invalid", async () => {
-        const res = await request.delete(`/courses/${new mongoose.Types.ObjectId()}/ratings/invalid`);
-        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
-    });
-
     afterEach(async () => {
         await disconnectDBForTesting();
     });

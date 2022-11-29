@@ -158,22 +158,44 @@ const updateRating = async (req: Request, res: Response, next: NextFunction) => 
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deleteRating = (req: Request, res: Response, next: NextFunction) => {
-    const ratingId = req.params.ratingId;
+const deleteRating = async (req: Request, res: Response, next: NextFunction) => {
+    const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
 
-    return Rating.findByIdAndDelete(ratingId)
-        .then((rating) =>
-            rating
-                ? res.status(StatusCodes.OK).json({ rating })
-                : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" })
-        )
-        .then(() => {
-            Course.findByIdAndUpdate(courseId, { $pull: { ratings: ratingId } }).catch((error) =>
-                res.status(StatusCodes.BAD_REQUEST).json({ error })
-            );
-        })
-        .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+    const course: ICourse = (await Course.findById(courseId).then((course) => {
+        if (!course) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Course not found"
+            });
+        }
+        return course;
+    })) as ICourse;
+
+    if (mongoose.Types.ObjectId.isValid(ratingId)) {
+        if (!course.ratings.includes(ratingId)) {
+            res.status(StatusCodes.NOT_FOUND).json({
+                message: "Rating does not belong to this course"
+            });
+        } else {
+            await Rating.findByIdAndDelete(ratingId)
+                .then((rating) => {
+                    if (rating) {
+                        Course.findByIdAndUpdate(courseId, { $pull: { ratings: ratingId } })
+                            .then(() => {
+                                res.status(StatusCodes.OK).json({ rating });
+                            })
+                            .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+                    } else {
+                        return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+                    }
+                })
+                .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+        }
+    } else {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Invalid ratingId"
+        });
+    }
 };
 
 export default {
