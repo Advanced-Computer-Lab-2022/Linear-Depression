@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import StatusCodes from "http-status-codes";
 
 const setCountry = (req: Request, res: Response) => {
-    console.log(req.params);
     const { country } = req.params;
     res.cookie("country", country);
     res.status(StatusCodes.OK).json({ message: "Language set" });
