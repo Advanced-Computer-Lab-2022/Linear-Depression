@@ -7,6 +7,8 @@ import { StatusCodes } from "http-status-codes";
 import { TIME_OUT } from "../../../utils/testUtilities";
 import supertest from "supertest";
 import app from "../../../server";
+import Instructor from "../../../models/Instructor";
+import { instructorFactory } from "../../test_models/instructor/factory";
 const request = supertest(app);
 
 describe("GET /courses/", () => {
@@ -93,10 +95,14 @@ describe("POST /courses/", () => {
         await connectDBForTesting();
     });
     it("Should create a course successfully", async () => {
+        const token = await getInstructorToken();
+
         const course = courseFactory();
-        const res = await request.post("/courses").send(course);
-        expect(res.status).toBe(StatusCodes.CREATED);
-        expect(res.body.course.title).toEqual(course.title);
+        const response = await request.post("/courses").set("Cookie", token).send(course);
+        expect(response.status).toBe(StatusCodes.CREATED);
+        expect(response.body.course.title).toEqual(course.title);
+        expect(response.body.course.description).toEqual(course.description);
+        expect(response.body.course.price).toEqual(course.price);
     });
 
     afterAll(async () => {
@@ -175,3 +181,17 @@ describe("GET /courses?name=...", () => {
         await disconnectDBForTesting();
     }, TIME_OUT);
 });
+
+async function getInstructorToken() {
+    const instructor = new Instructor(instructorFactory());
+    const password = faker.internet.password();
+    instructor.passwordHash = password;
+    await instructor.save();
+
+    const res = await request.post("/auth/login").send({
+        email: instructor.email,
+        password: password
+    });
+    const token = res.header["set-cookie"][0];
+    return token;
+}

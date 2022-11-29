@@ -23,12 +23,8 @@ async function getCurrencyRateByCookie(
 }
 
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
-    // check his cookie
-    const country: string = req.cookies.country || "us";
-    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
-        req,
-        "us"
-    );
+    const { currencyRate }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req, "us");
+    console.log(req.body);
 
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
@@ -52,7 +48,7 @@ const adjustCoursePrice = (courses: ICourse[], currencyRate: number) => {
     });
 };
 
-const listCourses = async (req: Request, res: Response, next: NextFunction) => {
+const listCourses = async (req: Request, res: Response) => {
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
         "us"
@@ -202,7 +198,7 @@ const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const createLesson = async (req: Request, res: Response, next: NextFunction) => {
+const createLesson = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const lesson = new Lesson({
         ...req.body

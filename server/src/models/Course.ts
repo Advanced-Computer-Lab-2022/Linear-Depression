@@ -33,7 +33,7 @@ const courseSchema = new Schema({
         min: 0,
         max: 5,
         default: 0
-    } /* FIXME: calculate average rating - use hook */,
+    },
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
     totalHours: {
         type: Number,
