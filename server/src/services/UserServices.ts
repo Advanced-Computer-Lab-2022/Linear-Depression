@@ -1,6 +1,8 @@
+import crypto from "crypto";
+import { UserTypes } from "../enums/UserTypes";
+import PasswordResetToken from "../models/PasswordResetToken";
 import User from "../models/User";
 import { createToken, decodeToken, TokenPayload } from "../utils/auth/token";
-import { UserTypes } from "../enums/UserTypes";
 
 export default class UserServices {
     static async login(email: string, password: string) {
@@ -23,6 +25,31 @@ export default class UserServices {
             return decodedToken.type;
         } else {
             return UserTypes.GUEST;
+        }
+    }
+
+    static async resetPassword(token: string, newPassword: string) {
+        try {
+            const passwordResetToken = await PasswordResetToken.findOne({
+                token: crypto
+                    .createHash("sha256")
+                    .update(token as string)
+                    .digest("hex")
+            });
+            if (!passwordResetToken) {
+                throw new Error();
+            }
+
+            const user = await User.findById(passwordResetToken.userId);
+            if (!user) {
+                throw new Error();
+            }
+
+            user.passwordHash = newPassword;
+
+            await user.save();
+        } catch (error) {
+            throw new Error("Failed to reset password");
         }
     }
 }

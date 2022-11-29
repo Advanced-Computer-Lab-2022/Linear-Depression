@@ -1,4 +1,5 @@
 import CorporateTrainee from "../../models/CorporateTrainee";
+import HashPasswordInPayload from "../hooks/hashPasswordInPayload";
 
 export const CorporateTraineeResource = {
     resource: CorporateTrainee,
@@ -25,6 +26,11 @@ export const CorporateTraineeResource = {
                         request.payload.passwordHash = request.payload.password;
                     }
                     return request;
+                }
+            },
+            edit: {
+                before: async (request: any) => {
+                    return await HashPasswordInPayload(request);
                 }
             }
         },
