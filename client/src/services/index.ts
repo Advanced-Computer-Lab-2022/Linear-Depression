@@ -14,3 +14,5 @@ export { default as addPromotion } from "./addPromotion";
 export { default as sendForgotPasswordRequest } from "./auth/sendForgotPasswordRequest";
 export { default as performPasswordReset } from "./auth/performPasswordReset";
 export { default as validatePasswordResetToken } from "./auth/validatePasswordResetToken";
+
+export { default as fetchUserType } from "./fetchUserType";

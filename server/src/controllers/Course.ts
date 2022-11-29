@@ -7,6 +7,9 @@ import { getCurrencyCode, getCurrencyRateFromCache } from "../services/CourseSer
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import Lesson from "../models/Lesson";
+import { UserTypes } from "../enums/UserTypes";
+import CorporateTrainee from "../models/CorporateTrainee";
+import IndividualTrainee from "../models/IndividualTrainee";
 
 async function getCurrencyRateByCookie(
     req: Request,
@@ -20,17 +23,12 @@ async function getCurrencyRateByCookie(
 }
 
 const createCourse = async (req: Request, res: Response, _next: NextFunction) => {
-    // check his cookie
-    const country: string = req.cookies.country || "us";
-    console.log(country);
-    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
-        req,
-        "us"
-    );
+    const { currencyRate }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(req, "us");
 
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
-        ...req.body
+        ...req.body,
+        instructor: req.body.userId
     });
     course.price = course.price / currencyRate;
 
@@ -49,7 +47,7 @@ const adjustCoursePrice = (courses: ICourse[], currencyRate: number) => {
     });
 };
 
-const listCourses = async (req: Request, res: Response, next: NextFunction) => {
+const listCourses = async (req: Request, res: Response) => {
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
         "us"
@@ -63,6 +61,54 @@ const listCourses = async (req: Request, res: Response, next: NextFunction) => {
         const maxPrice = price["$lte"] ? price["$lte"] / currencyRate : 100000;
         req.query.price = { $gte: minPrice, $lte: maxPrice } as any;
     }
+    if (searchTerm) {
+        // search by instructor
+        // try to find instructor by name
+        // @ts-ignore
+        await Instructor.fuzzySearch(searchTerm).then((instructors) => {
+            if (instructors.length > 0) {
+                // if instructor found, search by instructor
+                return searchWithInstructors(instructors, req, currencyRate, res, currency);
+            } else {
+                return searchWithTitleSubject(searchTerm, req, currencyRate, res, currency);
+            }
+        });
+    } else {
+        return listCoursesOnlyFilter(req, currencyRate, res, currency);
+    }
+};
+
+const listMyCourses = async (req: Request, res: Response, _next: NextFunction) => {
+    const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
+        req,
+        "us"
+    );
+    const searchTerm = req.query.searchTerm as string;
+    delete req.query.searchTerm;
+    //adjust price in query
+    if (req.query.price) {
+        const price = JSON.parse(JSON.stringify(req.query.price));
+        const minPrice = price["$gte"] ? price["$gte"] / currencyRate : 0;
+        const maxPrice = price["$lte"] ? price["$lte"] / currencyRate : 100000;
+        req.query.price = { $gte: minPrice, $lte: maxPrice } as any;
+    }
+    const userType = req.body.userType;
+    if (userType === UserTypes.INSTRUCTOR) {
+        req.query.instructor = req.body.userId;
+    } else if (userType === UserTypes.CORPORATE_TRAINEE) {
+        const corporateTrainee = await CorporateTrainee.findById(req.body.userId);
+        if (corporateTrainee) {
+            const courses = corporateTrainee.courses;
+            req.query["_id"] = { $in: courses } as any;
+        }
+    } else {
+        const individualTrainee = await IndividualTrainee.findById(req.body.userId);
+        if (individualTrainee) {
+            const courses = individualTrainee.courses;
+            req.query["_id"] = { $in: courses } as any;
+        }
+    }
+
     if (searchTerm) {
         // search by instructor
         // try to find instructor by name
@@ -151,7 +197,7 @@ const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const createLesson = async (req: Request, res: Response, next: NextFunction) => {
+const createLesson = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
     const lesson = new Lesson({
         ...req.body
@@ -262,4 +308,13 @@ function listCoursesOnlyFilter(
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 }
 
-export default { listCourses, createCourse, readCourse, updateCourse, deleteCourse, listSubjects, createLesson };
+export default {
+    listCourses,
+    createCourse,
+    readCourse,
+    updateCourse,
+    deleteCourse,
+    listSubjects,
+    createLesson,
+    listMyCourses
+};

@@ -3,6 +3,8 @@ import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typ
 import axios from "axios";
 import * as React from "react";
 
+import { config } from "@internals/config";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -15,12 +17,17 @@ const SignIn: React.FC = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        const API_URL = `${config.API_URL}/auth/login`;
 
         axios
-            .post("/auth/login", {
-                email: data.get("email"),
-                password: data.get("password")
-            })
+            .post(
+                API_URL,
+                {
+                    email: data.get("email"),
+                    password: data.get("password")
+                },
+                { withCredentials: true }
+            )
             .then((res) => {
                 console.log(res);
             })

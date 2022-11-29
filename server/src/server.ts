@@ -18,6 +18,7 @@ import LangRouter from "./routes/Currency";
 import PromotionRouter from "./routes/Promotion";
 import ExerciseRouter from "./routes/Exercise";
 import AuthRouter from "./routes/Auth";
+import MeRouter from "./routes/Me";
 
 const cors = require("cors");
 import * as path from "path";
@@ -69,6 +70,7 @@ app.use("/country", LangRouter);
 app.use("/promotions", PromotionRouter);
 app.use("/courses/:courseId/lessons/:lessonId", ExerciseRouter);
 app.use("/auth", AuthRouter);
+app.use("/me", MeRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {

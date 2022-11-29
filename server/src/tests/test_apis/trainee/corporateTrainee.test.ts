@@ -63,7 +63,6 @@ describe("CorporateTrainee APIs", () => {
             await corporateTrainee.save();
             const response = await request.get(`/corporate-trainees/${corporateTrainee._id}`);
             expect(response.status).toBe(StatusCodes.OK);
-            console.log(response.body);
             expect(response.body.corporateTrainee.courses[0].title).toEqual(course.title);
         });
 

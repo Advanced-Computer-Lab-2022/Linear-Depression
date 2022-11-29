@@ -1,17 +1,18 @@
 import axios from "axios";
 
 import { config } from "@internals/config";
+import { User } from "@internals/types";
 
-const fetchMyCourses = (searchParams: URLSearchParams): Promise<never[]> => {
-    const FILTERS = searchParams.toString();
-    const API_URL = `${config.API_URL}/me/courses?${FILTERS}`;
+const fetchUserType = (): Promise<User> => {
+    const API_URL = `${config.API_URL}/auth/role`;
+
     return new Promise((resolve, reject) => {
         axios
             .get(API_URL, {
                 withCredentials: true
             })
             .then((res) => {
-                resolve(res.data.courses);
+                resolve(res.data.type);
             })
             .catch((err) => {
                 reject(err);
@@ -19,4 +20,4 @@ const fetchMyCourses = (searchParams: URLSearchParams): Promise<never[]> => {
     });
 };
 
-export default fetchMyCourses;
+export default fetchUserType;
