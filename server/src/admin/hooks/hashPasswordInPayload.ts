@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-export default async function execute(request: any) {
+const execute = async (request: any) => {
     if (request.payload.password) {
         request.payload = {
             ...request.payload,
@@ -12,3 +12,5 @@ export default async function execute(request: any) {
 
     return request;
 }
+
+export default execute;

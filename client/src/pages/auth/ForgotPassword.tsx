@@ -1,16 +1,9 @@
 import PasswordIcon from "@mui/icons-material/Password";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import { Avatar, Box, Button, CircularProgress, Container, CssBaseline, TextField, Typography } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
 
-import sendForgotPasswordRequest from "../../services/auth/sendForgotPasswordRequest";
+import { sendForgotPasswordRequest } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -26,7 +19,7 @@ const enum PasswordResetState {
     SUCCESS
 }
 
-export default function ForgotPassword() {
+const ForgotPassword: React.FC = () => {
     const [resetRequestStatus, setResetRequestStatus] = useState(PasswordResetState.UNSENT);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +48,7 @@ export default function ForgotPassword() {
                     autoComplete="email"
                     autoFocus
                 />
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2, fontWeight: "bold"}}>
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2, fontWeight: "bold" }}>
                     Send Password Reset Email
                 </Button>
             </Box>
@@ -99,4 +92,6 @@ export default function ForgotPassword() {
             </Container>
         </ThemeProvider>
     );
-}
+};
+
+export default ForgotPassword;

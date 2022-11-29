@@ -1,12 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Grid, Link } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import * as React from "react";
 
@@ -18,7 +11,7 @@ const theme = createTheme({
     }
 });
 
-export default function SignIn() {
+const SignIn: React.FC = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -95,4 +88,6 @@ export default function SignIn() {
             </Container>
         </ThemeProvider>
     );
-}
+};
+
+export default SignIn;

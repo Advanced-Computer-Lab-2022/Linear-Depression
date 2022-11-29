@@ -10,3 +10,7 @@ export { default as fetchCourseReviews } from "./fetchCourseReviews";
 export { default as addCourseReview } from "./addCourseReview";
 export { default as addInstructorReview } from "./addInstructorReview";
 export { default as addPromotion } from "./addPromotion";
+
+export { default as sendForgotPasswordRequest } from "./auth/sendForgotPasswordRequest";
+export { default as performPasswordReset } from "./auth/performPasswordReset";
+export { default as validatePasswordResetToken } from "./auth/validatePasswordResetToken";

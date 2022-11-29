@@ -1,18 +1,9 @@
 import PasswordIcon from "@mui/icons-material/Password";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import { Avatar, Box, Button, CircularProgress, Container, CssBaseline, TextField, Typography } from "@mui/material";
 import * as React from "react";
-import { useSearchParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-import performPasswordReset from "../../services/auth/performPasswordReset";
-import validatePasswordResetToken from "../../services/auth/validatePasswordResetToken";
+import { performPasswordReset, validatePasswordResetToken } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -22,7 +13,7 @@ const theme = createTheme({
     }
 });
 
-export default function PasswordReset() {
+const PasswordReset: React.FC = () => {
     const [searchParams] = useSearchParams();
     const [isValidToken, setIsValidToken] = React.useState(null);
     const [email, setEmail] = React.useState("");
@@ -108,4 +99,6 @@ export default function PasswordReset() {
             </Container>
         </ThemeProvider>
     );
-}
+};
+
+export default PasswordReset;
