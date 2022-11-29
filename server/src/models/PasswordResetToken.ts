@@ -28,7 +28,7 @@ passResetTokenSchema.pre("save", async function (next) {
     next();
 });
 
-passResetTokenSchema.methods.isValid = async function () {
+passResetTokenSchema.methods.isValid = function () {
     return this.expiredBy > new Date();
 };
 
