@@ -141,8 +141,6 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
     const traineeId = req.body.userId;
 
-    console.log("exerciseId in submit", exerciseId);
-    console.log("traineeId in submit", traineeId);
 
     // FIXME: It is assumed that the traineeId is already in the request body
     return Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId })
