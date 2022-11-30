@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import CourseActions from "./courseHeader/CourseActions";
 import CourseInfo from "./courseHeader/CourseInfo";
 import { useAppSelector } from "@internals/redux";
+import OptionsButton from "../OptionsButton";
+import { openModal } from "react-url-modal";
+import { UserContext } from "@internals/contexts";
+import { User } from "@internals/types";
 
 const Header = styled.div`
     height: 370px;
@@ -25,6 +29,21 @@ const CourseHeader: React.FC = () => {
         activePromotion,
         currency
     } = data;
+    const { userType } = useContext(UserContext);
+    const options = [
+        {
+            label: "Edit",
+            onClick: () => {
+                openModal({
+                    name: "editCourse"
+                });
+            }
+        },
+        {
+            label: "Delete",
+            onClick: () => console.log("Delete")
+        }
+    ];
 
     if (loading) {
         return <div>Loading...</div>;
@@ -39,6 +58,8 @@ const CourseHeader: React.FC = () => {
                 rating={averageRating}
             />
             <CourseActions price={price} currency={currency} promotion={activePromotion} courseId={_id} />
+
+            {userType == User.INSTRUCTOR && <OptionsButton options={options} color="white" />}
         </Header>
     );
 };

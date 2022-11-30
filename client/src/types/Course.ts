@@ -20,6 +20,7 @@ interface ICourseProps {
     } | null;
     currency: string;
     lessons: ILessonProps[];
+    subject?: string;
 }
 
 export default ICourseProps;

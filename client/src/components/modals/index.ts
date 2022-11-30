@@ -4,3 +4,4 @@ export { default as AddReview } from "./AddReview";
 export { default as AddPromotion } from "./AddPromotion";
 export { default as AddExercise } from "./AddExercise";
 export { default as AddQuestion } from "./AddQuestion";
+export { default as EditCourse } from "./EditCourse";
