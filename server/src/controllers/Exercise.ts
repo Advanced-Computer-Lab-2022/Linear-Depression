@@ -118,8 +118,6 @@ const readSubmission = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
     const traineeId = req.body.userId;
 
-    console.log("exerciseId in read", exerciseId);
-    console.log("traineeId in read", traineeId);
 
     return Answer.findOne({
         exerciseId: exerciseId,
