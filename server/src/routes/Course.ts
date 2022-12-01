@@ -1,6 +1,7 @@
 import express from "express";
 import controller from "../controllers/Course";
 import ratingController from "../controllers/Rating";
+import exerciseController from "../controllers/Exercise";
 import authenticated from "../middleware/authenticated";
 
 const router = express.Router();
@@ -20,4 +21,20 @@ router.get("/:courseId/ratings/:ratingId", ratingController.readRating);
 router.put("/:courseId/ratings/:ratingId", ratingController.updateRating);
 router.delete("/:courseId/ratings/:ratingId", ratingController.deleteRating);
 
+router.get("/:courseId/lessons/:lessonId/exercises", exerciseController.listExercises);
+router.get("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.readExercise);
+router.post("/:courseId/lessons/:lessonId/exercises", exerciseController.createExercise);
+router.put("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.updateExercise);
+router.delete("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.deleteExercise);
+
+router.get(
+    "/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions",
+    authenticated,
+    exerciseController.readSubmission
+);
+router.post(
+    "/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions",
+    authenticated,
+    exerciseController.submitExercise
+);
 export default router;

@@ -116,7 +116,8 @@ const evaluateExercise = async (traineeId: string, exerciseId: string) => {
 
 const readSubmission = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
-    const traineeId = req.body.traineeId;
+    const traineeId = req.body.userId;
+
 
     return Answer.findOne({
         exerciseId: exerciseId,
@@ -124,7 +125,9 @@ const readSubmission = (req: Request, res: Response, next: NextFunction) => {
     })
         .then((answer) => {
             if (answer) {
-                return res.status(StatusCodes.OK).json({ answer });
+                evaluateExercise(traineeId, exerciseId).then((evaluation) => {
+                    res.status(StatusCodes.CREATED).json({ evaluation });
+                });
             } else {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }
@@ -134,7 +137,8 @@ const readSubmission = (req: Request, res: Response, next: NextFunction) => {
 
 const submitExercise = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
-    const traineeId = req.body.traineeId;
+    const traineeId = req.body.userId;
+
 
     // FIXME: It is assumed that the traineeId is already in the request body
     return Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId })
@@ -154,6 +158,7 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                 const answer = new Answer({
                     _id: new mongoose.Types.ObjectId(),
                     exerciseId: exerciseId,
+                    traineeId: traineeId,
                     ...req.body
                 });
 
