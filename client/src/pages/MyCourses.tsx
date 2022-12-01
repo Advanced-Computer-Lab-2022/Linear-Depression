@@ -1,22 +1,16 @@
 import AddIcon from "@mui/icons-material/Add";
 import React from "react";
-import { useEffect } from "react";
 import { openModal } from "react-url-modal";
 
 import { CoursesListWithFilters, FloatingButton } from "@internals/components";
-import { useFetchMyCourses } from "@internals/hooks";
+import { useFetchMyCourses, useGetInstructorContractStatus } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
-import { getInstructorContractStatus } from "@internals/services";
 
 const MyCourses: React.FC = () => {
     useFetchMyCourses();
-    const { data, loading } = useAppSelector((state) => state.coursesList);
+    useGetInstructorContractStatus();
 
-    useEffect(() => {
-        if (!getInstructorContractStatus()) {
-            openModal({ name: "viewAndAcceptContract" });
-        }
-    }, []);
+    const { data, loading } = useAppSelector((state) => state.coursesList);
 
     const onClick = () => {
         openModal({

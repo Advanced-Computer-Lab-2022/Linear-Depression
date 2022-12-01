@@ -7,3 +7,4 @@ export { default as useFetchCourseReviews } from "./useFetchCourseReviews";
 export { default as useFetchExerciseById } from "./useFetchExerciseById";
 export { default as useFetchEvaluation } from "./useFetchEvaluation";
 export { default as useGetUserType } from "./useGetUserType";
+export { default as useGetInstructorContractStatus } from "./useGetInstructorContractStatus";
