@@ -8,7 +8,8 @@ const ITEM_HEIGHT = 48;
 
 const OptionsButton: React.FC<{
     options: { label: string; onClick: () => void }[];
-}> = ({ options }) => {
+    color?: string;
+}> = ({ options, color }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,7 +28,7 @@ const OptionsButton: React.FC<{
                 aria-expanded={open ? "true" : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
-                style={{ marginLeft: "10px" }}
+                style={{ marginLeft: "10px", color: color }}
             >
                 <MoreVertIcon />
             </IconButton>

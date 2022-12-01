@@ -23,3 +23,4 @@ export { default as validatePasswordResetToken } from "./auth/validatePasswordRe
 export { default as fetchUserType } from "./fetchUserType";
 export { default as submitExercise } from "./submitExercise";
 export { default as fetchEvaluation } from "./fetchEvaluation";
+export { default as editCourse } from "./editCourse";
