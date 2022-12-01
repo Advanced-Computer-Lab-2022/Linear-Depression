@@ -4,6 +4,8 @@ export interface IRating {
     comment?: string;
     rating: number;
     traineeID: mongoose.Types.ObjectId;
+    IndividualTrainee?: mongoose.Types.ObjectId;
+    CorporateTrainee?: mongoose.Types.ObjectId;
 }
 
 export interface IRatingModel extends IRating, Document {}

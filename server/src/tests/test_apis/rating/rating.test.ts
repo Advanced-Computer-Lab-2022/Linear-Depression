@@ -41,7 +41,7 @@ describe("GET /courses/:courseId/ratings", () => {
     });
 
     it("Should skip ratings having no comments", async () => {
-        const { course, rating } = await createCourseWithRatings();
+        const { course } = await createCourseWithRatings();
 
         const rating2 = new Rating(ratingFactory());
         rating2.comment = undefined;
@@ -93,7 +93,7 @@ describe("GET /courses/:courseId/ratings", () => {
     });
 
     it("Should return only this course's ratings", async () => {
-        const { course, rating } = await createCourseWithRatings();
+        const { course } = await createCourseWithRatings();
         const course2 = new Course(courseFactory());
         const rating2 = new Rating(ratingFactory());
         await rating2.save();
@@ -172,9 +172,9 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
 
         const res = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.rating.IndividualTrainee._id).toBe(trainee._id.toString());
-        expect(res.body.rating.IndividualTrainee.firstName).toBe(trainee.firstName);
-        expect(res.body.rating.IndividualTrainee.lastName).toBe(trainee.lastName);
+        expect(res.body.rating.trainee._id).toEqual(trainee._id.toString());
+        expect(res.body.rating.trainee.firstName).toBe(trainee.firstName);
+        expect(res.body.rating.trainee.lastName).toBe(trainee.lastName);
     });
 
     it("Should return CorporateTrainee fields", async () => {
@@ -192,9 +192,9 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
 
         const res = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.rating.CorporateTrainee._id).toBe(trainee._id.toString());
-        expect(res.body.rating.CorporateTrainee.firstName).toBe(trainee.firstName);
-        expect(res.body.rating.CorporateTrainee.lastName).toBe(trainee.lastName);
+        expect(res.body.rating.trainee._id).toBe(trainee._id.toString());
+        expect(res.body.rating.trainee.firstName).toBe(trainee.firstName);
+        expect(res.body.rating.trainee.lastName).toBe(trainee.lastName);
     });
 
     afterEach(async () => {
