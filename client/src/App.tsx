@@ -4,7 +4,7 @@ import { URLModal } from "react-url-modal";
 import { Navbar } from "@internals/components";
 import { CountryContext, UserContext } from "@internals/contexts";
 import { useGetLocalizationData, useGetUserType } from "@internals/hooks";
-import { AddLesson, AddCourse, AddPromotion, AddReview } from "@internals/modals";
+import { AddLesson, AddCourse, AddPromotion, AddReview, ViewAndAcceptContract } from "@internals/modals";
 import {
     Home,
     CorporateTrainee,
@@ -31,7 +31,8 @@ function App() {
                             addLesson: AddLesson,
                             addCourse: AddCourse,
                             addReview: AddReview,
-                            addPromotion: AddPromotion
+                            addPromotion: AddPromotion,
+                            viewAndAcceptContract: ViewAndAcceptContract
                         }}
                     />
                     <Navbar />
@@ -45,7 +46,6 @@ function App() {
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
 
-                        <Route path="login" element={<Login />} />
                         <Route path="me/courses" element={<MyCourses />} />
                         <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />
                         <Route
