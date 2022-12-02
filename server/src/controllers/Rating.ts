@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import Rating from "../models/Rating";
+import Rating, { IRatingModel } from "../models/Rating";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
 import Course, { ICourse } from "../models/Course";
 
-const createRating = async (req: Request, res: Response, next: NextFunction) => {
+const createRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
 
     // if traineeId is provided, make sure it exists in the db in either IndividualTrainee or CorporateTrainee
@@ -53,10 +53,10 @@ const createRating = async (req: Request, res: Response, next: NextFunction) => 
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
-const listRatings = async (req: Request, res: Response, next: NextFunction) => {
+const listRatings = async (req: Request, res: Response) => {
     // filter only ratings that are have comments
     const courseId = req.params.courseId;
-    await Course.findById(courseId).then((course) => {
+    await Course.findById(courseId).then(async (course) => {
         if (!course) {
             return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Course not found"
@@ -64,11 +64,12 @@ const listRatings = async (req: Request, res: Response, next: NextFunction) => {
         }
         const ratings = course?.ratings;
         if (ratings) {
-            Rating.find({ _id: { $in: ratings }, comment: { $exists: true } })
-                .populate("IndividualTrainee")
-                .populate("CorporateTrainee")
+            await Rating.find({ _id: { $in: ratings }, comment: { $exists: true } })
+                .populate("IndividualTrainee", "firstName lastName")
+                .populate("CorporateTrainee", "firstName lastName")
                 .then((ratings) => {
-                    res.status(StatusCodes.OK).json({ ratings });
+                    const ratingsWithTrainee = serializeRatingTrainee(ratings);
+                    res.status(StatusCodes.OK).json({ ratings: ratingsWithTrainee });
                 })
                 .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
         } else {
@@ -77,7 +78,7 @@ const listRatings = async (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-const readRating = async (req: Request, res: Response, next: NextFunction) => {
+const readRating = async (req: Request, res: Response) => {
     const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
     const course = (await Course.findById(courseId).then((course) => {
@@ -88,26 +89,56 @@ const readRating = async (req: Request, res: Response, next: NextFunction) => {
         }
         return course as ICourse;
     })) as ICourse;
-    return Rating.findById(ratingId)
+    return await Rating.findById(ratingId)
         .populate("IndividualTrainee", "firstName lastName")
         .populate("CorporateTrainee", "firstName lastName")
         .then((rating) => {
             if (!rating) {
-                return res.status(StatusCodes.NOT_FOUND).json({
+                res.status(StatusCodes.NOT_FOUND).json({
                     message: "Rating not found"
                 });
+            } else {
+                if (!course.ratings.includes(ratingId)) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: "Rating does not belong to this course"
+                    });
+                }
+                if (rating.IndividualTrainee) {
+                    res.status(StatusCodes.OK).json({
+                        rating: {
+                            _id: rating._id,
+                            trainee: rating.IndividualTrainee,
+                            rating: rating.rating,
+                            comment: rating.comment,
+                            createdAt: rating.createdAt
+                        }
+                    });
+                } else if (rating.CorporateTrainee) {
+                    res.status(StatusCodes.OK).json({
+                        rating: {
+                            _id: rating._id,
+                            trainee: rating.CorporateTrainee,
+                            rating: rating.rating,
+                            comment: rating.comment,
+                            createdAt: rating.createdAt
+                        }
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        rating: {
+                            _id: rating._id,
+                            rating: rating.rating,
+                            comment: rating.comment,
+                            createdAt: rating.createdAt
+                        }
+                    });
+                }
             }
-            if (!course.ratings.includes(ratingId)) {
-                return res.status(StatusCodes.BAD_REQUEST).json({
-                    message: "Rating does not belong to this course"
-                });
-            }
-            return res.status(StatusCodes.OK).json({ rating });
         })
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
-const updateRating = async (req: Request, res: Response, next: NextFunction) => {
+const updateRating = async (req: Request, res: Response) => {
     const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
 
@@ -158,7 +189,7 @@ const updateRating = async (req: Request, res: Response, next: NextFunction) => 
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deleteRating = async (req: Request, res: Response, next: NextFunction) => {
+const deleteRating = async (req: Request, res: Response) => {
     const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
 
@@ -205,3 +236,31 @@ export default {
     updateRating,
     deleteRating
 };
+function serializeRatingTrainee(ratings: IRatingModel[]) {
+    return ratings.map((rating: IRatingModel) => {
+        if (rating.IndividualTrainee) {
+            return {
+                _id: rating._id,
+                trainee: rating.IndividualTrainee,
+                rating: rating.rating,
+                comment: rating.comment,
+                createdAt: rating.createdAt
+            };
+        } else if (rating.CorporateTrainee) {
+            return {
+                _id: rating._id,
+                trainee: rating.CorporateTrainee,
+                rating: rating.rating,
+                comment: rating.comment,
+                createdAt: rating.createdAt
+            };
+        } else {
+            return {
+                _id: rating._id,
+                rating: rating.rating,
+                comment: rating.comment,
+                createdAt: rating.createdAt
+            };
+        }
+    });
+}
