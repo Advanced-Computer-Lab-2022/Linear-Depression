@@ -1,6 +1,9 @@
 export { default as Home } from "./Home";
 export { default as Course } from "./Course";
 export { default as Profile } from "./Profile";
+export { default as InstructorProfile } from "./InstructorProfile";
+export { default as IndividualTraineeProfile } from "./IndividualTraineeProfile";
+export { default as CorporateTraineeProfile } from "./CorporateTraineeProfile";
 export { default as MyCourses } from "./MyCourses";
 export { default as CorporateTrainee } from "./CorporateTrainee";
 export { default as IndividualTrainee } from "./IndividualTrainee";
