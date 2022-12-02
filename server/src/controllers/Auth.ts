@@ -15,6 +15,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
 };
 
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("token");
+    res.status(StatusCodes.OK).json({ message: "Logout successful" });
+};
+
 const getRole = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
     return UserServices.getUserType(token)
@@ -30,10 +35,11 @@ const resetPassword = async (req: Request, res: Response, next: NextFunction) =>
     return UserServices.resetPassword(token, newPassword)
         .then(() => res.status(StatusCodes.OK).json({ success: true }))
         .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
-}
+};
 
 export default {
     login,
+    logout,
     getRole,
     resetPassword
 };
