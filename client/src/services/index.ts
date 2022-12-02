@@ -24,6 +24,7 @@ export { default as login } from "./auth/login";
 export { default as logout } from "./auth/logout";
 
 export { default as fetchUserType } from "./fetchUserType";
+export { default as fetchProfile } from "./fetchProfile";
 export { default as submitExercise } from "./submitExercise";
 export { default as fetchEvaluation } from "./fetchEvaluation";
 export { default as editCourse } from "./editCourse";
