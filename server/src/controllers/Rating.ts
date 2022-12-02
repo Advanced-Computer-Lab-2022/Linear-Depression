@@ -109,7 +109,8 @@ const readRating = async (req: Request, res: Response) => {
                             _id: rating._id,
                             trainee: rating.IndividualTrainee,
                             rating: rating.rating,
-                            comment: rating.comment
+                            comment: rating.comment,
+                            createdAt: rating.createdAt
                         }
                     });
                 } else if (rating.CorporateTrainee) {
@@ -118,7 +119,8 @@ const readRating = async (req: Request, res: Response) => {
                             _id: rating._id,
                             trainee: rating.CorporateTrainee,
                             rating: rating.rating,
-                            comment: rating.comment
+                            comment: rating.comment,
+                            createdAt: rating.createdAt
                         }
                     });
                 } else {
@@ -126,7 +128,8 @@ const readRating = async (req: Request, res: Response) => {
                         rating: {
                             _id: rating._id,
                             rating: rating.rating,
-                            comment: rating.comment
+                            comment: rating.comment,
+                            createdAt: rating.createdAt
                         }
                     });
                 }
@@ -240,20 +243,23 @@ function serializeRatingTrainee(ratings: IRatingModel[]) {
                 _id: rating._id,
                 trainee: rating.IndividualTrainee,
                 rating: rating.rating,
-                comment: rating.comment
+                comment: rating.comment,
+                createdAt: rating.createdAt
             };
         } else if (rating.CorporateTrainee) {
             return {
                 _id: rating._id,
                 trainee: rating.CorporateTrainee,
                 rating: rating.rating,
-                comment: rating.comment
+                comment: rating.comment,
+                createdAt: rating.createdAt
             };
         } else {
             return {
                 _id: rating._id,
                 rating: rating.rating,
-                comment: rating.comment
+                comment: rating.comment,
+                createdAt: rating.createdAt
             };
         }
     });
