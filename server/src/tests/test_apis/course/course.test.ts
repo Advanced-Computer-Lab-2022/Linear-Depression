@@ -218,7 +218,6 @@ describe("Post /courses/:courseId/lessons", () => {
         course.lessons = [];
         course.totalHours = 0;
         await course.save();
-        console.log(`course._id`, course._id);
 
         const lesson = lessonFactory();
         const res = await request.post(`/courses/${course._id}/lessons`).send(lesson);
