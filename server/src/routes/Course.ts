@@ -15,6 +15,7 @@ router.put("/:courseId", controller.updateCourse);
 router.delete("/:courseId", controller.deleteCourse);
 
 router.post("/:courseId/lessons", lessonController.createLesson);
+router.get("/:courseId/lessons/:lessonId", lessonController.readLesson);
 router.put("/:courseId/lessons/:lessonId", lessonController.updateLesson);
 
 router.get("/:courseId/ratings", ratingController.listRatings);
