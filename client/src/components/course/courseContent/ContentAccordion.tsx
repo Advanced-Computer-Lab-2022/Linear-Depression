@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useParams } from "react-router-dom";
+import { openModal } from "react-url-modal";
 
 import OptionsButton from "../../OptionsButton";
 import "./ContentAccordion.css";
 import ContentItem from "./ContentItem";
+import { UserContext } from "@internals/contexts";
 import { AddExercise } from "@internals/modals";
-import { Lesson as ILessonProps } from "@internals/types";
+import { Lesson as ILessonProps, User } from "@internals/types";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;
 }> = ({ lesson: { _id, title, totalHours, video, exercises } }) => {
+    const { userType } = useContext(UserContext);
+
     const { courseId } = useParams();
     const lessonId = _id;
 
@@ -29,7 +33,18 @@ const ContentAccordion: React.FC<{
         },
         {
             label: "Edit",
-            onClick: () => console.log("Edit")
+            onClick: () => {
+                openModal({
+                    name: "editLesson",
+                    params: {
+                        courseId,
+                        lessonId,
+                        lessonTitle: title,
+                        lessonTotalHours: totalHours,
+                        lessonVideo: video
+                    }
+                });
+            }
         },
         {
             label: "Delete",
@@ -50,7 +65,7 @@ const ContentAccordion: React.FC<{
                     <MdKeyboardArrowDown className="accordion-icon" />
                     <div className="accordion-title">{title}</div>
                     <div className="accordion-subtitle">{`${totalHours} hours`}</div>
-                    <OptionsButton options={options} />
+                    {userType === User.INSTRUCTOR && <OptionsButton options={options} />}
                 </div>
             </h2>
             <div
@@ -62,7 +77,7 @@ const ContentAccordion: React.FC<{
                 <div className="accordion-body">
                     {video && (
                         <ul>
-                            <ContentItem title={video.description} link={video.videoLink} />
+                            <ContentItem title={video.title} link={video.videoLink} />
                         </ul>
                     )}
 
