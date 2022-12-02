@@ -8,7 +8,8 @@ import {
     SolvedQuestion,
     SubmitButton,
     Title,
-    TotalGrade
+    TotalGrade,
+    Navbar
 } from "@internals/components";
 import { useFetchExerciseById, useFetchEvaluation } from "@internals/hooks";
 import { submitExercise } from "@internals/services";
@@ -42,12 +43,18 @@ const TraineeExercise = () => {
     };
 
     if (!data) {
-        return <div>Loading...</div>;
+        return (
+            <>
+                <Navbar />
+                <div>Loading...</div>
+            </>
+        );
     }
 
     if (evaluation.data) {
         return (
             <div>
+                <Navbar />
                 <Header>
                     <Title>{data.title}</Title>
                     <TotalGrade totalGrade={evaluation.data.totalGrade} />
@@ -64,6 +71,7 @@ const TraineeExercise = () => {
     } else {
         return (
             <div>
+                <Navbar />
                 <Header>
                     <Title>{data.title}</Title>
                     <SubmitButton variant="contained" color="primary" onClick={handleSubmit}>

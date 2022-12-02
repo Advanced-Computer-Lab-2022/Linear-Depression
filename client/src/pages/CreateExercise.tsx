@@ -10,7 +10,8 @@ import {
     QuestionTitle,
     Title,
     SubmitButton,
-    Header
+    Header,
+    Navbar
 } from "@internals/components";
 import { AddQuestion } from "@internals/modals";
 import { addExercise } from "@internals/services";
@@ -60,6 +61,7 @@ const CreateExercise = () => {
 
     return (
         <div>
+            <Navbar />
             <Header>
                 <Title>{title}</Title>
                 <SubmitButton variant="contained" color="primary" onClick={handleSubmit}>

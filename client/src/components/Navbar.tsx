@@ -1,14 +1,20 @@
 import { useContext, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Flag from "react-world-flags";
 
 import countries from "../media/country-currency.json";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
 import { config } from "@internals/config";
-import { CountryContext } from "@internals/contexts";
+import { CountryContext, UserContext } from "@internals/contexts";
+import { logout } from "@internals/services";
+import { User } from "@internals/types";
 
 const Navbar = () => {
+    const { userType, setUserType } = useContext(UserContext);
+
+    const navigate = useNavigate();
+
     const [open, setOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
@@ -104,8 +110,28 @@ const Navbar = () => {
                                 ></img>
                             </a>
                         </li>
-                        <button className="navbar-item login-button">Log In</button>
-                        <button className="navbar-item signup-button">Sign Up</button>
+                        {userType === User.GUEST && (
+                            <button
+                                className="navbar-item login-button"
+                                onClick={() => navigate("/auth/login", { replace: true })}
+                            >
+                                Log In
+                            </button>
+                        )}
+                        {userType !== User.GUEST && (
+                            <button
+                                className="navbar-item logout-button"
+                                onClick={() => {
+                                    logout().then(() => {
+                                        setUserType(User.GUEST);
+                                        navigate("/", { replace: true });
+                                    });
+                                }}
+                            >
+                                Log Out
+                            </button>
+                        )}
+                        {userType === User.GUEST && <button className="navbar-item signup-button">Sign Up</button>}
                         <button className="navbar-item language-button" onClick={handleClickOpen}>
                             <Flag
                                 code={country}
