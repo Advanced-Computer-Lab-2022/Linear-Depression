@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { MdPlayCircleFilled } from "react-icons/md";
 import { MdInsertDriveFile } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+
+import { UserContext } from "@internals/contexts";
+import { User } from "@internals/types";
 
 const Item = styled.li`
     height: 35px;
@@ -47,6 +50,7 @@ const ContentItem: React.FC<{
     lessonId?: string;
 }> = ({ title, link, exerciseId, lessonId }) => {
     const { courseId } = useParams();
+    const { userType } = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -55,15 +59,17 @@ const ContentItem: React.FC<{
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
             {/*link && <Preview href={link}>Preview</Preview>*/}
-            {exerciseId && lessonId && (
-                <OpenExercise
-                    onClick={() => {
-                        navigate(`/courses/${courseId}/lessons/${lessonId}/exercises/${exerciseId}`);
-                    }}
-                >
-                    Solve
-                </OpenExercise>
-            )}
+            {exerciseId &&
+                lessonId &&
+                (userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
+                    <OpenExercise
+                        onClick={() => {
+                            navigate(`/courses/${courseId}/lessons/${lessonId}/exercises/${exerciseId}`);
+                        }}
+                    >
+                        Solve
+                    </OpenExercise>
+                )}
         </Item>
     );
 };

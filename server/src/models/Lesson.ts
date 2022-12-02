@@ -6,6 +6,7 @@ export interface ILesson {
     exercises: Array<mongoose.Types.ObjectId>;
     totalHours: number;
     video?: {
+        title: string;
         videoLink: string;
         description: string;
     };
@@ -18,6 +19,7 @@ const lessonSchema = new mongoose.Schema({
     exercises: [{ type: mongoose.Types.ObjectId, ref: "Exercise", default: [] }],
     totalHours: { type: Number, required: true },
     video: {
+        title: { type: String },
         videoLink: {
             type: String,
             validate: {
