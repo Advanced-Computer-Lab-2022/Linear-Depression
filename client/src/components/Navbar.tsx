@@ -1,3 +1,4 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useContext, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Flag from "react-world-flags";
@@ -101,15 +102,6 @@ const Navbar = () => {
                                 My Courses
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <a className="navbar-brand" href="/">
-                                <img
-                                    src="https://img.icons8.com/material-outlined/344/shopping-cart--v1.png"
-                                    alt=""
-                                    height="24"
-                                ></img>
-                            </a>
-                        </li>
                         {userType === User.GUEST && (
                             <button
                                 className="navbar-item login-button"
@@ -144,6 +136,11 @@ const Navbar = () => {
                                 }
                             />
                         </button>
+                        {userType !== User.GUEST && (
+                            <button className="navbar-item language-button" onClick={() => navigate("/me/profile")}>
+                                <AccountCircleIcon />
+                            </button>
+                        )}
                     </ul>
                 </div>
             </div>
