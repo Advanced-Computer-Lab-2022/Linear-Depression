@@ -3,26 +3,13 @@ import React from "react";
 import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
+import { Avatar } from "@internals/components";
 import { Instructor } from "@internals/types";
 
 const Container = styled.div`
-    margin: 0 5px;
+    margin: 0 30px;
     flex: 1;
     flex-direction: row;
-`;
-
-const Avatar = styled.div`
-    height: 48px;
-    width: 48px;
-    border-radius: 50%;
-    background-color: white;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
-    margin-right: 24px;
 `;
 
 const HorizontalContainer = styled.div`
@@ -85,14 +72,11 @@ const CustomEmailIcon = styled(EmailIcon)`
 const ViewProfile: React.FC<{
     instructor: Instructor;
 }> = ({ instructor }) => {
-    const getInitials = (name: string) => {
-        const names = name.split(" ");
-        return names[0].charAt(0) + names[1].charAt(0);
-    };
-
     return (
         <Header>
-            <Avatar>{getInitials(`${instructor.firstName} ${instructor.lastName}`)}</Avatar>
+            <div>
+                <Avatar name={`${instructor.firstName} ${instructor.lastName}`} inverted={true} />
+            </div>
             <Container>
                 <div>
                     <Name>{`${instructor.firstName} ${instructor.lastName}`}</Name>
