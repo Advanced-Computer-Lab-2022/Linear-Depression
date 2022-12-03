@@ -312,6 +312,33 @@ describe("POST /courses/:courseId/ratings", () => {
         expect(res.body.rating.traineeID).toBe(ratingData2.traineeID.toString());
     });
 
+    it("should return 200 if the rating exists for the trainee but not the course", async () => {
+        const traineeData = individualTraineeFactory();
+        const trainee = new IndividualTrainee(traineeData);
+        await trainee.save();
+
+        const courseData = courseFactory();
+        const course = new Course(courseData);
+        await course.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        const rating = new Rating(ratingData);
+        await rating.save();
+        course.ratings.push(rating._id);
+        await course.save();
+
+        const courseData2 = courseFactory();
+        const course2 = new Course(courseData2);
+        await course2.save();
+
+        const res = await request.post(`/courses/${course2._id}/ratings`).send(ratingData);
+        expect(res.status).toBe(StatusCodes.CREATED);
+        expect(res.body.rating._id).toBeDefined();
+        expect(res.body.rating.comment).toBe(ratingData.comment);
+        expect(res.body.rating.rating).toBe(ratingData.rating);
+        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+    });
     afterEach(async () => {
         await disconnectDBForTesting();
     });
