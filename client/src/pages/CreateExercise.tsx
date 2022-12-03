@@ -60,7 +60,7 @@ const CreateExercise = () => {
     };
 
     return (
-        <div>
+        <>
             <Navbar />
             <Header>
                 <Title>{title}</Title>
@@ -84,7 +84,7 @@ const CreateExercise = () => {
                 <AddIcon />
             </FloatingButton>
             <AddQuestion open={openQuestionModal} onClose={handleCloseQuestionModal} />
-        </div>
+        </>
     );
 };
 

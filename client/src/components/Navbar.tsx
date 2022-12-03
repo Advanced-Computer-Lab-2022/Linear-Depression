@@ -102,23 +102,30 @@ const Navbar = () => {
                                 My Courses
                             </Link>
                         </li>
-{userType === User.GUEST ? (
-<><button className="navbar-item login-button"
-onClick={() => navigate("/auth/login", { replace: true })}>
-    Log In
-</button>
-<button className="navbar-item signup-button">Sign Up</button>
-</>
-) : (
-<button className="navbar-item logout-button"
-onClick={() => { logout().then(() => {
-setUserType(User.GUEST);
-navigate("/", { replace: true });
-});}}>
- Log Out
-</button>
-)}
-            
+                        {userType === User.GUEST ? (
+                            <>
+                                <button
+                                    className="navbar-item login-button"
+                                    onClick={() => navigate("/auth/login", { replace: true })}
+                                >
+                                    Log In
+                                </button>
+                                <button className="navbar-item signup-button">Sign Up</button>
+                            </>
+                        ) : (
+                            <button
+                                className="navbar-item logout-button"
+                                onClick={() => {
+                                    logout().then(() => {
+                                        setUserType(User.GUEST);
+                                        navigate("/", { replace: true });
+                                    });
+                                }}
+                            >
+                                Log Out
+                            </button>
+                        )}
+
                         <button className="navbar-item language-button" onClick={handleClickOpen}>
                             <Flag
                                 code={country}

@@ -19,13 +19,13 @@ const MyCourses: React.FC = () => {
     };
 
     return (
-        <div>
+        <>
             <Navbar />
             {!loading && <CoursesListWithFilters courses={data} addCourse={true} />}
             <FloatingButton color="primary" aria-label="add" onClick={onClick}>
                 <AddIcon />
             </FloatingButton>
-        </div>
+        </>
     );
 };
 

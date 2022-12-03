@@ -53,7 +53,7 @@ const TraineeExercise = () => {
 
     if (evaluation.data) {
         return (
-            <div>
+            <>
                 <Navbar />
                 <Header>
                     <Title>{data.title}</Title>
@@ -66,11 +66,11 @@ const TraineeExercise = () => {
                         </div>
                     </QuestionCard>
                 ))}
-            </div>
+            </>
         );
     } else {
         return (
-            <div>
+            <>
                 <Navbar />
                 <Header>
                     <Title>{data.title}</Title>
@@ -90,7 +90,7 @@ const TraineeExercise = () => {
                         </div>
                     </QuestionCard>
                 ))}
-            </div>
+            </>
         );
     }
 };
