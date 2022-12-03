@@ -1,5 +1,4 @@
-import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
-import Button from "@mui/material/Button";
+import { Dialog, DialogContent, DialogContentText, DialogActions, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
