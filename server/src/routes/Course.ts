@@ -1,6 +1,6 @@
 import express from "express";
 import controller from "../controllers/Course";
-import ratingController from "../controllers/Rating";
+import ratingController from "../controllers/CourseRating";
 import exerciseController from "../controllers/Exercise";
 import lessonController from "../controllers/Lesson";
 import authenticated from "../middleware/authenticated";
