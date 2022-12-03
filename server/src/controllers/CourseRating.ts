@@ -30,16 +30,14 @@ const createRating = async (req: Request, res: Response) => {
         });
     }
     // if there's existing rating for this trainee and course, return error
-    const existingRatings = (await Course.find({ courseId }).populate({
+    const courseHavingRatings = (await Course.findById(courseId).populate({
         path: "ratings",
         match: { traineeID: req.body.traineeID }
-    })) as ICourse[];
-    for (const course of existingRatings) {
-        if (course.ratings.length > 0) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: "Rating already exists for this trainee and course"
-            });
-        }
+    })) as ICourse;
+    if (courseHavingRatings.ratings.length > 0) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Rating already exists for this trainee and course"
+        });
     }
     return new Rating(req.body)
         .save()
