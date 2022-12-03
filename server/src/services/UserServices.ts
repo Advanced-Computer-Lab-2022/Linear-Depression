@@ -52,4 +52,19 @@ export default class UserServices {
             throw new Error("Failed to reset password");
         }
     }
+
+    static async changePassword(userId: string, oldPassword: string, newPassword: string) {
+        try {
+            const user = await User.findById(userId);
+            if (!user || !user.isCorrectPassword(oldPassword)) {
+                throw new Error();
+            }
+
+            user.passwordHash = newPassword;
+
+            await user.save();
+        } catch (error) {
+            throw new Error("Failed to change password");
+        }
+    }
 }

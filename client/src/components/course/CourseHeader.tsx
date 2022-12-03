@@ -1,12 +1,13 @@
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React, { useContext } from "react";
+import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
+import OptionsButton from "../OptionsButton";
 import CourseActions from "./courseHeader/CourseActions";
 import CourseInfo from "./courseHeader/CourseInfo";
-import { useAppSelector } from "@internals/redux";
-import OptionsButton from "../OptionsButton";
-import { openModal } from "react-url-modal";
 import { UserContext } from "@internals/contexts";
+import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
 const Header = styled.div`
@@ -59,7 +60,7 @@ const CourseHeader: React.FC = () => {
             />
             <CourseActions price={price} currency={currency} promotion={activePromotion} courseId={_id} />
 
-            {userType == User.INSTRUCTOR && <OptionsButton options={options} color="white" />}
+            {userType == User.INSTRUCTOR && <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />}
         </Header>
     );
 };

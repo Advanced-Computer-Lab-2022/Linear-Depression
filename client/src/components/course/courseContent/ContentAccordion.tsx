@@ -1,3 +1,4 @@
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React, { useContext, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useParams } from "react-router-dom";
@@ -65,7 +66,7 @@ const ContentAccordion: React.FC<{
                     <MdKeyboardArrowDown className="accordion-icon" />
                     <div className="accordion-title">{title}</div>
                     <div className="accordion-subtitle">{`${totalHours} hours`}</div>
-                    {userType === User.INSTRUCTOR && <OptionsButton options={options} />}
+                    {userType === User.INSTRUCTOR && <OptionsButton options={options} icon={<MoreVertIcon />} />}
                 </div>
             </h2>
             <div
