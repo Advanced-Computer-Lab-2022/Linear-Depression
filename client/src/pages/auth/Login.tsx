@@ -1,9 +1,10 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typography } from "@mui/material";
-import axios from "axios";
-import * as React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { config } from "@internals/config";
+import { UserContext } from "@internals/contexts";
+import { login } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -14,25 +15,21 @@ const theme = createTheme({
 });
 
 const SignIn: React.FC = () => {
+    const navigate = useNavigate();
+
+    const { setUserType } = useContext(UserContext);
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const API_URL = `${config.API_URL}/auth/login`;
 
-        axios
-            .post(
-                API_URL,
-                {
-                    email: data.get("email"),
-                    password: data.get("password")
-                },
-                { withCredentials: true }
-            )
-            .then((res) => {
-                console.log(res);
+        login(data.get("email") as string, data.get("password") as string)
+            .then((data) => {
+                setUserType(data.type);
+                navigate("/");
             })
             .catch((err) => {
-                console.log(err);
+                alert(err.message);
             });
     };
 

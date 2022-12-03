@@ -6,6 +6,7 @@ const options = { discriminatorKey: "kind" };
 export interface IInstructor extends IUser {
     ratings: Array<mongoose.Types.ObjectId>;
     averageRating: number;
+    biography: string;
 }
 
 export interface IInstructorModel extends IInstructor, Document {}
@@ -20,7 +21,8 @@ class InstructorSchema extends UserSchema {
                 min: 0,
                 max: 5,
                 default: 0
-            }
+            },
+            biography: { type: String, required: false, trim: true }
         });
         this.pre("save", async function (next) {
             const instructor = this as IInstructorModel;

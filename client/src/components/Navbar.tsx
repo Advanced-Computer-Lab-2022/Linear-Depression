@@ -1,14 +1,21 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useContext, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Flag from "react-world-flags";
 
 import countries from "../media/country-currency.json";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
 import { config } from "@internals/config";
-import { CountryContext } from "@internals/contexts";
+import { CountryContext, UserContext } from "@internals/contexts";
+import { logout } from "@internals/services";
+import { User } from "@internals/types";
 
 const Navbar = () => {
+    const { userType, setUserType } = useContext(UserContext);
+
+    const navigate = useNavigate();
+
     const [open, setOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
@@ -95,17 +102,30 @@ const Navbar = () => {
                                 My Courses
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <a className="navbar-brand" href="/">
-                                <img
-                                    src="https://img.icons8.com/material-outlined/344/shopping-cart--v1.png"
-                                    alt=""
-                                    height="24"
-                                ></img>
-                            </a>
-                        </li>
-                        <button className="navbar-item login-button">Log In</button>
-                        <button className="navbar-item signup-button">Sign Up</button>
+                        {userType === User.GUEST ? (
+                            <>
+                                <button
+                                    className="navbar-item login-button"
+                                    onClick={() => navigate("/auth/login", { replace: true })}
+                                >
+                                    Log In
+                                </button>
+                                <button className="navbar-item signup-button">Sign Up</button>
+                            </>
+                        ) : (
+                            <button
+                                className="navbar-item logout-button"
+                                onClick={() => {
+                                    logout().then(() => {
+                                        setUserType(User.GUEST);
+                                        navigate("/", { replace: true });
+                                    });
+                                }}
+                            >
+                                Log Out
+                            </button>
+                        )}
+
                         <button className="navbar-item language-button" onClick={handleClickOpen}>
                             <Flag
                                 code={country}
@@ -118,6 +138,11 @@ const Navbar = () => {
                                 }
                             />
                         </button>
+                        {userType !== User.GUEST && (
+                            <button className="navbar-item language-button" onClick={() => navigate("/me/profile")}>
+                                <AccountCircleIcon />
+                            </button>
+                        )}
                     </ul>
                 </div>
             </div>

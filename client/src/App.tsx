@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
-import { Navbar } from "@internals/components";
 import { CountryContext, UserContext } from "@internals/contexts";
 import { useGetLocalizationData, useGetUserType } from "@internals/hooks";
 import {
@@ -11,7 +10,8 @@ import {
     AddReview,
     EditCourse,
     ViewAndAcceptContract,
-    EditLesson
+    EditLesson,
+    EditProfile
 } from "@internals/modals";
 import {
     Home,
@@ -23,7 +23,8 @@ import {
     CreateExercise,
     Exercise,
     PasswordReset,
-    ForgotPassword
+    ForgotPassword,
+    Profile
 } from "@internals/pages";
 
 function App() {
@@ -42,12 +43,13 @@ function App() {
                             addPromotion: AddPromotion,
                             editCourse: EditCourse,
                             editLesson: EditLesson,
+                            editProfile: EditProfile,
                             viewAndAcceptContract: ViewAndAcceptContract
                         }}
                     />
-                    <Navbar />
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/me/profile" element={<Profile />} />
                         <Route path="courses/:courseId" element={<Course />} />
                         <Route path="corporate-trainee" element={<CorporateTrainee />} />
                         <Route path="individual-trainee" element={<IndividualTrainee />} />
