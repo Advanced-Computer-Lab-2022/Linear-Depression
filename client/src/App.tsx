@@ -10,7 +10,8 @@ import {
     AddReview,
     EditCourse,
     ViewAndAcceptContract,
-    EditLesson
+    EditLesson,
+    EditProfile
 } from "@internals/modals";
 import {
     Home,
@@ -42,6 +43,7 @@ function App() {
                             addPromotion: AddPromotion,
                             editCourse: EditCourse,
                             editLesson: EditLesson,
+                            editProfile: EditProfile,
                             viewAndAcceptContract: ViewAndAcceptContract
                         }}
                     />
