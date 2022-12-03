@@ -101,36 +101,8 @@ const readRating = async (req: Request, res: Response) => {
                         message: "Rating does not belong to this course"
                     });
                 }
-                if (rating.IndividualTrainee) {
-                    res.status(StatusCodes.OK).json({
-                        rating: {
-                            _id: rating._id,
-                            trainee: rating.IndividualTrainee,
-                            rating: rating.rating,
-                            comment: rating.comment,
-                            createdAt: rating.createdAt
-                        }
-                    });
-                } else if (rating.CorporateTrainee) {
-                    res.status(StatusCodes.OK).json({
-                        rating: {
-                            _id: rating._id,
-                            trainee: rating.CorporateTrainee,
-                            rating: rating.rating,
-                            comment: rating.comment,
-                            createdAt: rating.createdAt
-                        }
-                    });
-                } else {
-                    res.status(StatusCodes.OK).json({
-                        rating: {
-                            _id: rating._id,
-                            rating: rating.rating,
-                            comment: rating.comment,
-                            createdAt: rating.createdAt
-                        }
-                    });
-                }
+                const ratingWithTrainee = serializeRating(rating);
+                res.status(StatusCodes.OK).json({ rating: ratingWithTrainee });
             }
         })
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
@@ -227,6 +199,39 @@ const deleteRating = async (req: Request, res: Response) => {
     }
 };
 
+function serializeRatingTrainee(ratings: IRatingModel[]) {
+    return ratings.map((rating) => {
+        serializeRating(rating);
+    });
+}
+
+export const serializeRating = (rating: IRatingModel) => {
+    if (rating.IndividualTrainee) {
+        return {
+            _id: rating._id,
+            trainee: rating.IndividualTrainee,
+            rating: rating.rating,
+            comment: rating.comment,
+            createdAt: rating.createdAt
+        };
+    } else if (rating.CorporateTrainee) {
+        return {
+            _id: rating._id,
+            trainee: rating.CorporateTrainee,
+            rating: rating.rating,
+            comment: rating.comment,
+            createdAt: rating.createdAt
+        };
+    } else {
+        return {
+            _id: rating._id,
+            rating: rating.rating,
+            comment: rating.comment,
+            createdAt: rating.createdAt
+        };
+    }
+};
+
 export default {
     createRating,
     listRatings,
@@ -234,31 +239,3 @@ export default {
     updateRating,
     deleteRating
 };
-function serializeRatingTrainee(ratings: IRatingModel[]) {
-    return ratings.map((rating: IRatingModel) => {
-        if (rating.IndividualTrainee) {
-            return {
-                _id: rating._id,
-                trainee: rating.IndividualTrainee,
-                rating: rating.rating,
-                comment: rating.comment,
-                createdAt: rating.createdAt
-            };
-        } else if (rating.CorporateTrainee) {
-            return {
-                _id: rating._id,
-                trainee: rating.CorporateTrainee,
-                rating: rating.rating,
-                comment: rating.comment,
-                createdAt: rating.createdAt
-            };
-        } else {
-            return {
-                _id: rating._id,
-                rating: rating.rating,
-                comment: rating.comment,
-                createdAt: rating.createdAt
-            };
-        }
-    });
-}
