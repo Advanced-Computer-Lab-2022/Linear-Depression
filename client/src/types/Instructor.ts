@@ -4,7 +4,8 @@ interface Instructor {
     lastName: string;
     userName: string;
     email: string;
-    biography: string;
+    biography?: string;
+    averageRating: number;
 }
 
 export default Instructor;
