@@ -12,6 +12,8 @@ const request = supertest(app);
 import StatusCodes from "http-status-codes";
 import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
+import IndividualTrainee from "../../../models/IndividualTrainee";
+import { individualTraineeFactory } from "../../test_models/trainee/factory";
 
 describe("GET /me/ratings", () => {
     beforeAll(async () => {
@@ -82,6 +84,9 @@ describe("POST /instructors/:instructorId/ratings", () => {
         const { token, instructor } = await getInstructorToken();
 
         const ratingData = ratingFactory();
+        const trainee = new IndividualTrainee(individualTraineeFactory());
+        await trainee.save();
+        ratingData.traineeID = trainee._id;
         const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating.comment).toBe(ratingData.comment);
@@ -104,6 +109,16 @@ describe("POST /instructors/:instructorId/ratings", () => {
 
         const ratingData = ratingFactory();
         ratingData.rating = 6;
+        const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
+        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+    });
+
+    it("Should return 400 if the trainee does not exist", async () => {
+        const { token, instructor } = await getInstructorToken();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = new mongoose.Types.ObjectId();
+
         const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
