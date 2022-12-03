@@ -37,9 +37,18 @@ const resetPassword = async (req: Request, res: Response, next: NextFunction) =>
         .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
 };
 
+const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, oldPassword, newPassword } = req.body;
+
+    return UserServices.changePassword(userId, oldPassword, newPassword)
+        .then(() => res.status(StatusCodes.OK).json({ success: true }))
+        .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
+};
+
 export default {
     login,
     logout,
     getRole,
-    resetPassword
+    resetPassword,
+    changePassword
 };
