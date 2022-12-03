@@ -18,7 +18,6 @@ import { logout } from "@internals/services";
 import { User } from "@internals/types";
 
 const getUserName = (userType: User, data: any) => {
-    console.log(data);
     if (userType === User.INSTRUCTOR) {
         return `${data.instructor.firstName} ${data.instructor.lastName}`;
     } else if (userType === User.INDIVIDUAL_TRAINEE) {
