@@ -5,6 +5,7 @@ import PasswordResetTokenController from "../controllers/PasswordResetToken";
 const router = express.Router();
 
 router.post("/login", AuthController.login);
+router.post("/logout", AuthController.logout);
 router.get("/role", AuthController.getRole);
 router.post("/forgot", PasswordResetTokenController.sendPasswordResetToken);
 router.get("/reset", PasswordResetTokenController.validatePasswordResetToken);

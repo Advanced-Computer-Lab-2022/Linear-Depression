@@ -1,18 +1,21 @@
 import AddIcon from "@mui/icons-material/Add";
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CourseContent, CourseHeader, CourseReviews, FloatingButton } from "@internals/components";
+import { UserContext } from "@internals/contexts";
 import { useFetchCourseById } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
+import { User } from "@internals/types";
 
 const Container = styled.div`
     margin: 0 30% 0 100px;
 `;
 
 const InstructorCourse: React.FC = () => {
+    const { userType } = useContext(UserContext);
     const { courseId } = useParams();
     useFetchCourseById(courseId);
     const { data } = useAppSelector((state) => state.course);
@@ -38,9 +41,11 @@ const InstructorCourse: React.FC = () => {
                 <CourseContent lessons={data.lessons} />
                 <CourseReviews />
             </Container>
-            <FloatingButton onClick={onClick}>
-                <AddIcon />
-            </FloatingButton>
+            {userType === User.INSTRUCTOR && (
+                <FloatingButton onClick={onClick}>
+                    <AddIcon />
+                </FloatingButton>
+            )}
         </>
     );
 };

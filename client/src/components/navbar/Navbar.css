@@ -55,6 +55,18 @@
     font-size: 14px;
 }
 
+.logout-button {
+    background-color: #f5f5f5;
+    border: 1px solid black;
+    width: 90px;
+    height: 40px;
+    padding: 10px;
+    color: #1c1d1f;
+    font-weight: 700;
+    margin-right: 5px;
+    font-size: 14px;
+}
+
 .signup-button {
     background-color: black;
     border: 1px solid black;
