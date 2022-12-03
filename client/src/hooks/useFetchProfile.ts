@@ -1,38 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { fetchProfile } from "@internals/services";
-import { Instructor } from "@internals/types";
+import { getProfile, useAppDispatch } from "@internals/redux";
 
 const useFetchProfile = () => {
-    const [profile, setProfile] = useState({
-        data: null as {
-            instructor?: Instructor;
-            individualTrainee?: object;
-            corporateTrainee?: object;
-        } | null,
-        loading: true,
-        error: null
-    });
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        fetchProfile()
-            .then((data) => {
-                setProfile({
-                    data,
-                    loading: false,
-                    error: null
-                });
-            })
-            .catch((error) => {
-                setProfile({
-                    data: null,
-                    loading: false,
-                    error
-                });
-            });
+        dispatch(getProfile());
     }, []);
-
-    return { profile, setProfile };
 };
 
 export default useFetchProfile;

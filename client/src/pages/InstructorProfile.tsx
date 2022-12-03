@@ -1,27 +1,32 @@
-import { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import { openModal } from "react-url-modal";
 
-import EditProfile from "./instructorProfile/EditProfile";
 import ViewProfile from "./instructorProfile/ViewProfile";
+import { FloatingButton } from "@internals/components";
 import { Instructor } from "@internals/types";
 
 const InstructorProfile: React.FC<{
     instructor: Instructor;
 }> = ({ instructor }) => {
-    const [edit, setEdit] = useState(false);
+    const onClick = () => {
+        openModal({
+            name: "editProfile",
+            params: {
+                instructorFirstName: instructor.firstName,
+                instructorLastName: instructor.lastName,
+                instructorEmail: instructor.email,
+                instructorBiography: instructor.biography
+            }
+        });
+    };
 
     return (
         <>
-            {!edit && <ViewProfile instructor={instructor} />}
-            {edit && <EditProfile instructor={instructor} />}
-            {!edit && (
-                <button
-                    onClick={() => {
-                        setEdit(true);
-                    }}
-                >
-                    Update Profile
-                </button>
-            )}
+            <ViewProfile instructor={instructor} />
+
+            <FloatingButton color="primary" aria-label="add" onClick={onClick}>
+                <EditIcon />
+            </FloatingButton>
         </>
     );
 };
