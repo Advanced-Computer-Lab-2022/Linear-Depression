@@ -10,6 +10,12 @@
     z-index: 3;
 }
 
+.buttons-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .search-container {
     height: 45px;
     width: 400px;
