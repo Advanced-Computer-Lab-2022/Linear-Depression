@@ -9,7 +9,6 @@ export interface IUser {
     email: string;
     userName: string;
     passwordHash: string;
-    biography: string;
     __t: string;
 
     isCorrectPassword(passwordHash: string): boolean;
@@ -31,8 +30,7 @@ export class UserSchema extends Schema {
                 lowercase: true
             },
             userName: { type: String, required: true, unique: true, trim: true, lowercase: true },
-            passwordHash: { type: String, required: true },
-            biography: { type: String, required: false, trim: true }
+            passwordHash: { type: String, required: true }
         });
     }
 }
