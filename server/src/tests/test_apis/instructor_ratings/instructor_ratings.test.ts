@@ -81,12 +81,13 @@ describe("POST /instructors/:instructorId/ratings", () => {
     }, TIME_OUT);
 
     it("Should create a rating successfully", async () => {
-        const { token, instructor } = await getInstructorToken();
+        const instructor = new Instructor(instructorFactory());
+        await instructor.save();
 
         const ratingData = ratingFactory();
-        const trainee = new IndividualTrainee(individualTraineeFactory());
+        ratingData.traineeID = undefined!;
+        const { trainee, token } = await getTraineeToken();
         await trainee.save();
-        ratingData.traineeID = trainee._id;
         const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating.comment).toBe(ratingData.comment);
@@ -140,4 +141,18 @@ async function getInstructorToken() {
     });
     const token = res.header["set-cookie"][0];
     return { token, instructor };
+}
+
+async function getTraineeToken() {
+    const trainee = new IndividualTrainee(individualTraineeFactory());
+    const password = faker.internet.password();
+    trainee.passwordHash = password;
+    await trainee.save();
+
+    const res = await request.post("/auth/login").send({
+        email: trainee.email,
+        password: password
+    });
+    const token = res.header["set-cookie"][0];
+    return { token, trainee };
 }
