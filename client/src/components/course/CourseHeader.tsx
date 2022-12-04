@@ -50,7 +50,6 @@ const CourseHeader: React.FC = () => {
     if (loading) {
         return <div>Loading...</div>;
     }
-
     return (
         <Header>
             <CourseInfo

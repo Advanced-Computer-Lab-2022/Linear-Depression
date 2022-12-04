@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getVideoId } from "@internals/services";
+import { getVideoEmbedUrl } from "@internals/services";
 
 const Image = styled.img`
     height: 191px;
@@ -31,12 +31,12 @@ const Iframe = styled.iframe<{ height: number }>`
 
 const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl, height }) => {
     try {
-        const videoId = getVideoId(videoUrl);
+        const embedURL = getVideoEmbedUrl(videoUrl);
         return (
             <Container>
                 <Iframe
                     height={height}
-                    src={`https://www.youtube.com/embed/${videoId}`}
+                    src={embedURL}
                     frameBorder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
