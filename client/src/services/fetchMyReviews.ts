@@ -3,8 +3,8 @@ import axios from "axios";
 import { config } from "@internals/config";
 import { Review } from "@internals/types";
 
-const fetchCourseReviews = (courseId: string): Promise<Review[]> => {
-    const REVIEWS_FETCH_URL = `${config.API_URL}/courses/${courseId}/ratings`;
+const fetchMyReviews = (): Promise<Review[]> => {
+    const REVIEWS_FETCH_URL = `${config.API_URL}/me/ratings`;
     return new Promise((resolve, reject) => {
         axios
             .get(REVIEWS_FETCH_URL, { withCredentials: true })
@@ -17,4 +17,4 @@ const fetchCourseReviews = (courseId: string): Promise<Review[]> => {
     });
 };
 
-export default fetchCourseReviews;
+export default fetchMyReviews;
