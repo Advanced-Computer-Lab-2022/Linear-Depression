@@ -200,9 +200,7 @@ const deleteRating = async (req: Request, res: Response) => {
 };
 
 function serializeRatingTrainee(ratings: IRatingModel[]) {
-    return ratings.map((rating) => {
-        serializeRating(rating);
-    });
+    return ratings.map((rating) => serializeRating(rating));
 }
 
 export const serializeRating = (rating: IRatingModel) => {
