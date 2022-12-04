@@ -19,7 +19,6 @@ const Title = styled.div`
 const CourseReviews: React.FC = () => {
     const { courseId } = useParams();
     const { reviews } = useFetchCourseReviews(courseId);
-    console.log(reviews);
 
     return (
         <>
