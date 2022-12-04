@@ -24,16 +24,93 @@ const AddCourse: React.FC = () => {
     const [title, setTitle] = useState("");
     const [subject, setSubject] = useState("");
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(null);
     const dispatch = useAppDispatch();
     const [searchParams] = useSearchParams();
+    const initialFormError = {
+        title: {
+            error: false,
+            message: ""
+        },
+        subject: {
+            error: false,
+            message: ""
+        },
+        description: {
+            error: false,
+            message: ""
+        },
+        price: {
+            error: false,
+            message: ""
+        }
+    };
+
+    const [formError, setFormError] = useState(initialFormError);
+
+    const validateForm = () => {
+        if (title === "") {
+            setFormError({
+                ...initialFormError,
+                title: {
+                    error: true,
+                    message: "Title is required"
+                }
+            });
+            return false;
+        }
+        if (subject === "") {
+            setFormError({
+                ...initialFormError,
+                subject: {
+                    error: true,
+                    message: "Subject is required"
+                }
+            });
+            return false;
+        }
+        if (description === "") {
+            setFormError({
+                ...initialFormError,
+                description: {
+                    error: true,
+                    message: "Description is required"
+                }
+            });
+            return false;
+        }
+        if (price === null) {
+            setFormError({
+                ...initialFormError,
+                price: {
+                    error: true,
+                    message: "Price is required"
+                }
+            });
+            return false;
+        }
+        if (price < 0) {
+            setFormError({
+                ...initialFormError,
+                price: {
+                    error: true,
+                    message: "Price must be greater than 0"
+                }
+            });
+            return false;
+        }
+
+        return true;
+    };
 
     const handleSubmit = () => {
-        addCourse({ title, subject, description, price }).then(() => {
-            dispatch(getSubjects());
-            dispatch(getMyCourses(searchParams));
-            closeModal();
-        });
+        if (validateForm()) {
+            addCourse({ title, subject, description, price }).then(() => {
+                dispatch(getSubjects());
+                dispatch(getMyCourses(searchParams));
+                closeModal();
+            });
+        }
     };
 
     return (
@@ -49,6 +126,8 @@ const AddCourse: React.FC = () => {
                     type="text"
                     fullWidth
                     variant="outlined"
+                    error={formError.title.error}
+                    helperText={formError.title.message}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
@@ -64,6 +143,8 @@ const AddCourse: React.FC = () => {
                     multiline
                     minRows={2}
                     maxRows={4}
+                    error={formError.description.error}
+                    helperText={formError.description.message}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
@@ -77,6 +158,8 @@ const AddCourse: React.FC = () => {
                         type="text"
                         fullWidth
                         variant="outlined"
+                        error={formError.subject.error}
+                        helperText={formError.subject.message}
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
                     />
@@ -89,6 +172,8 @@ const AddCourse: React.FC = () => {
                         type="number"
                         fullWidth
                         variant="outlined"
+                        error={formError.price.error}
+                        helperText={formError.price.message}
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                     />
