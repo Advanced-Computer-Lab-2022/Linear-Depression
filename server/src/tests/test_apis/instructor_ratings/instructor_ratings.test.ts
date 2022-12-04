@@ -124,6 +124,23 @@ describe("POST /instructors/:instructorId/ratings", () => {
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
+    it("Should update the instructor average rating when a new rating is created", async () => {
+        const instructor = new Instructor(instructorFactory());
+        await instructor.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = undefined!;
+        const { trainee, token } = await getTraineeToken();
+        await trainee.save();
+        const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
+        expect(res.status).toBe(StatusCodes.CREATED);
+        expect(res.body.rating.comment).toBe(ratingData.comment);
+        expect(res.body.rating.rating).toBe(ratingData.rating);
+
+        const updatedInstructor = await Instructor.findById(instructor._id);
+        expect(updatedInstructor!.averageRating).toBe(ratingData.rating);
+    });
+
     afterAll(async () => {
         await disconnectDBForTesting();
     }, TIME_OUT);
