@@ -32,3 +32,4 @@ export { default as fetchEvaluation } from "./fetchEvaluation";
 export { default as editCourse } from "./editCourse";
 export { default as editLesson } from "./editLesson";
 export { default as editProfile } from "./editProfile";
+export { default as fetchMyReviews } from "./fetchMyReviews";

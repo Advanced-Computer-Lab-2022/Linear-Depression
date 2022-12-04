@@ -1,9 +1,8 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import ReviewItem from "../ReviewItem";
-import { useFetchCourseReviews } from "@internals/hooks";
+import { ReviewItem } from "@internals/components";
+import { useFetchMyReviews } from "@internals/hooks";
 
 const Containter = styled.div`
     margin: 24px;
@@ -17,8 +16,8 @@ const Title = styled.div`
 `;
 
 const CourseReviews: React.FC = () => {
-    const { courseId } = useParams();
-    const { reviews } = useFetchCourseReviews(courseId);
+    const { reviews } = useFetchMyReviews();
+    console.log(reviews);
 
     return (
         <>
