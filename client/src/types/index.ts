@@ -8,6 +8,7 @@ import Lesson from "./Lesson";
 import Profile from "./Profile";
 import Promotion from "./Promotion";
 import User from "./User";
+import Review from "./Review";
 
 export {
     type Country,
@@ -17,6 +18,7 @@ export {
     type Promotion,
     User,
     type Exercise,
+    type Review,
     type Evaluation,
     type Instructor,
     type Profile
