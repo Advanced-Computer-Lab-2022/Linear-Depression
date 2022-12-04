@@ -20,7 +20,6 @@ const Container = styled.div`
     position: relative;
     height: 0;
     margin-bottom: 26px;
-    // width: 100%;
 `;
 
 const Iframe = styled.iframe<{ height: number }>`
