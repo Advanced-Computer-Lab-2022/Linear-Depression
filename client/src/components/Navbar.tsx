@@ -1,18 +1,70 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useContext, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Flag from "react-world-flags";
 
 import countries from "../media/country-currency.json";
+import Avatar from "./Avatar";
+import OptionsButton from "./OptionsButton";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
 import { config } from "@internals/config";
-import { CountryContext } from "@internals/contexts";
+import { CountryContext, UserContext } from "@internals/contexts";
+import { useFetchProfile } from "@internals/hooks";
+import { useAppSelector } from "@internals/redux";
+import { logout } from "@internals/services";
+import { User } from "@internals/types";
+
+const getUserName = (userType: User, data: any) => {
+    if (userType === User.INSTRUCTOR) {
+        return `${data.instructor.firstName} ${data.instructor.lastName}`;
+    } else if (userType === User.INDIVIDUAL_TRAINEE) {
+        return `${data.individualTrainee.firstName} ${data.individualTrainee.lastName}`;
+    } else if (userType === User.CORPORATE_TRAINEE) {
+        return `${data.corporateTrainee.firstName} ${data.corporateTrainee.lastName}`;
+    } else {
+        return "";
+    }
+};
 
 const Navbar = () => {
+    const { userType, setUserType } = useContext(UserContext);
+
+    const navigate = useNavigate();
+
     const [open, setOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
     const { country, setCountry } = useContext(CountryContext);
+
+    useFetchProfile();
+
+    const { data } = useAppSelector((state) => state.profile);
+
+    const options = [
+        {
+            label: "Profile",
+            onClick: () => navigate("/me/profile"),
+            icon: <AccountCircleIcon />
+        },
+        {
+            label: "Change Password",
+            onClick: () => navigate("/auth/change"),
+            icon: <ChangeCircleIcon />
+        },
+        {
+            label: "Logout",
+            onClick: () => {
+                logout().then(() => {
+                    setUserType(User.GUEST);
+                    navigate("/", { replace: true });
+                });
+            },
+            icon: <LogoutIcon />
+        }
+    ];
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -84,28 +136,31 @@ const Navbar = () => {
                             />
                         </li>
                     </ul>
-                    <ul className="navbar-nav ">
+                    <ul className="navbar-nav buttons-list">
                         <li className="nav-item">
                             <a className="nav-link" href="/">
                                 LD Business
                             </a>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="me/courses">
-                                My Courses
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <a className="navbar-brand" href="/">
-                                <img
-                                    src="https://img.icons8.com/material-outlined/344/shopping-cart--v1.png"
-                                    alt=""
-                                    height="24"
-                                ></img>
-                            </a>
-                        </li>
-                        <button className="navbar-item login-button">Log In</button>
-                        <button className="navbar-item signup-button">Sign Up</button>
+                        {userType !== User.GUEST && (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="me/courses">
+                                    My Courses
+                                </Link>
+                            </li>
+                        )}
+                        {userType === User.GUEST && (
+                            <>
+                                <button
+                                    className="navbar-item login-button"
+                                    onClick={() => navigate("/auth/login", { replace: true })}
+                                >
+                                    Log In
+                                </button>
+                                <button className="navbar-item signup-button">Sign Up</button>
+                            </>
+                        )}
+
                         <button className="navbar-item language-button" onClick={handleClickOpen}>
                             <Flag
                                 code={country}
@@ -118,6 +173,11 @@ const Navbar = () => {
                                 }
                             />
                         </button>
+                        {userType !== User.GUEST && data !== null && (
+                            <div className="navbar-item">
+                                <OptionsButton options={options} icon={<Avatar name={getUserName(userType, data)} />} />
+                            </div>
+                        )}
                     </ul>
                 </div>
             </div>

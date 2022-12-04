@@ -1,10 +1,18 @@
 import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
-import { Navbar } from "@internals/components";
 import { CountryContext, UserContext } from "@internals/contexts";
 import { useGetLocalizationData, useGetUserType } from "@internals/hooks";
-import { AddLesson, AddCourse, AddPromotion, AddReview, EditCourse, ViewAndAcceptContract } from "@internals/modals";
+import {
+    AddLesson,
+    AddCourse,
+    AddPromotion,
+    AddReview,
+    EditCourse,
+    ViewAndAcceptContract,
+    EditLesson,
+    EditProfile
+} from "@internals/modals";
 import {
     Home,
     CorporateTrainee,
@@ -15,7 +23,9 @@ import {
     CreateExercise,
     Exercise,
     PasswordReset,
-    ForgotPassword
+    ForgotPassword,
+    Profile,
+    ChangePassword
 } from "@internals/pages";
 
 function App() {
@@ -33,12 +43,14 @@ function App() {
                             addReview: AddReview,
                             addPromotion: AddPromotion,
                             editCourse: EditCourse,
+                            editLesson: EditLesson,
+                            editProfile: EditProfile,
                             viewAndAcceptContract: ViewAndAcceptContract
                         }}
                     />
-                    <Navbar />
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/me/profile" element={<Profile />} />
                         <Route path="courses/:courseId" element={<Course />} />
                         <Route path="corporate-trainee" element={<CorporateTrainee />} />
                         <Route path="individual-trainee" element={<IndividualTrainee />} />
@@ -46,6 +58,7 @@ function App() {
                         <Route path="/auth/login" element={<Login />} />
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
+                        <Route path="/auth/change" element={<ChangePassword />} />
 
                         <Route path="me/courses" element={<MyCourses />} />
                         <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />

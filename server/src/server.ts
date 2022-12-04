@@ -19,6 +19,8 @@ import PromotionRouter from "./routes/Promotion";
 import AuthRouter from "./routes/Auth";
 import MeRouter from "./routes/Me";
 
+import { populateTestDb } from "./utils/populateTestDb";
+
 const cors = require("cors");
 import * as path from "path";
 
@@ -106,4 +108,8 @@ app.use((req, res) => {
 // getCurrencyRatesTask.start();
 /* --- End Routes --- */
 
+//NOTE: Use this to populate the database with test data
+// for (let i = 0; i < 2; i++) {
+//     populateTestDb();
+// }
 export default app;

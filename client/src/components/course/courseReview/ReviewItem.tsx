@@ -3,29 +3,20 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
+import { Avatar } from "@internals/components";
+
 const Containter = styled.div`
     display: flex;
     margin-bottom: 24px;
 `;
 
-const Avatar = styled.div`
-    height: 48px;
-    width: 48px;
-    border-radius: 50%;
-    background-color: #1c1d1f;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
-    margin-right: 24px;
-    flex: 1;
-`;
-
 const RatingContainer = styled.div`
     display: flex;
     align-items: center;
+`;
+
+const AvatarContainer = styled.div`
+    margin-right: 24px;
 `;
 
 const Rating = styled.div`
@@ -95,17 +86,12 @@ const ReviewItem: React.FC<{
     name: string;
     date: string;
 }> = ({ name, rating, date, comment }) => {
-    const getInitials = (name: string) => {
-        const names = name.split(" ");
-        return names[0].charAt(0) + names[1].charAt(0);
-    };
-
     return (
         <>
             <Containter>
-                <div>
-                    <Avatar>{getInitials(name)}</Avatar>
-                </div>
+                <AvatarContainer>
+                    <Avatar name={name} />
+                </AvatarContainer>
                 <div>
                     <div>{name}</div>
                     <RatingContainer>

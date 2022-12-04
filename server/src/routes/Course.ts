@@ -1,7 +1,8 @@
 import express from "express";
 import controller from "../controllers/Course";
-import ratingController from "../controllers/Rating";
+import ratingController from "../controllers/CourseRating";
 import exerciseController from "../controllers/Exercise";
+import lessonController from "../controllers/Lesson";
 import authenticated from "../middleware/authenticated";
 
 const router = express.Router();
@@ -13,7 +14,9 @@ router.get("/:courseId", controller.readCourse);
 router.put("/:courseId", controller.updateCourse);
 router.delete("/:courseId", controller.deleteCourse);
 
-router.post("/:courseId/lessons", controller.createLesson);
+router.post("/:courseId/lessons", lessonController.createLesson);
+router.get("/:courseId/lessons/:lessonId", lessonController.readLesson);
+router.put("/:courseId/lessons/:lessonId", lessonController.updateLesson);
 
 router.get("/:courseId/ratings", ratingController.listRatings);
 router.post("/:courseId/ratings", ratingController.createRating);

@@ -4,6 +4,7 @@ import { AdminResource } from "./resources/Admin";
 import { InstructorResource } from "./resources/Instructor";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import Course from "../models/Course";
+import Rating from "../models/Rating";
 import Dashboard from "./components/dashboard";
 
 export function CreateAdminJS(app: any) {
@@ -14,6 +15,12 @@ export function CreateAdminJS(app: any) {
             AdminResource,
             {
                 resource: Course,
+                options: {
+                    navigation: false
+                }
+            },
+            {
+                resource: Rating,
                 options: {
                     navigation: false
                 }

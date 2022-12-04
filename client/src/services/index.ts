@@ -5,6 +5,7 @@ export { default as fetchAllCourses } from "./fetchAllCourses";
 export { default as fetchMyCourses } from "./fetchMyCourses";
 export { default as fetchCourseById } from "./fetchCourseById";
 export { default as fetchExerciseById } from "./fetchExerciseById";
+export { default as fetchLessonById } from "./fetchLessonById";
 export { default as fetchSubjects } from "./fetchSubjects";
 export { default as getCurrency } from "./getCurrency";
 export { default as fetchCountryCode } from "./fetchCountryCode";
@@ -19,8 +20,14 @@ export { default as getInstructorContractStatus } from "./instructor/getInstruct
 export { default as sendForgotPasswordRequest } from "./auth/sendForgotPasswordRequest";
 export { default as performPasswordReset } from "./auth/performPasswordReset";
 export { default as validatePasswordResetToken } from "./auth/validatePasswordResetToken";
+export { default as login } from "./auth/login";
+export { default as logout } from "./auth/logout";
+export { default as changePassword } from "./auth/changePassword";
 
 export { default as fetchUserType } from "./fetchUserType";
+export { default as fetchProfile } from "./fetchProfile";
 export { default as submitExercise } from "./submitExercise";
 export { default as fetchEvaluation } from "./fetchEvaluation";
 export { default as editCourse } from "./editCourse";
+export { default as editLesson } from "./editLesson";
+export { default as editProfile } from "./editProfile";
