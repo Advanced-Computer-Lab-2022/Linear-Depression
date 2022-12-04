@@ -22,6 +22,7 @@ import {
     MyCourses,
     CreateExercise,
     Exercise,
+    Lesson,
     PasswordReset,
     ForgotPassword,
     Profile,
@@ -66,6 +67,7 @@ function App() {
                             path="courses/:courseId/lessons/:lessonId/exercises/:exerciseId"
                             element={<Exercise />}
                         />
+                        <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
                     </Routes>
                 </div>
             </CountryContext.Provider>

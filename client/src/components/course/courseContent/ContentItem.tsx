@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { MdPlayCircleFilled } from "react-icons/md";
 import { MdInsertDriveFile } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { UserContext } from "@internals/contexts";
@@ -26,13 +26,13 @@ const Title = styled.div`
     flex: 1;
 `;
 
-/*const Preview = styled.a`
+const Preview = styled(Link)`
     font-size: 14px;
     font-weight: 400;
     color: #5624d0;
     text-decoration: underline;
     margin-right: 10px;
-`;*/
+`;
 
 const OpenExercise = styled.div`
     font-size: 14px;
@@ -58,7 +58,7 @@ const ContentItem: React.FC<{
         <Item>
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
-            {/*link && <Preview href={link}>Preview</Preview>*/}
+            <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>
             {exerciseId &&
                 lessonId &&
                 (userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (

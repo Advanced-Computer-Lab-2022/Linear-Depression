@@ -8,7 +8,6 @@ const useGetUserType = () => {
 
     fetchUserType()
         .then((res) => {
-            console.log(res);
             setUserType(res);
         })
         .catch((err) => {

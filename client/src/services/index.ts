@@ -25,6 +25,7 @@ export { default as logout } from "./auth/logout";
 export { default as changePassword } from "./auth/changePassword";
 
 export { default as fetchUserType } from "./fetchUserType";
+export { getVideoEmbedUrl, getVideoThumbnailUrl } from "./videoServices";
 export { default as fetchProfile } from "./fetchProfile";
 export { default as submitExercise } from "./submitExercise";
 export { default as fetchEvaluation } from "./fetchEvaluation";
