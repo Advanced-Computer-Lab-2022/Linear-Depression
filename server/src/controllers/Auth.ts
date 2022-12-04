@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import UserServices from "../services/UserServices";
 import { UserTypes } from "../enums/UserTypes";
+import UserServices from "../services/UserServices";
 import { decodeToken } from "../utils/auth/token";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,6 +15,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
 };
 
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("token", { httpOnly: true });
+    res.status(StatusCodes.OK).json({ message: "Logout successful" });
+};
+
 const getRole = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
     return UserServices.getUserType(token)
@@ -24,7 +29,26 @@ const getRole = async (req: Request, res: Response, next: NextFunction) => {
         .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
 };
 
+const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    const { token, newPassword } = req.body;
+
+    return UserServices.resetPassword(token, newPassword)
+        .then(() => res.status(StatusCodes.OK).json({ success: true }))
+        .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
+};
+
+const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, oldPassword, newPassword } = req.body;
+
+    return UserServices.changePassword(userId, oldPassword, newPassword)
+        .then(() => res.status(StatusCodes.OK).json({ success: true }))
+        .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
+};
+
 export default {
     login,
-    getRole
+    logout,
+    getRole,
+    resetPassword,
+    changePassword
 };

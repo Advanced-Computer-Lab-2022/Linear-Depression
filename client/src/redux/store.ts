@@ -4,13 +4,15 @@ import type { TypedUseSelectorHook } from "react-redux";
 
 import { courseSlice } from "./features/course/courseSlice";
 import { CoursesListSlice } from "./features/courseList/coursesListSlice";
+import { profileSlice } from "./features/profile/profileSlice";
 import { subjectsSlice } from "./features/subjects/subjectSlice";
 
 const store = configureStore({
     reducer: {
         course: courseSlice.reducer,
         coursesList: CoursesListSlice.reducer,
-        subjects: subjectsSlice.reducer
+        subjects: subjectsSlice.reducer,
+        profile: profileSlice.reducer
     }
 });
 

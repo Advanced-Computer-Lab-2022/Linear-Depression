@@ -3,6 +3,7 @@ interface ILessonProps {
     title: string;
     totalHours: number;
     video?: {
+        title: string;
         videoLink: string;
         description: string;
     };

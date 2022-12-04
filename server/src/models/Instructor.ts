@@ -1,17 +1,47 @@
-import mongoose, { Document, Schema } from "mongoose";
-import User, { IUser } from "./User";
+import mongoose, { Document } from "mongoose";
+import Rating, { IRatingModel } from "./Rating";
+import User, { IUser, UserSchema } from "./User";
 const options = { discriminatorKey: "kind" };
-import { MongoosePluginModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
 
-export interface IInstructor extends IUser {}
+export interface IInstructor extends IUser {
+    ratings: Array<mongoose.Types.ObjectId>;
+    averageRating: number;
+    biography: string;
+}
 
-// inherit from IUserModel
 export interface IInstructorModel extends IInstructor, Document {}
 
-const Instructor: mongoose.Model<IInstructorModel> = User.discriminator("Instructor", new Schema({}, options));
+class InstructorSchema extends UserSchema {
+    constructor(obj: Object, options: Object) {
+        super(obj, options);
+        this.add({
+            ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
+            averageRating: {
+                type: Number,
+                min: 0,
+                max: 5,
+                default: 0
+            },
+            biography: { type: String, required: false, trim: true }
+        });
+        this.pre("save", async function (next) {
+            const instructor = this as IInstructorModel;
+            const ratingIds = instructor.ratings as Array<mongoose.Types.ObjectId>;
+            const ratings = (await Rating.find({ _id: { $in: ratingIds } })) as Array<IRatingModel>;
+            const totalRating = ratings.reduce((acc, rating) => acc + rating.rating, 0);
+            if (ratings.length > 0) {
+                instructor.averageRating = totalRating / ratings.length;
+            } else {
+                instructor.averageRating = 0;
+            }
+            next();
+        });
+    }
+}
+
+const Instructor: mongoose.Model<IInstructorModel> = User.discriminator(
+    "Instructor",
+    new InstructorSchema({}, options)
+);
 
 export default Instructor<IInstructorModel>;
-// write equivalent of this:
-// export default mongoose.model<IInstructorModel>("Instructor", instructorSchema) as MongoosePluginModel<IInstructorModel>;
-// without using as
-//

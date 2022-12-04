@@ -1,4 +1,5 @@
 import Admin from "../../models/Admin";
+import HashPasswordInPayload from "../hooks/hashPasswordInPayload";
 
 export const AdminResource = {
     resource: Admin,
@@ -25,6 +26,11 @@ export const AdminResource = {
                         request.payload.passwordHash = request.payload.password;
                     }
                     return request;
+                }
+            },
+            edit: {
+                before: async (request: any) => {
+                    return await HashPasswordInPayload(request);
                 }
             }
         },

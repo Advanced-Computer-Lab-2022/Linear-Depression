@@ -108,7 +108,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
     return (
         <CardContainer
             onClick={() => {
-                navigate(`/course/${_id}`);
+                navigate(`/courses/${_id}`);
             }}
         >
             <HorizontalLayout>

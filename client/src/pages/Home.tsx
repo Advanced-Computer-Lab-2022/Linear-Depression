@@ -1,9 +1,15 @@
 import React from "react";
 
 import AllCourses from "./home/AllCourses";
+import { Navbar } from "@internals/components";
 
 const Home: React.FC = () => {
-    return <AllCourses />;
+    return (
+        <>
+            <Navbar />
+            <AllCourses />
+        </>
+    );
 };
 
 export default Home;

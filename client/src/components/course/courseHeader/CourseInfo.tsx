@@ -1,4 +1,6 @@
-import React from "react";
+import { UserContext } from "@internals/contexts";
+import { User } from "@internals/types";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
@@ -52,6 +54,7 @@ const CourseInfo: React.FC<{
     instructor: string;
     rating: number;
 }> = ({ title, description, rating, instructor }) => {
+    const { userType } = useContext(UserContext);
     rating = Number(rating.toFixed(1));
 
     const { courseId } = useParams();
@@ -73,7 +76,9 @@ const CourseInfo: React.FC<{
             <div>
                 Created by <Instructor>{instructor}</Instructor>
             </div>
-            <Button onClick={onClick}>Add Review</Button>
+            {(userType == User.INDIVIDUAL_TRAINEE || userType == User.CORPORATE_TRAINEE) && (
+                <Button onClick={onClick}>Add Review</Button>
+            )}
         </Container>
     );
 };

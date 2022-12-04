@@ -4,6 +4,9 @@ export interface IRating {
     comment?: string;
     rating: number;
     traineeID: mongoose.Types.ObjectId;
+    IndividualTrainee?: mongoose.Types.ObjectId;
+    CorporateTrainee?: mongoose.Types.ObjectId;
+    createdAt?: Date;
 }
 
 export interface IRatingModel extends IRating, Document {}
@@ -14,8 +17,6 @@ const ratingSchema = new mongoose.Schema(
         rating: { type: Number, required: true, min: 1, max: 5 },
         traineeID: {
             type: mongoose.Schema.Types.ObjectId,
-            // reference to the IndividualTrainee model or CorporateTrainee model
-            // refPath: "traineeModel",
             required: true
         }
     },
@@ -25,6 +26,8 @@ const ratingSchema = new mongoose.Schema(
         }
     }
 );
+
+ratingSchema.set("timestamps", true);
 
 ratingSchema.virtual("IndividualTrainee", {
     ref: "IndividualTrainee",

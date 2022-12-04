@@ -21,6 +21,7 @@ interface ICourseProps {
     currency: string;
     lessons: ILessonProps[];
     preview: string;
+    subject?: string;
 }
 
 export default ICourseProps;

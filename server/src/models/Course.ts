@@ -33,7 +33,7 @@ const courseSchema = new Schema({
         min: 0,
         max: 5,
         default: 0
-    } /* FIXME: calculate average rating - use hook */,
+    },
     ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
     totalHours: {
         type: Number,
@@ -87,6 +87,20 @@ courseSchema.pre<ICourseModel>("save", async function (next) {
         course.averageRating = ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
     }
     next();
+});
+
+courseSchema.post("findOneAndUpdate", async function () {
+    const courseId = this.getQuery()["_id"] as mongoose.Types.ObjectId;
+    const course = await this.model.findById(courseId);
+    const lessons = await Lesson.find({ _id: { $in: course.lessons } });
+    const ratings = await Rating.find({ _id: { $in: course.ratings } });
+    course.totalHours = lessons.reduce((acc, lesson) => acc + lesson.totalHours, 0);
+    if (ratings.length == 0) {
+        course.averageRating = 0;
+    } else {
+        course.averageRating = ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
+    }
+    await course.save();
 });
 
 export default mongoose.model<ICourseModel>("Course", courseSchema) as MongoosePluginModel<ICourseModel>;

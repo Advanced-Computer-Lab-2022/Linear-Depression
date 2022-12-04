@@ -35,14 +35,13 @@ describe("GET /courses/:courseId/ratings", () => {
     beforeEach(async () => {
         await connectDBForTesting();
     });
-    it("should return an empty array when the db is empty", async () => {
-        const response = await request.get("/courses/1/ratings");
-        expect(response.status).toBe(StatusCodes.OK);
-        expect(response.body.ratings).toEqual([]);
+    it("It should return 404 if course is not found", async () => {
+        const response = await request.get(`/courses/${new mongoose.Types.ObjectId()}/ratings`);
+        expect(response.status).toBe(StatusCodes.NOT_FOUND);
     });
 
     it("Should skip ratings having no comments", async () => {
-        const { course, rating } = await createCourseWithRatings();
+        const { course } = await createCourseWithRatings();
 
         const rating2 = new Rating(ratingFactory());
         rating2.comment = undefined;
@@ -91,6 +90,30 @@ describe("GET /courses/:courseId/ratings", () => {
         const response = await request.get(`/courses/${course._id}/ratings`);
         expect(response.status).toBe(StatusCodes.OK);
         expect(response.body.ratings).toHaveLength(randomLength);
+    });
+
+    it("Should return only this course's ratings", async () => {
+        const { course } = await createCourseWithRatings();
+        const course2 = new Course(courseFactory());
+        const rating2 = new Rating(ratingFactory());
+        await rating2.save();
+        course2.ratings.push(rating2._id);
+        await course2.save();
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(1);
+    });
+
+    it("Should return empty array if no ratings", async () => {
+        const course = new Course(courseFactory());
+        await course.save();
+
+        const rating = new Rating(ratingFactory());
+        await rating.save();
+
+        const response = await request.get(`/courses/${course._id}/ratings`);
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.ratings).toHaveLength(0);
     });
 
     afterEach(async () => {
@@ -149,9 +172,9 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
 
         const res = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.rating.IndividualTrainee._id).toBe(trainee._id.toString());
-        expect(res.body.rating.IndividualTrainee.firstName).toBe(trainee.firstName);
-        expect(res.body.rating.IndividualTrainee.lastName).toBe(trainee.lastName);
+        expect(res.body.rating.trainee._id).toEqual(trainee._id.toString());
+        expect(res.body.rating.trainee.firstName).toBe(trainee.firstName);
+        expect(res.body.rating.trainee.lastName).toBe(trainee.lastName);
     });
 
     it("Should return CorporateTrainee fields", async () => {
@@ -169,9 +192,9 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
 
         const res = await request.get(`/courses/${course._id}/ratings/${rating._id}`);
         expect(res.status).toBe(StatusCodes.OK);
-        expect(res.body.rating.CorporateTrainee._id).toBe(trainee._id.toString());
-        expect(res.body.rating.CorporateTrainee.firstName).toBe(trainee.firstName);
-        expect(res.body.rating.CorporateTrainee.lastName).toBe(trainee.lastName);
+        expect(res.body.rating.trainee._id).toBe(trainee._id.toString());
+        expect(res.body.rating.trainee.firstName).toBe(trainee.firstName);
+        expect(res.body.rating.trainee.lastName).toBe(trainee.lastName);
     });
 
     afterEach(async () => {
@@ -188,22 +211,24 @@ describe("POST /courses/:courseId/ratings", () => {
         const traineeData = individualTraineeFactory();
         const trainee = new IndividualTrainee(traineeData);
         await trainee.save();
-        const { course, rating } = await createCourseWithRatings();
-        rating.traineeID = trainee._id;
-        rating.save();
 
-        const ratingData = getRatingData(rating);
+        const courseData = courseFactory();
+        const course = new Course(courseData);
+        await course.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
 
         const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
-        expect(res.body.rating.comment).toBe(rating.comment);
-        expect(res.body.rating.rating).toBe(rating.rating);
-        expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
+        expect(res.body.rating.comment).toBe(ratingData.comment);
+        expect(res.body.rating.rating).toBe(ratingData.rating);
+        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
 
         const courseRes = await request.get(`/courses/${course._id}`);
         expect(courseRes.status).toBe(StatusCodes.OK);
-        expect(courseRes.body.course.ratings).toHaveLength(2);
+        expect(courseRes.body.course.ratings).toHaveLength(1);
     });
 
     it("Should return a 400 error if the traineeID is not found", async () => {
@@ -218,15 +243,20 @@ describe("POST /courses/:courseId/ratings", () => {
         const trainee = new IndividualTrainee(traineeData);
         await trainee.save();
 
-        const { course, rating } = await createCourseWithRatings();
-        rating.traineeID = trainee._id;
-        rating.comment = undefined;
-        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
+        const courseData = courseFactory();
+        const course = new Course(courseData);
+        await course.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.comment = undefined;
+
+        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBeUndefined();
-        expect(res.body.rating.rating).toBe(rating.rating);
-        expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
+        expect(res.body.rating.rating).toBe(ratingData.rating);
+        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
     });
 
     it("Should return a 400 error if the rating is missing", async () => {
@@ -241,6 +271,74 @@ describe("POST /courses/:courseId/ratings", () => {
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
+    it("Should return a 400 error if the rating exists for the trainee and course", async () => {
+        const traineeData = individualTraineeFactory();
+        const trainee = new IndividualTrainee(traineeData);
+        await trainee.save();
+
+        const { course, rating } = await createCourseWithRatings();
+        rating.traineeID = trainee._id;
+        await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
+        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
+        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
+    });
+
+    it("Should return a 201 if the rating exists for the course but not the trainee", async () => {
+        const traineeData = individualTraineeFactory();
+        const trainee = new IndividualTrainee(traineeData);
+        await trainee.save();
+
+        const courseData = courseFactory();
+        const course = new Course(courseData);
+        await course.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        const rating = new Rating(ratingData);
+        await rating.save();
+
+        const traineeData2 = individualTraineeFactory();
+        const trainee2 = new IndividualTrainee(traineeData2);
+        await trainee2.save();
+
+        const ratingData2 = ratingFactory();
+        ratingData2.traineeID = trainee2._id as mongoose.Types.ObjectId;
+
+        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData2);
+        expect(res.status).toBe(StatusCodes.CREATED);
+        expect(res.body.rating._id).toBeDefined();
+        expect(res.body.rating.comment).toBe(ratingData2.comment);
+        expect(res.body.rating.rating).toBe(ratingData2.rating);
+        expect(res.body.rating.traineeID).toBe(ratingData2.traineeID.toString());
+    });
+
+    it("should return 200 if the rating exists for the trainee but not the course", async () => {
+        const traineeData = individualTraineeFactory();
+        const trainee = new IndividualTrainee(traineeData);
+        await trainee.save();
+
+        const courseData = courseFactory();
+        const course = new Course(courseData);
+        await course.save();
+
+        const ratingData = ratingFactory();
+        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        const rating = new Rating(ratingData);
+        await rating.save();
+        course.ratings.push(rating._id);
+        await course.save();
+
+        const courseData2 = courseFactory();
+        const course2 = new Course(courseData2);
+        await course2.save();
+
+        const res = await request.post(`/courses/${course2._id}/ratings`).send(ratingData);
+        expect(res.status).toBe(StatusCodes.CREATED);
+        expect(res.body.rating._id).toBeDefined();
+        expect(res.body.rating.comment).toBe(ratingData.comment);
+        expect(res.body.rating.rating).toBe(ratingData.rating);
+        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+    });
     afterEach(async () => {
         await disconnectDBForTesting();
     });
@@ -312,11 +410,6 @@ describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
         const { course } = await createCourseWithRatings();
         const res = await request.delete(`/courses/${course._id}/ratings/${new mongoose.Types.ObjectId()}`);
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
-    });
-
-    it("Should return a 400 error if the ratingId is invalid", async () => {
-        const res = await request.delete(`/courses/${new mongoose.Types.ObjectId()}/ratings/invalid`);
-        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     afterEach(async () => {

@@ -1,42 +1,35 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
-import * as React from "react";
+import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typography } from "@mui/material";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { config } from "@internals/config";
+import { UserContext } from "@internals/contexts";
+import { login } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const theme = createTheme();
+const theme = createTheme({
+    typography: {
+        fontFamily: ["Montserrat", "sans-serif"].join(",")
+    }
+});
 
-export default function SignIn() {
+const SignIn: React.FC = () => {
+    const navigate = useNavigate();
+
+    const { setUserType } = useContext(UserContext);
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const API_URL = `${config.API_URL}/auth/login`;
 
-        axios
-            .post(
-                API_URL,
-                {
-                    email: data.get("email"),
-                    password: data.get("password")
-                },
-                { withCredentials: true }
-            )
-            .then((res) => {
-                console.log(res);
+        login(data.get("email") as string, data.get("password") as string)
+            .then((data) => {
+                setUserType(data.type);
+                navigate("/");
             })
             .catch((err) => {
-                console.log(err);
+                alert(err.message);
             });
     };
 
@@ -55,7 +48,7 @@ export default function SignIn() {
                     <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
                         Sign in
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -79,13 +72,26 @@ export default function SignIn() {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, fontWeight: "bold" }}>
                             Sign In
                         </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="/auth/forgot" variant="body2" fontWeight={"bold"}>
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="#" variant="body2" fontWeight={"bold"}>
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Box>
             </Container>
         </ThemeProvider>
     );
-}
+};
+
+export default SignIn;
