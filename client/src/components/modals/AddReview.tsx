@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
-import { addCourseReview } from "@internals/services";
+import { addCourseReview, addInstructorReview } from "@internals/services";
 
 const RatingContainer = styled.div`
     margin-top: 10px;
@@ -35,21 +35,24 @@ const AddReview: React.FC = () => {
     };
 
     const courseId = useAppSelector((state) => state.course).data?._id;
-    // const instructorId = useAppSelector((state) => state.course).data?.instructor._id;
+    const instructorId = useAppSelector((state) => state.course).data?.instructor._id;
     const dispatch = useAppDispatch();
-
-    const handleSubmit = () => {
-        addCourseReview(courseId, courseRating, courseComment).then(() => {
-            dispatch(getCourse(courseId));
-        });
-        // addInstructorReview(instructorId, instructorRating, instructorComment); //TODO: waiting for backend
-        closeModal();
-    };
 
     const [courseComment, setCourseComment] = useState("");
     const [courseRating, setCourseRating] = useState(0);
     const [instructorComment, setInstructorComment] = useState("");
     const [instructorRating, setInstructorRating] = useState(0);
+
+    const handleSubmit = async () => {
+        try {
+            await addCourseReview(courseId, courseRating, courseComment);
+            dispatch(getCourse(courseId));
+            await addInstructorReview(instructorId, instructorRating, instructorComment);
+            closeModal();
+        } catch (err) {
+            alert(err);
+        }
+    };
 
     const handleCourseReviewChange = (_event: React.SyntheticEvent<{}>, newValue: number | null) => {
         setCourseRating(newValue);
