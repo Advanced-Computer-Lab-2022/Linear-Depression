@@ -10,3 +10,4 @@ export { default as useGetUserType } from "./useGetUserType";
 export { default as useFetchProfile } from "./useFetchProfile";
 export { default as useFetchLessonById } from "./useFetchLessonById";
 export { default as useGetInstructorContractStatus } from "./useGetInstructorContractStatus";
+export { default as useFetchMyReviews } from "./useFetchMyReviews";
