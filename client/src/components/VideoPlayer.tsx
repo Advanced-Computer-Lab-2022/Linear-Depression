@@ -20,6 +20,7 @@ const Container = styled.div`
     position: relative;
     height: 0;
     margin-bottom: 26px;
+    // width: 100%;
 `;
 
 const Iframe = styled.iframe<{ height: number }>`
@@ -36,6 +37,7 @@ const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl
             <Container>
                 <Iframe
                     height={height}
+                    width={height * 1.7777777777777777}
                     src={embedURL}
                     frameBorder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
