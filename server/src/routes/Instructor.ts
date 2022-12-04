@@ -12,5 +12,6 @@ router.put("/:instructorId", controller.updateInstructor);
 router.delete("/:instructorId", controller.deleteInstructor);
 
 router.post("/:instructorId/ratings", authenticated, ratingController.createRating);
+router.delete("/:instructorId/ratings/:ratingId", authenticated, ratingController.deleteRating);
 
 export default router;

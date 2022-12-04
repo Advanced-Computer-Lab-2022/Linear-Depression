@@ -129,6 +129,72 @@ describe("POST /instructors/:instructorId/ratings", () => {
     }, TIME_OUT);
 });
 
+describe("DELETE /instructors/:instructorId/ratings/:ratingId", () => {
+    beforeAll(async () => {
+        await connectDBForTesting();
+    }, TIME_OUT);
+
+    it("Should delete a rating successfully", async () => {
+        const rating = new Rating(ratingFactory());
+        await rating.save();
+
+        const { token, trainee } = await getTraineeToken();
+        rating.traineeID = trainee._id;
+        await rating.save();
+        const instructor = new Instructor(instructorFactory());
+        instructor.ratings.push(rating._id);
+        await instructor.save();
+
+        const res = await request.delete(`/instructors/${instructor._id}/ratings/${rating._id}`).set("Cookie", token);
+        expect(res.status).toBe(StatusCodes.OK);
+        expect(res.body.rating.comment).toBe(rating.comment);
+        expect(res.body.rating.rating).toBe(rating.rating);
+
+        const deletedRating = await Rating.findById(rating._id);
+        expect(deletedRating).toBeNull();
+    });
+
+    it("Should return 404 if the instructor does not exist", async () => {
+        const { token } = await getInstructorToken();
+
+        const rating = new Rating(ratingFactory());
+        await rating.save();
+
+        const res = await request
+            .delete(`/instructors/${new mongoose.Types.ObjectId()}/ratings/${rating._id}`)
+            .set("Cookie", token);
+        expect(res.status).toBe(StatusCodes.NOT_FOUND);
+    });
+
+    it("Should return 404 if the rating does not exist", async () => {
+        const { token, trainee } = await getTraineeToken();
+
+        const instructor = new Instructor(instructorFactory());
+        await instructor.save();
+
+        const res = await request
+            .delete(`/instructors/${instructor._id}/ratings/${new mongoose.Types.ObjectId()}`)
+            .set("Cookie", token);
+        expect(res.status).toBe(StatusCodes.NOT_FOUND);
+    });
+
+    it("Should return 401 if the trainee is not the owner of the rating", async () => {
+        const rating = new Rating(ratingFactory());
+        await rating.save();
+
+        const { token, trainee } = await getTraineeToken();
+        const instructor = new Instructor(instructorFactory());
+        instructor.ratings.push(rating._id);
+        await instructor.save();
+
+        const res = await request.delete(`/instructors/${instructor._id}/ratings/${rating._id}`).set("Cookie", token);
+        expect(res.status).toBe(StatusCodes.UNAUTHORIZED);
+    });
+    afterAll(async () => {
+        await disconnectDBForTesting();
+    }, TIME_OUT);
+});
+
 async function getInstructorToken() {
     const instructor = new Instructor(instructorFactory());
     const password = faker.internet.password();
