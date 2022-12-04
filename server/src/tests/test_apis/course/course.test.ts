@@ -95,7 +95,7 @@ describe("POST /courses/", () => {
         await connectDBForTesting();
     });
     it("Should create a course successfully", async () => {
-        const token = await getInstructorToken();
+        const { token } = await getInstructorToken();
 
         const course = courseFactory();
         const response = await request.post("/courses").set("Cookie", token).send(course);
@@ -244,5 +244,5 @@ async function getInstructorToken() {
         password: password
     });
     const token = res.header["set-cookie"][0];
-    return token;
+    return { token, instructor };
 }

@@ -2,6 +2,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { openModal } from "react-url-modal";
 
 import ViewProfile from "./instructorProfile/ViewProfile";
+import MyReviews from "./instructorProfile/MyReviews";
 import { FloatingButton } from "@internals/components";
 import { Instructor } from "@internals/types";
 
@@ -23,6 +24,7 @@ const InstructorProfile: React.FC<{
     return (
         <>
             <ViewProfile instructor={instructor} />
+            <MyReviews />
 
             <FloatingButton color="primary" aria-label="add" onClick={onClick}>
                 <EditIcon />
