@@ -15,3 +15,4 @@ export { default as Login } from "./auth/Login";
 export { default as CreateExercise } from "./CreateExercise";
 export { default as PasswordReset } from "./auth/PasswordReset";
 export { default as ForgotPassword } from "./auth/ForgotPassword";
+export { default as ChangePassword } from "./auth/ChangePassword";

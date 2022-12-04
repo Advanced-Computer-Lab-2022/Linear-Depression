@@ -24,7 +24,8 @@ import {
     Exercise,
     PasswordReset,
     ForgotPassword,
-    Profile
+    Profile,
+    ChangePassword
 } from "@internals/pages";
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
                         <Route path="/auth/login" element={<Login />} />
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
+                        <Route path="/auth/change" element={<ChangePassword />} />
 
                         <Route path="me/courses" element={<MyCourses />} />
                         <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />
