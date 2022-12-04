@@ -2,8 +2,7 @@ import React, { useContext } from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
-import CourseVideo from "./courseActions/CourseVideo";
-import { CoursePrice } from "@internals/components";
+import { CoursePrice, VideoPlayer } from "@internals/components";
 import { UserContext } from "@internals/contexts";
 import { Promotion, User } from "@internals/types";
 
@@ -47,7 +46,7 @@ const CourseActions: React.FC<{
     };
     return (
         <MainContainer>
-            <CourseVideo videoUrl={videoUrl} />
+            <VideoPlayer videoUrl={videoUrl} height={191} />
             <SubContainer>
                 <PriceSection>
                     <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />

@@ -16,38 +16,36 @@ const Image = styled.img`
 `;
 
 const Container = styled.div`
-    // overflow: hidden;
     padding-bottom: 56.25%;
     position: relative;
     height: 0;
     margin-bottom: 26px;
 `;
 
-const Iframe = styled.iframe`
+const Iframe = styled.iframe<{ height: number }>`
     position: absolute;
-    height: 191px;
+    height: ${(props) => props.height}px;
     position: relative;
     display: inline-block;
 `;
 
-const CourseVideo: React.FC<{ videoUrl?: string }> = ({ videoUrl }) => {
-    if (!videoUrl) {
+const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl, height }) => {
+    try {
+        const videoId = getVideoId(videoUrl);
+        return (
+            <Container>
+                <Iframe
+                    height={height}
+                    src={`https://www.youtube.com/embed/${videoId}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                />
+            </Container>
+        );
+    } catch (error) {
         return <Image src="https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg" />;
     }
-
-    const videoId = getVideoId(videoUrl);
-
-    return (
-        <Container className="video-responsive">
-            <Iframe
-                src={`https://www.youtube.com/embed/${videoId}`}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title="Embedded youtube"
-            />
-        </Container>
-    );
 };
 
-export default CourseVideo;
+export default VideoPlayer;

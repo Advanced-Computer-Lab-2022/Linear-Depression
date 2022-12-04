@@ -80,6 +80,15 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
+const CourseThumbnail: React.FC<{ preview: string }> = ({ preview }) => {
+    try {
+        const url = getVideoThumbnailUrl(preview);
+        return <Image src={url} />;
+    } catch (error) {
+        return <Image src="https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg" />;
+    }
+};
+
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
     course: {
         _id,
@@ -103,11 +112,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
             }}
         >
             <HorizontalLayout>
-                {preview ? (
-                    <Image src={getVideoThumbnailUrl(preview)} />
-                ) : (
-                    <Image src="https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg" />
-                )}
+                <CourseThumbnail preview={preview} />
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
                     <CourseDescription>{description + "  ..."}</CourseDescription>
