@@ -58,7 +58,7 @@ const ContentItem: React.FC<{
         <Item>
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
-            <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>
+            {link && <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>}
             {exerciseId &&
                 lessonId &&
                 (userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (

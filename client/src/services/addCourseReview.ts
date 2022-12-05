@@ -3,7 +3,6 @@ import axios from "axios";
 import { config } from "@internals/config";
 
 const addCourseReview = (courseId: string, rating: number, comment: string) => {
-    const traineeId = "6384a3c12209e4310eb3251d"; //TODO: remove when cookie is implemented
     const REVIEW_POST_URL = `${config.API_URL}/courses/${courseId}/ratings`;
     return new Promise((resolve, reject) => {
         axios
@@ -11,8 +10,7 @@ const addCourseReview = (courseId: string, rating: number, comment: string) => {
                 REVIEW_POST_URL,
                 {
                     rating,
-                    comment,
-                    traineeID: traineeId
+                    comment
                 },
                 { withCredentials: true }
             )
