@@ -10,6 +10,7 @@ const createRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
 
     const traineeID = req.body.userId;
+    console.log(req.body);
     if (traineeID) {
         if (!mongoose.Types.ObjectId.isValid(traineeID)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -38,6 +39,7 @@ const createRating = async (req: Request, res: Response) => {
             message: "Rating already exists for this trainee and course"
         });
     }
+    req.body.traineeID = traineeID;
     return new Rating(req.body)
         .save()
         .then((rating) => {
