@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// import { config } from "@internals/config";
 import { User } from "@internals/types";
 
 const login = (
