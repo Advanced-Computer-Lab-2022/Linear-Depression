@@ -10,7 +10,6 @@ const createRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
 
     const traineeID = req.body.userId;
-    console.log(req.body);
     if (traineeID) {
         if (!mongoose.Types.ObjectId.isValid(traineeID)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
