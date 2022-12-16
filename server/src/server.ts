@@ -1,6 +1,5 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import Logger from "./library/Logger";
 import { loadModels } from "./utils/loadModelsUtil";
 import { parseQueryParams } from "./utils/parseQueryParams";
 import AdminJS from "adminjs";
@@ -9,6 +8,7 @@ import { CreateAdminJS } from "./admin";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
+import logger from "./middleware/logger";
 
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
@@ -62,6 +62,8 @@ app.use((req, res, next) => {
     parseQueryParams(req, res, next);
 });
 
+app.use(logger);
+
 /* Routers*/
 app.use("/courses", CourseRouter);
 app.use("/instructors", InstructorRouter);
@@ -99,9 +101,7 @@ app.get("/test", async (_req, res) => {
 
 // 404
 app.use((req, res) => {
-    const error = new Error("Not Found");
-    Logger.error(error);
-    return res.status(StatusCodes.NOT_FOUND).json({ message: error.message });
+    return res.status(StatusCodes.NOT_FOUND).json({ message: "Not Found" });
 });
 
 // FIXME: should be removed in Test environment. This is for production only.
