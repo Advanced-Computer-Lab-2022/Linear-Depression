@@ -10,6 +10,8 @@ import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 import logger from "./middleware/logger";
 
+import rateLimiter from "./middleware/rateLimiter";
+
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 import InstructorRouter from "./routes/Instructor";
@@ -63,6 +65,7 @@ app.use((req, res, next) => {
 });
 
 app.use(logger);
+app.use(rateLimiter());
 
 /* Routers*/
 app.use("/courses", CourseRouter);
