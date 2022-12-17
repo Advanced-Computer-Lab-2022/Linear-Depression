@@ -32,11 +32,11 @@ const AddCourse: React.FC = () => {
             error: false,
             message: ""
         },
-        subject: {
+        description: {
             error: false,
             message: ""
         },
-        description: {
+        subject: {
             error: false,
             message: ""
         },
@@ -59,22 +59,22 @@ const AddCourse: React.FC = () => {
             });
             return false;
         }
-        if (subject === "") {
-            setFormError({
-                ...initialFormError,
-                subject: {
-                    error: true,
-                    message: "Subject is required"
-                }
-            });
-            return false;
-        }
         if (description === "") {
             setFormError({
                 ...initialFormError,
                 description: {
                     error: true,
                     message: "Description is required"
+                }
+            });
+            return false;
+        }
+        if (subject === "") {
+            setFormError({
+                ...initialFormError,
+                subject: {
+                    error: true,
+                    message: "Subject is required"
                 }
             });
             return false;
