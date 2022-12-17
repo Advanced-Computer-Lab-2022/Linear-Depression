@@ -1,4 +1,6 @@
 import React from "react";
+import ReactPlayer from "react-player/lazy";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { getVideoEmbedUrl } from "@internals/services";
@@ -22,22 +24,18 @@ const Container = styled.div`
     margin-bottom: 26px;
 `;
 
-const Iframe = styled.iframe<{ height: number }>`
-    position: absolute;
-    height: ${(props) => props.height}px;
-    position: relative;
-    display: inline-block;
-`;
-
 const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl, height }) => {
+    const { lessonId } = useParams();
     try {
         const embedURL = getVideoEmbedUrl(videoUrl);
         return (
             <Container>
-                <Iframe
+                <ReactPlayer
                     height={height}
                     width={height * 1.7777777777777777}
-                    src={embedURL}
+                    url={embedURL}
+                    onEnded={() => console.log(lessonId)} // FIXME: Check lessonId is valid before calling this
+                    controls={true}
                     frameBorder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
