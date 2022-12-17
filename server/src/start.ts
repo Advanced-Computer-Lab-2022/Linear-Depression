@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import Logger from "./library/Logger";
 import { config } from "./config/config";
 import app from "./server";
+import { logInfo, logError, logSuccess } from "./middleware/logger";
 
 /*connect to MongoDB*/
 mongoose
@@ -10,12 +10,12 @@ mongoose
         w: "majority"
     })
     .then(() => {
-        Logger.log("Connected to MongoDB");
+        logSuccess("Connected to MongoDB");
 
         app.listen(config.server.port, () => {
-            Logger.log(`Server started at http://localhost:${config.server.port}`);
+            logInfo(`Server started at http://localhost:${config.server.port}`);
         });
     })
     .catch((err) => {
-        Logger.error(err);
+        logError(err);
     });
