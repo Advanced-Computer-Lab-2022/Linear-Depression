@@ -17,3 +17,5 @@ export { default as TotalGrade } from "./exercise/TotalGrade";
 export { default as SolvedQuestion } from "./exercise/SolvedQuestion";
 export { default as Avatar } from "./Avatar";
 export { default as ReviewItem } from "./ReviewItem";
+
+export * from "./report/index";

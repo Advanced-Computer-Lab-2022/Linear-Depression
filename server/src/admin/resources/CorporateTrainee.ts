@@ -38,8 +38,8 @@ export const CorporateTraineeResource = {
             name: "Site Users",
             icon: "User"
         },
-        listProperties: ["userName", "email", "firstName", "lastName", "corporate", "status", "expiredAt"],
+        listProperties: ["userName", "email", "firstName", "lastName", "corporate", "expiredAt"],
         editProperties: ["userName", "email", "firstName", "lastName", "password", "corporate", "gender", "expiredAt"],
-        showProperties: ["userName", "email", "firstName", "lastName", "corporate", "gender", "expiredAt", "status"]
+        showProperties: ["userName", "email", "firstName", "lastName", "corporate", "gender", "expiredAt"]
     }
 };
