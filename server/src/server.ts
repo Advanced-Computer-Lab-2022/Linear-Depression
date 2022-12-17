@@ -10,6 +10,8 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 
+import rateLimiter from "./middleware/rateLimiter";
+
 import CorporateTraineeRouter from "./routes/CorporateTrainee";
 import IndividualTraineeRouter from "./routes/IndividualTrainee";
 import InstructorRouter from "./routes/Instructor";
@@ -62,6 +64,7 @@ app.use((req, res, next) => {
     parseQueryParams(req, res, next);
 });
 
+app.use(rateLimiter());
 /* Routers*/
 app.use("/courses", CourseRouter);
 app.use("/instructors", InstructorRouter);
