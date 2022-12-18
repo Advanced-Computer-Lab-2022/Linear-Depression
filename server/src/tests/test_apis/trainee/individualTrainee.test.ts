@@ -8,7 +8,6 @@ import { courseFactory } from "../../test_models/course/factory";
 import IndividualTrainee from "../../../models/IndividualTrainee";
 import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
-import Logger from "../../../library/Logger";
 const request = supertest(app);
 
 describe("IndividualTrainee APIs", () => {
