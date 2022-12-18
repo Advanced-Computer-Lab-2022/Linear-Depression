@@ -1,4 +1,4 @@
-import { FormLabel, Select, Option, TextField, Textarea, Button } from "@mui/joy";
+import { FormLabel, Select, Option, TextField, Textarea, Button, Sheet } from "@mui/joy";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +17,24 @@ const Form: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <>
-            <FormLabel htmlFor="select" id="select-label" sx={{ mt: 2 }} required>
+        <Sheet
+            sx={{
+                width: "auto",
+                px: 4,
+                py: 3,
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: "sm",
+                boxShadow: "0 0 0 0px rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1)"
+            }}
+        >
+            <FormLabel htmlFor="select" id="select-label" required>
                 Issue Type
             </FormLabel>
             <Select
                 placeholder="Choose one…"
                 size="lg"
-                variant="outlined"
+                variant="soft"
                 slotProps={{
                     button: {
                         id: "select",
@@ -46,7 +56,7 @@ const Form: React.FC = () => {
             <TextField
                 placeholder="Subject"
                 size="lg"
-                variant="outlined"
+                variant="soft"
                 slotProps={{
                     input: {
                         id: "subject",
@@ -64,7 +74,7 @@ const Form: React.FC = () => {
                 minRows={5}
                 placeholder="Describe the issue you are facing"
                 size="lg"
-                variant="outlined"
+                variant="soft"
                 slotProps={{
                     textarea: {
                         id: "textarea",
@@ -84,7 +94,7 @@ const Form: React.FC = () => {
             >
                 Submit
             </Button>
-        </>
+        </Sheet>
     );
 };
 

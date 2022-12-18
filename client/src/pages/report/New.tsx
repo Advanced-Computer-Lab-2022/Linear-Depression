@@ -1,11 +1,11 @@
 import React from "react";
 
-import { ReportPageContainer, NewReportPageHeader, NewReportForm } from "@internals/components";
+import { ReportPageContainer, NewReportForm, ReportPageHeader } from "@internals/components";
 
 const NewReport: React.FC = () => {
     return (
-        <ReportPageContainer width={800} loading={false}>
-            <NewReportPageHeader />
+        <ReportPageContainer width={1000} loading={false}>
+            <ReportPageHeader newReport={true} />
 
             <NewReportForm />
         </ReportPageContainer>
