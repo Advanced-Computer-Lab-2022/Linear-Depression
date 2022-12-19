@@ -9,15 +9,25 @@ import "./ContentAccordion.css";
 import ContentItem from "./ContentItem";
 import { UserContext } from "@internals/contexts";
 import { AddExercise } from "@internals/modals";
+import { useAppSelector } from "@internals/redux";
+import { getLessonElementsStatus } from "@internals/services";
 import { Lesson as ILessonProps, User } from "@internals/types";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;
-}> = ({ lesson: { _id, title, totalHours, video, exercises } }) => {
+    showLessonStatus?: boolean;
+}> = ({ lesson: { _id, title, totalHours, video, exercises }, showLessonStatus }) => {
     const { userType } = useContext(UserContext);
+
+    const enrollement = useAppSelector((state) => state.enrollement);
 
     const { courseId } = useParams();
     const lessonId = _id;
+
+    let lessonElementsStatus: boolean[] = null;
+    if (showLessonStatus && enrollement.data) {
+        lessonElementsStatus = getLessonElementsStatus(_id, enrollement.data);
+    }
 
     const [openExerciseModal, setOpenExerciseModal] = useState(false);
 
@@ -78,17 +88,23 @@ const ContentAccordion: React.FC<{
                 <div className="accordion-body">
                     {video && (
                         <ul>
-                            <ContentItem title={video.title} link={video.videoLink} lessonId={lessonId} />
+                            <ContentItem
+                                title={video.title}
+                                link={video.videoLink}
+                                lessonId={lessonId}
+                                seen={lessonElementsStatus ? lessonElementsStatus[0] : null}
+                            />
                         </ul>
                     )}
 
                     <ul>
-                        {exercises.map((exercise) => (
+                        {exercises.map((exercise, index) => (
                             <ContentItem
                                 key={exercise._id}
                                 title={exercise.title}
                                 exerciseId={exercise._id}
                                 lessonId={lessonId}
+                                seen={lessonElementsStatus ? lessonElementsStatus[index + 1] : null}
                             />
                         ))}
                     </ul>

@@ -2,8 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { Navbar, VideoPlayer } from "@internals/components";
-import { useFetchLessonById } from "@internals/hooks";
+import { ContentAccordion, CourseNavbar } from "@internals/components";
+import { VideoPlayer } from "@internals/components";
+import { useFetchCourseById, useFetchLessonById, useFetchMyEnrollement } from "@internals/hooks";
+import { useAppSelector } from "@internals/redux";
 
 const Container = styled.div`
     display: flex;
@@ -31,16 +33,22 @@ const Title = styled.h1``;
 const Description = styled.p``;
 
 const SideMenu = styled.div`
-    width: 30%;
+    width: 40%;
 `;
 
 const Lesson: React.FC = () => {
     const { courseId, lessonId } = useParams();
+    useFetchMyEnrollement(courseId);
+    const enrollement = useAppSelector((state) => state.enrollement);
+    useFetchCourseById(courseId);
+    const course = useAppSelector((state) => state.course);
+    console.log(enrollement);
+    console.log(course);
     const { lesson } = useFetchLessonById(courseId, lessonId);
     if (!lesson.data) return <div>Loading....</div>;
     return (
         <>
-            <Navbar />
+            <CourseNavbar />
             <HorizontalContainer>
                 <Container>
                     <VideoContainer>
@@ -49,7 +57,15 @@ const Lesson: React.FC = () => {
                     <Title>{lesson.data.video?.title}</Title>
                     <Description>{lesson.data.video?.description}</Description>
                 </Container>
-                <SideMenu />
+                <SideMenu>
+                    {course.data?.lessons.map((lesson) => {
+                        return (
+                            <div>
+                                <ContentAccordion key={lesson._id} lesson={lesson} showLessonStatus={true} />
+                            </div>
+                        );
+                    })}
+                </SideMenu>
             </HorizontalContainer>
         </>
     );

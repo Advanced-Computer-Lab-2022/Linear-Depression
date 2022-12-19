@@ -1,3 +1,4 @@
+import Checkbox from "@mui/material/Checkbox";
 import React, { useContext } from "react";
 import { MdPlayCircleFilled } from "react-icons/md";
 import { MdInsertDriveFile } from "react-icons/md";
@@ -12,6 +13,10 @@ const Item = styled.li`
     width: 100%;
     display: flex;
     align-items: center;
+`;
+
+const CustomCheckbox = styled(Checkbox)`
+    color: black !important;
 `;
 
 const Icon = styled.div`
@@ -48,7 +53,8 @@ const ContentItem: React.FC<{
     link?: string;
     exerciseId?: string;
     lessonId?: string;
-}> = ({ title, link, exerciseId, lessonId }) => {
+    seen?: boolean;
+}> = ({ title, link, exerciseId, lessonId, seen }) => {
     const { courseId } = useParams();
     const { userType } = useContext(UserContext);
 
@@ -56,6 +62,8 @@ const ContentItem: React.FC<{
 
     return (
         <Item>
+            {seen && seen === true && <CustomCheckbox disabled checked />}
+            {seen !== null && seen === false && <CustomCheckbox disabled />}
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
             {link && <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>}
