@@ -19,8 +19,8 @@ const theme = extendTheme({
         }
     },
     fontFamily: {
-        body: "Montserrat, sans-serif",
-        display: "Montserrat, sans-serif"
+        body: "Inter, sans-serif",
+        display: "Inter, sans-serif"
     }
 });
 
