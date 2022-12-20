@@ -1,6 +1,4 @@
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
+import {Box, CircularProgress, Typography} from "@mui/material";
 
 const CircularProgressBar: React.FC<{
     value: number;
