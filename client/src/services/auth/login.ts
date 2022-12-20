@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { config } from "@internals/config";
 import { User } from "@internals/types";
 
 const login = (
@@ -9,7 +8,7 @@ const login = (
 ): Promise<{
     type: User;
 }> => {
-    const LOGIN_URL = `${config.API_URL}/auth/login`;
+    const LOGIN_URL = `/auth/login`;
 
     return new Promise((resolve, reject) => {
         axios

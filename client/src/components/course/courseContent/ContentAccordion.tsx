@@ -78,7 +78,7 @@ const ContentAccordion: React.FC<{
                 <div className="accordion-body">
                     {video && (
                         <ul>
-                            <ContentItem title={video.title} link={video.videoLink} />
+                            <ContentItem title={video.title} link={video.videoLink} lessonId={lessonId} />
                         </ul>
                     )}
 

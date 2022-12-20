@@ -144,7 +144,7 @@ const Navbar = () => {
                         </li>
                         {userType !== User.GUEST && (
                             <li className="nav-item">
-                                <Link className="nav-link" to="me/courses">
+                                <Link className="nav-link" to="/me/courses">
                                     My Courses
                                 </Link>
                             </li>

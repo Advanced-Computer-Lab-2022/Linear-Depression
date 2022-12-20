@@ -28,7 +28,8 @@ const CourseHeader: React.FC = () => {
         instructor: { firstName, lastName },
         price,
         activePromotion,
-        currency
+        currency,
+        preview
     } = data;
     const { userType } = useContext(UserContext);
     const options = [
@@ -49,7 +50,6 @@ const CourseHeader: React.FC = () => {
     if (loading) {
         return <div>Loading...</div>;
     }
-
     return (
         <Header>
             <CourseInfo
@@ -58,9 +58,15 @@ const CourseHeader: React.FC = () => {
                 instructor={`${firstName} ${lastName}`}
                 rating={averageRating}
             />
-            <CourseActions price={price} currency={currency} promotion={activePromotion} courseId={_id} />
+            <CourseActions
+                price={price}
+                currency={currency}
+                promotion={activePromotion}
+                courseId={_id}
+                videoUrl={preview}
+            />
 
-            {userType == User.INSTRUCTOR && <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />}
+            {userType === User.INSTRUCTOR && <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />}
         </Header>
     );
 };

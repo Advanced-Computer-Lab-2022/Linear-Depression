@@ -9,16 +9,15 @@ import Course, { ICourse } from "../models/Course";
 const createRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
 
-    // if traineeId is provided, make sure it exists in the db in either IndividualTrainee or CorporateTrainee
-    if (req.body.traineeID) {
-        const traineeId = req.body.traineeID;
-        if (!mongoose.Types.ObjectId.isValid(traineeId)) {
+    const traineeID = req.body.userId;
+    if (traineeID) {
+        if (!mongoose.Types.ObjectId.isValid(traineeID)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Invalid traineeId"
             });
         }
-        const individualTrainee = await IndividualTrainee.findById(traineeId);
-        const corporateTrainee = await CorporateTrainee.findById(traineeId);
+        const individualTrainee = await IndividualTrainee.findById(traineeID);
+        const corporateTrainee = await CorporateTrainee.findById(traineeID);
         if (!individualTrainee && !corporateTrainee) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Invalid traineeId"
@@ -32,13 +31,14 @@ const createRating = async (req: Request, res: Response) => {
     // if there's existing rating for this trainee and course, return error
     const courseHavingRatings = (await Course.findById(courseId).populate({
         path: "ratings",
-        match: { traineeID: req.body.traineeID }
+        match: { traineeID: traineeID }
     })) as ICourse;
     if (courseHavingRatings.ratings.length > 0) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             message: "Rating already exists for this trainee and course"
         });
     }
+    req.body.traineeID = traineeID;
     return new Rating(req.body)
         .save()
         .then((rating) => {
@@ -162,6 +162,7 @@ const updateRating = async (req: Request, res: Response) => {
 const deleteRating = async (req: Request, res: Response) => {
     const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
+    const traineeId = req.body.userId as unknown as mongoose.Types.ObjectId;
 
     const course: ICourse = (await Course.findById(courseId).then((course) => {
         if (!course) {
@@ -181,11 +182,17 @@ const deleteRating = async (req: Request, res: Response) => {
             await Rating.findByIdAndDelete(ratingId)
                 .then((rating) => {
                     if (rating) {
-                        Course.findByIdAndUpdate(courseId, { $pull: { ratings: ratingId } })
-                            .then(() => {
-                                res.status(StatusCodes.OK).json({ rating });
-                            })
-                            .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+                        if (rating.traineeID != traineeId) {
+                            res.status(StatusCodes.BAD_REQUEST).json({
+                                message: "You are not allowed to delete this rating"
+                            });
+                        } else {
+                            Course.findByIdAndUpdate(courseId, { $pull: { ratings: ratingId } })
+                                .then(() => {
+                                    res.status(StatusCodes.OK).json({ rating });
+                                })
+                                .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
+                        }
                     } else {
                         return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
                     }

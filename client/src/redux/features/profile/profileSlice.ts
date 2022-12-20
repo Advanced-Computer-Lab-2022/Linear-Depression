@@ -15,7 +15,7 @@ const getProfile = createAsyncThunk("profile/getProfile", async (_, thunkapi) =>
 interface ProfileState {
     data: null | Profile; // TODO: Add other user types
     loading: boolean;
-    error: null | string;
+    error: null | any;
 }
 const initialState = {
     data: null,

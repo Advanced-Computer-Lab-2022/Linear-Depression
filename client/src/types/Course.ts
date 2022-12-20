@@ -20,6 +20,7 @@ interface ICourseProps {
     } | null;
     currency: string;
     lessons: ILessonProps[];
+    preview: string;
     subject?: string;
 }
 

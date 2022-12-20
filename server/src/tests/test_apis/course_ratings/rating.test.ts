@@ -208,9 +208,7 @@ describe("POST /courses/:courseId/ratings", () => {
     });
 
     it("Should create a new rating Successfully", async () => {
-        const traineeData = individualTraineeFactory();
-        const trainee = new IndividualTrainee(traineeData);
-        await trainee.save();
+        const { token, trainee } = await getTraineeToken();
 
         const courseData = courseFactory();
         const course = new Course(courseData);
@@ -219,7 +217,7 @@ describe("POST /courses/:courseId/ratings", () => {
         const ratingData = ratingFactory();
         ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
 
-        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData);
+        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBe(ratingData.comment);
@@ -231,17 +229,8 @@ describe("POST /courses/:courseId/ratings", () => {
         expect(courseRes.body.course.ratings).toHaveLength(1);
     });
 
-    it("Should return a 400 error if the traineeID is not found", async () => {
-        const { course, rating } = await createCourseWithRatings();
-        rating.traineeID = new mongoose.Types.ObjectId();
-        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
-        expect(res.status).toBe(StatusCodes.BAD_REQUEST);
-    });
-
     it("Should return a 200 ok if no comment is provided", async () => {
-        const traineeData = individualTraineeFactory();
-        const trainee = new IndividualTrainee(traineeData);
-        await trainee.save();
+        const { token, trainee } = await getTraineeToken();
 
         const courseData = courseFactory();
         const course = new Course(courseData);
@@ -251,7 +240,7 @@ describe("POST /courses/:courseId/ratings", () => {
         ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
         ratingData.comment = undefined;
 
-        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData);
+        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBeUndefined();
@@ -260,33 +249,36 @@ describe("POST /courses/:courseId/ratings", () => {
     });
 
     it("Should return a 400 error if the rating is missing", async () => {
-        const traineeData = individualTraineeFactory();
-        const trainee = new IndividualTrainee(traineeData);
-        await trainee.save();
+        const { token, trainee } = await getTraineeToken();
 
         const { course, rating } = await createCourseWithRatings();
         rating.traineeID = trainee._id;
         rating.rating = undefined!;
-        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
+        const res = await request
+            .post(`/courses/${course._id}/ratings`)
+            .send(getRatingData(rating))
+            .set("Cookie", token);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it("Should return a 400 error if the rating exists for the trainee and course", async () => {
-        const traineeData = individualTraineeFactory();
-        const trainee = new IndividualTrainee(traineeData);
-        await trainee.save();
+        const { token, trainee } = await getTraineeToken();
 
         const { course, rating } = await createCourseWithRatings();
         rating.traineeID = trainee._id;
+        rating.save();
         await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
-        const res = await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
+        const res = await request
+            .post(`/courses/${course._id}/ratings`)
+            .send(getRatingData(rating))
+            .set("Cookie", token);
+
+        console.log(res.body);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     it("Should return a 201 if the rating exists for the course but not the trainee", async () => {
-        const traineeData = individualTraineeFactory();
-        const trainee = new IndividualTrainee(traineeData);
-        await trainee.save();
+        const { token, trainee } = await getTraineeToken();
 
         const courseData = courseFactory();
         const course = new Course(courseData);
@@ -304,7 +296,7 @@ describe("POST /courses/:courseId/ratings", () => {
         const ratingData2 = ratingFactory();
         ratingData2.traineeID = trainee2._id as mongoose.Types.ObjectId;
 
-        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData2);
+        const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData2).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBe(ratingData2.comment);
@@ -313,9 +305,7 @@ describe("POST /courses/:courseId/ratings", () => {
     });
 
     it("should return 200 if the rating exists for the trainee but not the course", async () => {
-        const traineeData = individualTraineeFactory();
-        const trainee = new IndividualTrainee(traineeData);
-        await trainee.save();
+        const { token, trainee } = await getTraineeToken();
 
         const courseData = courseFactory();
         const course = new Course(courseData);
@@ -332,7 +322,7 @@ describe("POST /courses/:courseId/ratings", () => {
         const course2 = new Course(courseData2);
         await course2.save();
 
-        const res = await request.post(`/courses/${course2._id}/ratings`).send(ratingData);
+        const res = await request.post(`/courses/${course2._id}/ratings`).send(ratingData).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBe(ratingData.comment);
@@ -393,8 +383,10 @@ describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
 
     it("Should delete a rating Successfully", async () => {
         const { course, rating } = await createCourseWithRatings();
-
-        const res = await request.delete(`/courses/${course._id}/ratings/${rating._id}`);
+        const { token, trainee } = await getTraineeToken();
+        rating.traineeID = trainee._id;
+        await rating.save();
+        const res = await request.delete(`/courses/${course._id}/ratings/${rating._id}`).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.rating._id).toBe(rating._id.toString());
         expect(res.body.rating.comment).toBe(rating.comment);
@@ -408,7 +400,10 @@ describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
 
     it("Should return a 404 error if the rating is not found", async () => {
         const { course } = await createCourseWithRatings();
-        const res = await request.delete(`/courses/${course._id}/ratings/${new mongoose.Types.ObjectId()}`);
+        const { token, trainee } = await getTraineeToken();
+        const res = await request
+            .delete(`/courses/${course._id}/ratings/${new mongoose.Types.ObjectId()}`)
+            .set("Cookie", token);
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
@@ -416,3 +411,17 @@ describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
         await disconnectDBForTesting();
     });
 });
+
+async function getTraineeToken() {
+    const trainee = new IndividualTrainee(individualTraineeFactory());
+    const password = faker.internet.password();
+    trainee.passwordHash = password;
+    await trainee.save();
+
+    const res = await request.post("/auth/login").send({
+        email: trainee.email,
+        password: password
+    });
+    const token = res.header["set-cookie"][0];
+    return { token, trainee };
+}

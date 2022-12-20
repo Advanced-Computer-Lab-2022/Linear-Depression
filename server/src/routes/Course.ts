@@ -19,10 +19,10 @@ router.get("/:courseId/lessons/:lessonId", lessonController.readLesson);
 router.put("/:courseId/lessons/:lessonId", lessonController.updateLesson);
 
 router.get("/:courseId/ratings", ratingController.listRatings);
-router.post("/:courseId/ratings", ratingController.createRating);
+router.post("/:courseId/ratings", authenticated, ratingController.createRating);
 router.get("/:courseId/ratings/:ratingId", ratingController.readRating);
 router.put("/:courseId/ratings/:ratingId", ratingController.updateRating);
-router.delete("/:courseId/ratings/:ratingId", ratingController.deleteRating);
+router.delete("/:courseId/ratings/:ratingId", authenticated, ratingController.deleteRating);
 
 router.get("/:courseId/lessons/:lessonId/exercises", exerciseController.listExercises);
 router.get("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.readExercise);
