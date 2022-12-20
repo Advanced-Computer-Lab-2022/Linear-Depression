@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 import logger from "./middleware/logger";
+import Enrollement from "./models/Enrollement";
 
 import rateLimiter from "./middleware/rateLimiter";
 

@@ -39,7 +39,6 @@ const SideMenu = styled.div`
 const Lesson: React.FC = () => {
     const { courseId, lessonId } = useParams();
     useFetchMyEnrollement(courseId);
-    const enrollement = useAppSelector((state) => state.enrollement);
     useFetchCourseById(courseId);
     const course = useAppSelector((state) => state.course);
     const { lesson } = useFetchLessonById(courseId, lessonId);
