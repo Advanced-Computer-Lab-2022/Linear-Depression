@@ -61,7 +61,7 @@ const ContentItem: React.FC<{
 
     return (
         <Item>
-            {seen && seen === true && <CustomCheckbox disabled checked />}
+            {seen  && <CustomCheckbox disabled checked />}
             {seen !== null && seen === false && <CustomCheckbox disabled />}
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
