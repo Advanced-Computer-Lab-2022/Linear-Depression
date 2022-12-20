@@ -42,8 +42,6 @@ const Lesson: React.FC = () => {
     const enrollement = useAppSelector((state) => state.enrollement);
     useFetchCourseById(courseId);
     const course = useAppSelector((state) => state.course);
-    console.log(enrollement);
-    console.log(course);
     const { lesson } = useFetchLessonById(courseId, lessonId);
     if (!lesson.data) return <div>Loading....</div>;
     return (
