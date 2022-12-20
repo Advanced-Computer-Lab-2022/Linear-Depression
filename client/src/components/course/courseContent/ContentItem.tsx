@@ -1,7 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
 import React, { useContext } from "react";
-import { MdPlayCircleFilled } from "react-icons/md";
-import { MdInsertDriveFile } from "react-icons/md";
+import { MdPlayCircleFilled, MdInsertDriveFile } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
