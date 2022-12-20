@@ -6,6 +6,7 @@ import Exercise from "./Exercise";
 import FormProps from "./FormProps";
 import Instructor from "./Instructor";
 import Lesson from "./Lesson";
+import Note from "./Note";
 import Profile from "./Profile";
 import Promotion from "./Promotion";
 import Review from "./Review";
@@ -23,5 +24,6 @@ export {
     type Evaluation,
     type Enrollement,
     type Instructor,
-    type Profile
+    type Profile,
+    type Note
 };
