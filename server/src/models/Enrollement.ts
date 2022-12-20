@@ -84,7 +84,6 @@ enrollementSchema.pre<IEnrollementModel>("save", async function (next) {
     const course = await Course.findById(courseId).populate("lessons");
     if (this.isNew) {
         if (course) {
-            console.log("course", course);
             const lessons = course.lessons;
             for (const lessonId of lessons) {
                 const lesson = await Lesson.findById(lessonId).populate("exercises");
