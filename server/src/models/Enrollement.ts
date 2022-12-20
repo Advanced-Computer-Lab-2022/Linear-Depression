@@ -106,7 +106,6 @@ enrollementSchema.pre<IEnrollementModel>("save", async function (next) {
                 }
             }
         }
-        console.log("enrollement", enrollement);
     } else {
         let totalElements = enrollement.lessons.length;
         for (const lesson of enrollement.lessons) {
