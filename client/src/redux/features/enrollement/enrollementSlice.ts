@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import Enrollement from "src/types/Enrollement";
+import { Enrollement } from "@internals/types";
 
 import { fetchMyEnrollement } from "@internals/services";
 
