@@ -26,7 +26,10 @@ import {
     PasswordReset,
     ForgotPassword,
     Profile,
-    ChangePassword
+    ChangePassword,
+    NewReport,
+    AllReports,
+    ReportThread
 } from "@internals/pages";
 
 function App() {
@@ -68,6 +71,10 @@ function App() {
                             element={<Exercise />}
                         />
                         <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
+
+                        <Route path="/me/reports/new" element={<NewReport />} />
+                        <Route path="/me/reports" element={<AllReports />} />
+                        <Route path="/me/reports/:reportId" element={<ReportThread />} />
                     </Routes>
                 </div>
             </CountryContext.Provider>

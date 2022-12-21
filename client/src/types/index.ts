@@ -9,19 +9,25 @@ import Lesson from "./Lesson";
 import Profile from "./Profile";
 import Promotion from "./Promotion";
 import Review from "./Review";
-import User from "./User";
+import { ReportStatus, ReportType, UserType } from "./enums/index";
+import { Report, ReportThread, ReportFormProps } from "./report/index";
 
 export {
+    UserType as User, // TODO: Change all usages of this to UserType
+    ReportType,
+    ReportStatus,
     type Country,
     type Course,
     type FormProps,
     type Lesson,
     type Promotion,
-    User,
     type Exercise,
     type Review,
     type Evaluation,
     type Enrollement,
     type Instructor,
-    type Profile
+    type Profile,
+    type Report,
+    type ReportThread,
+    type ReportFormProps
 };

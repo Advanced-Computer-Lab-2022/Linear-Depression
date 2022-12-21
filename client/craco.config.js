@@ -12,7 +12,9 @@ module.exports = {
             "@internals/services": path.resolve(__dirname, "src/services"),
             "@internals/types": path.resolve(__dirname, "src/types"),
             "@internals/modals": path.resolve(__dirname, "src/components/modals"),
-            "@internals/redux": path.resolve(__dirname, "src/redux")
+            "@internals/redux": path.resolve(__dirname, "src/redux"),
+            "@internals/api": path.resolve(__dirname, "src/api"),
+            "@internals/handlers": path.resolve(__dirname, "src/handlers")
         }
     }
 };

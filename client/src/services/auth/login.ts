@@ -18,7 +18,7 @@ const login = (
                     email,
                     password
                 },
-                { withCredentials: true }
+                { withCredentials: true } // TODO: not correct
             )
             .then((res) => {
                 resolve(res.data);

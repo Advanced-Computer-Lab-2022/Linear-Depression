@@ -1,9 +1,6 @@
-interface Instructor {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    userName: string;
-    email: string;
+import User from "./User";
+
+interface Instructor extends User {
     biography?: string;
     averageRating: number;
 }
