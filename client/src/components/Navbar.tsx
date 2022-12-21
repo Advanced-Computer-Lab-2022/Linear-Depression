@@ -11,8 +11,8 @@ import OptionsButton from "./OptionsButton";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
 import { config } from "@internals/config";
-import { CountryContext, UserContext } from "@internals/contexts";
-import { useFetchProfile } from "@internals/hooks";
+import { CountryContext } from "@internals/contexts";
+import { useAuth, useFetchProfile } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { logout } from "@internals/services";
 import { User } from "@internals/types";
@@ -30,8 +30,7 @@ const getUserName = (userType: User, data: any) => {
 };
 
 const Navbar = () => {
-    const { userType, setUserType } = useContext(UserContext);
-
+    const { auth, logout: authLogout } = useAuth();
     const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
@@ -58,7 +57,7 @@ const Navbar = () => {
             label: "Logout",
             onClick: () => {
                 logout().then(() => {
-                    setUserType(User.GUEST);
+                    authLogout();
                     navigate("/", { replace: true });
                 });
             },
@@ -142,14 +141,14 @@ const Navbar = () => {
                                 LD Business
                             </a>
                         </li>
-                        {userType !== User.GUEST && (
+                        {auth.userType !== User.GUEST && (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/me/courses">
                                     My Courses
                                 </Link>
                             </li>
                         )}
-                        {userType === User.GUEST && (
+                        {auth.userType === User.GUEST && (
                             <>
                                 <button
                                     className="navbar-item login-button"
@@ -173,9 +172,12 @@ const Navbar = () => {
                                 }
                             />
                         </button>
-                        {userType !== User.GUEST && data !== null && (
+                        {auth.userType !== User.GUEST && data !== null && (
                             <div className="navbar-item">
-                                <OptionsButton options={options} icon={<Avatar name={getUserName(userType, data)} />} />
+                                <OptionsButton
+                                    options={options}
+                                    icon={<Avatar name={getUserName(auth.userType, data)} />}
+                                />
                             </div>
                         )}
                     </ul>
