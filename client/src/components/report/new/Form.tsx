@@ -1,6 +1,5 @@
 import { FormLabel, Select, Option, TextField, Textarea, Button, Sheet } from "@mui/joy";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { HandleReportFormSubmit } from "@internals/handlers";

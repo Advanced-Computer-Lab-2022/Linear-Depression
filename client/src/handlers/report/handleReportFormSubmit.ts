@@ -12,11 +12,11 @@ const execute = async (
 
     try {
         await AddReport(report);
-        setLoading(false);
         navigate("/me/reports/");
     } catch (err) {
-        setLoading(false);
         alert(err);
+    } finally {
+        setLoading(false);
     }
 };
 

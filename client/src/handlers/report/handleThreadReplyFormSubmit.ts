@@ -9,7 +9,7 @@ const execute = async (
 
     try {
         await AddThreadReply(reportId, message);
-        window.location.reload();
+        window.location.reload(); // TODO: will update to use state instead of reloading the page
     } catch (err) {
         setLoading(false);
         alert(err);

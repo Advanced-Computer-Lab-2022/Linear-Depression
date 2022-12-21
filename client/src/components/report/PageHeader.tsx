@@ -1,7 +1,13 @@
 import { Add, ArrowForwardIosRounded, BugReportTwoTone } from "@mui/icons-material";
-import { Avatar, Typography, Button, Sheet, Link } from "@mui/joy";
+import { Avatar, Typography, Button, Sheet } from "@mui/joy";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const link = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+`;
 
 interface HeaderProps {
     reportSubject?: string;
@@ -24,15 +30,15 @@ const Header: React.FC<HeaderProps> = ({ reportSubject, newReport }) => {
             <Avatar sx={{ bgcolor: "#e3f2fd", width: 50, height: 50, alignSelf: "center", mr: 2 }}>
                 <BugReportTwoTone sx={{ fontSize: 40 }} />
             </Avatar>
-            <Typography level="h3" component={Link} href="/me/profile" sx={{ alignSelf: "center" }}>
+            <Typography level="h3" component={link} to="/me/profile" sx={{ alignSelf: "center" }}>
                 <b>Me</b>
             </Typography>
             <ArrowForwardIosRounded sx={{ fontSize: 15, alignSelf: "center", mx: 1 }} />
 
             <Typography
                 level="h3"
-                component={reportSubject || newReport ? Link : "h1"}
-                href="/me/reports"
+                component={reportSubject || newReport ? link : "h1"}
+                to="/me/reports"
                 sx={{ alignSelf: "center" }}
             >
                 <b>Reports</b>

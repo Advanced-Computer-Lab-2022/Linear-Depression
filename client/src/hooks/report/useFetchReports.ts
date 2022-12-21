@@ -13,10 +13,11 @@ const useFetchReports = () => {
         GetUserReports()
             .then((res) => {
                 setReports(res);
-                setLoading(false);
             })
             .catch((err) => {
                 setError(err);
+            })
+            .finally(() => {
                 setLoading(false);
             });
     }, []);

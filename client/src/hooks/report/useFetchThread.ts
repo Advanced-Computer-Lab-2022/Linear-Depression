@@ -17,6 +17,9 @@ const useFetchReport = (reportId: string) => {
             .catch((err) => {
                 setError(err);
                 setLoading(false);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }, [reportId]);
 

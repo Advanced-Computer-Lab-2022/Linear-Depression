@@ -1,4 +1,4 @@
-export { default as ReportPageHeader } from "./listing/PageHeader";
+export { default as ReportPageHeader } from "./PageHeader";
 export { default as ReportPageContainer } from "./PageContainter";
 
 export { default as ThreadContainer } from "./thread/Container";
@@ -13,5 +13,4 @@ export { default as ReportsTableHeader } from "./listing/table/Header";
 export { default as ReportsTableBodyContainer } from "./listing/table/BodyContainer";
 export { default as ReportsTableRow } from "./listing/table/Row";
 
-export { default as NewReportPageHeader } from "./new/PageHeader";
 export { default as NewReportForm } from "./new/Form";

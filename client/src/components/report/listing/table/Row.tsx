@@ -2,6 +2,7 @@ import { KeyboardArrowRight } from "@mui/icons-material";
 import { ListItemButton, ListItemContent, Chip } from "@mui/joy";
 import moment from "moment";
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { ReportStatus } from "@internals/types";
 
@@ -15,7 +16,7 @@ interface RowProps {
 
 const Row: React.FC<RowProps> = ({ reportId, subject, createdAt, lastActivity, status }) => {
     return (
-        <ListItemButton component="a" href={`/me/reports/${reportId}`}>
+        <ListItemButton component={Link} to={`/me/reports/${reportId}`}>
             <ListItemContent sx={{ width: "40%" }}>{subject}</ListItemContent>
             <ListItemContent sx={{ textAlign: "center", width: "16%" }}>
                 {moment(createdAt).format("MMMM Do, YYYY")}
