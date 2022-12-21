@@ -5,8 +5,6 @@ export { default as InstructorProfile } from "./InstructorProfile";
 export { default as IndividualTraineeProfile } from "./IndividualTraineeProfile";
 export { default as CorporateTraineeProfile } from "./CorporateTraineeProfile";
 export { default as MyCourses } from "./MyCourses";
-export { default as CorporateTrainee } from "./CorporateTrainee";
-export { default as IndividualTrainee } from "./IndividualTrainee";
 export { default as InstructorExercise } from "./InstructorExercise";
 export { default as TraineeExercise } from "./TraineeExercise";
 export { default as Exercise } from "./Exercise";

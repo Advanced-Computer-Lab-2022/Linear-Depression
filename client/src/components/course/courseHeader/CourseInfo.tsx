@@ -79,7 +79,7 @@ const CourseInfo: React.FC<{
             <div>
                 Created by <Instructor>{instructor}</Instructor>
             </div>
-            {(userType == User.INDIVIDUAL_TRAINEE || userType == User.CORPORATE_TRAINEE) && (
+            {(userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
                 <Button onClick={onClick}>Add Review</Button>
             )}
         </Container>

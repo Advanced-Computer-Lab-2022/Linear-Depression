@@ -17,8 +17,6 @@ import {
 } from "@internals/modals";
 import {
     Home,
-    CorporateTrainee,
-    IndividualTrainee,
     Course,
     Login,
     MyCourses,
@@ -52,25 +50,34 @@ function App() {
                 <Routes>
                     <Route element={<AuthHandler />}>
                         <Route path="/" element={<Home />} />
-                        <Route path="/me/profile" element={<Profile />} />
-                        <Route element={<AuthHandler roles={[User.INSTRUCTOR]} />}>
-                            <Route path="courses/:courseId" element={<Course />} />
-                        </Route>
-                        <Route path="corporate-trainee" element={<CorporateTrainee />} />
-                        <Route path="individual-trainee" element={<IndividualTrainee />} />
-
+                        <Route path="courses/:courseId" element={<Course />} />
                         <Route path="/auth/login" element={<Login />} />
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
-                        <Route path="/auth/change" element={<ChangePassword />} />
 
-                        <Route path="me/courses" element={<MyCourses />} />
-                        <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />
                         <Route
-                            path="courses/:courseId/lessons/:lessonId/exercises/:exerciseId"
-                            element={<Exercise />}
-                        />
-                        <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
+                            element={
+                                <AuthHandler
+                                    roles={[User.INSTRUCTOR, User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]}
+                                />
+                            }
+                        >
+                            <Route path="/me/profile" element={<Profile />} />
+                            <Route path="/auth/change" element={<ChangePassword />} />
+                            <Route path="me/courses" element={<MyCourses />} />
+                            <Route
+                                path="courses/:courseId/lessons/:lessonId/exercises/:exerciseId"
+                                element={<Exercise />}
+                            />
+                        </Route>
+
+                        <Route element={<AuthHandler roles={[User.INSTRUCTOR]} />}>
+                            <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />
+                        </Route>
+
+                        <Route element={<AuthHandler roles={[User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]} />}>
+                            <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
+                        </Route>
                     </Route>
                 </Routes>
             </div>
