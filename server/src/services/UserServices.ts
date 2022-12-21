@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import PasswordResetToken from "../models/PasswordResetToken";
-import User from "../models/User";
+import User, { IUserModel } from "../models/User";
 import {
     createRefreshToken,
     createAccessToken,
@@ -10,11 +10,14 @@ import {
 } from "../utils/auth/token";
 import { UserTypesNames, UserType } from "../enums/UserTypes";
 
+interface AuthResponse {
+    refreshToken?: string;
+    accessToken: string;
+    userType: UserType;
+}
+
 export default class UserServices {
-    static login(
-        email: string,
-        password: string
-    ): Promise<{ accessToken: string; refreshToken: string; userType: number }> {
+    static login(email: string, password: string): Promise<AuthResponse> {
         return new Promise(async (resolve, reject) => {
             const user = await User.findOne({ email });
 
@@ -33,11 +36,14 @@ export default class UserServices {
         });
     }
 
-    static refresh(refreshToken: string): Promise<string> {
+    static refresh(refreshToken: string): Promise<AuthResponse> {
         return new Promise((resolve, reject) => {
             verifyRefreshToken(refreshToken)
-                .then((accessToken: string) => {
-                    resolve(accessToken);
+                .then((user: IUserModel) => {
+                    resolve({
+                        accessToken: createAccessToken(user),
+                        userType: UserTypesNames.get(user.__t) as UserType
+                    });
                 })
                 .catch((error: Error) => {
                     reject(error);

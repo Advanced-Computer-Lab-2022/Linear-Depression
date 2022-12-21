@@ -16,7 +16,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
                 httpOnly: true,
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
-            res.status(StatusCodes.OK).json({ accessToken: data.accessToken, userType: data.userType });
+
+            res.status(StatusCodes.OK).json({
+                accessToken: data.accessToken,
+                userType: data.userType
+            });
         })
         .catch((error: any) => res.status(error.status).json({ message: error.message }));
 };
@@ -29,8 +33,11 @@ const refresh = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     UserServices.refresh(refreshToken)
-        .then((accessToken: string) => {
-            res.status(StatusCodes.OK).json({ accessToken });
+        .then((data) => {
+            res.status(StatusCodes.OK).json({
+                accessToken: data.accessToken,
+                userType: data.userType
+            });
         })
         .catch((error: any) => res.status(error.status).json({ error: error.message }));
 };

@@ -29,7 +29,7 @@ export const createRefreshToken = (user: IUserModel): string => {
     );
 };
 
-export const verifyRefreshToken = (refreshToken: string): Promise<string> => {
+export const verifyRefreshToken = (refreshToken: string): Promise<IUserModel> => {
     return new Promise((resolve, reject) => {
         jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET as jwt.Secret, async (err, decoded) => {
             if (err) {
@@ -47,9 +47,7 @@ export const verifyRefreshToken = (refreshToken: string): Promise<string> => {
                 });
             }
 
-            const accessToken = createAccessToken(user);
-
-            return resolve(accessToken);
+            return resolve(user);
         });
     });
 };
