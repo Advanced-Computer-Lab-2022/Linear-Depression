@@ -1,0 +1,6 @@
+{
+    "properties": {
+        "userId": "User",
+        "courseId": "Course"
+    }
+}

@@ -9,6 +9,7 @@ import { ParsedQs } from "qs";
 import { UserType } from "../enums/UserTypes";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
+import Enrollement from "../models/Enrollement";
 
 async function getCurrencyRateByCookie(
     req: Request,
@@ -97,13 +98,27 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
     } else if (userType === UserType.CORPORATE_TRAINEE) {
         const corporateTrainee = await CorporateTrainee.findById(req.body.userId);
         if (corporateTrainee) {
-            const courses = corporateTrainee.courses;
+            const courses = [];
+            for (const enrollementId of corporateTrainee.enrollements) {
+                const enrollement = await Enrollement.findById(enrollementId);
+                if (enrollement) {
+                    courses.push(enrollement.courseId);
+                }
+            }
+
             req.query["_id"] = { $in: courses } as any;
         }
     } else {
         const individualTrainee = await IndividualTrainee.findById(req.body.userId);
         if (individualTrainee) {
-            const courses = individualTrainee.courses;
+            const courses = [];
+            for (const enrollementId of individualTrainee.enrollements) {
+                const enrollement = await Enrollement.findById(enrollementId);
+                if (enrollement) {
+                    courses.push(enrollement.courseId);
+                }
+            }
+
             req.query["_id"] = { $in: courses } as any;
         }
     }

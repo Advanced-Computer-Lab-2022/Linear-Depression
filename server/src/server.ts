@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 import logger from "./middleware/logger";
+import Enrollement from "./models/Enrollement";
 
 import rateLimiter from "./middleware/rateLimiter";
 
@@ -18,6 +19,7 @@ import InstructorRouter from "./routes/Instructor";
 import CourseRouter from "./routes/Course";
 import LangRouter from "./routes/Currency";
 import PromotionRouter from "./routes/Promotion";
+import EnrollementRouter from "./routes/Enrollement";
 import AuthRouter from "./routes/Auth";
 import MeRouter from "./routes/Me";
 
@@ -74,6 +76,7 @@ app.use("/corporate-trainees", CorporateTraineeRouter);
 app.use("/individual-trainees", IndividualTraineeRouter);
 app.use("/country", LangRouter);
 app.use("/promotions", PromotionRouter);
+app.use("/enrollements", EnrollementRouter);
 app.use("/auth", AuthRouter);
 app.use("/me", MeRouter);
 

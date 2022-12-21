@@ -16,7 +16,7 @@ const GridContainer = styled(Grid)`
 
 const theme = createTheme({
     typography: {
-        fontFamily: ["Montserrat", "sans-serif"].join(",")
+        fontFamily: ["Inter", "sans-serif"].join(",")
     }
 });
 

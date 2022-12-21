@@ -4,6 +4,7 @@ import type { TypedUseSelectorHook } from "react-redux";
 
 import { courseSlice } from "./features/course/courseSlice";
 import { CoursesListSlice } from "./features/courseList/coursesListSlice";
+import { enrollementSlice } from "./features/enrollement/enrollementSlice";
 import { profileSlice } from "./features/profile/profileSlice";
 import { subjectsSlice } from "./features/subjects/subjectSlice";
 
@@ -12,7 +13,8 @@ const store = configureStore({
         course: courseSlice.reducer,
         coursesList: CoursesListSlice.reducer,
         subjects: subjectsSlice.reducer,
-        profile: profileSlice.reducer
+        profile: profileSlice.reducer,
+        enrollement: enrollementSlice.reducer
     }
 });
 

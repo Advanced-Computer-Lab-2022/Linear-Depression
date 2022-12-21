@@ -26,7 +26,10 @@ import {
     PasswordReset,
     ForgotPassword,
     Profile,
-    ChangePassword
+    ChangePassword,
+    NewReport,
+    AllReports,
+    ReportThread
 } from "@internals/pages";
 
 function App() {
@@ -69,6 +72,9 @@ function App() {
                                 path="courses/:courseId/lessons/:lessonId/exercises/:exerciseId"
                                 element={<Exercise />}
                             />
+                            <Route path="/me/reports/new" element={<NewReport />} />
+                            <Route path="/me/reports" element={<AllReports />} />
+                            <Route path="/me/reports/:reportId" element={<ReportThread />} />
                         </Route>
 
                         <Route element={<AuthHandler roles={[User.INSTRUCTOR]} />}>
