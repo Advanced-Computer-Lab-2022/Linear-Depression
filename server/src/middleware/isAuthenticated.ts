@@ -13,7 +13,7 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     verifyAccessToken(token)
         .then((decoded: TokenPayload) => {
             req.body.userId = decoded.id;
-            req.body.userType = decoded.type;
+            req.body.userType = decoded.userType;
             next();
         })
         .catch((error: any) => res.status(401).json({ message: "Unauthorized" }));

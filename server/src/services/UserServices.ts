@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import { UserTypes } from "../enums/UserTypes";
 import PasswordResetToken from "../models/PasswordResetToken";
 import User from "../models/User";
 import {
@@ -9,9 +8,13 @@ import {
     decodeToken,
     TokenPayload
 } from "../utils/auth/token";
+import { UserTypesNames, UserType } from "../enums/UserTypes";
 
 export default class UserServices {
-    static login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
+    static login(
+        email: string,
+        password: string
+    ): Promise<{ accessToken: string; refreshToken: string; userType: number }> {
         return new Promise(async (resolve, reject) => {
             const user = await User.findOne({ email });
 
@@ -24,7 +27,8 @@ export default class UserServices {
 
             resolve({
                 accessToken: createAccessToken(user),
-                refreshToken: createRefreshToken(user)
+                refreshToken: createRefreshToken(user),
+                userType: UserTypesNames.get(user.__t) as UserType
             });
         });
     }
@@ -44,9 +48,9 @@ export default class UserServices {
     static async getUserType(token: string) {
         if (token) {
             const decodedToken: TokenPayload = decodeToken(token) as TokenPayload;
-            return decodedToken.type;
+            return decodedToken.userType;
         } else {
-            return UserTypes.GUEST;
+            return UserType.GUEST;
         }
     }
 

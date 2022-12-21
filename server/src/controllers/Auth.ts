@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { UserTypes } from "../enums/UserTypes";
+import { UserType } from "../enums/UserTypes";
 import UserServices from "../services/UserServices";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -11,13 +11,12 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     return UserServices.login(email, password)
-        .then((tokens) => {
-            res.cookie("jwt", tokens.refreshToken, {
+        .then((data) => {
+            res.cookie("jwt", data.refreshToken, {
                 httpOnly: true,
-                sameSite: "none",
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
-            res.status(StatusCodes.OK).json({ accessToken: tokens.accessToken });
+            res.status(StatusCodes.OK).json({ accessToken: data.accessToken, userType: data.userType });
         })
         .catch((error: any) => res.status(error.status).json({ message: error.message }));
 };
@@ -47,7 +46,7 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
 const getRole = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
     return UserServices.getUserType(token)
-        .then((type: UserTypes) => {
+        .then((type: UserType) => {
             res.status(StatusCodes.OK).json({ type });
         })
         .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));

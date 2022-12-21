@@ -1,18 +1,18 @@
 import jwt from "jsonwebtoken";
 import User, { IUserModel } from "../../models/User";
-import { UserTypes, UserTypesNames } from "../../enums/UserTypes";
+import { UserType, UserTypesNames } from "../../enums/UserTypes";
 import { StatusCodes } from "http-status-codes";
 
 export interface TokenPayload extends Object {
     id: string;
-    type: UserTypes;
+    userType: UserType;
 }
 
 export const createAccessToken = (user: IUserModel): string => {
     return jwt.sign(
         {
             id: user._id,
-            type: UserTypesNames.get(user.__t)
+            userType: UserTypesNames.get(user.__t)
         },
         process.env.JWT_ACCESS_TOKEN_SECRET as jwt.Secret,
         { expiresIn: "15m" }
