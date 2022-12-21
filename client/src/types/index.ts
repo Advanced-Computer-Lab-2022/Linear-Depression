@@ -1,5 +1,6 @@
 import Country from "./Country";
 import Course from "./Course";
+import Enrollement from "./Enrollement";
 import Evaluation from "./Evaluation";
 import Exercise from "./Exercise";
 import FormProps from "./FormProps";
@@ -23,6 +24,7 @@ export {
     type Exercise,
     type Review,
     type Evaluation,
+    type Enrollement,
     type Instructor,
     type Profile,
     type Report,

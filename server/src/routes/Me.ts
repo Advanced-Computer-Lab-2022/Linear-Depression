@@ -1,6 +1,7 @@
 import express from "express";
 import courseController from "../controllers/Course";
 import profileController from "../controllers/Profile";
+import enrollementController from "../controllers/Enrollement";
 import authenticated from "../middleware/authenticated";
 import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
@@ -8,6 +9,8 @@ import reportController from "../controllers/Report";
 const router = express.Router();
 
 router.get("/courses", authenticated, courseController.listMyCourses);
+
+router.get("/enrollements", authenticated, enrollementController.readMyEnrollements);
 
 router.get("/ratings", authenticated, instructorRatingController.listRatings);
 router.get("/profile", authenticated, profileController.readProfile);

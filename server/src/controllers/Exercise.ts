@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import Exercise from "../models/Exercise";
 import Lesson from "../models/Lesson";
 import Answer from "../models/Answer";
+import Enrollement from "../models/Enrollement";
 
 const createExercise = (req: Request, res: Response, next: NextFunction) => {
     const lessonId = req.params.lessonId;
@@ -118,7 +119,6 @@ const readSubmission = (req: Request, res: Response, next: NextFunction) => {
     const exerciseId = req.params.exerciseId;
     const traineeId = req.body.userId;
 
-
     return Answer.findOne({
         exerciseId: exerciseId,
         traineeId: traineeId
@@ -136,11 +136,9 @@ const readSubmission = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const submitExercise = (req: Request, res: Response, next: NextFunction) => {
-    const exerciseId = req.params.exerciseId;
+    const { courseId, lessonId, exerciseId } = req.params;
     const traineeId = req.body.userId;
 
-
-    // FIXME: It is assumed that the traineeId is already in the request body
     return Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId })
         .then((answer) => {
             if (answer) {
@@ -149,7 +147,14 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                 return answer
                     .save()
                     .then(() => {
-                        evaluateExercise(traineeId, exerciseId).then((evaluation) => {
+                        evaluateExercise(traineeId, exerciseId).then(async (evaluation) => {
+                            const enrollement = await Enrollement.find({
+                                courseId: courseId,
+                                traineeId: traineeId
+                            });
+                            if (enrollement.length > 0) {
+                                enrollement[0].setCompletedExercise(lessonId, exerciseId);
+                            }
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
                     })
@@ -165,7 +170,14 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                 return answer
                     .save()
                     .then(() => {
-                        evaluateExercise(traineeId, exerciseId).then((evaluation) => {
+                        evaluateExercise(traineeId, exerciseId).then(async (evaluation) => {
+                            const enrollement = await Enrollement.find({
+                                courseId: courseId,
+                                traineeId: traineeId
+                            });
+                            if (enrollement.length > 0) {
+                                enrollement[0].setCompletedExercise(lessonId, exerciseId);
+                            }
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
                     })

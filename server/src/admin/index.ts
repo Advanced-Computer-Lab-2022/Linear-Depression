@@ -6,6 +6,7 @@ import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import { ReportResource } from "./resources/Report";
 import Course from "../models/Course";
 import Rating from "../models/Rating";
+import Enrollement from "../models/Enrollement";
 import User from "../models/User";
 import ReportThread from "../models/ReportThread";
 
@@ -38,6 +39,12 @@ export function CreateAdminJS(app: any) {
             },
             {
                 resource: ReportThread,
+                options: {
+                    navigation: false
+                }
+            },
+            {
+                resource: Enrollement,
                 options: {
                     navigation: false
                 }
