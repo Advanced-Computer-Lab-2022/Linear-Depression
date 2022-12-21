@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { MdPlayCircleFilled } from "react-icons/md";
 import { MdInsertDriveFile } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { UserContext } from "@internals/contexts";
+import { useAuth } from "@internals/hooks";
 import { User } from "@internals/types";
 
 const Item = styled.li`
@@ -50,7 +50,9 @@ const ContentItem: React.FC<{
     lessonId?: string;
 }> = ({ title, link, exerciseId, lessonId }) => {
     const { courseId } = useParams();
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
 
     const navigate = useNavigate();
 

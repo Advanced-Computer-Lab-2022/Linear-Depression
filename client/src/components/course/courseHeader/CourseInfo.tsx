@@ -1,11 +1,11 @@
-import { UserContext } from "@internals/contexts";
-import { User } from "@internals/types";
-import React, { useContext } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import BadgeRatedEnrolled from "./courseInfo/BadgeRatedEnrolled";
+import { useAuth } from "@internals/hooks";
+import { User } from "@internals/types";
 
 const Container = styled.div`
     margin: 0 40px;
@@ -54,7 +54,10 @@ const CourseInfo: React.FC<{
     instructor: string;
     rating: number;
 }> = ({ title, description, rating, instructor }) => {
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
+
     rating = Number(rating.toFixed(1));
 
     const { courseId } = useParams();

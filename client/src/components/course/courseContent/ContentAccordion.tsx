@@ -1,5 +1,5 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
@@ -7,14 +7,16 @@ import { openModal } from "react-url-modal";
 import OptionsButton from "../../OptionsButton";
 import "./ContentAccordion.css";
 import ContentItem from "./ContentItem";
-import { UserContext } from "@internals/contexts";
+import { useAuth } from "@internals/hooks";
 import { AddExercise } from "@internals/modals";
 import { Lesson as ILessonProps, User } from "@internals/types";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;
 }> = ({ lesson: { _id, title, totalHours, video, exercises } }) => {
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
 
     const { courseId } = useParams();
     const lessonId = _id;

@@ -1,8 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
-import { CountryContext, UserContext } from "@internals/contexts";
-import { useGetLocalizationData, useGetUserType } from "@internals/hooks";
+import AuthHandler from "./components/AuthHandler";
+import { User } from "./types";
+import { CountryContext } from "@internals/contexts";
+import { useGetLocalizationData } from "@internals/hooks";
 import {
     AddLesson,
     AddCourse,
@@ -31,28 +33,29 @@ import {
 
 function App() {
     const { country, setCountry, currency, setCurrency } = useGetLocalizationData();
-    const { userType, setUserType } = useGetUserType();
 
     return (
-        <UserContext.Provider value={{ userType, setUserType }}>
-            <CountryContext.Provider value={{ country, setCountry, currency, setCurrency }}>
-                <div className="App">
-                    <URLModal
-                        modals={{
-                            addLesson: AddLesson,
-                            addCourse: AddCourse,
-                            addReview: AddReview,
-                            addPromotion: AddPromotion,
-                            editCourse: EditCourse,
-                            editLesson: EditLesson,
-                            editProfile: EditProfile,
-                            viewAndAcceptContract: ViewAndAcceptContract
-                        }}
-                    />
-                    <Routes>
+        <CountryContext.Provider value={{ country, setCountry, currency, setCurrency }}>
+            <div className="App">
+                <URLModal
+                    modals={{
+                        addLesson: AddLesson,
+                        addCourse: AddCourse,
+                        addReview: AddReview,
+                        addPromotion: AddPromotion,
+                        editCourse: EditCourse,
+                        editLesson: EditLesson,
+                        editProfile: EditProfile,
+                        viewAndAcceptContract: ViewAndAcceptContract
+                    }}
+                />
+                <Routes>
+                    <Route element={<AuthHandler />}>
                         <Route path="/" element={<Home />} />
                         <Route path="/me/profile" element={<Profile />} />
-                        <Route path="courses/:courseId" element={<Course />} />
+                        <Route element={<AuthHandler roles={[User.INSTRUCTOR]} />}>
+                            <Route path="courses/:courseId" element={<Course />} />
+                        </Route>
                         <Route path="corporate-trainee" element={<CorporateTrainee />} />
                         <Route path="individual-trainee" element={<IndividualTrainee />} />
 
@@ -68,10 +71,10 @@ function App() {
                             element={<Exercise />}
                         />
                         <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
-                    </Routes>
-                </div>
-            </CountryContext.Provider>
-        </UserContext.Provider>
+                    </Route>
+                </Routes>
+            </div>
+        </CountryContext.Provider>
     );
 }
 

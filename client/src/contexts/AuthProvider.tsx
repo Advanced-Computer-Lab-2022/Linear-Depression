@@ -6,12 +6,13 @@ import { User } from "@internals/types";
 
 interface Auth {
     accessToken: string | null;
-    userType: number;
+    userType: User;
+    isLoggedIn: boolean;
 }
 
 interface AuthContextValue {
     auth: Auth;
-    setAuth: (accessToken: string, userType: number) => void;
+    setAuth: (accessToken: string, userType: User) => void;
     logout: () => void;
     refreshAuth: () => void;
 }
@@ -19,7 +20,8 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
     auth: {
         accessToken: null,
-        userType: User.GUEST
+        userType: User.GUEST,
+        isLoggedIn: localStorage.getItem("logged") === "true"
     },
     setAuth: () => {},
     logout: () => {},
@@ -31,14 +33,17 @@ export const AuthProvider: React.FC<{
 }> = ({ children }) => {
     const [authState, setAuthState] = useState<Auth>({
         accessToken: null,
-        userType: User.GUEST
+        userType: User.GUEST,
+        isLoggedIn: localStorage.getItem("logged") === "true"
     });
 
-    const setAuth = (accessToken: string, userType: number) => {
+    const setAuth = (accessToken: string, userType: User) => {
         setAuthState({
             accessToken,
-            userType
+            userType,
+            isLoggedIn: true
         });
+        localStorage.setItem("logged", "true");
 
         axios.interceptors.request.use((config) => {
             config.headers.Authorization = `Bearer ${accessToken}`;
@@ -49,9 +54,10 @@ export const AuthProvider: React.FC<{
     const logout = () => {
         setAuthState({
             accessToken: null,
-            userType: User.GUEST
+            userType: User.GUEST,
+            isLoggedIn: false
         });
-        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("logged");
     };
 
     const refreshAuth = async () => {
@@ -59,7 +65,8 @@ export const AuthProvider: React.FC<{
             .then((data) => {
                 setAuthState({
                     accessToken: data.accessToken,
-                    userType: data.userType
+                    userType: data.userType,
+                    isLoggedIn: true
                 });
             })
             .catch((err) => {
@@ -80,5 +87,4 @@ export const AuthProvider: React.FC<{
         </AuthContext.Provider>
     );
 };
-
 export default AuthContext;

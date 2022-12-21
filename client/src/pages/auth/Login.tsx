@@ -1,9 +1,7 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typography } from "@mui/material";
-import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { UserContext } from "@internals/contexts";
 import { useAuth } from "@internals/hooks";
 import { login } from "@internals/services";
 
@@ -19,8 +17,6 @@ const SignIn: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { setUserType } = useContext(UserContext);
-
     const { setAuth } = useAuth();
 
     const from = location.state?.from?.pathname || "/";
@@ -32,9 +28,6 @@ const SignIn: React.FC = () => {
         login(data.get("email") as string, data.get("password") as string)
             .then((data) => {
                 setAuth(data.accessToken, data.userType);
-
-                setUserType(data.userType); //TODO: to be removed an replaced with auth
-                localStorage.setItem("rememberMe", "true");
                 navigate(from);
             })
             .catch((err) => {

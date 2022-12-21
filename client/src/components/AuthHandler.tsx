@@ -3,27 +3,25 @@ import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { useAuth } from "@internals/hooks";
-import { refresh } from "@internals/services";
+import { logout, refresh } from "@internals/services";
 import { User } from "@internals/types";
 
-const RequireAuth: React.FC<{
+const AuthHandler: React.FC<{
     roles?: User[];
-}> = ({ roles = [User.GUEST] }) => {
+}> = ({ roles = [] }) => {
     const { auth, setAuth } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const location = useLocation();
 
     useEffect(() => {
-        const persistLogin = localStorage.getItem("rememberMe");
-
-        if (persistLogin && auth.userType === User.GUEST) {
+        if (auth.isLoggedIn && auth.userType === User.GUEST) {
             refresh()
                 .then((data) => {
                     setAuth(data.accessToken, data.userType);
                 })
                 .catch((err) => {
                     console.log(err);
-                    localStorage.removeItem("rememberMe");
+                    logout();
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -39,7 +37,7 @@ const RequireAuth: React.FC<{
         <>
             {isLoading ? (
                 <CircularProgress style={{ position: "absolute", top: "50%", left: "50%" }} />
-            ) : roles?.includes(userType) ? (
+            ) : roles.includes(userType) || roles.length === 0 ? (
                 <Outlet />
             ) : (
                 <Navigate to="/auth/login" state={{ from: location }} replace />
@@ -48,4 +46,4 @@ const RequireAuth: React.FC<{
     );
 };
 
-export default RequireAuth;
+export default AuthHandler;
