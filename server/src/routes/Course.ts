@@ -7,6 +7,8 @@ import { UserType } from "../enums/UserTypes";
 import isAuthenticated from "../middleware/isAuthenticated";
 import isAuthorized from "../middleware/isAuthorized";
 import isCourseOwner from "../middleware/isCourseOwner";
+import isEnrolled from "../middleware/isEnrolled";
+import isOwnerOrEnrolled from "../middleware/isOwnerOrEnrolled";
 import isRatingOwner from "../middleware/isRatingOwner";
 
 const router = express.Router();
@@ -67,16 +69,33 @@ router.delete(
 );
 
 // trainee and enrolled
-router.get("/:courseId/lessons/:lessonId", lessonController.readLesson);
-router.post("/:courseId/ratings", isAuthenticated, ratingController.createRating);
+router.get(
+    "/:courseId/lessons/:lessonId",
+    isAuthenticated,
+    isAuthorized([UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
+    isEnrolled,
+    lessonController.readLesson
+);
+router.post(
+    "/:courseId/ratings",
+    isAuthenticated,
+    isAuthorized([UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
+    isEnrolled,
+    isAuthenticated,
+    ratingController.createRating
+);
 router.get(
     "/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions",
     isAuthenticated,
+    isAuthorized([UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
+    isEnrolled,
     exerciseController.readSubmission
 );
 router.post(
     "/:courseId/lessons/:lessonId/exercises/:exerciseId/submissions",
     isAuthenticated,
+    isAuthorized([UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
+    isEnrolled,
     exerciseController.submitExercise
 );
 
@@ -97,7 +116,19 @@ router.delete(
 );
 
 // trainee and enrolled or Instructor and owner
-router.get("/:courseId/lessons/:lessonId/exercises", exerciseController.listExercises);
-router.get("/:courseId/lessons/:lessonId/exercises/:exerciseId", exerciseController.readExercise);
+router.get(
+    "/:courseId/lessons/:lessonId/exercises",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR, UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
+    isOwnerOrEnrolled,
+    exerciseController.listExercises
+);
+router.get(
+    "/:courseId/lessons/:lessonId/exercises/:exerciseId",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR, UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
+    isOwnerOrEnrolled,
+    exerciseController.readExercise
+);
 
 export default router;
