@@ -2,21 +2,43 @@ import crypto from "crypto";
 import { UserTypes } from "../enums/UserTypes";
 import PasswordResetToken from "../models/PasswordResetToken";
 import User from "../models/User";
-import { createToken, decodeToken, TokenPayload } from "../utils/auth/token";
+import {
+    createRefreshToken,
+    createAccessToken,
+    verifyRefreshToken,
+    decodeToken,
+    TokenPayload
+} from "../utils/auth/token";
 
 export default class UserServices {
-    static async login(email: string, password: string) {
-        try {
+    static login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
+        return new Promise(async (resolve, reject) => {
             const user = await User.findOne({ email });
 
             if (!user || !user.isCorrectPassword(password)) {
-                throw new Error();
+                return reject({
+                    status: 401,
+                    message: "Wrong email or password"
+                });
             }
 
-            return createToken(user);
-        } catch (error) {
-            throw new Error("Wrong email or password");
-        }
+            resolve({
+                accessToken: createAccessToken(user),
+                refreshToken: createRefreshToken(user)
+            });
+        });
+    }
+
+    static refresh(refreshToken: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            verifyRefreshToken(refreshToken)
+                .then((accessToken: string) => {
+                    resolve(accessToken);
+                })
+                .catch((error: Error) => {
+                    reject(error);
+                });
+        });
     }
 
     static async getUserType(token: string) {
