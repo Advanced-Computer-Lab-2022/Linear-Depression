@@ -1,25 +1,14 @@
 import axios from "axios";
 
-import { User } from "@internals/types";
-
-const login = (
-    email: string,
-    password: string
-): Promise<{
-    type: User;
-}> => {
+const login = (email: string, password: string): Promise<{ accessToken: string; userType: number }> => {
     const LOGIN_URL = `/auth/login`;
 
     return new Promise((resolve, reject) => {
         axios
-            .post(
-                LOGIN_URL,
-                {
-                    email,
-                    password
-                },
-                { withCredentials: true }
-            )
+            .post(LOGIN_URL, {
+                email,
+                password
+            })
             .then((res) => {
                 resolve(res.data);
             })
