@@ -50,15 +50,6 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
     res.status(StatusCodes.OK).json({ message: "Logout successful" });
 };
 
-const getRole = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token;
-    return UserServices.getUserType(token)
-        .then((type: UserType) => {
-            res.status(StatusCodes.OK).json({ type });
-        })
-        .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
-};
-
 const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     const { token, newPassword } = req.body;
 
@@ -79,7 +70,6 @@ export default {
     login,
     refresh,
     logout,
-    getRole,
     resetPassword,
     changePassword
 };
