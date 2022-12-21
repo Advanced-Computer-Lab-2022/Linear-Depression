@@ -3,7 +3,7 @@ import controller from "../controllers/Course";
 import ratingController from "../controllers/CourseRating";
 import exerciseController from "../controllers/Exercise";
 import lessonController from "../controllers/Lesson";
-import authenticated from "../middleware/authenticated";
+import authenticated from "../middleware/isAuthenticated";
 
 const router = express.Router();
 

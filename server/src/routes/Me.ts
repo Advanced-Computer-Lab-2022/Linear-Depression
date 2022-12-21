@@ -1,7 +1,7 @@
 import express from "express";
 import courseController from "../controllers/Course";
 import profileController from "../controllers/Profile";
-import authenticated from "../middleware/authenticated";
+import authenticated from "../middleware/isAuthenticated";
 import instructorRatingController from "../controllers/InstructorRating";
 
 const router = express.Router();
