@@ -16,8 +16,6 @@ const logSuccess = (args: any) => {
 };
 
 const logError = (args: any) => {
-    // print time
-
     console.log(
         chalk.red(`[${new Date().toLocaleTimeString()}] [ERROR]`),
         typeof args === "string" ? chalk.redBright(args) : chalk.redBright(JSON.stringify(args))
@@ -27,10 +25,10 @@ const logError = (args: any) => {
 const logger = (req: Request, res: Response, next: NextFunction) => {
     logInfo(`${req.method} ${req.path}`);
     res.on("finish", () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-            logSuccess(`${res.statusCode} ${res.statusMessage}`);
-        } else {
+        if (res.statusCode >= 400) {
             logError(`${res.statusCode} ${res.statusMessage}`);
+        } else {
+            logSuccess(`${res.statusCode} ${res.statusMessage}`);
         }
         console.log("---------------------------------------");
     });

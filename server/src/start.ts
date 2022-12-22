@@ -14,6 +14,7 @@ mongoose
 
         app.listen(config.server.port, () => {
             logInfo(`Server started at http://localhost:${config.server.port}`);
+            console.log("---------------------------------------");
         });
     })
     .catch((err) => {
