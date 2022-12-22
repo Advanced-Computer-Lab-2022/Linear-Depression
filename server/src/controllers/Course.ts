@@ -6,7 +6,7 @@ import Instructor, { IInstructorModel } from "../models/Instructor";
 import { getCurrencyCode, getCurrencyRateFromCache } from "../services/CourseServices";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
-import { UserTypes } from "../enums/UserTypes";
+import { UserType } from "../enums/UserTypes";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
 import Enrollement from "../models/Enrollement";
@@ -93,9 +93,9 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
         req.query.price = { $gte: minPrice, $lte: maxPrice } as any;
     }
     const userType = req.body.userType;
-    if (userType === UserTypes.INSTRUCTOR) {
+    if (userType === UserType.INSTRUCTOR) {
         req.query.instructor = req.body.userId;
-    } else if (userType === UserTypes.CORPORATE_TRAINEE) {
+    } else if (userType === UserType.CORPORATE_TRAINEE) {
         const corporateTrainee = await CorporateTrainee.findById(req.body.userId);
         if (corporateTrainee) {
             const courses = [];

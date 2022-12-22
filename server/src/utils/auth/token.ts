@@ -1,26 +1,60 @@
 import jwt from "jsonwebtoken";
-import { IUserModel } from "../../models/User";
-import { UserTypes, UserTypesNames } from "../../enums/UserTypes";
+import User, { IUserModel } from "../../models/User";
+import { UserType, UserTypesNames } from "../../enums/UserTypes";
+import { StatusCodes } from "http-status-codes";
 
 export interface TokenPayload extends Object {
     id: string;
-    type: UserTypes;
+    userType: UserType;
 }
 
-export const createToken = (user: IUserModel): string => {
+export const createAccessToken = (user: IUserModel): string => {
     return jwt.sign(
         {
             id: user._id,
-            type: UserTypesNames.get(user.__t)
+            userType: UserTypesNames.get(user.__t)
         },
-        process.env.JWT_SECRET as jwt.Secret,
-        { expiresIn: "1d" }
+        process.env.JWT_ACCESS_TOKEN_SECRET as jwt.Secret,
+        { expiresIn: "15m" }
     );
 };
 
-export const verifyToken = async (token: string): Promise<TokenPayload | jwt.JsonWebTokenError> => {
+export const createRefreshToken = (user: IUserModel): string => {
+    return jwt.sign(
+        {
+            id: user._id
+        },
+        process.env.JWT_REFRESH_TOKEN_SECRET as jwt.Secret,
+        { expiresIn: "7d" }
+    );
+};
+
+export const verifyRefreshToken = (refreshToken: string): Promise<IUserModel> => {
     return new Promise((resolve, reject) => {
-        jwt.verify(token, process.env.JWT_SECRET as jwt.Secret, (err, decoded) => {
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET as jwt.Secret, async (err, decoded) => {
+            if (err) {
+                return reject({
+                    status: StatusCodes.FORBIDDEN,
+                    message: "Invalid refresh token"
+                });
+            }
+            const user = await User.findOne({ _id: (decoded as TokenPayload).id });
+
+            if (!user) {
+                return reject({
+                    status: StatusCodes.UNAUTHORIZED,
+                    message: "User not found"
+                });
+            }
+
+            return resolve(user);
+        });
+    });
+};
+
+export const verifyAccessToken = async (accessToken: string): Promise<TokenPayload> => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET as jwt.Secret, (err, decoded) => {
             if (err) {
                 return reject(err);
             }
@@ -36,4 +70,4 @@ export const decodeToken = (token: string): TokenPayload | null => {
     } catch (e) {
         return null;
     }
-}
+};

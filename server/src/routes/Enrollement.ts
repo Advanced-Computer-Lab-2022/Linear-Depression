@@ -1,10 +1,10 @@
 import express from "express";
 import enrollementController from "../controllers/Enrollement";
-import authenticated from "../middleware/authenticated";
+import isAuthenticated from "../middleware/isAuthenticated";
 
 const router = express.Router();
 
-router.get("/:enrollementId", authenticated, enrollementController.readEnrollement);
-router.put("/:enrollementId", authenticated, enrollementController.updateEnrollement);
+router.get("/:enrollementId", isAuthenticated, enrollementController.readEnrollement);
+router.put("/:enrollementId", isAuthenticated, enrollementController.updateEnrollement);
 
 export default router;

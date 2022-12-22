@@ -6,11 +6,11 @@ export { default as useGetLocalizationData } from "./useGetLocalizationData";
 export { default as useFetchCourseReviews } from "./useFetchCourseReviews";
 export { default as useFetchExerciseById } from "./useFetchExerciseById";
 export { default as useFetchEvaluation } from "./useFetchEvaluation";
-export { default as useGetUserType } from "./useGetUserType";
 export { default as useFetchProfile } from "./useFetchProfile";
 export { default as useFetchLessonById } from "./useFetchLessonById";
 export { default as useGetInstructorContractStatus } from "./useGetInstructorContractStatus";
 export { default as useFetchMyReviews } from "./useFetchMyReviews";
+export { default as useAuth } from "./useAuth";
 export { default as useFetchMyEnrollement } from "./useFetchMyEnrollement";
 
 export * from "./report/index";

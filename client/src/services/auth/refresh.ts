@@ -1,15 +1,18 @@
 import axios from "axios";
 
-const login = (email: string, password: string): Promise<{ accessToken: string; userType: number }> => {
-    const LOGIN_URL = `/auth/login`;
+const refresh = (): Promise<{
+    accessToken: string;
+    userType: number;
+}> => {
+    const REFRESH_URL = `/auth/refresh`;
 
     return new Promise((resolve, reject) => {
         axios
-            .post(LOGIN_URL, {
-                email,
-                password
+            .get(REFRESH_URL, {
+                withCredentials: true
             })
             .then((res) => {
+                console.log(res);
                 resolve(res.data);
             })
             .catch((err) => {
@@ -18,4 +21,4 @@ const login = (email: string, password: string): Promise<{ accessToken: string; 
     });
 };
 
-export default login;
+export default refresh;
