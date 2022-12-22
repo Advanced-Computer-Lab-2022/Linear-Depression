@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { ContentAccordion, CourseNavbar } from "@internals/components";
 import { VideoPlayer } from "@internals/components";
-import { useFetchCourseById, useFetchLessonById, useFetchMyEnrollement } from "@internals/hooks";
+import { useFetchCourseById, useFetchLessonById, useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 
 const Container = styled.div`
@@ -38,7 +38,7 @@ const SideMenu = styled.div`
 
 const Lesson: React.FC = () => {
     const { courseId, lessonId } = useParams();
-    useFetchMyEnrollement(courseId);
+    useFetchMyEnrollment(courseId);
     useFetchCourseById(courseId);
     const course = useAppSelector((state) => state.course);
     const { lesson } = useFetchLessonById(courseId, lessonId);

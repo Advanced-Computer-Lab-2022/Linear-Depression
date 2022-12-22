@@ -3,8 +3,8 @@ import ReactPlayer from "react-player/lazy";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { getEnrollement, useAppDispatch, useAppSelector } from "@internals/redux";
-import { getVideoEmbedUrl, updateEnrollement, updateVideoOfLessonAsSeen } from "@internals/services";
+import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
+import { getVideoEmbedUrl, updateEnrollment, updateVideoOfLessonAsSeen } from "@internals/services";
 
 const Image = styled.img`
     height: 191px;
@@ -28,19 +28,19 @@ const Container = styled.div`
 const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl, height }) => {
     const { courseId, lessonId } = useParams();
 
-    const enrollement = useAppSelector((state) => state.enrollement);
+    const enrollment = useAppSelector((state) => state.enrollment);
     const dispatch = useAppDispatch();
 
-    const enrollementId = enrollement.data?._id;
+    const enrollmentId = enrollment.data?._id;
 
     const onEnded = () => {
-        if (lessonId && enrollementId) {
-            const newEnrollement = updateVideoOfLessonAsSeen(enrollement.data, lessonId);
+        if (lessonId && enrollmentId) {
+            const newEnrollment = updateVideoOfLessonAsSeen(enrollment.data, lessonId);
 
-            updateEnrollement(enrollementId, newEnrollement)
+            updateEnrollment(enrollmentId, newEnrollment)
                 .then(() => {
-                    console.log("Updated enrollement", newEnrollement);
-                    dispatch(getEnrollement(courseId));
+                    console.log("Updated enrollment", newEnrollment);
+                    dispatch(getEnrollment(courseId));
                 })
                 .catch((err) => {
                     console.log(err);

@@ -26,13 +26,13 @@ export { default as refresh } from "./auth/refresh";
 export { default as changePassword } from "./auth/changePassword";
 
 export { getVideoEmbedUrl, getVideoThumbnailUrl } from "./videoServices";
-export { updateVideoOfLessonAsSeen, getLessonElementsStatus } from "./enrollementServices";
+export { updateVideoOfLessonAsSeen, getLessonElementsStatus } from "./enrollmentServices";
 export { default as fetchProfile } from "./fetchProfile";
 export { default as submitExercise } from "./submitExercise";
 export { default as fetchEvaluation } from "./fetchEvaluation";
 export { default as editCourse } from "./editCourse";
 export { default as editLesson } from "./editLesson";
-export { default as updateEnrollement } from "./updateEnrollement";
+export { default as updateEnrollment } from "./updateEnrollment";
 export { default as editProfile } from "./editProfile";
 export { default as fetchMyReviews } from "./fetchMyReviews";
-export { default as fetchMyEnrollement } from "./fetchMyEnrollement";
+export { default as fetchMyEnrollment } from "./fetchMyEnrollment";

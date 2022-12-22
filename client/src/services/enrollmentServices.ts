@@ -1,18 +1,18 @@
-import { Enrollement } from "@internals/types";
+import { Enrollment } from "@internals/types";
 
-const updateVideoOfLessonAsSeen = (enrollement: Enrollement, lessonId: string): Enrollement => {
-    const newEnrollement = JSON.parse(JSON.stringify(enrollement));
-    for (const lesson of newEnrollement.lessons) {
+const updateVideoOfLessonAsSeen = (enrollment: Enrollment, lessonId: string): Enrollment => {
+    const newEnrollment = JSON.parse(JSON.stringify(enrollment));
+    for (const lesson of newEnrollment.lessons) {
         if (lesson.lessonId === lessonId) {
             lesson.isVideoWatched = true;
         }
     }
-    return newEnrollement;
+    return newEnrollment;
 };
 
-const getLessonElementsStatus = (lessonId: string, enrollement: Enrollement): Array<boolean> => {
+const getLessonElementsStatus = (lessonId: string, enrollment: Enrollment): Array<boolean> => {
     let lessonElementsStatus: Array<boolean> = [];
-    for (const lesson of enrollement.lessons) {
+    for (const lesson of enrollment.lessons) {
         if (lesson.lessonId == lessonId) {
             //TODO: fix this
             lessonElementsStatus.push(lesson.isVideoWatched);

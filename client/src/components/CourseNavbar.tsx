@@ -35,7 +35,7 @@ const ProgressContainer = styled.div`
 
 const CourseNavbar: React.FC = () => {
     const course = useAppSelector((state) => state.course);
-    const enrollement = useAppSelector((state) => state.enrollement);
+    const enrollment = useAppSelector((state) => state.enrollment);
 
     return (
         <HorizontalContainer>
@@ -52,9 +52,9 @@ const CourseNavbar: React.FC = () => {
             </NavItem>
             <ProgressContainer>
                 <NavItem>
-                    <CircularProgressBar value={enrollement.data?.progress} />
+                    <CircularProgressBar value={enrollment.data?.progress} />
                 </NavItem>
-                {enrollement.data?.progress === 100 ? "Get Certificate" : "Your Progress"}
+                {enrollment.data?.progress === 100 ? "Get Certificate" : "Your Progress"}
                 {/* TODO: Add link to certificate */}
             </ProgressContainer>
         </HorizontalContainer>
