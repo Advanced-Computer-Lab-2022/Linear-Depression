@@ -11,6 +11,6 @@ export { default as useFetchLessonById } from "./useFetchLessonById";
 export { default as useGetInstructorContractStatus } from "./useGetInstructorContractStatus";
 export { default as useFetchMyReviews } from "./useFetchMyReviews";
 export { default as useAuth } from "./useAuth";
-export { default as useFetchMyEnrollement } from "./useFetchMyEnrollement";
+export { default as useFetchMyEnrollment } from "./useFetchMyEnrollment";
 
 export * from "./report/index";

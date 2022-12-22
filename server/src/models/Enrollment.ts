@@ -44,7 +44,7 @@ export const lessonStatusSchema = new mongoose.Schema({
     ]
 });
 
-export interface IEnrollement {
+export interface IEnrollment {
     courseId: string;
     traineeId: string;
     lessons: Array<ILessonStatus>;
@@ -53,9 +53,9 @@ export interface IEnrollement {
     setCompletedExercise(lessonId: string, exerciseId: string): void;
 }
 
-export interface IEnrollementModel extends IEnrollement, Document {}
+export interface IEnrollmentModel extends IEnrollment, Document {}
 
-const enrollementSchema = new mongoose.Schema({
+const enrollmentSchema = new mongoose.Schema({
     courseId: {
         type: mongoose.Types.ObjectId,
         ref: "Course",
@@ -78,9 +78,9 @@ const enrollementSchema = new mongoose.Schema({
     }
 });
 
-enrollementSchema.pre<IEnrollementModel>("save", async function (next) {
-    const enrollement = this as IEnrollementModel;
-    const courseId = enrollement.courseId;
+enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
+    const enrollment = this as IEnrollmentModel;
+    const courseId = enrollment.courseId;
     const course = await Course.findById(courseId).populate("lessons");
     if (this.isNew) {
         if (course) {
@@ -101,18 +101,18 @@ enrollementSchema.pre<IEnrollementModel>("save", async function (next) {
                         };
                         lessonStatus.exercisesStatus.push(exerciseStatus);
                     }
-                    enrollement.lessons.push(lessonStatus);
+                    enrollment.lessons.push(lessonStatus);
                 }
             }
         }
     } else {
-        let totalElements = enrollement.lessons.length;
-        for (const lesson of enrollement.lessons) {
+        let totalElements = enrollment.lessons.length;
+        for (const lesson of enrollment.lessons) {
             totalElements += lesson.exercisesStatus.length;
         }
         let totalWatchedVideos = 0;
         let totalCompletedExercises = 0;
-        for (const lesson of enrollement.lessons) {
+        for (const lesson of enrollment.lessons) {
             if (lesson.isVideoWatched) {
                 totalWatchedVideos++;
             }
@@ -122,28 +122,28 @@ enrollementSchema.pre<IEnrollementModel>("save", async function (next) {
                 }
             }
         }
-        enrollement.progress = Math.round(((totalWatchedVideos + totalCompletedExercises) / totalElements) * 100);
+        enrollment.progress = Math.round(((totalWatchedVideos + totalCompletedExercises) / totalElements) * 100);
     }
     next();
 });
 
-enrollementSchema.virtual("IndividualTrainee", {
+enrollmentSchema.virtual("IndividualTrainee", {
     ref: "IndividualTrainee",
     localField: "traineeId",
     foreignField: "_id",
     justOne: true
 });
 
-enrollementSchema.virtual("CorporateTrainee", {
+enrollmentSchema.virtual("CorporateTrainee", {
     ref: "CorporateTrainee",
     localField: "traineeId",
     foreignField: "_id",
     justOne: true
 });
 
-enrollementSchema.methods.setCompletedExercise = async function (lessonId: string, exerciseId: string) {
-    const enrollement = this as IEnrollementModel;
-    for (const lesson of enrollement.lessons) {
+enrollmentSchema.methods.setCompletedExercise = async function (lessonId: string, exerciseId: string) {
+    const enrollment = this as IEnrollmentModel;
+    for (const lesson of enrollment.lessons) {
         if (lesson.lessonId.toString() === lessonId) {
             for (const exercise of lesson.exercisesStatus) {
                 if (exercise.exerciseId.toString() === exerciseId) {
@@ -152,7 +152,7 @@ enrollementSchema.methods.setCompletedExercise = async function (lessonId: strin
             }
         }
     }
-    await enrollement.save();
+    await enrollment.save();
 };
 
-export default mongoose.model<IEnrollementModel>("Enrollement", enrollementSchema);
+export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);

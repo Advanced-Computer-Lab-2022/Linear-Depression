@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import Exercise from "../models/Exercise";
 import Lesson from "../models/Lesson";
 import Answer from "../models/Answer";
-import Enrollement from "../models/Enrollement";
+import Enrollment from "../models/Enrollment";
 
 const createExercise = (req: Request, res: Response, next: NextFunction) => {
     const lessonId = req.params.lessonId;
@@ -148,12 +148,12 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                     .save()
                     .then(() => {
                         evaluateExercise(traineeId, exerciseId).then(async (evaluation) => {
-                            const enrollement = await Enrollement.find({
+                            const enrollment = await Enrollment.find({
                                 courseId: courseId,
                                 traineeId: traineeId
                             });
-                            if (enrollement.length > 0) {
-                                enrollement[0].setCompletedExercise(lessonId, exerciseId);
+                            if (enrollment.length > 0) {
+                                enrollment[0].setCompletedExercise(lessonId, exerciseId);
                             }
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
@@ -171,12 +171,12 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                     .save()
                     .then(() => {
                         evaluateExercise(traineeId, exerciseId).then(async (evaluation) => {
-                            const enrollement = await Enrollement.find({
+                            const enrollment = await Enrollment.find({
                                 courseId: courseId,
                                 traineeId: traineeId
                             });
-                            if (enrollement.length > 0) {
-                                enrollement[0].setCompletedExercise(lessonId, exerciseId);
+                            if (enrollment.length > 0) {
+                                enrollment[0].setCompletedExercise(lessonId, exerciseId);
                             }
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });

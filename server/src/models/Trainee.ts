@@ -3,7 +3,7 @@ import { IUser, UserSchema } from "./User";
 
 export interface ITrainee extends IUser {
     courses: Array<mongoose.Types.ObjectId>; // Array of course IDs
-    enrollements: Array<mongoose.Types.ObjectId>; // Array of enrollement IDs
+    enrollments: Array<mongoose.Types.ObjectId>; // Array of enrollment IDs
     gender: string;
 }
 
@@ -15,7 +15,7 @@ export class TraineeSchema extends UserSchema {
         super(obj, options);
         this.add({
             courses: [{ type: mongoose.Types.ObjectId, ref: "Course" }],
-            enrollements: [{ type: mongoose.Types.ObjectId, ref: "Enrollement" }],
+            enrollments: [{ type: mongoose.Types.ObjectId, ref: "Enrollment" }],
             gender: { type: String, required: true, trim: true, enum: ["male", "female"] }
         }),
             {
