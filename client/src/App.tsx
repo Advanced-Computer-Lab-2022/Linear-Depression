@@ -29,7 +29,8 @@ import {
     ChangePassword,
     NewReport,
     AllReports,
-    ReportThread
+    ReportThread,
+    Register
 } from "@internals/pages";
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="courses/:courseId" element={<Course />} />
                         <Route path="/auth/login" element={<Login />} />
+                        <Route path="/auth/register" element={<Register />} />
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
 

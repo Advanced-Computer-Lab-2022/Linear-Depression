@@ -21,6 +21,7 @@ export { default as sendForgotPasswordRequest } from "./auth/sendForgotPasswordR
 export { default as performPasswordReset } from "./auth/performPasswordReset";
 export { default as validatePasswordResetToken } from "./auth/validatePasswordResetToken";
 export { default as login } from "./auth/login";
+export { default as register } from "./auth/register";
 export { default as logout } from "./auth/logout";
 export { default as refresh } from "./auth/refresh";
 export { default as changePassword } from "./auth/changePassword";

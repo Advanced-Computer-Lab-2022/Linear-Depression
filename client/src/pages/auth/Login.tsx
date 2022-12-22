@@ -1,6 +1,6 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typography } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import { useAuth } from "@internals/hooks";
 import { login } from "@internals/services";
@@ -13,7 +13,7 @@ const theme = createTheme({
     }
 });
 
-const SignIn: React.FC = () => {
+const Login: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -79,14 +79,10 @@ const SignIn: React.FC = () => {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="/auth/forgot" variant="body2" fontWeight={"bold"}>
-                                    Forgot password?
-                                </Link>
+                                <Link to="/auth/forgot">Forgot password?</Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2" fontWeight={"bold"}>
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
+                                <Link to={"/auth/register"}>{"Don't have an account? Sign Up"}</Link>
                             </Grid>
                         </Grid>
                     </Box>
@@ -96,4 +92,4 @@ const SignIn: React.FC = () => {
     );
 };
 
-export default SignIn;
+export default Login;
