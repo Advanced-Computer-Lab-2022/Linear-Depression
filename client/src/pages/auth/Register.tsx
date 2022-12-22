@@ -1,8 +1,9 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
-import { register } from "@internals/services";
+import { useAuth } from "@internals/hooks";
+import { login, register } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -23,6 +24,13 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 const Register: React.FC = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const { auth, setAuth } = useAuth();
+
+    const from = location.state?.from?.pathname || "/";
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -35,13 +43,21 @@ const Register: React.FC = () => {
             gender: "male"
         };
         register(data)
+            .then(() => {
+                return login(data.email, data.passwordHash);
+            })
             .then((data) => {
-                console.log(data);
+                setAuth(data.accessToken, data.userType);
+                navigate(from);
             })
             .catch((err) => {
                 console.log(err);
             });
     };
+
+    if (auth.isLoggedIn) {
+        return <Navigate to={from} />;
+    }
 
     return (
         <ThemeProvider theme={theme}>

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { UserType } from "../enums/UserTypes";
 import CorporateTrainee from "../models/CorporateTrainee";
-import Enrollement from "../models/Enrollement";
+import Enrollment from "../models/Enrollment";
 import IndividualTrainee from "../models/IndividualTrainee";
 
 const isEnrolled = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,8 +23,8 @@ const isEnrolled = async (req: Request, res: Response, next: NextFunction) => {
         });
     }
 
-    for (const enrollmentId of user.enrollements) {
-        const enrollment = await Enrollement.findById(enrollmentId);
+    for (const enrollmentId of user.enrollments) {
+        const enrollment = await Enrollment.findById(enrollmentId);
         if (enrollment?.courseId.toString() === courseId) {
             return next();
         }

@@ -6,7 +6,7 @@ import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import { ReportResource } from "./resources/Report";
 import Course from "../models/Course";
 import Rating from "../models/Rating";
-import Enrollement from "../models/Enrollement";
+import Enrollment from "../models/Enrollment";
 import User from "../models/User";
 import ReportThread from "../models/ReportThread";
 
@@ -44,7 +44,7 @@ export function CreateAdminJS(app: any) {
                 }
             },
             {
-                resource: Enrollement,
+                resource: Enrollment,
                 options: {
                     navigation: false
                 }
