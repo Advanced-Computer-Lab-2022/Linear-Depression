@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { UserType } from "../enums/UserTypes";
 import UserServices from "../services/UserServices";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +15,8 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
                 httpOnly: true,
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
+
+            console.log("TESTTSET");
 
             res.status(StatusCodes.OK).json({
                 accessToken: data.accessToken,
@@ -46,7 +47,7 @@ const logout = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.cookies?.jwt) {
         return res.status(StatusCodes.UNAUTHORIZED).json({ error: "Missing refresh token" });
     }
-    res.clearCookie("jwt", { httpOnly: true, sameSite: "none" });
+    res.clearCookie("jwt", { httpOnly: true });
     res.status(StatusCodes.OK).json({ message: "Logout successful" });
 };
 

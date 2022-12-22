@@ -1,6 +1,6 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
 
 import { useAuth } from "@internals/hooks";
 import { login } from "@internals/services";
@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { setAuth } = useAuth();
+    const { auth, setAuth } = useAuth();
 
     const from = location.state?.from?.pathname || "/";
 
@@ -34,6 +34,10 @@ const Login: React.FC = () => {
                 alert(err.message);
             });
     };
+
+    if (auth.isLoggedIn) {
+        return <Navigate to={from} />;
+    }
 
     return (
         <ThemeProvider theme={theme}>
