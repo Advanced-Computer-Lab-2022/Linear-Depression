@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { MdPlayCircleFilled } from "react-icons/md";
-import { MdInsertDriveFile } from "react-icons/md";
+import Checkbox from "@mui/material/Checkbox";
+import React from "react";
+import { MdPlayCircleFilled, MdInsertDriveFile } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { UserContext } from "@internals/contexts";
+import { useAuth } from "@internals/hooks";
 import { User } from "@internals/types";
 
 const Item = styled.li`
@@ -12,6 +12,10 @@ const Item = styled.li`
     width: 100%;
     display: flex;
     align-items: center;
+`;
+
+const CustomCheckbox = styled(Checkbox)`
+    color: black !important;
 `;
 
 const Icon = styled.div`
@@ -48,14 +52,19 @@ const ContentItem: React.FC<{
     link?: string;
     exerciseId?: string;
     lessonId?: string;
-}> = ({ title, link, exerciseId, lessonId }) => {
+    seen?: boolean;
+}> = ({ title, link, exerciseId, lessonId, seen }) => {
     const { courseId } = useParams();
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
 
     const navigate = useNavigate();
 
     return (
         <Item>
+            {seen && <CustomCheckbox disabled checked />}
+            {seen === false && <CustomCheckbox disabled />}
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
             {link && <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>}

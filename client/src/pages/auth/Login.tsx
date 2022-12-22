@@ -1,23 +1,25 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, Typography } from "@mui/material";
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { UserContext } from "@internals/contexts";
+import { useAuth } from "@internals/hooks";
 import { login } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme({
     typography: {
-        fontFamily: ["Montserrat", "sans-serif"].join(",")
+        fontFamily: ["Inter", "sans-serif"].join(",")
     }
 });
 
 const SignIn: React.FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const { setUserType } = useContext(UserContext);
+    const { setAuth } = useAuth();
+
+    const from = location.state?.from?.pathname || "/";
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -25,8 +27,8 @@ const SignIn: React.FC = () => {
 
         login(data.get("email") as string, data.get("password") as string)
             .then((data) => {
-                setUserType(data.type);
-                navigate("/");
+                setAuth(data.accessToken, data.userType);
+                navigate(from);
             })
             .catch((err) => {
                 alert(err.message);

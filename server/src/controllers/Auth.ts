@@ -1,32 +1,53 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { UserTypes } from "../enums/UserTypes";
+import { UserType } from "../enums/UserTypes";
 import UserServices from "../services/UserServices";
-import { decodeToken } from "../utils/auth/token";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: "Missing email or password" });
+    }
+
     return UserServices.login(email, password)
-        .then((token: string) => {
-            res.cookie("token", token, { httpOnly: true });
-            res.status(StatusCodes.OK).json({ type: decodeToken(token)?.type });
+        .then((data) => {
+            res.cookie("jwt", data.refreshToken, {
+                httpOnly: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            res.status(StatusCodes.OK).json({
+                accessToken: data.accessToken,
+                userType: data.userType
+            });
         })
-        .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
+        .catch((error: any) => res.status(error.status).json({ message: error.message }));
+};
+
+const refresh = async (req: Request, res: Response, next: NextFunction) => {
+    const refreshToken = req.cookies?.jwt;
+
+    if (!refreshToken) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({ error: "Missing refresh token" });
+    }
+
+    UserServices.refresh(refreshToken)
+        .then((data) => {
+            res.status(StatusCodes.OK).json({
+                accessToken: data.accessToken,
+                userType: data.userType
+            });
+        })
+        .catch((error: any) => res.status(error.status).json({ error: error.message }));
 };
 
 const logout = async (req: Request, res: Response, next: NextFunction) => {
-    res.clearCookie("token", { httpOnly: true });
+    if (!req.cookies?.jwt) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({ error: "Missing refresh token" });
+    }
+    res.clearCookie("jwt", { httpOnly: true, sameSite: "none" });
     res.status(StatusCodes.OK).json({ message: "Logout successful" });
-};
-
-const getRole = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token;
-    return UserServices.getUserType(token)
-        .then((type: UserTypes) => {
-            res.status(StatusCodes.OK).json({ type });
-        })
-        .catch((error: any) => res.status(StatusCodes.UNAUTHORIZED).json({ error }));
 };
 
 const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
@@ -47,8 +68,8 @@ const changePassword = async (req: Request, res: Response, next: NextFunction) =
 
 export default {
     login,
+    refresh,
     logout,
-    getRole,
     resetPassword,
     changePassword
 };

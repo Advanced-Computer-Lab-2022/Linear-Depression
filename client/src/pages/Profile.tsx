@@ -1,14 +1,13 @@
-import { useContext } from "react";
-
 import { Navbar } from "@internals/components";
-import { UserContext } from "@internals/contexts";
-import { useFetchProfile } from "@internals/hooks";
+import { useAuth, useFetchProfile } from "@internals/hooks";
 import { InstructorProfile, IndividualTraineeProfile, CorporateTraineeProfile } from "@internals/pages";
 import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
 const Profile = () => {
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
 
     useFetchProfile();
 

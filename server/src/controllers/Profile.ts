@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { UserTypes } from "../enums/UserTypes";
+import { UserType } from "../enums/UserTypes";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
 import Instructor from "../models/Instructor";
@@ -8,7 +8,7 @@ import Instructor from "../models/Instructor";
 const readProfile = async (req: Request, res: Response, _next: NextFunction) => {
     const { userType, userId } = req.body;
 
-    if (userType === UserTypes.INSTRUCTOR) {
+    if (userType === UserType.INSTRUCTOR) {
         const instructor = await Instructor.findById(userId);
 
         if (!instructor) {
@@ -20,7 +20,7 @@ const readProfile = async (req: Request, res: Response, _next: NextFunction) => 
         return res.status(StatusCodes.OK).json({
             instructor
         });
-    } else if (userType === UserTypes.INDIVIDUAL_TRAINEE) {
+    } else if (userType === UserType.INDIVIDUAL_TRAINEE) {
         const individualTrainee = await IndividualTrainee.findById(userId);
 
         if (!individualTrainee) {
@@ -32,7 +32,7 @@ const readProfile = async (req: Request, res: Response, _next: NextFunction) => 
         return res.status(StatusCodes.OK).json({
             individualTrainee
         });
-    } else if (userType === UserTypes.CORPORATE_TRAINEE) {
+    } else if (userType === UserType.CORPORATE_TRAINEE) {
         const corporateTrainee = await CorporateTrainee.findById(userId);
 
         if (!corporateTrainee) {
@@ -54,7 +54,7 @@ const readProfile = async (req: Request, res: Response, _next: NextFunction) => 
 const updateProfile = async (req: Request, res: Response, _next: NextFunction) => {
     const { userType, userId } = req.body;
 
-    if (userType === UserTypes.INSTRUCTOR) {
+    if (userType === UserType.INSTRUCTOR) {
         return Instructor.findById(userId)
             .then((instructor) => {
                 if (!instructor) {
@@ -82,7 +82,7 @@ const updateProfile = async (req: Request, res: Response, _next: NextFunction) =
                     error: error.message
                 });
             });
-    } else if (userType === UserTypes.INDIVIDUAL_TRAINEE) {
+    } else if (userType === UserType.INDIVIDUAL_TRAINEE) {
         return IndividualTrainee.findById(userId)
             .then((individualTrainee) => {
                 if (!individualTrainee) {
@@ -110,7 +110,7 @@ const updateProfile = async (req: Request, res: Response, _next: NextFunction) =
                     error: error.message
                 });
             });
-    } else if (userType === UserTypes.CORPORATE_TRAINEE) {
+    } else if (userType === UserType.CORPORATE_TRAINEE) {
         return CorporateTrainee.findById(userId)
             .then((corporateTrainee) => {
                 if (!corporateTrainee) {

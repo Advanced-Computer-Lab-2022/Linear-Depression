@@ -4,6 +4,8 @@ export { default as FloatingButton } from "./FloatingButton";
 export { default as CoursesListWithFilters } from "./CoursesListWithFilters";
 export { default as CourseContent } from "./course/CourseContent";
 export { default as CourseHeader } from "./course/CourseHeader";
+export { default as CourseNavbar } from "./CourseNavbar";
+export { default as ContentAccordion } from "./course/courseContent/ContentAccordion";
 export { default as CoursePrice } from "./CoursePrice";
 export { default as CourseReviews } from "./course/CourseReviews";
 export { default as VideoPlayer } from "./VideoPlayer";
@@ -17,3 +19,5 @@ export { default as TotalGrade } from "./exercise/TotalGrade";
 export { default as SolvedQuestion } from "./exercise/SolvedQuestion";
 export { default as Avatar } from "./Avatar";
 export { default as ReviewItem } from "./ReviewItem";
+
+export * from "./report/index";

@@ -1,30 +1,62 @@
 import crypto from "crypto";
-import { UserTypes } from "../enums/UserTypes";
 import PasswordResetToken from "../models/PasswordResetToken";
-import User from "../models/User";
-import { createToken, decodeToken, TokenPayload } from "../utils/auth/token";
+import User, { IUserModel } from "../models/User";
+import {
+    createRefreshToken,
+    createAccessToken,
+    verifyRefreshToken,
+    decodeToken,
+    TokenPayload
+} from "../utils/auth/token";
+import { UserTypesNames, UserType } from "../enums/UserTypes";
+
+interface AuthResponse {
+    refreshToken?: string;
+    accessToken: string;
+    userType: UserType;
+}
 
 export default class UserServices {
-    static async login(email: string, password: string) {
-        try {
+    static login(email: string, password: string): Promise<AuthResponse> {
+        return new Promise(async (resolve, reject) => {
             const user = await User.findOne({ email });
 
             if (!user || !user.isCorrectPassword(password)) {
-                throw new Error();
+                return reject({
+                    status: 401,
+                    message: "Wrong email or password"
+                });
             }
 
-            return createToken(user);
-        } catch (error) {
-            throw new Error("Wrong email or password");
-        }
+            resolve({
+                accessToken: createAccessToken(user),
+                refreshToken: createRefreshToken(user),
+                userType: UserTypesNames.get(user.__t) as UserType
+            });
+        });
+    }
+
+    static refresh(refreshToken: string): Promise<AuthResponse> {
+        return new Promise((resolve, reject) => {
+            verifyRefreshToken(refreshToken)
+                .then((user: IUserModel) => {
+                    resolve({
+                        accessToken: createAccessToken(user),
+                        userType: UserTypesNames.get(user.__t) as UserType
+                    });
+                })
+                .catch((error: Error) => {
+                    reject(error);
+                });
+        });
     }
 
     static async getUserType(token: string) {
         if (token) {
             const decodedToken: TokenPayload = decodeToken(token) as TokenPayload;
-            return decodedToken.type;
+            return decodedToken.userType;
         } else {
-            return UserTypes.GUEST;
+            return UserType.GUEST;
         }
     }
 

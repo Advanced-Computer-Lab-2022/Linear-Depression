@@ -1,12 +1,11 @@
 import AddIcon from "@mui/icons-material/Add";
-import React, { useContext } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CourseContent, CourseHeader, CourseReviews, FloatingButton } from "@internals/components";
-import { UserContext } from "@internals/contexts";
-import { useFetchCourseById } from "@internals/hooks";
+import { useAuth, useFetchCourseById } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
@@ -15,7 +14,9 @@ const Container = styled.div`
 `;
 
 const InstructorCourse: React.FC = () => {
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
     const { courseId } = useParams();
     useFetchCourseById(courseId);
     const { data } = useAppSelector((state) => state.course);

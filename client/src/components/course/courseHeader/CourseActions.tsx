@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
-import { UserContext } from "@internals/contexts";
+import { useAuth } from "@internals/hooks";
 import { Promotion, User } from "@internals/types";
 
 const MainContainer = styled.div``;
@@ -35,7 +35,9 @@ const CourseActions: React.FC<{
     courseId: string;
     videoUrl?: string;
 }> = ({ price, promotion, currency, courseId, videoUrl }) => {
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
     const openAddPromotionModal = () => {
         openModal({
             name: "addPromotion",

@@ -1,7 +1,10 @@
 import React from "react";
+import ReactPlayer from "react-player/lazy";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { getVideoEmbedUrl } from "@internals/services";
+import { getEnrollement, useAppDispatch, useAppSelector } from "@internals/redux";
+import { getVideoEmbedUrl, updateEnrollement, updateVideoOfLessonAsSeen } from "@internals/services";
 
 const Image = styled.img`
     height: 191px;
@@ -22,22 +25,39 @@ const Container = styled.div`
     margin-bottom: 26px;
 `;
 
-const Iframe = styled.iframe<{ height: number }>`
-    position: absolute;
-    height: ${(props) => props.height}px;
-    position: relative;
-    display: inline-block;
-`;
-
 const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl, height }) => {
+    const { courseId, lessonId } = useParams();
+
+    const enrollement = useAppSelector((state) => state.enrollement);
+    const dispatch = useAppDispatch();
+
+    const enrollementId = enrollement.data?._id;
+
+    const onEnded = () => {
+        if (lessonId && enrollementId) {
+            const newEnrollement = updateVideoOfLessonAsSeen(enrollement.data, lessonId);
+
+            updateEnrollement(enrollementId, newEnrollement)
+                .then(() => {
+                    console.log("Updated enrollement", newEnrollement);
+                    dispatch(getEnrollement(courseId));
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    };
+
     try {
         const embedURL = getVideoEmbedUrl(videoUrl);
         return (
             <Container>
-                <Iframe
+                <ReactPlayer
                     height={height}
                     width={height * 1.7777777777777777}
-                    src={embedURL}
+                    url={embedURL}
+                    onEnded={onEnded} // FIXME: Check lessonId is valid before calling this
+                    controls={true}
                     frameBorder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
