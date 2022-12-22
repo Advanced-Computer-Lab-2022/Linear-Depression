@@ -46,7 +46,7 @@
         "mongoose-unique-validator": "^3.1.0",
         "nodemailer": "^6.8.0",
         "prettier": "^2.7.1",
-        "request": "^2.81.0",
+        "request": "^2.88.2",
         "styled-components": "^5.3.6",
         "superagent": "^8.0.3",
         "supertest": "^6.3.0",
