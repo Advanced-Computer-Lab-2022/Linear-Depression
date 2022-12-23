@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { TokenPayload, verifyAccessToken } from "../utils/auth/token";
+import { TokenPayload, verifyAccessToken } from "../../utils/auth/token";
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization || (req.headers.Authorization as string);

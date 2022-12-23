@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import Rating from "../models/Rating";
+import Rating from "../../models/Rating";
 
 const isRatingOwner = async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.body;

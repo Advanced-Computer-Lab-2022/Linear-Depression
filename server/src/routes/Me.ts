@@ -2,11 +2,11 @@ import express from "express";
 import courseController from "../controllers/Course";
 import profileController from "../controllers/Profile";
 import noteRouter from "../controllers/Note";
-import isAuthenticated from "../middleware/isAuthenticated";
+import isAuthenticated from "../middleware/permissions/isAuthenticated";
 import enrollmentController from "../controllers/Enrollment";
 import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
-import isAuthorized from "../middleware/isAuthorized";
+import isAuthorized from "../middleware/permissions/isAuthorized";
 import { UserType } from "../enums/UserTypes";
 
 const router = express.Router();
