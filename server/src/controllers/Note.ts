@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 import Note from "../models/Note";
 import { mdToPdf } from "md-to-pdf";
 
+import path from "path";
+
 const createNote = async (req: Request, res: Response, _next: NextFunction) => {
     const lessonId = req.params.lessonId;
     const traineeId = req.body.userId;
@@ -60,14 +62,17 @@ const updateNote = async (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error: error.message }));
 };
 
-const getPDF = async (req: Request, res: Response, _next: NextFunction) => {
+const saveAsPDF = async (req: Request, res: Response, _next: NextFunction) => {
     const { noteId } = req.params;
     console.log(noteId);
 
     Note.findById(noteId)
         .then(async (note) => {
             if (note) {
-                await mdToPdf({ content: note.content }, { dest: `./src/files/${noteId}.pdf` });
+                await mdToPdf(
+                    { content: note.content },
+                    { dest: path.join(__dirname, `../../public/notes/${noteId}.pdf`) }
+                );
                 res.status(StatusCodes.OK).json({ note });
             } else {
                 res.status(StatusCodes.NOT_FOUND).json({ error: "Note not found" });
@@ -80,5 +85,5 @@ export default {
     createNote,
     readNote,
     updateNote,
-    getPDF
+    saveAsPDF
 };

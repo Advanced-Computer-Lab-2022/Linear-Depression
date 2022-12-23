@@ -14,7 +14,7 @@ router.get("/courses", isAuthenticated, courseController.listMyCourses);
 router.get("/enrollments", isAuthenticated, enrollmentController.readMyEnrollments);
 
 router.get("/lessons/:lessonId/notes", isAuthenticated, noteRouter.readNote);
-router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.getPDF);
+router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.saveAsPDF);
 router.post("/lessons/:lessonId/notes", isAuthenticated, noteRouter.createNote);
 router.put("/lessons/:lessonId/notes/:noteId", isAuthenticated, noteRouter.updateNote);
 
