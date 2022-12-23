@@ -112,6 +112,7 @@ const createCertificate = (studentName: string, courseName: string, date: string
     });
 
     doc.end();
+    return `${publicDirectory}/certificates/${fileName}.pdf`;
 };
 
 function jumpLine(doc: PDFKit.PDFDocument, lines: number) {

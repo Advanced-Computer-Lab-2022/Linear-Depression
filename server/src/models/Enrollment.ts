@@ -4,6 +4,7 @@ import Lesson from "./Lesson";
 
 import createCertificate from "../services/certificateService";
 import IndividualTrainee from "./IndividualTrainee";
+import { sendCertificateEmail } from "../services/emails/sendCertificateEmail";
 
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
@@ -165,26 +166,34 @@ enrollmentSchema.methods.setCompletedExercise = async function (
 enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
     const enrollment = this as IEnrollmentModel;
     if (enrollment.progress !== 100) {
-        next();
+        return next();
     }
     const course_title = await Course.findById(enrollment.courseId).select("title");
     if (!course_title) {
         console.log("course not found");
-        next();
+        return next();
     }
 
     let trainee_name = "";
-    const individualTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
+    let email = "";
+    const individualTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName email");
     if (individualTrainee) {
         trainee_name = individualTrainee.firstName + " " + individualTrainee.lastName;
+        email = individualTrainee.email;
     } else {
-        const corporateTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
+        const corporateTrainee = await IndividualTrainee.findById(enrollment.traineeId).select(
+            "firstName lastName email"
+        );
         if (corporateTrainee) {
             trainee_name = corporateTrainee.firstName + " " + corporateTrainee.lastName;
+            email = corporateTrainee.email;
         }
     }
 
-    createCertificate(trainee_name, course_title!.title, new Date().toDateString(), enrollment._id);
+    const filePath = createCertificate(trainee_name, course_title!.title, new Date().toDateString(), enrollment._id);
+
+    sendCertificateEmail(email, course_title!.title, filePath);
+
     next();
 });
 
