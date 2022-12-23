@@ -10,9 +10,19 @@ export const CourseResource = {
         properties: {
             _id: {
                 isVisible: false
+            },
+            ratings: {
+                isVisible: false
+            },
+            instructor: {
+                isVisible: false
             }
         },
         actions: {
+            new: {
+                isAccessible: false,
+                isVisible: false
+            },
             addPromotion: {
                 actionType: "bulk",
                 icon: "AddPromotion",
