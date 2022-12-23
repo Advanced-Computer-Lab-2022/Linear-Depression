@@ -1,5 +1,17 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Button,
+    Container,
+    CssBaseline,
+    FormControlLabel,
+    Grid,
+    Radio,
+    RadioGroup,
+    TextField,
+    Typography
+} from "@mui/material";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@internals/hooks";
@@ -40,7 +52,7 @@ const Register: React.FC = () => {
             email: formData.get("email") as string,
             userName: formData.get("username") as string,
             passwordHash: formData.get("password") as string,
-            gender: "male"
+            gender: formData.get("gender-radio-buttons-group") as string
         };
         register(data)
             .then(() => {
@@ -132,6 +144,18 @@ const Register: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+                        {/* radio to choose gender */}
+                        <Grid container justifyContent="flex-start">
+                            <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue="male"
+                                name="gender-radio-buttons-group"
+                            >
+                                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                            </RadioGroup>
+                        </Grid>
+
                         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                             Sign Up
                         </Button>
