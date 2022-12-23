@@ -1,8 +1,11 @@
-import React from "react";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { Popover } from "@mui/material";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { ContentAccordion, CourseNavbar } from "@internals/components";
+import Note from "./lesson/Note";
+import { ContentAccordion, CourseNavbar, FloatingButton } from "@internals/components";
 import { VideoPlayer } from "@internals/components";
 import { useFetchCourseById, useFetchLessonById, useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
@@ -40,8 +43,12 @@ const Lesson: React.FC = () => {
     const { courseId, lessonId } = useParams();
     useFetchMyEnrollment(courseId);
     useFetchCourseById(courseId);
+
     const course = useAppSelector((state) => state.course);
     const { lesson } = useFetchLessonById(courseId, lessonId);
+
+    const [open, setOpen] = useState(false);
+
     if (!lesson.data) return <div>Loading....</div>;
     return (
         <>
@@ -53,6 +60,30 @@ const Lesson: React.FC = () => {
                     </VideoContainer>
                     <Title>{lesson.data.video?.title}</Title>
                     <Description>{lesson.data.video?.description}</Description>
+                    <FloatingButton
+                        color="primary"
+                        aria-label="add"
+                        onClick={() => {
+                            setOpen(true);
+                        }}
+                    >
+                        <DescriptionIcon />
+                    </FloatingButton>
+                    <Popover
+                        anchorReference="anchorPosition"
+                        anchorPosition={{ top: 200, left: 700 }}
+                        anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "left"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left"
+                        }}
+                        open={open}
+                    >
+                        <Note setOpen={setOpen} />
+                    </Popover>
                 </Container>
                 <SideMenu>
                     {course.data?.lessons.map((lesson) => {
