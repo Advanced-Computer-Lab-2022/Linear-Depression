@@ -1,4 +1,4 @@
-import countries from "../media/country-currency.json";
+import countries from "../../media/country-currency.json";
 import { Country } from "@internals/types";
 
 const getCurrency = (country: string) => {

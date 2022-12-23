@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import useAuth from "./useAuth";
+import { useAuth } from "@internals/hooks";
 import { getProfile, useAppDispatch } from "@internals/redux";
 
 const useFetchProfile = () => {
