@@ -13,10 +13,8 @@ import { useAppSelector } from "@internals/redux";
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    // align-items: ;
     width: 100%;
     height: 100%;
-    padding: 10px 40px;
 `;
 
 const HorizontalContainer = styled.div`
@@ -31,12 +29,22 @@ const VideoContainer = styled.div`
     margin-bottom: 26px;
 `;
 
+const VideoInfoContainer = styled.div`
+    margin-left: 20px;
+`;
+
 const Title = styled.h1``;
 
 const Description = styled.p``;
 
 const SideMenu = styled.div`
-    width: 40%;
+    width: 70%;
+`;
+
+const CourseContentTitle = styled.h4`
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px;
 `;
 
 const Lesson: React.FC = () => {
@@ -58,8 +66,10 @@ const Lesson: React.FC = () => {
                     <VideoContainer>
                         <VideoPlayer videoUrl={lesson.data.video?.videoLink} height={550} />
                     </VideoContainer>
-                    <Title>{lesson.data.video?.title}</Title>
-                    <Description>{lesson.data.video?.description}</Description>
+                    <VideoInfoContainer>
+                        <Title>{lesson.data.video?.title}</Title>
+                        <Description>{lesson.data.video?.description}</Description>
+                    </VideoInfoContainer>
                     <FloatingButton
                         color="primary"
                         aria-label="add"
@@ -86,6 +96,7 @@ const Lesson: React.FC = () => {
                     </Popover>
                 </Container>
                 <SideMenu>
+                    <CourseContentTitle>Course Content</CourseContentTitle>
                     {course.data?.lessons.map((lesson) => {
                         return (
                             <div>
