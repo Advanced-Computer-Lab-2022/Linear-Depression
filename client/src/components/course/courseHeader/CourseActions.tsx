@@ -78,7 +78,9 @@ const CourseActions: React.FC<{
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&
                     accessRequest.data == null && <Button onClick={handleEnroll}>Enroll now</Button>}
-                {enrollment.data !== null && accessRequest.data && <Button disabled>Access Request Sent</Button>}
+                {enrollment.data !== null && accessRequest.data && accessRequest.data.status === "PENDING" && (
+                    <Button disabled>Access Request Sent</Button>
+                )}
             </SubContainer>
         </MainContainer>
     );

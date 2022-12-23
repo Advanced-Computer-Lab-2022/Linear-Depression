@@ -80,7 +80,7 @@ const Lesson: React.FC = () => {
                     </FloatingButton>
                     <Popover
                         anchorReference="anchorPosition"
-                        anchorPosition={{ top: 200, left: 700 }}
+                        anchorPosition={{ top: 200, left: 1000 }}
                         anchorOrigin={{
                             vertical: "top",
                             horizontal: "left"
