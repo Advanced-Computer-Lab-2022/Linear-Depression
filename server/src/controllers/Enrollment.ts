@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import mongoose from "mongoose";
 import Enrollment from "../models/Enrollment";
+import IndividualTrainee from "../models/IndividualTrainee";
 
 const readEnrollment = (req: Request, res: Response, next: NextFunction) => {
     const { enrollmentId } = req.params;
@@ -55,8 +57,32 @@ const updateEnrollment = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
+const createEnrollment = async (req: Request, res: Response, _next: NextFunction) => {
+    const courseId = req.body.courseId as unknown as mongoose.Types.ObjectId;
+    const traineeId = req.body.userId as unknown as mongoose.Types.ObjectId;
+
+    const enrollment = new Enrollment({
+        courseId,
+        traineeId
+    });
+
+    await enrollment.save();
+
+    IndividualTrainee.findById(traineeId).then((trainee) => {
+        if (trainee) {
+            trainee.enrollments.push(enrollment._id);
+            trainee.save();
+        } else {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+        }
+    });
+
+    return res.status(StatusCodes.CREATED).json({ enrollment });
+};
+
 export default {
     readEnrollment,
     readMyEnrollments,
-    updateEnrollment
+    updateEnrollment,
+    createEnrollment
 };

@@ -6,12 +6,20 @@ import isAuthenticated from "../middleware/isAuthenticated";
 import enrollmentController from "../controllers/Enrollment";
 import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
+import isAuthorized from "../middleware/isAuthorized";
+import { UserType } from "../enums/UserTypes";
 
 const router = express.Router();
 
 router.get("/courses", isAuthenticated, courseController.listMyCourses);
 
 router.get("/enrollments", isAuthenticated, enrollmentController.readMyEnrollments);
+router.post(
+    "/enrollments",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
+    enrollmentController.createEnrollment
+);
 
 router.get("/lessons/:lessonId/notes", isAuthenticated, noteRouter.readNote);
 router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.saveAsPDF);
