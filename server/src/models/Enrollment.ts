@@ -2,6 +2,11 @@ import mongoose, { Document } from "mongoose";
 import Course from "./Course";
 import Lesson from "./Lesson";
 
+import createCertificate from "../services/certificateService";
+import IndividualTrainee from "./IndividualTrainee";
+import { sendCertificateEmail } from "../services/emails/sendCertificateEmail";
+import CorporateTrainee from "./CorporateTrainee";
+
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
     isCompleted: boolean;
@@ -45,12 +50,12 @@ export const lessonStatusSchema = new mongoose.Schema({
 });
 
 export interface IEnrollment {
-    courseId: string;
-    traineeId: string;
+    courseId: mongoose.Types.ObjectId;
+    traineeId: mongoose.Types.ObjectId;
     lessons: Array<ILessonStatus>;
     progress: number;
 
-    setCompletedExercise(lessonId: string, exerciseId: string): void;
+    setCompletedExercise(lessonId: mongoose.Types.ObjectId, exerciseId: mongoose.Types.ObjectId): void;
 }
 
 export interface IEnrollmentModel extends IEnrollment, Document {}
@@ -141,12 +146,15 @@ enrollmentSchema.virtual("CorporateTrainee", {
     justOne: true
 });
 
-enrollmentSchema.methods.setCompletedExercise = async function (lessonId: string, exerciseId: string) {
+enrollmentSchema.methods.setCompletedExercise = async function (
+    lessonId: mongoose.Types.ObjectId,
+    exerciseId: mongoose.Types.ObjectId
+) {
     const enrollment = this as IEnrollmentModel;
     for (const lesson of enrollment.lessons) {
-        if (lesson.lessonId.toString() === lessonId) {
+        if (lesson.lessonId.toString() === lessonId.toString()) {
             for (const exercise of lesson.exercisesStatus) {
-                if (exercise.exerciseId.toString() === exerciseId) {
+                if (exercise.exerciseId.toString() === exerciseId.toString()) {
                     exercise.isCompleted = true;
                 }
             }
@@ -154,5 +162,40 @@ enrollmentSchema.methods.setCompletedExercise = async function (lessonId: string
     }
     await enrollment.save();
 };
+
+// a hook on the progress, if it's 100 create a certificate
+enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
+    const enrollment = this as IEnrollmentModel;
+    if (enrollment.progress !== 100) {
+        return next();
+    }
+    const course_title = await Course.findById(enrollment.courseId).select("title");
+    if (!course_title) {
+        console.log("course not found");
+        return next();
+    }
+
+    let trainee_name = "";
+    let email = "";
+    const individualTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName email");
+    if (individualTrainee) {
+        trainee_name = individualTrainee.firstName + " " + individualTrainee.lastName;
+        email = individualTrainee.email;
+    } else {
+        const corporateTrainee = await CorporateTrainee.findById(enrollment.traineeId).select(
+            "firstName lastName email"
+        );
+        if (corporateTrainee) {
+            trainee_name = corporateTrainee.firstName + " " + corporateTrainee.lastName;
+            email = corporateTrainee.email;
+        }
+    }
+
+    const filePath = createCertificate(trainee_name, course_title!.title, new Date().toDateString(), enrollment._id);
+
+    sendCertificateEmail(email, course_title!.title, filePath);
+
+    next();
+});
 
 export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);
