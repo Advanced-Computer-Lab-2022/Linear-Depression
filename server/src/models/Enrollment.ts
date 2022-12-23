@@ -2,6 +2,9 @@ import mongoose, { Document } from "mongoose";
 import Course from "./Course";
 import Lesson from "./Lesson";
 
+import createCertificate from "../services/certificateService";
+import IndividualTrainee from "./IndividualTrainee";
+
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
     isCompleted: boolean;
@@ -45,12 +48,12 @@ export const lessonStatusSchema = new mongoose.Schema({
 });
 
 export interface IEnrollment {
-    courseId: string;
-    traineeId: string;
+    courseId: mongoose.Types.ObjectId;
+    traineeId: mongoose.Types.ObjectId;
     lessons: Array<ILessonStatus>;
     progress: number;
 
-    setCompletedExercise(lessonId: string, exerciseId: string): void;
+    setCompletedExercise(lessonId: mongoose.Types.ObjectId, exerciseId: mongoose.Types.ObjectId): void;
 }
 
 export interface IEnrollmentModel extends IEnrollment, Document {}
@@ -141,12 +144,15 @@ enrollmentSchema.virtual("CorporateTrainee", {
     justOne: true
 });
 
-enrollmentSchema.methods.setCompletedExercise = async function (lessonId: string, exerciseId: string) {
+enrollmentSchema.methods.setCompletedExercise = async function (
+    lessonId: mongoose.Types.ObjectId,
+    exerciseId: mongoose.Types.ObjectId
+) {
     const enrollment = this as IEnrollmentModel;
     for (const lesson of enrollment.lessons) {
-        if (lesson.lessonId.toString() === lessonId) {
+        if (lesson.lessonId.toString() === lessonId.toString()) {
             for (const exercise of lesson.exercisesStatus) {
-                if (exercise.exerciseId.toString() === exerciseId) {
+                if (exercise.exerciseId.toString() === exerciseId.toString()) {
                     exercise.isCompleted = true;
                 }
             }
@@ -154,5 +160,28 @@ enrollmentSchema.methods.setCompletedExercise = async function (lessonId: string
     }
     await enrollment.save();
 };
+
+// a hook on the progress, if it's 100 create a certificate
+enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
+    console.log("post save hook");
+    // get the enrollment and populate the course and trainee
+    const enrollment = this as IEnrollmentModel;
+    const course_title = await Course.findById(enrollment.courseId).select("title");
+    if (!course_title) {
+        console.log("course not found");
+        next();
+    }
+    // get the trainee check if it's individual or corporate
+    const trainee_name = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
+    if (trainee_name) {
+        createCertificate(
+            trainee_name.firstName + " " + trainee_name.lastName,
+            course_title!.title,
+            new Date().toDateString(),
+            enrollment._id
+        );
+    }
+    next();
+});
 
 export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);

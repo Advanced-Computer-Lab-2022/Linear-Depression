@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';
-import fs from 'fs';
-import handlebars from 'handlebars';
-import path from 'path';
+import nodemailer from "nodemailer";
+import fs from "fs";
+import handlebars from "handlebars";
+import path from "path";
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
     const transporter = nodemailer.createTransport({
@@ -13,14 +13,14 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
         }
     });
 
-    const htmlFile = fs.readFileSync(path.resolve(__dirname, '../../public/emails/passwordResetEmail.html'), 'utf-8');
+    const htmlFile = fs.readFileSync(path.resolve(__dirname, "../../public/emails/passwordResetEmail.html"), "utf-8");
     const template = handlebars.compile(htmlFile);
     const replacements = {
         url: `${process.env.FRONT_END_URL}/auth/reset?token=${token}`,
         email
     };
     const htmlToSend = template(replacements);
-    
+
     const message = {
         from: process.env.PASSWORD_RESET_EMAIL_FROM,
         to: email,
