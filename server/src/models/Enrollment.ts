@@ -172,15 +172,17 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
         next();
     }
     // get the trainee check if it's individual or corporate
-    const trainee_name = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
-    if (trainee_name) {
-        createCertificate(
-            trainee_name.firstName + " " + trainee_name.lastName,
-            course_title!.title,
-            new Date().toDateString(),
-            enrollment._id
-        );
+    let trainee_name = "";
+    const individualTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
+    if (individualTrainee) {
+        trainee_name = individualTrainee.firstName + " " + individualTrainee.lastName;
+    } else {
+        const corporateTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
+        if (corporateTrainee) {
+            trainee_name = corporateTrainee.firstName + " " + corporateTrainee.lastName;
+        }
     }
+    createCertificate(trainee_name, course_title!.title, new Date().toDateString(), enrollment._id);
     next();
 });
 

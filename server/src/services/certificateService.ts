@@ -2,7 +2,7 @@ import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
 
-const createCertificate = (student_name: string, course_name: string, date: string, file_name: string) => {
+const createCertificate = (studentName: string, courseName: string, date: string, fileName: string) => {
     const doc = new PDFDocument({
         size: "A4",
         layout: "landscape"
@@ -10,7 +10,7 @@ const createCertificate = (student_name: string, course_name: string, date: stri
 
     const publicDirectory = path.join(__dirname, "../../public");
 
-    doc.pipe(fs.createWriteStream(`${publicDirectory}/certificates/${file_name}.pdf`));
+    doc.pipe(fs.createWriteStream(`${publicDirectory}/certificates/${fileName}.pdf`));
     doc.rect(0, 0, doc.page.width, doc.page.height).fill("#fff");
 
     doc.fontSize(10);
@@ -51,7 +51,7 @@ const createCertificate = (student_name: string, course_name: string, date: stri
 
     jumpLine(doc, 2);
 
-    doc.font(`${fontDir}/NotoSansJP-Bold.otf`).fontSize(24).fill("#021c27").text(student_name, {
+    doc.font(`${fontDir}/NotoSansJP-Bold.otf`).fontSize(24).fill("#021c27").text(studentName, {
         align: "center"
     });
 
@@ -60,7 +60,7 @@ const createCertificate = (student_name: string, course_name: string, date: stri
     doc.font(`${fontDir}/NotoSansJP-Light.otf`)
         .fontSize(10)
         .fill("#021c27")
-        .text(`Successfully completed  ${course_name} on ${date}`, {
+        .text(`Successfully completed  ${courseName} on ${date}`, {
             align: "center"
         });
 
@@ -82,7 +82,7 @@ const createCertificate = (student_name: string, course_name: string, date: stri
     doc.font(`${fontDir}/NotoSansJP-Bold.otf`)
         .fontSize(10)
         .fill("#021c27")
-        .text(student_name, startLine2, signatureHeight + 10, {
+        .text(studentName, startLine2, signatureHeight + 10, {
             columns: 1,
             columnGap: 0,
             height: 40,
