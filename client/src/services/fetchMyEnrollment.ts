@@ -1,10 +1,10 @@
 import axios from "axios";
 
 import { config } from "@internals/config";
-import { Enrollement } from "@internals/types";
+import { Enrollment } from "@internals/types";
 
-const fetchMyEnrollement = (courseId: string): Promise<Enrollement> => {
-    const API_URL = `${config.API_URL}/me/enrollements`;
+const fetchMyEnrollment = (courseId: string): Promise<Enrollment> => {
+    const API_URL = `${config.API_URL}/me/enrollments`;
     return new Promise((resolve, reject) => {
         axios
             .get(API_URL, {
@@ -14,7 +14,7 @@ const fetchMyEnrollement = (courseId: string): Promise<Enrollement> => {
                 }
             })
             .then((res) => {
-                resolve(res.data.enrollement[0]);
+                resolve(res.data.enrollment[0]);
             })
             .catch((err) => {
                 reject(err);
@@ -22,4 +22,4 @@ const fetchMyEnrollement = (courseId: string): Promise<Enrollement> => {
     });
 };
 
-export default fetchMyEnrollement;
+export default fetchMyEnrollment;
