@@ -1,0 +1,158 @@
+import mongoose, { Document } from "mongoose";
+import Course from "./Course";
+import Lesson from "./Lesson";
+
+interface IExerciseStatus {
+    exerciseId: mongoose.Types.ObjectId;
+    isCompleted: boolean;
+}
+
+export const exerciseStatusSchema = new mongoose.Schema({
+    exerciseId: {
+        type: mongoose.Types.ObjectId,
+        ref: "Exercise",
+        required: true
+    },
+    isCompleted: {
+        type: Boolean,
+        default: false
+    }
+});
+
+interface ILessonStatus {
+    lessonId: string;
+    isVideoWatched: boolean;
+    exercisesStatus: Array<IExerciseStatus>;
+}
+
+export const lessonStatusSchema = new mongoose.Schema({
+    lessonId: {
+        type: mongoose.Types.ObjectId,
+        ref: "Lesson",
+        required: true
+    },
+    isVideoWatched: {
+        type: Boolean,
+        default: false
+    },
+    exercisesStatus: [
+        {
+            type: exerciseStatusSchema,
+            required: true,
+            default: []
+        }
+    ]
+});
+
+export interface IEnrollment {
+    courseId: string;
+    traineeId: string;
+    lessons: Array<ILessonStatus>;
+    progress: number;
+
+    setCompletedExercise(lessonId: string, exerciseId: string): void;
+}
+
+export interface IEnrollmentModel extends IEnrollment, Document {}
+
+const enrollmentSchema = new mongoose.Schema({
+    courseId: {
+        type: mongoose.Types.ObjectId,
+        ref: "Course",
+        required: true
+    },
+    traineeId: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
+    lessons: [
+        {
+            type: lessonStatusSchema,
+            required: true,
+            default: []
+        }
+    ],
+    progress: {
+        type: Number,
+        default: 0
+    }
+});
+
+enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
+    const enrollment = this as IEnrollmentModel;
+    const courseId = enrollment.courseId;
+    const course = await Course.findById(courseId).populate("lessons");
+    if (this.isNew) {
+        if (course) {
+            const lessons = course.lessons;
+            for (const lessonId of lessons) {
+                const lesson = await Lesson.findById(lessonId).populate("exercises");
+                if (lesson) {
+                    const lessonStatus: ILessonStatus = {
+                        lessonId: lesson._id,
+                        isVideoWatched: false,
+                        exercisesStatus: []
+                    };
+                    const exercises = lesson.exercises;
+                    for (const exerciseId of exercises) {
+                        const exerciseStatus: IExerciseStatus = {
+                            exerciseId: exerciseId,
+                            isCompleted: false
+                        };
+                        lessonStatus.exercisesStatus.push(exerciseStatus);
+                    }
+                    enrollment.lessons.push(lessonStatus);
+                }
+            }
+        }
+    } else {
+        let totalElements = enrollment.lessons.length;
+        for (const lesson of enrollment.lessons) {
+            totalElements += lesson.exercisesStatus.length;
+        }
+        let totalWatchedVideos = 0;
+        let totalCompletedExercises = 0;
+        for (const lesson of enrollment.lessons) {
+            if (lesson.isVideoWatched) {
+                totalWatchedVideos++;
+            }
+            for (const exercise of lesson.exercisesStatus) {
+                if (exercise.isCompleted) {
+                    totalCompletedExercises++;
+                }
+            }
+        }
+        enrollment.progress = Math.round(((totalWatchedVideos + totalCompletedExercises) / totalElements) * 100);
+    }
+    next();
+});
+
+enrollmentSchema.virtual("IndividualTrainee", {
+    ref: "IndividualTrainee",
+    localField: "traineeId",
+    foreignField: "_id",
+    justOne: true
+});
+
+enrollmentSchema.virtual("CorporateTrainee", {
+    ref: "CorporateTrainee",
+    localField: "traineeId",
+    foreignField: "_id",
+    justOne: true
+});
+
+enrollmentSchema.methods.setCompletedExercise = async function (lessonId: string, exerciseId: string) {
+    const enrollment = this as IEnrollmentModel;
+    for (const lesson of enrollment.lessons) {
+        if (lesson.lessonId.toString() === lessonId) {
+            for (const exercise of lesson.exercisesStatus) {
+                if (exercise.exerciseId.toString() === exerciseId) {
+                    exercise.isCompleted = true;
+                }
+            }
+        }
+    }
+    await enrollment.save();
+};
+
+export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);

@@ -12,7 +12,9 @@
             "@internals/services": ["src/services"],
             "@internals/types": ["src/types"],
             "@internals/modals": ["src/components/modals"],
-            "@internals/redux": ["src/redux"]
+            "@internals/redux": ["src/redux"],
+            "@internals/api": ["src/api"],
+            "@internals/handlers": ["src/handlers"]
         }
     }
 }

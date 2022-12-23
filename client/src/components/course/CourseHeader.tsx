@@ -1,12 +1,12 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import React, { useContext } from "react";
+import React from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import OptionsButton from "../OptionsButton";
 import CourseActions from "./courseHeader/CourseActions";
 import CourseInfo from "./courseHeader/CourseInfo";
-import { UserContext } from "@internals/contexts";
+import { useAuth } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
@@ -31,7 +31,9 @@ const CourseHeader: React.FC = () => {
         currency,
         preview
     } = data;
-    const { userType } = useContext(UserContext);
+    const {
+        auth: { userType }
+    } = useAuth();
     const options = [
         {
             label: "Edit",

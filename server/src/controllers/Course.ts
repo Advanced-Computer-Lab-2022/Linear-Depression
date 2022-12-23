@@ -6,10 +6,10 @@ import Instructor, { IInstructorModel } from "../models/Instructor";
 import { getCurrencyCode, getCurrencyRateFromCache } from "../services/CourseServices";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
-import { UserTypes } from "../enums/UserTypes";
+import { UserType } from "../enums/UserTypes";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
-import Enrollement from "../models/Enrollement";
+import Enrollment from "../models/Enrollment";
 
 async function getCurrencyRateByCookie(
     req: Request,
@@ -93,16 +93,16 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
         req.query.price = { $gte: minPrice, $lte: maxPrice } as any;
     }
     const userType = req.body.userType;
-    if (userType === UserTypes.INSTRUCTOR) {
+    if (userType === UserType.INSTRUCTOR) {
         req.query.instructor = req.body.userId;
-    } else if (userType === UserTypes.CORPORATE_TRAINEE) {
+    } else if (userType === UserType.CORPORATE_TRAINEE) {
         const corporateTrainee = await CorporateTrainee.findById(req.body.userId);
         if (corporateTrainee) {
             const courses = [];
-            for (const enrollementId of corporateTrainee.enrollements) {
-                const enrollement = await Enrollement.findById(enrollementId);
-                if (enrollement) {
-                    courses.push(enrollement.courseId);
+            for (const enrollmentId of corporateTrainee.enrollments) {
+                const enrollment = await Enrollment.findById(enrollmentId);
+                if (enrollment) {
+                    courses.push(enrollment.courseId);
                 }
             }
 
@@ -112,10 +112,10 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
         const individualTrainee = await IndividualTrainee.findById(req.body.userId);
         if (individualTrainee) {
             const courses = [];
-            for (const enrollementId of individualTrainee.enrollements) {
-                const enrollement = await Enrollement.findById(enrollementId);
-                if (enrollement) {
-                    courses.push(enrollement.courseId);
+            for (const enrollmentId of individualTrainee.enrollments) {
+                const enrollment = await Enrollment.findById(enrollmentId);
+                if (enrollment) {
+                    courses.push(enrollment.courseId);
                 }
             }
 
