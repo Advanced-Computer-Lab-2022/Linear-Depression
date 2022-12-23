@@ -22,4 +22,8 @@ export const accessRequestSchema = new mongoose.Schema({
     status: { type: String, required: true, trim: true, enum: ["PENDING", "APPROVED", "REJECTED"], default: "PENDING" }
 });
 
+accessRequestSchema.pre<IAccessRequestModel>("save", async function (next) {
+    next();
+});
+
 export default mongoose.model<IAccessRequestModel>("AccessRequest", accessRequestSchema);
