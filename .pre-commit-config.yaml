@@ -15,4 +15,3 @@ repos:
       hooks:
           - id: prettier
             args: [--config, .prettierrc]
-            exclude: server/public/templates/*/*
