@@ -3,6 +3,7 @@ import controller from "../controllers/Course";
 import ratingController from "../controllers/CourseRating";
 import exerciseController from "../controllers/Exercise";
 import lessonController from "../controllers/Lesson";
+import accessRequestController from "../controllers/AccessRequest";
 import { UserType } from "../enums/UserTypes";
 import isAuthenticated from "../middleware/isAuthenticated";
 import isAuthorized from "../middleware/isAuthorized";
@@ -129,6 +130,14 @@ router.get(
     isAuthorized([UserType.INSTRUCTOR, UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
     isOwnerOrEnrolled,
     exerciseController.readExercise
+);
+
+// corporate trainee
+router.post(
+    "/:courseId/access-requests",
+    isAuthenticated,
+    isAuthorized([UserType.CORPORATE_TRAINEE]),
+    accessRequestController.createAccessRequest
 );
 
 export default router;

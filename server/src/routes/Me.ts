@@ -4,6 +4,7 @@ import profileController from "../controllers/Profile";
 import noteRouter from "../controllers/Note";
 import isAuthenticated from "../middleware/isAuthenticated";
 import enrollmentController from "../controllers/Enrollment";
+import accessRequestController from "../controllers/AccessRequest";
 import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
 
@@ -12,6 +13,8 @@ const router = express.Router();
 router.get("/courses", isAuthenticated, courseController.listMyCourses);
 
 router.get("/enrollments", isAuthenticated, enrollmentController.readMyEnrollments);
+
+router.get("/courses/:courseId/access-requests", isAuthenticated, accessRequestController.readAccessRequest);
 
 router.get("/lessons/:lessonId/notes", isAuthenticated, noteRouter.readNote);
 router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.saveAsPDF);
