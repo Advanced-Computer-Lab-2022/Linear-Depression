@@ -2,11 +2,12 @@ import axios from "axios";
 
 import { config } from "@internals/config";
 
-const updateEnrollement = (enrollementId: string, enrollement: {}) => {
-    const UPDATE_ENROLLEMENT_URL = `${config.API_URL}/enrollements/${enrollementId}`;
+const addNote = (lessonId: string, content: string) => {
+    const ADD_NOTE_URL = `${config.API_URL}/me/lessons/${lessonId}/notes`;
+    console.log("content", content);
     return new Promise((resolve, reject) => {
         axios
-            .put(UPDATE_ENROLLEMENT_URL, enrollement, { withCredentials: true })
+            .post(ADD_NOTE_URL, { content }, { withCredentials: true })
             .then((res) => {
                 resolve(res.data);
             })
@@ -16,4 +17,4 @@ const updateEnrollement = (enrollementId: string, enrollement: {}) => {
     });
 };
 
-export default updateEnrollement;
+export default addNote;

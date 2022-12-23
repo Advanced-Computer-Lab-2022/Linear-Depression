@@ -1,11 +1,12 @@
 import Country from "./Country";
 import Course from "./Course";
-import Enrollement from "./Enrollement";
+import Enrollment from "./Enrollment";
 import Evaluation from "./Evaluation";
 import Exercise from "./Exercise";
 import FormProps from "./FormProps";
 import Instructor from "./Instructor";
 import Lesson from "./Lesson";
+import Note from "./Note";
 import Profile from "./Profile";
 import Promotion from "./Promotion";
 import Review from "./Review";
@@ -24,9 +25,10 @@ export {
     type Exercise,
     type Review,
     type Evaluation,
-    type Enrollement,
+    type Enrollment,
     type Instructor,
     type Profile,
+    type Note,
     type Report,
     type ReportThread,
     type ReportFormProps

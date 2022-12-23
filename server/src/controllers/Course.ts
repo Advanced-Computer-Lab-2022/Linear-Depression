@@ -9,7 +9,7 @@ import { ParsedQs } from "qs";
 import { UserType } from "../enums/UserTypes";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
-import Enrollement from "../models/Enrollement";
+import Enrollment from "../models/Enrollment";
 
 async function getCurrencyRateByCookie(
     req: Request,
@@ -99,10 +99,10 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
         const corporateTrainee = await CorporateTrainee.findById(req.body.userId);
         if (corporateTrainee) {
             const courses = [];
-            for (const enrollementId of corporateTrainee.enrollements) {
-                const enrollement = await Enrollement.findById(enrollementId);
-                if (enrollement) {
-                    courses.push(enrollement.courseId);
+            for (const enrollmentId of corporateTrainee.enrollments) {
+                const enrollment = await Enrollment.findById(enrollmentId);
+                if (enrollment) {
+                    courses.push(enrollment.courseId);
                 }
             }
 
@@ -112,10 +112,10 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
         const individualTrainee = await IndividualTrainee.findById(req.body.userId);
         if (individualTrainee) {
             const courses = [];
-            for (const enrollementId of individualTrainee.enrollements) {
-                const enrollement = await Enrollement.findById(enrollementId);
-                if (enrollement) {
-                    courses.push(enrollement.courseId);
+            for (const enrollmentId of individualTrainee.enrollments) {
+                const enrollment = await Enrollment.findById(enrollmentId);
+                if (enrollment) {
+                    courses.push(enrollment.courseId);
                 }
             }
 

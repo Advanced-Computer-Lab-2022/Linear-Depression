@@ -5,12 +5,11 @@ import { InstructorResource } from "./resources/Instructor";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import { ReportResource } from "./resources/Report";
 import { CourseResource } from "./resources/Course";
-import Course from "../models/Course";
 import Lesson from "../models/Lesson";
 import Exercise from "../models/Exercise";
 import Rating from "../models/Rating";
 import Promotion from "../models/Promotion";
-import Enrollement from "../models/Enrollement";
+import Enrollment from "../models/Enrollment";
 import User from "../models/User";
 import ReportThread from "../models/ReportThread";
 
@@ -43,7 +42,7 @@ export function CreateAdminJS(app: any) {
                 }
             },
             {
-                resource: Enrollement,
+                resource: Enrollment,
                 options: {
                     navigation: false
                 }

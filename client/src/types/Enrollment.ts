@@ -9,7 +9,7 @@ interface ILessonStatus {
     exercisesStatus: Array<IExerciseStatus>;
 }
 
-interface Enrollement {
+interface Enrollment {
     _id: string;
     courseId: string;
     traineeId: string;
@@ -17,4 +17,4 @@ interface Enrollement {
     progress: number;
 }
 
-export default Enrollement;
+export default Enrollment;

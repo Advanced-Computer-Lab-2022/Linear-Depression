@@ -1,16 +1,11 @@
-export { default as useFetchAllCourses } from "./useFetchAllCourses";
-export { default as useFetchCourseById } from "./useFetchCourseById";
-export { default as useFetchMyCourses } from "./useFetchMyCourses";
-export { default as useFetchSubjects } from "./useFetchSubjects";
-export { default as useGetLocalizationData } from "./useGetLocalizationData";
-export { default as useFetchCourseReviews } from "./useFetchCourseReviews";
-export { default as useFetchExerciseById } from "./useFetchExerciseById";
-export { default as useFetchEvaluation } from "./useFetchEvaluation";
-export { default as useFetchProfile } from "./useFetchProfile";
-export { default as useFetchLessonById } from "./useFetchLessonById";
-export { default as useGetInstructorContractStatus } from "./useGetInstructorContractStatus";
-export { default as useFetchMyReviews } from "./useFetchMyReviews";
-export { default as useAuth } from "./useAuth";
-export { default as useFetchMyEnrollement } from "./useFetchMyEnrollement";
-
+export * from "./course/index";
+export * from "./exercise/index";
+export * from "./lesson/index";
+export * from "./review/index";
+export * from "./enrollment/index";
+export * from "./profile/index";
+export * from "./localization/index";
+export * from "./instructor/index";
+export * from "./note/index";
 export * from "./report/index";
+export { default as useAuth } from "./useAuth";

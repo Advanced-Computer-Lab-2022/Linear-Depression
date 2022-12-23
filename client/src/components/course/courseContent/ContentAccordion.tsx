@@ -21,14 +21,14 @@ const ContentAccordion: React.FC<{
         auth: { userType }
     } = useAuth();
 
-    const enrollement = useAppSelector((state) => state.enrollement);
+    const enrollment = useAppSelector((state) => state.enrollment);
 
     const { courseId } = useParams();
     const lessonId = _id;
 
     let lessonElementsStatus: boolean[] = null;
-    if (showLessonStatus && enrollement.data) {
-        lessonElementsStatus = getLessonElementsStatus(_id, enrollement.data);
+    if (showLessonStatus && enrollment.data) {
+        lessonElementsStatus = getLessonElementsStatus(_id, enrollment.data);
     }
 
     const [openExerciseModal, setOpenExerciseModal] = useState(false);
