@@ -163,15 +163,16 @@ enrollmentSchema.methods.setCompletedExercise = async function (
 
 // a hook on the progress, if it's 100 create a certificate
 enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
-    console.log("post save hook");
-    // get the enrollment and populate the course and trainee
     const enrollment = this as IEnrollmentModel;
+    if (enrollment.progress !== 100) {
+        next();
+    }
     const course_title = await Course.findById(enrollment.courseId).select("title");
     if (!course_title) {
         console.log("course not found");
         next();
     }
-    // get the trainee check if it's individual or corporate
+
     let trainee_name = "";
     const individualTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName");
     if (individualTrainee) {
@@ -182,6 +183,7 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
             trainee_name = corporateTrainee.firstName + " " + corporateTrainee.lastName;
         }
     }
+
     createCertificate(trainee_name, course_title!.title, new Date().toDateString(), enrollment._id);
     next();
 });
