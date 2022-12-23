@@ -79,6 +79,7 @@ app.use("/promotions", PromotionRouter);
 app.use("/enrollments", EnrollmentRouter);
 app.use("/auth", AuthRouter);
 app.use("/me", MeRouter);
+app.use("/pdf", express.static(__dirname + "/files/"));
 
 /*Health Check*/
 app.get("/ping", (req, res) => {

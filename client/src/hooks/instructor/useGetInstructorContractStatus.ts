@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { openModal } from "react-url-modal";
 
-import useAuth from "./useAuth";
+import { useAuth } from "@internals/hooks";
 import { getInstructorContractStatus } from "@internals/services";
 import { User } from "@internals/types";
 
