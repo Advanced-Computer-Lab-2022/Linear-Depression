@@ -49,13 +49,11 @@ const courseSchema = new Schema({
             message: "Invalid URL"
         }
     },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
-    isFree: {
-        type: Boolean,
-        default: function (this: ICourseModel) {
-            return this.price === 0;
-        }
-    }
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }]
+});
+
+courseSchema.virtual("isFree").get(function (this: ICourseModel) {
+    return this.price === 0;
 });
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
