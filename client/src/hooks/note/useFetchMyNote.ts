@@ -9,8 +9,6 @@ const useFetchMyNote = (lessonId: string) => {
         loading: true,
         error: null
     });
-    const [savedContent, setSavedContent] = useState("");
-
     const [content, setContent] = useState("");
 
     const updateNote = () => {
@@ -21,7 +19,6 @@ const useFetchMyNote = (lessonId: string) => {
                     loading: false,
                     error: null
                 });
-                setSavedContent(data.content);
                 setContent(data.content);
             })
             .catch((error) => {
@@ -30,7 +27,6 @@ const useFetchMyNote = (lessonId: string) => {
                     loading: false,
                     error
                 });
-                setSavedContent("");
                 setContent("");
             });
     };
@@ -39,7 +35,7 @@ const useFetchMyNote = (lessonId: string) => {
         updateNote();
     }, [lessonId]);
 
-    return { note, setNote, savedContent, setSavedContent, content, setContent, updateNote };
+    return { note, setNote, content, setContent, updateNote };
 };
 
 export default useFetchMyNote;
