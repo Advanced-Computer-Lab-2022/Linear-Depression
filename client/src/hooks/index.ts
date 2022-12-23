@@ -7,5 +7,6 @@ export * from "./profile/index";
 export * from "./localization/index";
 export * from "./instructor/index";
 export * from "./note/index";
+export * from "./request/index";
 export * from "./report/index";
 export { default as useAuth } from "./useAuth";
