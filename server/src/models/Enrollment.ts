@@ -5,6 +5,7 @@ import Lesson from "./Lesson";
 import createCertificate from "../services/certificateService";
 import IndividualTrainee from "./IndividualTrainee";
 import { sendCertificateEmail } from "../services/emails/sendCertificateEmail";
+import CorporateTrainee from "./CorporateTrainee";
 
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
@@ -181,7 +182,7 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
         trainee_name = individualTrainee.firstName + " " + individualTrainee.lastName;
         email = individualTrainee.email;
     } else {
-        const corporateTrainee = await IndividualTrainee.findById(enrollment.traineeId).select(
+        const corporateTrainee = await CorporateTrainee.findById(enrollment.traineeId).select(
             "firstName lastName email"
         );
         if (corporateTrainee) {
