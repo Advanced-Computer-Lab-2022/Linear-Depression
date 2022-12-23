@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { config } from "@internals/config";
 
-const saveToPDF = (lessonId: string, noteId: string): Promise<any> => {
+const saveAsPDF = (lessonId: string, noteId: string): Promise<any> => {
     const API_URL = `${config.API_URL}/me/lessons/${lessonId}/notes/${noteId}/pdf`;
     return new Promise((resolve, reject) => {
         axios
@@ -18,4 +18,4 @@ const saveToPDF = (lessonId: string, noteId: string): Promise<any> => {
     });
 };
 
-export default saveToPDF;
+export default saveAsPDF;
