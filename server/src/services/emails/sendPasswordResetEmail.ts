@@ -5,5 +5,5 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
         url: `${process.env.FRONT_END_URL}/auth/reset?token=${token}`,
         email
     };
-    await sendEmail(email, context, "passwordResetEmail", "Linear Depression | Password Reset");
+    sendEmail(email, context, "passwordResetEmail", "Linear Depression | Password Reset");
 };

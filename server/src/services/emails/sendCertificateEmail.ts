@@ -12,5 +12,5 @@ export const sendCertificateEmail = async (email: string, courseName: string, ce
             contentType: "application/pdf"
         }
     ];
-    await sendEmail(email, context, "certificateUponCompletion", "Linear Depression | Congrats 🎉", attachments);
+    sendEmail(email, context, "certificateUponCompletion", "Linear Depression | Congrats 🎉", attachments);
 };
