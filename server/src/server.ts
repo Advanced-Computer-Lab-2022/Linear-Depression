@@ -9,8 +9,6 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 import logger from "./middleware/logger";
-import Enrollment from "./models/Enrollment";
-import { enrollmentFactory } from "./tests/test_models/enrollment/factory";
 
 import rateLimiter from "./middleware/rateLimiter";
 
@@ -25,7 +23,6 @@ import AuthRouter from "./routes/Auth";
 import MeRouter from "./routes/Me";
 
 import { populateTestDb } from "./utils/populateTestDb";
-import createCertificate from "./services/certificateService";
 
 const cors = require("cors");
 import * as path from "path";
@@ -112,8 +109,6 @@ app.use((req, res) => {
     return res.status(StatusCodes.NOT_FOUND).json({ message: "Not Found" });
 });
 
-// createCertificate("Abdulaziz", "Testing 101", "12/12/1999", "azoz");
-
 // FIXME: should be removed in Test environment. This is for production only.
 // getCurrencyRatesTask.start();
 /* --- End Routes --- */
@@ -122,11 +117,5 @@ app.use((req, res) => {
 // for (let i = 0; i < 2; i++) {
 //     populateTestDb();
 // }
-// enrollmentFactory().then((enrollmentData) => {
-//     console.log(enrollmentData);
-//     const enrollment = new Enrollment(enrollmentData);
-//     enrollment.progress = 100;
-//     enrollment.save();
-// });
 
 export default app;
