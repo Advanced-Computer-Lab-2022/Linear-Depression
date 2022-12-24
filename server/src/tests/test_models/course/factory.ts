@@ -31,7 +31,8 @@ export function lessonFactory(): ILesson {
         totalHours: faker.datatype.number(),
         video: {
             videoLink: `https://www.youtube.com/watch?v=${faker.datatype.number()}`,
-            description: faker.lorem.paragraph()
+            description: faker.lorem.paragraph(),
+            title: faker.lorem.words()
         }
     };
 }

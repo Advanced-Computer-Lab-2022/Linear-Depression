@@ -2,6 +2,7 @@ import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import { AdminResource } from "./resources/Admin";
 import { InstructorResource } from "./resources/Instructor";
+import { AccessRequestResource } from "./resources/AccessRequest";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import { ReportResource } from "./resources/Report";
 import { CourseResource } from "./resources/Course";
@@ -12,6 +13,8 @@ import Promotion from "../models/Promotion";
 import Enrollment from "../models/Enrollment";
 import User from "../models/User";
 import ReportThread from "../models/ReportThread";
+import { RefundRequestResource } from "./resources/RefundRequest";
+import { IndividualTraineeResource } from "./resources/IndividualTrainee";
 
 import enLocale from "./locale/en";
 
@@ -20,9 +23,12 @@ export function CreateAdminJS(app: any) {
         resources: [
             InstructorResource,
             CorporateTraineeResource,
+            IndividualTraineeResource,
             AdminResource,
             ReportResource,
             CourseResource,
+            AccessRequestResource,
+            RefundRequestResource,
             {
                 resource: Rating,
                 options: {

@@ -9,7 +9,6 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 import logger from "./middleware/logger";
-import Enrollment from "./models/Enrollment";
 
 import rateLimiter from "./middleware/rateLimiter";
 
@@ -22,6 +21,7 @@ import PromotionRouter from "./routes/Promotion";
 import EnrollmentRouter from "./routes/Enrollment";
 import AuthRouter from "./routes/Auth";
 import MeRouter from "./routes/Me";
+import PaymentRouter from "./routes/Payment";
 
 import { populateTestDb } from "./utils/populateTestDb";
 
@@ -40,6 +40,7 @@ app.use(
     })
 );
 app.use(express.urlencoded({ extended: true }));
+app.use("/payment/stripe-webhook", express.raw({ type: "*/*" }));
 app.use(express.json());
 app.use(cookieParser());
 const swaggerFile = require("./swagger.json");
@@ -79,6 +80,7 @@ app.use("/promotions", PromotionRouter);
 app.use("/enrollments", EnrollmentRouter);
 app.use("/auth", AuthRouter);
 app.use("/me", MeRouter);
+app.use("/payment", PaymentRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
@@ -118,4 +120,5 @@ app.use((req, res) => {
 // for (let i = 0; i < 2; i++) {
 //     populateTestDb();
 // }
+
 export default app;

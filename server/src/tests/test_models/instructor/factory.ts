@@ -6,5 +6,7 @@ export function instructorFactory(): IInstructorModel {
     instructor["__t"] = "Instructor";
     instructor.ratings = [];
     instructor.averageRating = 0;
+    instructor.biography = "This is a biography";
+    instructor.balance = 0;
     return instructor;
 }

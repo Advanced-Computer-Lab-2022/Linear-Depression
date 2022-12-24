@@ -14,7 +14,8 @@ module.exports = {
             "@internals/modals": path.resolve(__dirname, "src/components/modals"),
             "@internals/redux": path.resolve(__dirname, "src/redux"),
             "@internals/api": path.resolve(__dirname, "src/api"),
-            "@internals/handlers": path.resolve(__dirname, "src/handlers")
+            "@internals/handlers": path.resolve(__dirname, "src/handlers"),
+            "@internals/utils": path.resolve(__dirname, "src/utils")
         }
     }
 };

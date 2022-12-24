@@ -1,5 +1,5 @@
 import mongoose, { Document } from "mongoose";
-import { validateURL } from "../utils/modelUtilities";
+import { isValidVideoLink } from "../services/videoServices";
 
 export interface ILesson {
     title: string;
@@ -23,7 +23,7 @@ const lessonSchema = new mongoose.Schema({
         videoLink: {
             type: String,
             validate: {
-                validator: validateURL,
+                validator: isValidVideoLink,
                 message: "Invalid URL"
             }
         },
