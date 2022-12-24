@@ -14,24 +14,11 @@ import {
 } from "@mui/material";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
+import { Copyright } from "@internals/components";
 import { useAuth } from "@internals/hooks";
 import { login, register } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-function Copyright(props: any) {
-    // TODO: extract this to a separate component
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {"Copyright © "}
-            <Link color="inherit" to="/">
-                Linear Depression
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
 
 const theme = createTheme();
 
