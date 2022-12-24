@@ -1,10 +1,10 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
     Alert,
     AlertTitle,
     Avatar,
     Box,
-    Button,
     Container,
     CssBaseline,
     FormControlLabel,
@@ -42,20 +42,21 @@ const Register: React.FC = () => {
 
     const [formErrors, setFormErrors] = useState(new Map());
     const [showAlert, setShowAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
+        setFormErrors(new Map());
+        setShowAlert(false);
 
         const formData = getFormData(event);
 
         validateFormData(formData, validationRules)
-            .then((data) => {
-                setFormErrors(new Map());
-                setShowAlert(false);
-
+            .then(async (data) => {
                 const validatedData = data as unknown as RegistrationData;
 
-                register(validatedData)
+                await register(validatedData)
                     .then(() => {
                         return login(validatedData.email, validatedData.passwordHash);
                     })
@@ -78,6 +79,9 @@ const Register: React.FC = () => {
             })
             .catch((errors) => {
                 setFormErrors(errors);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
@@ -200,9 +204,14 @@ const Register: React.FC = () => {
                             </RadioGroup>
                         </Grid>
 
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            Sign Up
-                        </Button>
+                        <LoadingButton
+                            loading={loading}
+                            type="submit"
+                            sx={{ mt: 3, mb: 2, width: "100%" }}
+                            variant="contained"
+                        >
+                            Sign up
+                        </LoadingButton>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Link to="/auth/login">Already have an account? Sign in</Link>

@@ -1,16 +1,6 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import {
-    Alert,
-    AlertTitle,
-    Avatar,
-    Box,
-    Button,
-    Container,
-    CssBaseline,
-    Grid,
-    TextField,
-    Typography
-} from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Alert, AlertTitle, Avatar, Box, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -38,20 +28,21 @@ const Login: React.FC = () => {
 
     const [formErrors, setFormErrors] = useState(new Map());
     const [alertMsg, setAlertMsg] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
+        setFormErrors(new Map());
+        setAlertMsg(null);
 
         const formData = getFormData(event);
 
         validateFormData(formData, validationRules)
-            .then((data) => {
-                setFormErrors(new Map());
-                setAlertMsg(null);
-
+            .then(async (data) => {
                 const validatedData = data as unknown as LoginData;
 
-                login(validatedData.email, validatedData.password)
+                await login(validatedData.email, validatedData.password)
                     .then((data) => {
                         setAuth(data.accessToken, data.userType);
                         navigate(from);
@@ -67,6 +58,9 @@ const Login: React.FC = () => {
             })
             .catch((errors) => {
                 setFormErrors(errors);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
@@ -131,9 +125,14 @@ const Login: React.FC = () => {
                             error={formErrors.has("password")}
                             helperText={formErrors.get("password")}
                         />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, fontWeight: "bold" }}>
+                        <LoadingButton
+                            loading={loading}
+                            type="submit"
+                            sx={{ mt: 3, mb: 2, width: "100%" }}
+                            variant="contained"
+                        >
                             Sign In
-                        </Button>
+                        </LoadingButton>
                         <Grid container>
                             <Grid item xs>
                                 <Link to="/auth/forgot">Forgot password?</Link>
