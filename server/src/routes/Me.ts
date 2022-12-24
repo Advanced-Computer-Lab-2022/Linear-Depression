@@ -2,19 +2,27 @@ import express from "express";
 import courseController from "../controllers/Course";
 import profileController from "../controllers/Profile";
 import noteRouter from "../controllers/Note";
-import isAuthenticated from "../middleware/isAuthenticated";
+import isAuthenticated from "../middleware/permissions/isAuthenticated";
 import enrollmentController from "../controllers/Enrollment";
 import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
+import isAuthorized from "../middleware/permissions/isAuthorized";
+import { UserType } from "../enums/UserTypes";
 
 const router = express.Router();
 
 router.get("/courses", isAuthenticated, courseController.listMyCourses);
 
 router.get("/enrollments", isAuthenticated, enrollmentController.readMyEnrollments);
+router.post(
+    "/enrollments",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
+    enrollmentController.createEnrollment
+);
 
 router.get("/lessons/:lessonId/notes", isAuthenticated, noteRouter.readNote);
-router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.getPDF);
+router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.saveAsPDF);
 router.post("/lessons/:lessonId/notes", isAuthenticated, noteRouter.createNote);
 router.put("/lessons/:lessonId/notes/:noteId", isAuthenticated, noteRouter.updateNote);
 

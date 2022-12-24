@@ -1,7 +1,7 @@
 import express from "express";
 import controller from "../controllers/Instructor";
 import ratingController from "../controllers/InstructorRating";
-import authenticated from "../middleware/isAuthenticated";
+import authenticated from "../middleware/permissions/isAuthenticated";
 
 const router = express.Router();
 

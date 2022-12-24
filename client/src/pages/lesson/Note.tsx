@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { useFetchMyNote } from "@internals/hooks";
-import { addNote, editNote, downloadPDF, saveToPDF } from "@internals/services";
+import { addNote, editNote, downloadPDF, saveAsPDF } from "@internals/services";
 
 const Container = styled.div`
     width: 650px;
@@ -56,7 +56,7 @@ const Note: React.FC<{
     const handleDownload = () => {
         saveNote()
             .then(async () => {
-                await saveToPDF(lessonId, note.data?._id);
+                await saveAsPDF(lessonId, note.data?._id);
                 downloadPDF(note.data?._id);
             })
             .catch((err) => {

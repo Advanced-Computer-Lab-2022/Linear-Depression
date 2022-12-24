@@ -9,7 +9,6 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import swaggerUi from "swagger-ui-express";
 import logger from "./middleware/logger";
-import Enrollment from "./models/Enrollment";
 
 import rateLimiter from "./middleware/rateLimiter";
 
@@ -79,7 +78,6 @@ app.use("/promotions", PromotionRouter);
 app.use("/enrollments", EnrollmentRouter);
 app.use("/auth", AuthRouter);
 app.use("/me", MeRouter);
-app.use("/pdf", express.static(__dirname + "/files/"));
 
 /*Health Check*/
 app.get("/ping", (req, res) => {
@@ -119,4 +117,5 @@ app.use((req, res) => {
 // for (let i = 0; i < 2; i++) {
 //     populateTestDb();
 // }
+
 export default app;

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+        "target": "es2017" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
         "module": "commonjs" /* Specify what module code is generated. */,
         "outDir": "./build" /* Specify an output folder for all emitted files. */,
         "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
