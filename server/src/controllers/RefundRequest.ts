@@ -74,7 +74,7 @@ const deleteRefundRequest = async (req: Request, res: Response, next: NextFuncti
         return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing required fields" });
     }
 
-    RefundRequest.findOneAndDelete({ traineeId, enrollmentId })
+    RefundRequest.findOneAndDelete({ traineeId, enrollmentId, status: "PENDING" })
         .then((refundRequest) => {
             if (!refundRequest) {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "Refund request not found" });
