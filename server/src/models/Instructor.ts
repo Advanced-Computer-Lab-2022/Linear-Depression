@@ -7,6 +7,9 @@ export interface IInstructor extends IUser {
     ratings: Array<mongoose.Types.ObjectId>;
     averageRating: number;
     biography: string;
+    balance: number;
+
+    credit(amount: number): void;
 }
 
 export interface IInstructorModel extends IInstructor, Document {}
@@ -22,7 +25,8 @@ class InstructorSchema extends UserSchema {
                 max: 5,
                 default: 0
             },
-            biography: { type: String, required: false, trim: true }
+            biography: { type: String, required: false, trim: true },
+            balance: { type: Number, default: 0, min: 0 }
         });
         this.pre("save", async function (next) {
             const instructor = this as IInstructorModel;
@@ -36,6 +40,11 @@ class InstructorSchema extends UserSchema {
             }
             next();
         });
+
+        this.methods.credit = function (amount: number) {
+            this.balance += amount;
+            this.save();
+        };
     }
 }
 

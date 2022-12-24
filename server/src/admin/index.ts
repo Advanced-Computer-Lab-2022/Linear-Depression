@@ -10,6 +10,8 @@ import Rating from "../models/Rating";
 import Enrollment from "../models/Enrollment";
 import User from "../models/User";
 import ReportThread from "../models/ReportThread";
+import { RefundRequestResource } from "./resources/RefundRequest";
+import { IndividualTraineeResource } from "./resources/IndividualTrainee";
 
 import enLocale from "./locale/en";
 
@@ -18,9 +20,11 @@ export function CreateAdminJS(app: any) {
         resources: [
             InstructorResource,
             CorporateTraineeResource,
+            IndividualTraineeResource,
             AdminResource,
             ReportResource,
             AccessRequestResource,
+            RefundRequestResource,
             {
                 resource: Course,
                 options: {

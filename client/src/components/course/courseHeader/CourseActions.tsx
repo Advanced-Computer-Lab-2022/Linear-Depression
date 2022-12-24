@@ -6,6 +6,7 @@ import { CoursePrice, VideoPlayer } from "@internals/components";
 import { useAuth, useFetchMyAccessRequest } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { sendAccessRequest } from "@internals/services";
+import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
 const MainContainer = styled.div``;
@@ -62,6 +63,12 @@ const CourseActions: React.FC<{
                 .catch((err) => {
                     console.log(err);
                 });
+        } else if (userType === User.INDIVIDUAL_TRAINEE) {
+            if (price > 0) {
+                handleCheckout(courseId);
+            } else {
+                console.log("free course");
+            }
         }
     };
 

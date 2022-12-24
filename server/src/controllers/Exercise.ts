@@ -78,7 +78,7 @@ const deleteExercise = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const evaluateExercise = async (traineeId: string, exerciseId: string) => {
+const evaluateExercise = async (traineeId: mongoose.Types.ObjectId, exerciseId: mongoose.Types.ObjectId) => {
     const answerObject = await Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId });
     let userAnswers: number[] = [];
 
@@ -116,8 +116,8 @@ const evaluateExercise = async (traineeId: string, exerciseId: string) => {
 };
 
 const readSubmission = (req: Request, res: Response, next: NextFunction) => {
-    const exerciseId = req.params.exerciseId;
-    const traineeId = req.body.userId;
+    const exerciseId = req.params.exerciseId as unknown as mongoose.Types.ObjectId;
+    const traineeId = req.body.userId as unknown as mongoose.Types.ObjectId;
 
     return Answer.findOne({
         exerciseId: exerciseId,
@@ -136,7 +136,11 @@ const readSubmission = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const submitExercise = (req: Request, res: Response, next: NextFunction) => {
-    const { courseId, lessonId, exerciseId } = req.params;
+    const { courseId, lessonId, exerciseId } = req.params as {
+        courseId: unknown;
+        lessonId: unknown;
+        exerciseId: unknown;
+    } as { courseId: mongoose.Types.ObjectId; lessonId: mongoose.Types.ObjectId; exerciseId: mongoose.Types.ObjectId };
     const traineeId = req.body.userId;
 
     return Answer.findOne({ exerciseId: exerciseId, traineeId: traineeId })

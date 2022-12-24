@@ -10,14 +10,14 @@ import { VideoPlayer } from "@internals/components";
 import { useFetchCourseById, useFetchLessonById } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 
-const Container = styled.div`
+export const Container = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
 `;
 
-const HorizontalContainer = styled.div`
+export const HorizontalContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -41,7 +41,7 @@ const SideMenu = styled.div`
     width: 70%;
 `;
 
-const CourseContentTitle = styled.h4`
+export const CourseContentTitle = styled.h4`
     font-size: 20px;
     font-weight: 600;
     padding: 10px;

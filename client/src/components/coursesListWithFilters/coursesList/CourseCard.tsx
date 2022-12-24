@@ -4,7 +4,6 @@ import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
 import { CoursePrice } from "@internals/components";
-import { getVideoThumbnailUrl } from "@internals/services";
 import { Course as ICourseProps } from "@internals/types";
 
 const HorizontalLayout = styled.div`
@@ -80,15 +79,6 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CourseThumbnail: React.FC<{ preview: string }> = ({ preview }) => {
-    try {
-        const url = getVideoThumbnailUrl(preview);
-        return <Image src={url} />;
-    } catch (error) {
-        return <Image src="https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg" />;
-    }
-};
-
 const CourseCard: React.FC<{ course: ICourseProps }> = ({
     course: {
         _id,
@@ -100,7 +90,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         price,
         activePromotion,
         currency,
-        preview
+        thumbnail
     }
 }) => {
     const navigate = useNavigate();
@@ -112,7 +102,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
             }}
         >
             <HorizontalLayout>
-                <CourseThumbnail preview={preview} />
+                <Image src={thumbnail} />
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
                     <CourseDescription>{description + "  ..."}</CourseDescription>
