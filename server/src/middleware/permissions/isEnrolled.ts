@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { UserType } from "../enums/UserTypes";
-import CorporateTrainee from "../models/CorporateTrainee";
-import Enrollment from "../models/Enrollment";
-import IndividualTrainee from "../models/IndividualTrainee";
+import { UserType } from "../../enums/UserTypes";
+import CorporateTrainee from "../../models/CorporateTrainee";
+import Enrollment from "../../models/Enrollment";
+import IndividualTrainee from "../../models/IndividualTrainee";
 
 const isEnrolled = async (req: Request, res: Response, next: NextFunction) => {
     const { userId, userType } = req.body;

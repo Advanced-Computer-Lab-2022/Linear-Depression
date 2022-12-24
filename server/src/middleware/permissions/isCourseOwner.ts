@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import Course from "../models/Course";
+import Course from "../../models/Course";
 
 const isCourseOwner = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.body.userId as unknown as mongoose.Types.ObjectId;

@@ -4,12 +4,12 @@ import ratingController from "../controllers/CourseRating";
 import exerciseController from "../controllers/Exercise";
 import lessonController from "../controllers/Lesson";
 import { UserType } from "../enums/UserTypes";
-import isAuthenticated from "../middleware/isAuthenticated";
-import isAuthorized from "../middleware/isAuthorized";
-import isCourseOwner from "../middleware/isCourseOwner";
-import isEnrolled from "../middleware/isEnrolled";
-import isOwnerOrEnrolled from "../middleware/isOwnerOrEnrolled";
-import isRatingOwner from "../middleware/isRatingOwner";
+import isAuthenticated from "../middleware/permissions/isAuthenticated";
+import isAuthorized from "../middleware/permissions/isAuthorized";
+import isCourseOwner from "../middleware/permissions/isCourseOwner";
+import isEnrolled from "../middleware/permissions/isEnrolled";
+import isOwnerOrEnrolled from "../middleware/permissions/isOwnerOrEnrolled";
+import isRatingOwner from "../middleware/permissions/isRatingOwner";
 
 const router = express.Router();
 
