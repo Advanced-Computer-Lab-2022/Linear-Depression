@@ -5,7 +5,7 @@ const downloadCertificate = (enrollmentId: string) => {
         .then((res) => res.blob())
         .then((res) => {
             const aElement = document.createElement("a");
-            aElement.setAttribute("download", `${enrollmentId}.pdf`);
+            aElement.setAttribute("download", "certificate.pdf");
             const href = URL.createObjectURL(res);
             aElement.href = href;
             aElement.setAttribute("target", "_blank");
