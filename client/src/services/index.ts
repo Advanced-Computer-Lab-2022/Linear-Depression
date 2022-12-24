@@ -36,3 +36,5 @@ export { default as updateEnrollment } from "./updateEnrollment";
 export { default as editProfile } from "./editProfile";
 export { default as fetchMyReviews } from "./fetchMyReviews";
 export { default as fetchMyEnrollment } from "./fetchMyEnrollment";
+
+export { default as handleCheckout } from "./payment/payment";

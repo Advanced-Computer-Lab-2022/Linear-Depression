@@ -22,6 +22,7 @@ import PromotionRouter from "./routes/Promotion";
 import EnrollmentRouter from "./routes/Enrollment";
 import AuthRouter from "./routes/Auth";
 import MeRouter from "./routes/Me";
+import PaymentRouter from "./routes/Payment";
 
 import { populateTestDb } from "./utils/populateTestDb";
 
@@ -79,6 +80,7 @@ app.use("/promotions", PromotionRouter);
 app.use("/enrollments", EnrollmentRouter);
 app.use("/auth", AuthRouter);
 app.use("/me", MeRouter);
+app.use("/payment", PaymentRouter);
 
 /*Health Check*/
 app.get("/ping", (req, res) => {

@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
 import AuthHandler from "./components/AuthHandler";
+import PaymentTest from "./pages/PaymentTest";
 import { User } from "./types";
 import { CountryContext } from "@internals/contexts";
 import { useGetLocalizationData } from "@internals/hooks";
@@ -57,6 +58,10 @@ function App() {
                         <Route path="/auth/login" element={<Login />} />
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
+
+                        {/* TODO: remove  */}
+
+                        <Route path="/test" element={<PaymentTest />} />
 
                         <Route
                             element={

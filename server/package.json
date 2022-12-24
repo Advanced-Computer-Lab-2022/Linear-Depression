@@ -47,6 +47,7 @@
         "nodemailer": "^6.8.0",
         "prettier": "^2.7.1",
         "request": "^2.88.2",
+        "stripe": "^11.5.0",
         "styled-components": "^5.3.6",
         "superagent": "^8.0.3",
         "supertest": "^6.3.0",
