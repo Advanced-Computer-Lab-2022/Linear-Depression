@@ -31,7 +31,7 @@ const FormAction = styled.div`
 `;
 
 const AddPromotion = (props: ActionProps) => {
-    const [name, setName] = React.useState<string>("helloo");
+    const [name, setName] = React.useState<string>("");
     const [discountPercent, setDiscountPercent] = React.useState(0);
     const [startDate, setStartDate] = React.useState(new Date());
     const [endDate, setEndDate] = React.useState(new Date());
