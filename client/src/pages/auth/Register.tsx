@@ -1,5 +1,7 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
+    Alert,
+    AlertTitle,
     Avatar,
     Box,
     Button,
@@ -22,7 +24,11 @@ import { login, register } from "@internals/services";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const theme = createTheme();
+const theme = createTheme({
+    typography: {
+        fontFamily: ["Inter", "sans-serif"].join(",")
+    }
+});
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
@@ -33,6 +39,7 @@ const Register: React.FC = () => {
     const from = location.state?.from?.pathname || "/";
 
     const [formErrors, setFormErrors] = useState(new Map());
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -40,19 +47,28 @@ const Register: React.FC = () => {
         const formData = getFormData(event);
 
         validateFormData(formData)
-            .then((data) => {
+            .then((validatedData) => {
                 setFormErrors(new Map());
 
-                register(data)
+                register(validatedData)
                     .then(() => {
-                        return login(data.email, data.passwordHash);
+                        return login(validatedData.email, validatedData.passwordHash);
                     })
                     .then((data) => {
                         setAuth(data.accessToken, data.userType);
                         navigate(from);
                     })
                     .catch((err) => {
-                        console.log(err);
+                        if (err.response?.status === 400 && err.response?.data?.error?.code === 11000) {
+                            const field = Object.entries(err.response.data.error.keyPattern)[0][0].toLowerCase();
+                            setFormErrors(
+                                "username" === field
+                                    ? new Map([["userName", "Username already taken"]])
+                                    : new Map([["email", "Email already taken"]])
+                            );
+                        } else {
+                            setShowAlert(true);
+                        }
                     });
             })
             .catch((errors) => {
@@ -213,6 +229,14 @@ const Register: React.FC = () => {
                                 <Link to="/auth/login">Already have an account? Sign in</Link>
                             </Grid>
                         </Grid>
+                        {showAlert && (
+                            <Box sx={{ mt: 3 }}>
+                                <Alert severity="error">
+                                    <AlertTitle>Error</AlertTitle>
+                                    Something went wrong — <strong>please try again!</strong>
+                                </Alert>
+                            </Box>
+                        )}
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
