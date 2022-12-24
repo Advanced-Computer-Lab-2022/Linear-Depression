@@ -24,7 +24,7 @@ export const sendEmail = async (
     handlebars.registerPartial("header", fs.readFileSync(`${TEMPLATE_DIR}/partials/header.html`, "utf-8"));
     handlebars.registerPartial("footer", fs.readFileSync(`${TEMPLATE_DIR}/partials/footer.html`, "utf-8"));
 
-    const htmlFile = fs.readFileSync(templatePath, "utf-8");
+    const htmlFile = fs.readFileSync(TEMPLATE_PATH, "utf-8");
     const template = handlebars.compile(htmlFile);
     const htmlToSend = template(context);
 
