@@ -30,12 +30,13 @@ export const AccessRequestResource = {
                 isVisible: true,
                 component: false,
                 handler: async (request: any, response: any, context: any) => {
-                    const { record } = context;
-                    await record.update({
-                        status: "APPROVED"
+                    const { record, currentAdmin } = context;
+                    AccessRequest.findById(record.params._id).then(async (accessRequest) => {
+                        await accessRequest!.approve();
                     });
                     return {
-                        record: record.toJSON(context.currentAdmin)
+                        record: record.toJSON(currentAdmin),
+                        msg: "Access Request Approved"
                     };
                 }
             },
@@ -45,12 +46,13 @@ export const AccessRequestResource = {
                 isVisible: true,
                 component: false,
                 handler: async (request: any, response: any, context: any) => {
-                    const { record } = context;
-                    await record.update({
-                        status: "REJECTED"
+                    const { record, currentAdmin } = context;
+                    AccessRequest.findById(record.params._id).then(async (accessRequest) => {
+                        await accessRequest!.reject();
                     });
                     return {
-                        record: record.toJSON(context.currentAdmin)
+                        record: record.toJSON(currentAdmin),
+                        msg: "Access Request Rejected"
                     };
                 }
             }
