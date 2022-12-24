@@ -21,8 +21,8 @@ export const sendEmail = async (
     const TEMPLATE_DIR = "src/services/emails/templates";
     const TEMPLATE_PATH = `${TEMPLATE_DIR}/${templateName}.html`;
     // Register partials
-    handlebars.registerPartial("header", fs.readFileSync(`${templateDir}/partials/header.html`, "utf-8"));
-    handlebars.registerPartial("footer", fs.readFileSync(`${templateDir}/partials/footer.html`, "utf-8"));
+    handlebars.registerPartial("header", fs.readFileSync(`${TEMPLATE_DIR}/partials/header.html`, "utf-8"));
+    handlebars.registerPartial("footer", fs.readFileSync(`${TEMPLATE_DIR}/partials/footer.html`, "utf-8"));
 
     const htmlFile = fs.readFileSync(templatePath, "utf-8");
     const template = handlebars.compile(htmlFile);
