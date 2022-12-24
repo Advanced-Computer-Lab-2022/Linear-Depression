@@ -14,6 +14,7 @@ export function traineeFactory(): ITraineeModel {
 export function individualTraineeFactory(): IIndividualTraineeModel {
     const IndividualTrainee = traineeFactory() as IIndividualTraineeModel;
     IndividualTrainee["__t"] = "IndividualTrainee";
+    IndividualTrainee["wallet"] = 0;
     return IndividualTrainee;
 }
 

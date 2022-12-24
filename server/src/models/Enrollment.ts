@@ -6,6 +6,8 @@ import createCertificate from "../services/certificateService";
 import IndividualTrainee from "./IndividualTrainee";
 import { sendCertificateEmail } from "../services/emails/sendCertificateEmail";
 import CorporateTrainee from "./CorporateTrainee";
+import Instructor from "./Instructor";
+import { sendEnrollmentEmail } from "../services/emails/sendEnrollmentEmail";
 
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
@@ -196,6 +198,32 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
     sendCertificateEmail(email, course_title!.title, filePath);
 
     next();
+});
+
+// hook on create to send email to instructor and credit him
+enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
+    const enrollment = this as IEnrollmentModel;
+    if (!this.isNew) {
+        return next();
+    }
+    const course = await Course.findById(enrollment.courseId);
+    if (!course) {
+        console.log("course not found");
+        return next();
+    }
+    IndividualTrainee.findById(enrollment.traineeId).then((trainee) => {
+        if (!trainee) {
+            return next();
+        }
+        // credit the instructor if an individual trainee enrolled
+        Instructor.findById(course.instructor).then((instructor) => {
+            if (instructor) {
+                instructor.credit(course.price * 0.4);
+                console.log("instructor credited");
+                sendEnrollmentEmail(instructor.email, course.title);
+            }
+        });
+    });
 });
 
 export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);
