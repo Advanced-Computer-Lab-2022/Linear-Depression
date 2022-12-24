@@ -11,7 +11,6 @@ export interface IRefundRequest {
     enrollmentId: mongoose.Types.ObjectId;
     refundAmount: number;
     status: string;
-    reason?: string;
 
     approve(): Promise<void>;
     reject(): Promise<void>;
@@ -35,11 +34,6 @@ export const refundRequestSchema = new mongoose.Schema({
         required: true
     },
 
-    reason: {
-        type: String,
-        required: false
-    },
-
     status: { type: String, required: true, trim: true, enum: ["PENDING", "APPROVED", "REJECTED"], default: "PENDING" }
 });
 
@@ -55,7 +49,7 @@ refundRequestSchema.methods.approve = async function () {
             return;
         }
         trainee.enrollments.splice(trainee.enrollments.indexOf(this.enrollmentId), 1);
-        await Enrollment.findByIdAndDelete(this.enrollmentId);
+        // await Enrollment.findByIdAndDelete(this.enrollmentId);
         trainee.credit(this.refundAmount);
         sendRefundRequestApprovalEmail(trainee.email, this.refundAmount);
     });
@@ -75,7 +69,7 @@ refundRequestSchema.methods.reject = async function () {
             return;
         }
         // send email to trainee to notify that the refund request is rejected
-        sendRefundRequestRejectionEmail(trainee.email, this.reason);
+        sendRefundRequestRejectionEmail(trainee.email);
     });
     await this.save();
 };

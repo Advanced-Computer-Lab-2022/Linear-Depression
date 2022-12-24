@@ -1,9 +1,8 @@
 import { sendEmail } from "./sendMailService";
 
-export const sendRefundRequestRejectionEmail = async (email: string, reason: string) => {
+export const sendRefundRequestRejectionEmail = async (email: string) => {
     const context = {
-        reason: reason,
         email: email
     };
-    sendEmail(email, context, "refundRequestApproval", "Linear Depression | Refund Request Rejected 🟥");
+    sendEmail(email, context, "refundRequestRejection", "Linear Depression | Refund Request Rejected 🟥");
 };
