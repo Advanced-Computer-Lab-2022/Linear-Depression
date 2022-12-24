@@ -24,7 +24,7 @@ class InstructorSchema extends UserSchema {
                 default: 0
             },
             biography: { type: String, required: false, trim: true },
-            balance: { type: Number, default: 0 }
+            balance: { type: Number, default: 0, min: 0 }
         });
         this.pre("save", async function (next) {
             const instructor = this as IInstructorModel;
