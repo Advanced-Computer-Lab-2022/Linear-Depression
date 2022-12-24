@@ -11,7 +11,6 @@ export const createEnrollmentService = async (
     }).then((enrollment) => {
         if (enrollment) {
             throw new Error("Enrollment already exists");
-            return;
         }
     });
 
