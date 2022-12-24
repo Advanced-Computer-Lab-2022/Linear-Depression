@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import Enrollment from "../models/Enrollment";
 import RefundRequest from "../models/RefundRequest";
+import Course from "../models/Course";
 
 const createRefundRequest = async (req: Request, res: Response, _next: NextFunction) => {
     const traineeId = req.body.userId as unknown as mongoose.Types.ObjectId;
@@ -26,10 +27,14 @@ const createRefundRequest = async (req: Request, res: Response, _next: NextFunct
                     .status(StatusCodes.BAD_REQUEST)
                     .json({ message: "You cannot request a refund after 50% of the course has been completed" });
             }
+            const refundAmount = Course.findById(enrollment.courseId).then((course) => {
+                return course!.price;
+            });
             new RefundRequest({
                 traineeId,
                 enrollmentId,
-                status: "PENDING"
+                status: "PENDING",
+                refundAmount
             })
                 .save()
                 .then((refundRequest) => {

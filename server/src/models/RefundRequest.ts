@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+import { sendRefundRequestApprovalEmail } from "../services/emails/sendRefundRequestApprovalEmail";
 import { sendRefundRequestCreationEmail } from "../services/emails/sendRefundRequestCreationEmail";
 import Course from "./Course";
 import Enrollment from "./Enrollment";
@@ -23,8 +24,27 @@ export const refundRequestSchema = new mongoose.Schema({
         ref: "Enrollment",
         required: true
     },
+    refundAmount: {
+        type: Number,
+        required: true
+    },
     status: { type: String, required: true, trim: true, enum: ["PENDING", "APPROVED", "REJECTED"], default: "PENDING" }
 });
+
+refundRequestSchema.methods.approve = async function () {
+    this.status = "APPROVED";
+    IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
+        if (!trainee) {
+            console.log("Trainee not found");
+            return;
+        }
+        trainee.enrollments.splice(trainee.enrollments.indexOf(this.enrollmentId), 1);
+        await Enrollment.findByIdAndDelete(this.enrollmentId);
+        trainee.credit(this.refundAmount);
+        sendRefundRequestApprovalEmail(trainee.email, this.refundAmount);
+    });
+    await this.save();
+};
 
 refundRequestSchema.pre<IRefundRequestModel>("save", async function (next) {
     const refundRequest = this;
@@ -33,18 +53,9 @@ refundRequestSchema.pre<IRefundRequestModel>("save", async function (next) {
         return next();
     }
     IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
-        if (!trainee) {
-            return;
-        }
         await Enrollment.findById(refundRequest.enrollmentId).then((enrollment) => {
-            if (!enrollment) {
-                return;
-            }
-            Course.findById(enrollment.courseId).then((course) => {
-                if (!course) {
-                    return;
-                }
-                sendRefundRequestCreationEmail(trainee.email, course.title);
+            Course.findById(enrollment!.courseId).then((course) => {
+                sendRefundRequestCreationEmail(trainee!.email, course!.title);
             });
         });
     });
