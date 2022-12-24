@@ -19,12 +19,6 @@ const HorizontalContainer = styled.div`
     align-items: center;
 `;
 
-// const GradeLabel = styled.div`
-//     font-size: 28px;
-//     font-weight: 800;
-//     margin-right: 10px;
-// `;
-
 const Grade = styled.div<{ grade: number }>`
     font-size: 28px;
     font-weight: 600;
@@ -36,7 +30,6 @@ const TotalGrade: React.FC<{
 }> = ({ totalGrade }) => {
     return (
         <Container>
-            {/* <GradeLabel>Total Grade</GradeLabel> */}
             <HorizontalContainer>
                 <RuleIcon
                     sx={{
