@@ -211,7 +211,6 @@ enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
         console.log("course not found");
         return next();
     }
-    console.log("course found");
     Instructor.findById(course.instructor).then((instructor) => {
         if (instructor) {
             instructor.credit(course.price * 0.4);
