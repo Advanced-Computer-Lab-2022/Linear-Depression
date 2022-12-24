@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import Course from "../models/Course";
+import Promotion, { PromotionStatus } from "../models/Promotion";
 import User from "../models/User";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -17,6 +18,19 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
 
     if (!user) {
         return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+    }
+
+    const discounts = [];
+
+    if (course.activePromotion) {
+        const promotion = await Promotion.findById(course.activePromotion);
+        if (!promotion) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Promotion not found" });
+        }
+        if (promotion.status === PromotionStatus.Active) {
+            const coupon = await stripe.coupons.create({ percent_off: promotion.discountPercent, duration: "once" });
+            discounts.push({ coupon: coupon.id });
+        }
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -36,6 +50,7 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
         client_reference_id: userId,
         customer_email: user.email,
         mode: "payment",
+        ...(discounts.length && { discounts }),
         success_url: `${process.env.FRONT_END_URL}/courses/${courseId}`,
         cancel_url: `${process.env.FRONT_END_URL}/payment/cancel`
     });
