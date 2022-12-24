@@ -12,7 +12,9 @@ import {
     TextField,
     Typography
 } from "@mui/material";
+import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
 import { Copyright } from "@internals/components";
 import { useAuth } from "@internals/hooks";
@@ -30,8 +32,35 @@ const Register: React.FC = () => {
 
     const from = location.state?.from?.pathname || "/";
 
+    const [formErrors, setFormErrors] = useState(new Map());
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const formData = getFormData(event);
+
+        validateFormData(formData)
+            .then((data) => {
+                setFormErrors(new Map());
+
+                register(data)
+                    .then(() => {
+                        return login(data.email, data.passwordHash);
+                    })
+                    .then((data) => {
+                        setAuth(data.accessToken, data.userType);
+                        navigate(from);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((errors) => {
+                setFormErrors(errors);
+            });
+    };
+
+    const getFormData = (event: React.FormEvent<HTMLFormElement>) => {
         const formData = new FormData(event.currentTarget);
         const data = {
             firstName: formData.get("firstName") as string,
@@ -41,17 +70,41 @@ const Register: React.FC = () => {
             passwordHash: formData.get("password") as string,
             gender: formData.get("gender-radio-buttons-group") as string
         };
-        register(data)
-            .then(() => {
-                return login(data.email, data.passwordHash);
-            })
-            .then((data) => {
-                setAuth(data.accessToken, data.userType);
-                navigate(from);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        return data;
+    };
+
+    const validateFormData = (
+        data: any
+    ): Promise<{
+        firstName: string;
+        lastName: string;
+        email: string;
+        userName: string;
+        passwordHash: string;
+        gender: string;
+    }> => {
+        const validationSchema = Yup.object().shape({
+            firstName: Yup.string().max(255).required("First name is required"),
+            lastName: Yup.string().max(255).required("Last name is required"),
+            email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+            userName: Yup.string().max(255).required("Username is required"),
+            passwordHash: Yup.string().max(255).required("Password is required")
+        });
+
+        return new Promise((resolve, reject) => {
+            validationSchema
+                .validate(data, { abortEarly: false })
+                .then(() => {
+                    resolve(data);
+                })
+                .catch((errors) => {
+                    const validationErrors = new Map();
+                    errors.inner.forEach((error: any) => {
+                        validationErrors.set(error.path, error.message);
+                    });
+                    reject(validationErrors);
+                });
+        });
     };
 
     if (auth.isLoggedIn) {
@@ -87,6 +140,8 @@ const Register: React.FC = () => {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    error={formErrors.has("firstName")}
+                                    helperText={formErrors.get("firstName")}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -97,6 +152,8 @@ const Register: React.FC = () => {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                    error={formErrors.has("lastName")}
+                                    helperText={formErrors.get("lastName")}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -107,6 +164,8 @@ const Register: React.FC = () => {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    error={formErrors.has("email")}
+                                    helperText={formErrors.get("email")}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -117,6 +176,8 @@ const Register: React.FC = () => {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
+                                    error={formErrors.has("userName")}
+                                    helperText={formErrors.get("userName")}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -128,10 +189,11 @@ const Register: React.FC = () => {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    error={formErrors.has("passwordHash")}
+                                    helperText={formErrors.get("passwordHash")}
                                 />
                             </Grid>
                         </Grid>
-                        {/* radio to choose gender */}
                         <Grid container justifyContent="flex-start">
                             <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
