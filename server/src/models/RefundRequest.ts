@@ -9,8 +9,12 @@ import IndividualTrainee from "./IndividualTrainee";
 export interface IRefundRequest {
     traineeId: mongoose.Types.ObjectId;
     enrollmentId: mongoose.Types.ObjectId;
+    refundAmount: number;
     status: string;
     reason?: string;
+
+    approve(): Promise<void>;
+    reject(): Promise<void>;
 }
 
 export interface IRefundRequestModel extends IRefundRequest, Document {}
@@ -40,6 +44,10 @@ export const refundRequestSchema = new mongoose.Schema({
 });
 
 refundRequestSchema.methods.approve = async function () {
+    if (this.status !== "PENDING") {
+        console.log("Refund request is not pending");
+        return;
+    }
     this.status = "APPROVED";
     IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
         if (!trainee) {
@@ -55,6 +63,10 @@ refundRequestSchema.methods.approve = async function () {
 };
 
 refundRequestSchema.methods.reject = async function () {
+    if (this.status !== "PENDING") {
+        console.log("Refund request is not pending");
+        return;
+    }
     this.status = "REJECTED";
 
     IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
