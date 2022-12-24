@@ -10,6 +10,7 @@
         "@emotion/styled": "^11.10.5",
         "@mui/icons-material": "^5.10.9",
         "@mui/joy": "^5.0.0-alpha.57",
+        "@mui/lab": "^5.0.0-alpha.113",
         "@mui/material": "^5.10.10",
         "@mui/styled-engine-sc": "^5.10.6",
         "@reduxjs/toolkit": "^1.9.0",
