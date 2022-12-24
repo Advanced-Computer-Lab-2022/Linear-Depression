@@ -1,13 +1,13 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { IUser, UserSchema } from "./User";
 
 export interface ITrainee extends IUser {
-    courses: Array<mongoose.Types.ObjectId>; // Array of course IDs
-    enrollments: Array<mongoose.Types.ObjectId>; // Array of enrollment IDs
+    courses: Array<mongoose.Types.ObjectId>;
+    enrollments: Array<mongoose.Types.ObjectId>;
     gender: string;
+    wallet: number;
 }
 
-// inherit from IUserModel
 export interface ITraineeModel extends ITrainee, Document {}
 
 export class TraineeSchema extends UserSchema {
@@ -16,12 +16,25 @@ export class TraineeSchema extends UserSchema {
         this.add({
             courses: [{ type: mongoose.Types.ObjectId, ref: "Course" }],
             enrollments: [{ type: mongoose.Types.ObjectId, ref: "Enrollment" }],
-            gender: { type: String, required: true, trim: true, enum: ["male", "female"] }
+            gender: { type: String, required: true, trim: true, enum: ["male", "female"] },
+            wallet: { type: Number, default: 0 }
         }),
             {
                 toJSON: {
                     virtuals: true
                 }
             };
+        this.methods.credit = function (amount: number) {
+            this.wallet += amount;
+            this.save();
+        };
+
+        this.methods.debit = function (amount: number) {
+            if (this.wallet < amount) {
+                throw new Error("Insufficient funds");
+            }
+            this.wallet -= amount;
+            this.save();
+        };
     }
 }

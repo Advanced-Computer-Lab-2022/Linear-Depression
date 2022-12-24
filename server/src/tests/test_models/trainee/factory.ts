@@ -8,6 +8,7 @@ export function traineeFactory(): ITraineeModel {
     const trainee = userFactory() as ITraineeModel;
     trainee["courses"] = [];
     trainee["gender"] = faker.name.sex().toLowerCase();
+    trainee["wallet"] = 0;
     return trainee;
 }
 

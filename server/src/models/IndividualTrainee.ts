@@ -4,7 +4,6 @@ import User from "./User";
 const options = { discriminatorKey: "kind" };
 export interface IIndividualTrainee extends ITrainee {}
 
-// inherit from ITraineeModel
 export interface IIndividualTraineeModel extends IIndividualTrainee, Document {}
 class IndividualTraineeSchema extends TraineeSchema {
     constructor(obj: Object, options: Object) {
