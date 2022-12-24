@@ -18,8 +18,8 @@ export const sendEmail = async (
             pass: process.env.EMAIL_PASSWORD
         }
     });
-    const templateDir = "src/services/emails/templates";
-    const templatePath = `${templateDir}/${templateName}.html`;
+    const TEMPLATE_DIR = "src/services/emails/templates";
+    const TEMPLATE_PATH = `${TEMPLATE_DIR}/${templateName}.html`;
     // Register partials
     handlebars.registerPartial("header", fs.readFileSync(`${templateDir}/partials/header.html`, "utf-8"));
     handlebars.registerPartial("footer", fs.readFileSync(`${templateDir}/partials/footer.html`, "utf-8"));
