@@ -2,7 +2,7 @@ import mongoose, { Document } from "mongoose";
 
 export interface IRefundRequest {
     traineeId: mongoose.Types.ObjectId;
-    courseId: mongoose.Types.ObjectId;
+    enrollmentId: mongoose.Types.ObjectId;
     status: string;
 }
 
@@ -14,9 +14,9 @@ export const refundRequestSchema = new mongoose.Schema({
         ref: "IndividualTrainee",
         required: true
     },
-    courseId: {
+    enrollmentId: {
         type: mongoose.Types.ObjectId,
-        ref: "Course",
+        ref: "Enrollment",
         required: true
     },
     status: { type: String, required: true, trim: true, enum: ["PENDING", "APPROVED", "REJECTED"], default: "PENDING" }
