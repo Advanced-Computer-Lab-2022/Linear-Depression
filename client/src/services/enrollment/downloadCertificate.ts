@@ -1,11 +1,11 @@
 import { config } from "@internals/config";
 
-const downloadPDF = (noteId: string) => {
-    fetch(`${config.API_URL}/notes/${noteId}.pdf`, { method: "get" })
+const downloadCertificate = (enrollmentId: string) => {
+    fetch(`${config.API_URL}/certificates/${enrollmentId}.pdf`, { method: "get" })
         .then((res) => res.blob())
         .then((res) => {
             const aElement = document.createElement("a");
-            aElement.setAttribute("download", "notes.pdf");
+            aElement.setAttribute("download", "certificate.pdf");
             const href = URL.createObjectURL(res);
             aElement.href = href;
             aElement.setAttribute("target", "_blank");
@@ -14,4 +14,4 @@ const downloadPDF = (noteId: string) => {
         });
 };
 
-export default downloadPDF;
+export default downloadCertificate;
