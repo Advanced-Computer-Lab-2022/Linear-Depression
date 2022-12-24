@@ -211,12 +211,18 @@ enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
         console.log("course not found");
         return next();
     }
-    Instructor.findById(course.instructor).then((instructor) => {
-        if (instructor) {
-            instructor.credit(course.price * 0.4);
-            console.log("instructor credited");
-            sendEnrollmentEmail(instructor.email, course.title);
+    IndividualTrainee.findById(enrollment.traineeId).then((trainee) => {
+        if (!trainee) {
+            return next();
         }
+        // credit the instructor if an individual trainee enrolled
+        Instructor.findById(course.instructor).then((instructor) => {
+            if (instructor) {
+                instructor.credit(course.price * 0.4);
+                console.log("instructor credited");
+                sendEnrollmentEmail(instructor.email, course.title);
+            }
+        });
     });
 });
 
