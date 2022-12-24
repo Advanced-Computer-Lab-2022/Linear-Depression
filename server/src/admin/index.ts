@@ -5,8 +5,11 @@ import { InstructorResource } from "./resources/Instructor";
 import { AccessRequestResource } from "./resources/AccessRequest";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import { ReportResource } from "./resources/Report";
-import Course from "../models/Course";
+import { CourseResource } from "./resources/Course";
+import Lesson from "../models/Lesson";
+import Exercise from "../models/Exercise";
 import Rating from "../models/Rating";
+import Promotion from "../models/Promotion";
 import Enrollment from "../models/Enrollment";
 import User from "../models/User";
 import ReportThread from "../models/ReportThread";
@@ -23,14 +26,9 @@ export function CreateAdminJS(app: any) {
             IndividualTraineeResource,
             AdminResource,
             ReportResource,
+            CourseResource,
             AccessRequestResource,
             RefundRequestResource,
-            {
-                resource: Course,
-                options: {
-                    navigation: false
-                }
-            },
             {
                 resource: Rating,
                 options: {
@@ -51,6 +49,24 @@ export function CreateAdminJS(app: any) {
             },
             {
                 resource: Enrollment,
+                options: {
+                    navigation: false
+                }
+            },
+            {
+                resource: Promotion,
+                options: {
+                    navigation: false
+                }
+            },
+            {
+                resource: Exercise,
+                options: {
+                    navigation: false
+                }
+            },
+            {
+                resource: Lesson,
                 options: {
                     navigation: false
                 }
