@@ -12,36 +12,34 @@ const createRefundRequest = async (req: Request, res: Response, _next: NextFunct
         return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing required fields" });
     }
 
-    await RefundRequest.findOne({ traineeId, enrollmentId }).then((refundRequest) => {
+    RefundRequest.findOne({ traineeId, enrollmentId }).then((refundRequest) => {
         if (refundRequest) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Refund request already exists" });
         }
-    });
-
-    // make sure enrollment exists and progress is less than 50%
-    await Enrollment.findById(enrollmentId).then((enrollment) => {
-        if (!enrollment) {
-            return res.status(StatusCodes.BAD_REQUEST).json({ message: "You are not enrolled on this course" });
-        }
-        if (enrollment.progress >= 0.5) {
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "You cannot request a refund after 50% of the course has been completed" });
-        }
-    });
-
-    return new RefundRequest({
-        traineeId,
-        enrollmentId,
-        status: "PENDING"
-    })
-        .save()
-        .then((refundRequest) => {
-            return res.status(StatusCodes.CREATED).json({ refundRequest });
-        })
-        .catch((err) => {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+        // make sure enrollment exists and progress is less than 50%
+        Enrollment.findById(enrollmentId).then((enrollment) => {
+            if (!enrollment) {
+                return res.status(StatusCodes.BAD_REQUEST).json({ message: "You are not enrolled on this course" });
+            }
+            if (enrollment.progress >= 0.5) {
+                return res
+                    .status(StatusCodes.BAD_REQUEST)
+                    .json({ message: "You cannot request a refund after 50% of the course has been completed" });
+            }
+            new RefundRequest({
+                traineeId,
+                enrollmentId,
+                status: "PENDING"
+            })
+                .save()
+                .then((refundRequest) => {
+                    return res.status(StatusCodes.CREATED).json({ refundRequest });
+                })
+                .catch((err) => {
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+                });
         });
+    });
 };
 
 const readRefundRequest = async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +50,7 @@ const readRefundRequest = async (req: Request, res: Response, next: NextFunction
         return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing required fields" });
     }
 
-    return RefundRequest.findOne({ traineeId, enrollmentId, status: "PENDING" })
+    RefundRequest.findOne({ traineeId, enrollmentId, status: "PENDING" })
         .then((refundRequest) => {
             if (!refundRequest) {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "Refund request not found" });
@@ -73,7 +71,7 @@ const deleteRefundRequest = async (req: Request, res: Response, next: NextFuncti
         return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing required fields" });
     }
 
-    return RefundRequest.findOneAndDelete({ traineeId, enrollmentId, status: "PENDING" })
+    RefundRequest.findOneAndDelete({ traineeId, enrollmentId, status: "PENDING" })
         .then((refundRequest) => {
             if (!refundRequest) {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "Refund request not found" });

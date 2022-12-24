@@ -18,16 +18,11 @@ export const sendEmail = async (
             pass: process.env.EMAIL_PASSWORD
         }
     });
-    const templatePath = path.resolve(__dirname, `../../../public/templates/${templateName}.html`);
+    const templateDir = "src/services/emails/templates";
+    const templatePath = `${templateDir}/${templateName}.html`;
     // Register partials
-    handlebars.registerPartial(
-        "header",
-        fs.readFileSync(path.resolve(__dirname, "../../../public/templates/partials/header.html"), "utf-8")
-    );
-    handlebars.registerPartial(
-        "footer",
-        fs.readFileSync(path.resolve(__dirname, "../../../public/templates/partials/footer.html"), "utf-8")
-    );
+    handlebars.registerPartial("header", fs.readFileSync(`${templateDir}/partials/header.html`, "utf-8"));
+    handlebars.registerPartial("footer", fs.readFileSync(`${templateDir}/partials/footer.html`, "utf-8"));
 
     const htmlFile = fs.readFileSync(templatePath, "utf-8");
     const template = handlebars.compile(htmlFile);

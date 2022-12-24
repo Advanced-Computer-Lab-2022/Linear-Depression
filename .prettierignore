@@ -1,1 +1,2 @@
 server/public/*
+server/src/services/emails/templates/*
