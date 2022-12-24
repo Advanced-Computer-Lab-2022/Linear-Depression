@@ -21,6 +21,8 @@ import * as Yup from "yup";
 import { Copyright } from "@internals/components";
 import { useAuth } from "@internals/hooks";
 import { login, register } from "@internals/services";
+import { RegistrationData } from "@internals/types";
+import { validateFormData } from "@internals/utils";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -46,9 +48,12 @@ const Register: React.FC = () => {
 
         const formData = getFormData(event);
 
-        validateFormData(formData)
-            .then((validatedData) => {
+        validateFormData(formData, validationRules)
+            .then((data) => {
                 setFormErrors(new Map());
+                setShowAlert(false);
+
+                const validatedData = data as unknown as RegistrationData;
 
                 register(validatedData)
                     .then(() => {
@@ -89,38 +94,12 @@ const Register: React.FC = () => {
         return data;
     };
 
-    const validateFormData = (
-        data: any
-    ): Promise<{
-        firstName: string;
-        lastName: string;
-        email: string;
-        userName: string;
-        passwordHash: string;
-        gender: string;
-    }> => {
-        const validationSchema = Yup.object().shape({
-            firstName: Yup.string().max(255).required("First name is required"),
-            lastName: Yup.string().max(255).required("Last name is required"),
-            email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-            userName: Yup.string().max(255).required("Username is required"),
-            passwordHash: Yup.string().max(255).required("Password is required")
-        });
-
-        return new Promise((resolve, reject) => {
-            validationSchema
-                .validate(data, { abortEarly: false })
-                .then(() => {
-                    resolve(data);
-                })
-                .catch((errors) => {
-                    const validationErrors = new Map();
-                    errors.inner.forEach((error: any) => {
-                        validationErrors.set(error.path, error.message);
-                    });
-                    reject(validationErrors);
-                });
-        });
+    const validationRules = {
+        firstName: Yup.string().max(255).required("First name is required"),
+        lastName: Yup.string().max(255).required("Last name is required"),
+        email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+        userName: Yup.string().max(255).required("Username is required"),
+        passwordHash: Yup.string().max(255).required("Password is required")
     };
 
     if (auth.isLoggedIn) {

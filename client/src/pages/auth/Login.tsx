@@ -17,6 +17,8 @@ import * as Yup from "yup";
 
 import { useAuth } from "@internals/hooks";
 import { login } from "@internals/services";
+import { LoginData } from "@internals/types";
+import { validateFormData } from "@internals/utils";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -42,10 +44,13 @@ const Login: React.FC = () => {
 
         const formData = getFormData(event);
 
-        validateFormData(formData)
-            .then((validatedData) => {
+        validateFormData(formData, validationRules)
+            .then((data) => {
                 setFormErrors(new Map());
                 setAlertMsg(null);
+
+                const validatedData = data as unknown as LoginData;
+
                 login(validatedData.email, validatedData.password)
                     .then((data) => {
                         setAuth(data.accessToken, data.userType);
@@ -74,31 +79,9 @@ const Login: React.FC = () => {
         return data;
     };
 
-    const validateFormData = (
-        data: any
-    ): Promise<{
-        email: string;
-        password: string;
-    }> => {
-        const validationSchema = Yup.object().shape({
-            email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-            password: Yup.string().max(255).required("Password is required")
-        });
-
-        return new Promise((resolve, reject) => {
-            validationSchema
-                .validate(data, { abortEarly: false })
-                .then(() => {
-                    resolve(data);
-                })
-                .catch((errors) => {
-                    const validationErrors = new Map();
-                    errors.inner.forEach((error: any) => {
-                        validationErrors.set(error.path, error.message);
-                    });
-                    reject(validationErrors);
-                });
-        });
+    const validationRules = {
+        email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+        password: Yup.string().max(255).required("Password is required")
     };
 
     if (auth.isLoggedIn) {

@@ -1,15 +1,9 @@
 import axios from "axios";
 
 import { config } from "@internals/config";
+import { RegistrationData } from "@internals/types";
 
-const register = (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    userName: string;
-    passwordHash: string;
-    gender: string;
-}): Promise<{ accessToken: string; userType: number }> => {
+const register = (data: RegistrationData): Promise<{ accessToken: string; userType: number }> => {
     const REGISTER_URL = `${config.API_URL}/individual-trainees`;
 
     return new Promise((resolve, reject) => {
