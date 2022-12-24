@@ -1,6 +1,6 @@
 import express from "express";
 import Controller from "../controllers/Payment";
-import isAuthenticated from "../middleware/isAuthenticated";
+import isAuthenticated from "../middleware/permissions/isAuthenticated";
 
 const router = express.Router();
 

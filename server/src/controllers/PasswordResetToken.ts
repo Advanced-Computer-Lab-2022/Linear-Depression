@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import PasswordResetToken from "../models/PasswordResetToken";
 import User from "../models/User";
 import PasswordResetTokenServices from "../services/PasswordResetTokenServices";
-import { sendPasswordResetEmail } from "../utils/sendPasswordResetEmail";
+import { sendPasswordResetEmail } from "../services/emails/sendPasswordResetEmail";
 
 const sendPasswordResetToken = async (req: Request, res: Response, next: NextFunction) => {
     try {

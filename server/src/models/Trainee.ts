@@ -1,13 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { IUser, UserSchema } from "./User";
 
 export interface ITrainee extends IUser {
-    courses: Array<mongoose.Types.ObjectId>; // Array of course IDs
-    enrollments: Array<mongoose.Types.ObjectId>; // Array of enrollment IDs
+    courses: Array<mongoose.Types.ObjectId>;
+    enrollments: Array<mongoose.Types.ObjectId>;
     gender: string;
 }
 
-// inherit from IUserModel
 export interface ITraineeModel extends ITrainee, Document {}
 
 export class TraineeSchema extends UserSchema {

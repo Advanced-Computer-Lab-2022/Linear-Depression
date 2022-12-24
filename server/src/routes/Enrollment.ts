@@ -1,6 +1,6 @@
 import express from "express";
 import enrollmentController from "../controllers/Enrollment";
-import isAuthenticated from "../middleware/isAuthenticated";
+import isAuthenticated from "../middleware/permissions/isAuthenticated";
 
 const router = express.Router();
 
