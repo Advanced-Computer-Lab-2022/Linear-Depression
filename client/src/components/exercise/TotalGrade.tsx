@@ -1,3 +1,4 @@
+import RuleIcon from "@mui/icons-material/Rule";
 import React from "react";
 import styled from "styled-components";
 
@@ -12,11 +13,17 @@ const Container = styled.div`
     padding: 10px;
 `;
 
-const GradeLabel = styled.div`
-    font-size: 28px;
-    font-weight: 800;
-    margin-right: 10px;
+const HorizontalContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 `;
+
+// const GradeLabel = styled.div`
+//     font-size: 28px;
+//     font-weight: 800;
+//     margin-right: 10px;
+// `;
 
 const Grade = styled.div<{ grade: number }>`
     font-size: 28px;
@@ -29,8 +36,17 @@ const TotalGrade: React.FC<{
 }> = ({ totalGrade }) => {
     return (
         <Container>
-            <GradeLabel>Total Grade</GradeLabel>
-            <Grade grade={totalGrade}>{totalGrade.toFixed(1)}%</Grade>
+            {/* <GradeLabel>Total Grade</GradeLabel> */}
+            <HorizontalContainer>
+                <RuleIcon
+                    sx={{
+                        width: "40px",
+                        height: "40px",
+                        padding: "5px"
+                    }}
+                />
+                <Grade grade={totalGrade}>{totalGrade.toFixed(1)}%</Grade>
+            </HorizontalContainer>
         </Container>
     );
 };
