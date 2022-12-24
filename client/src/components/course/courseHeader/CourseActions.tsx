@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
 import { useAuth } from "@internals/hooks";
+import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
 const MainContainer = styled.div``;
@@ -46,6 +47,15 @@ const CourseActions: React.FC<{
             }
         });
     };
+
+    const handleEnroll = () => {
+        if (price > 0) {
+            handleCheckout(courseId);
+        } else {
+            console.log("free course");
+        }
+    };
+
     return (
         <MainContainer>
             <VideoPlayer videoUrl={videoUrl} height={191} />
@@ -56,7 +66,7 @@ const CourseActions: React.FC<{
                 {userType === User.INSTRUCTOR ? (
                     <Button onClick={openAddPromotionModal}>Add Promotion</Button>
                 ) : (
-                    <Button>Enroll now</Button>
+                    <Button onClick={handleEnroll}>Enroll now</Button>
                 )}
             </SubContainer>
         </MainContainer>

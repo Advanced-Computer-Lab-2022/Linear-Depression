@@ -1,9 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import Course from "../models/Course";
+import User from "../models/User";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createCheckoutSession = async (req: Request, res: Response, _next: NextFunction) => {
-    const { courseId } = req.body;
+    const { userId, courseId } = req.body;
+
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+        return res.status(StatusCodes.NOT_FOUND).json({ message: "Course not found" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+    }
 
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -12,15 +26,17 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
                 price_data: {
                     currency: "usd",
                     product_data: {
-                        name: "T-shirt"
+                        name: course.title
                     },
-                    unit_amount: 2000
+                    unit_amount: Math.ceil(course.price * 100)
                 },
                 quantity: 1
             }
         ],
+        client_reference_id: userId,
+        customer_email: user.email,
         mode: "payment",
-        success_url: `${process.env.FRONT_END_URL}/success`,
+        success_url: `${process.env.FRONT_END_URL}/courses/${courseId}`,
         cancel_url: `${process.env.FRONT_END_URL}/cancel`
     });
 
@@ -46,6 +62,8 @@ const stripeWebhook = async (req: Request, res: Response, _next: NextFunction) =
         const session = event.data.object;
 
         console.log(session);
+        console.log(session.client_reference_id);
+        console.log(session.customer_email);
     }
 
     res.json({ received: true });
