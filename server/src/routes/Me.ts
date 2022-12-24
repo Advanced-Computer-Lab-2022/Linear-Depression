@@ -8,6 +8,7 @@ import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
 import isAuthorized from "../middleware/permissions/isAuthorized";
 import { UserType } from "../enums/UserTypes";
+import RefundRequestController from "../controllers/RefundRequest";
 
 const router = express.Router();
 
@@ -19,6 +20,26 @@ router.post(
     isAuthenticated,
     isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
     enrollmentController.createEnrollment
+);
+
+// refund requests
+router.get(
+    "/enrollments/:enrollmentId/refunds",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
+    RefundRequestController.readRefundRequest
+);
+router.post(
+    "/enrollments/:enrollmentId/refunds",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
+    RefundRequestController.createRefundRequest
+);
+router.delete(
+    "/enrollments/:enrollmentId/refunds",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
+    RefundRequestController.deleteRefundRequest
 );
 
 router.get("/lessons/:lessonId/notes", isAuthenticated, noteRouter.readNote);

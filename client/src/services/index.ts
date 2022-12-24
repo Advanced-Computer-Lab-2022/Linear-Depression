@@ -8,3 +8,4 @@ export * from "./auth/index";
 export * from "./note/index";
 export * from "./enrollment/index";
 export * from "./review/index";
+export * from "./payment/index";

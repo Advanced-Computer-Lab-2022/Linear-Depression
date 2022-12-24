@@ -1,5 +1,33 @@
 # Linear-Depression
 
+## Stripe in development mode
+
+how to run stripe in development mode
+
+1. update your .env file in both the client and server bu following the .env.example files
+2. install the stripe cli
+
+```bash
+sudo apt install stripe # for linux
+brew install stripe/stripe-cli/stripe # for mac
+```
+
+you can refer to this [documentation](https://stripe.com/docs/stripe-cli) for more information
+
+3. login to to stripe cli using stripe api key
+
+```bash
+stripe login --api-key sk_test_example
+# contact the team for the api key or use your own
+```
+
+4. run the stripe cli
+
+```bash
+stripe listen --forward-to localhost:PORT/payment/stripe-webhook
+# PORT is the port you are running the server on
+```
+
 ## Pre-commit
 
 The pre-commit hook is managed by pre-commit. It is a versatile way of managing the pre-commit tool but it also permits you to run the script on arbitrary files without committing. The module will take charge of installing your required dependencies (such as code-style tools: prettier, eslint, etc.) and will run them on the files you want to commit.
