@@ -8,13 +8,13 @@ export function traineeFactory(): ITraineeModel {
     const trainee = userFactory() as ITraineeModel;
     trainee["courses"] = [];
     trainee["gender"] = faker.name.sex().toLowerCase();
-    trainee["wallet"] = 0;
     return trainee;
 }
 
 export function individualTraineeFactory(): IIndividualTraineeModel {
     const IndividualTrainee = traineeFactory() as IIndividualTraineeModel;
     IndividualTrainee["__t"] = "IndividualTrainee";
+    IndividualTrainee["wallet"] = 0;
     return IndividualTrainee;
 }
 

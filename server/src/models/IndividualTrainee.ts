@@ -1,14 +1,30 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { ITrainee, TraineeSchema } from "./Trainee";
 import User from "./User";
 const options = { discriminatorKey: "kind" };
-export interface IIndividualTrainee extends ITrainee {}
+export interface IIndividualTrainee extends ITrainee {
+    wallet: number;
+}
 
 export interface IIndividualTraineeModel extends IIndividualTrainee, Document {}
 class IndividualTraineeSchema extends TraineeSchema {
     constructor(obj: Object, options: Object) {
         super(obj, options);
-        this.add({});
+        this.add({
+            wallet: { type: Number, default: 0, min: 0 }
+        });
+        this.methods.credit = function (amount: number) {
+            this.wallet += amount;
+            this.save();
+        };
+
+        this.methods.debit = function (amount: number) {
+            if (this.wallet < amount) {
+                throw new Error("Insufficient funds");
+            }
+            this.wallet -= amount;
+            this.save();
+        };
     }
 }
 
