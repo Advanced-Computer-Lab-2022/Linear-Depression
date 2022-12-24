@@ -21,6 +21,7 @@ interface ICourseProps {
     currency: string;
     lessons: ILessonProps[];
     preview: string;
+    thumbnail: string;
     subject?: string;
 }
 

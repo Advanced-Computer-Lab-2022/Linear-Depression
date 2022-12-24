@@ -40,7 +40,8 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
                 price_data: {
                     currency: "usd",
                     product_data: {
-                        name: course.title
+                        name: course.title,
+                        images: [course.thumbnail]
                     },
                     unit_amount: Math.ceil(course.price * 100)
                 },
