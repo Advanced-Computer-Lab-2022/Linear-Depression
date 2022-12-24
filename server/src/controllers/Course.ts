@@ -165,7 +165,7 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
-                res.status(StatusCodes.OK).json({ course: { ...course.toObject(), currency } });
+                res.status(StatusCodes.OK).json({ course: { ...course.toObject({ virtuals: true }), currency } });
             } else {
                 res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }
@@ -235,7 +235,7 @@ function searchWithTitleSubject(
         })
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
-            const coursesWithCurrency = courses.map((course) => ({ ...course.toObject(), currency }));
+            const coursesWithCurrency = courses.map((course) => ({ ...course.toObject({ virtuals: true }), currency }));
             res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
         })
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
@@ -269,7 +269,7 @@ function searchWithInstructors(
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
-                return { ...course.toObject(), currency };
+                return { ...course.toObject({ virtuals: true }), currency };
             });
             res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
         })
@@ -300,7 +300,7 @@ function listCoursesOnlyFilter(
         .then((courses) => {
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
-                return { ...course.toObject(), currency };
+                return { ...course.toObject({ virtuals: true }), currency };
             });
             res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
         })
