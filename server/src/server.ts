@@ -41,6 +41,7 @@ app.use(
     })
 );
 app.use(express.urlencoded({ extended: true }));
+app.use("/payment/stripe-webhook", express.raw({ type: "*/*" }));
 app.use(express.json());
 app.use(cookieParser());
 const swaggerFile = require("./swagger.json");
