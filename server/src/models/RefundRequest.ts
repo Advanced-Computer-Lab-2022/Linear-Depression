@@ -16,6 +16,12 @@ export interface IRefundRequest {
     reject(): Promise<void>;
 }
 
+export enum RefundRequestStatus {
+    PENDING = "PENDING",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED"
+}
+
 export interface IRefundRequestModel extends IRefundRequest, Document {}
 
 export const refundRequestSchema = new mongoose.Schema({
@@ -34,15 +40,21 @@ export const refundRequestSchema = new mongoose.Schema({
         required: true
     },
 
-    status: { type: String, required: true, trim: true, enum: ["PENDING", "APPROVED", "REJECTED"], default: "PENDING" }
+    status: {
+        type: String,
+        required: true,
+        trim: true,
+        enum: Object.values(RefundRequestStatus),
+        default: RefundRequestStatus.PENDING
+    }
 });
 
 refundRequestSchema.methods.approve = async function () {
-    if (this.status !== "PENDING") {
+    if (this.status !== RefundRequestStatus.PENDING) {
         console.log("Refund request is not pending");
         return;
     }
-    this.status = "APPROVED";
+    this.status = RefundRequestStatus.APPROVED;
     IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
         if (!trainee) {
             console.log("Trainee not found");
@@ -57,11 +69,11 @@ refundRequestSchema.methods.approve = async function () {
 };
 
 refundRequestSchema.methods.reject = async function () {
-    if (this.status !== "PENDING") {
+    if (this.status !== RefundRequestStatus.PENDING) {
         console.log("Refund request is not pending");
         return;
     }
-    this.status = "REJECTED";
+    this.status = RefundRequestStatus.REJECTED;
 
     IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
         if (!trainee) {

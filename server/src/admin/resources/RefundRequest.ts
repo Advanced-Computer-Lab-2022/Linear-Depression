@@ -6,23 +6,6 @@ export const RefundRequestResource = {
         parent: {
             name: "Requests"
         },
-        properties: {
-            traineeId: {
-                isVisible: true
-            },
-            enrollmentId: {
-                isVisible: true
-            },
-            refundAmount: {
-                isVisible: true
-            },
-            reason: {
-                isVisible: true
-            },
-            status: {
-                isVisible: true
-            }
-        },
         actions: {
             new: {
                 isAccessible: false
