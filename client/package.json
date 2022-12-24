@@ -48,7 +48,8 @@
         "styled-components": "^5.3.6",
         "typescript": "^4.8.4",
         "universal-cookie": "^4.0.4",
-        "web-vitals": "^2.1.4"
+        "web-vitals": "^2.1.4",
+        "yup": "^0.32.11"
     },
     "scripts": {
         "start": "GENERATE_SOURCEMAP=false craco start",
