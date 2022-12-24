@@ -3,7 +3,9 @@ import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
-import { useAuth } from "@internals/hooks";
+import { useAuth, useFetchMyAccessRequest } from "@internals/hooks";
+import { useAppSelector } from "@internals/redux";
+import { sendAccessRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
@@ -36,6 +38,10 @@ const CourseActions: React.FC<{
     courseId: string;
     videoUrl?: string;
 }> = ({ price, promotion, currency, courseId, videoUrl }) => {
+    const enrollment = useAppSelector((state) => state.enrollment);
+
+    const { accessRequest, updateAccessRequest } = useFetchMyAccessRequest(courseId);
+
     const {
         auth: { userType }
     } = useAuth();
@@ -49,10 +55,20 @@ const CourseActions: React.FC<{
     };
 
     const handleEnroll = () => {
-        if (price > 0) {
-            handleCheckout(courseId);
-        } else {
-            console.log("free course");
+        if (userType === User.CORPORATE_TRAINEE) {
+            sendAccessRequest(courseId)
+                .then(() => {
+                    updateAccessRequest();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else if (userType === User.INDIVIDUAL_TRAINEE) {
+            if (price > 0) {
+                handleCheckout(courseId);
+            } else {
+                console.log("free course");
+            }
         }
     };
 
@@ -60,13 +76,17 @@ const CourseActions: React.FC<{
         <MainContainer>
             <VideoPlayer videoUrl={videoUrl} height={191} />
             <SubContainer>
-                <PriceSection>
-                    <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />
-                </PriceSection>
-                {userType === User.INSTRUCTOR ? (
-                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
-                ) : (
-                    <Button onClick={handleEnroll}>Enroll now</Button>
+                {(userType === User.INSTRUCTOR || userType === User.INDIVIDUAL_TRAINEE) && enrollment.data == null && (
+                    <PriceSection>
+                        <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />
+                    </PriceSection>
+                )}
+                {userType === User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
+                {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
+                    enrollment.data == null &&
+                    accessRequest.data == null && <Button onClick={handleEnroll}>Enroll now</Button>}
+                {enrollment.data !== null && accessRequest.data && accessRequest.data.status === "PENDING" && (
+                    <Button disabled>Access Request Sent</Button>
                 )}
             </SubContainer>
         </MainContainer>

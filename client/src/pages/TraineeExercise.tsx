@@ -15,7 +15,7 @@ import {
     ContentAccordion
 } from "@internals/components";
 import { useFetchExerciseById, useFetchEvaluation, useFetchMyEnrollment, useFetchCourseById } from "@internals/hooks";
-import { useAppSelector } from "@internals/redux";
+import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
 import { submitExercise } from "@internals/services";
 
 const SideMenu = styled.div`
@@ -29,6 +29,8 @@ const TraineeExercise = () => {
     useFetchCourseById(courseId);
 
     const course = useAppSelector((state) => state.course);
+
+    const dispatch = useAppDispatch();
 
     const { exercise, answers, setAnswers } = useFetchExerciseById();
     const { data } = exercise;
@@ -44,6 +46,7 @@ const TraineeExercise = () => {
     const handleSubmit = () => {
         submitExercise(courseId, lessonId, exerciseId, answers)
             .then((data) => {
+                dispatch(getEnrollment(courseId));
                 setEvaluation({
                     data: data,
                     loading: false,

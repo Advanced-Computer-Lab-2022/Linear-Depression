@@ -4,6 +4,7 @@ import profileController from "../controllers/Profile";
 import noteRouter from "../controllers/Note";
 import isAuthenticated from "../middleware/permissions/isAuthenticated";
 import enrollmentController from "../controllers/Enrollment";
+import accessRequestController from "../controllers/AccessRequest";
 import instructorRatingController from "../controllers/InstructorRating";
 import reportController from "../controllers/Report";
 import isAuthorized from "../middleware/permissions/isAuthorized";
@@ -41,6 +42,8 @@ router.delete(
     isAuthorized([UserType.INDIVIDUAL_TRAINEE]),
     RefundRequestController.deleteRefundRequest
 );
+
+router.get("/courses/:courseId/access-requests", isAuthenticated, accessRequestController.readAccessRequest);
 
 router.get("/lessons/:lessonId/notes", isAuthenticated, noteRouter.readNote);
 router.get("/lessons/:lessonId/notes/:noteId/pdf", isAuthenticated, noteRouter.saveAsPDF);

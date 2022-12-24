@@ -7,7 +7,7 @@ import styled from "styled-components";
 import Note from "./lesson/Note";
 import { ContentAccordion, CourseNavbar, FloatingButton } from "@internals/components";
 import { VideoPlayer } from "@internals/components";
-import { useFetchCourseById, useFetchLessonById, useFetchMyEnrollment } from "@internals/hooks";
+import { useFetchCourseById, useFetchLessonById } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 
 export const Container = styled.div`
@@ -49,7 +49,6 @@ export const CourseContentTitle = styled.h4`
 
 const Lesson: React.FC = () => {
     const { courseId, lessonId } = useParams();
-    useFetchMyEnrollment(courseId);
     useFetchCourseById(courseId);
 
     const course = useAppSelector((state) => state.course);
@@ -81,7 +80,7 @@ const Lesson: React.FC = () => {
                     </FloatingButton>
                     <Popover
                         anchorReference="anchorPosition"
-                        anchorPosition={{ top: 200, left: 700 }}
+                        anchorPosition={{ top: 200, left: 1000 }}
                         anchorOrigin={{
                             vertical: "top",
                             horizontal: "left"

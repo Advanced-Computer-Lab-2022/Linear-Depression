@@ -1,3 +1,4 @@
+import AccessRequest from "./AccessRequest";
 import Country from "./Country";
 import Course from "./Course";
 import Enrollment from "./Enrollment";
@@ -31,7 +32,8 @@ export {
     type Note,
     type Report,
     type ReportThread,
-    type ReportFormProps
+    type ReportFormProps,
+    type AccessRequest
 };
 
 export * from "./auth";

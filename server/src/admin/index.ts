@@ -2,6 +2,7 @@ import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import { AdminResource } from "./resources/Admin";
 import { InstructorResource } from "./resources/Instructor";
+import { AccessRequestResource } from "./resources/AccessRequest";
 import { CorporateTraineeResource } from "./resources/CorporateTrainee";
 import { ReportResource } from "./resources/Report";
 import Course from "../models/Course";
@@ -22,6 +23,7 @@ export function CreateAdminJS(app: any) {
             IndividualTraineeResource,
             AdminResource,
             ReportResource,
+            AccessRequestResource,
             RefundRequestResource,
             {
                 resource: Course,
