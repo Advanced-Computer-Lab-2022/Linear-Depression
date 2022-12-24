@@ -37,7 +37,7 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
         customer_email: user.email,
         mode: "payment",
         success_url: `${process.env.FRONT_END_URL}/courses/${courseId}`,
-        cancel_url: `${process.env.FRONT_END_URL}/cancel`
+        cancel_url: `${process.env.FRONT_END_URL}/payment/cancel`
     });
 
     res.json({ url: session.url, id: session.id });
