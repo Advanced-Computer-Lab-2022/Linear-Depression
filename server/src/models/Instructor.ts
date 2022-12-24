@@ -8,6 +8,8 @@ export interface IInstructor extends IUser {
     averageRating: number;
     biography: string;
     balance: number;
+
+    credit(amount: number): void;
 }
 
 export interface IInstructorModel extends IInstructor, Document {}

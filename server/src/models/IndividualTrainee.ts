@@ -4,6 +4,9 @@ import User from "./User";
 const options = { discriminatorKey: "kind" };
 export interface IIndividualTrainee extends ITrainee {
     wallet: number;
+
+    credit(amount: number): void;
+    debit(amount: number): void;
 }
 
 export interface IIndividualTraineeModel extends IIndividualTrainee, Document {}
