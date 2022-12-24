@@ -52,9 +52,6 @@ const courseSchema = new Schema({
     lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }]
 });
 
-courseSchema.virtual("isFree").get(function (this: ICourseModel) {
-    return this.price === 0;
-});
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
 courseSchema.plugin(mongoose_fuzzy_searching, {
