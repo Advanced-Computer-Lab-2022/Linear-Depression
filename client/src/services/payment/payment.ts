@@ -3,7 +3,7 @@ import axios from "axios";
 import { config } from "@internals/config";
 
 const handleCheckout = (courseId: string) => {
-    const CHECKOUT_URL = `${config.API_URL}/payment/create-checkout-session`;
+    const CHECKOUT_URL = `${config.API_URL}/payment/checkout-session`;
     axios
         .post(CHECKOUT_URL, {
             courseId

@@ -4,7 +4,7 @@ import isAuthenticated from "../middleware/isAuthenticated";
 
 const router = express.Router();
 
-router.post("/create-checkout-session", isAuthenticated, Controller.createCheckoutSession);
+router.post("/checkout-session", isAuthenticated, Controller.createCheckoutSession);
 router.post("/stripe-webhook", Controller.stripeWebhook);
 
 export default router;
