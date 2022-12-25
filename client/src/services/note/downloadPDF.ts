@@ -5,7 +5,7 @@ const downloadPDF = (noteId: string) => {
         .then((res) => res.blob())
         .then((res) => {
             const aElement = document.createElement("a");
-            aElement.setAttribute("download", `${noteId}.pdf`);
+            aElement.setAttribute("download", "notes.pdf");
             const href = URL.createObjectURL(res);
             aElement.href = href;
             aElement.setAttribute("target", "_blank");

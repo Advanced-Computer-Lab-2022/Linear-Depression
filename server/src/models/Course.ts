@@ -1,9 +1,9 @@
 import mongoose, { Document, Schema } from "mongoose";
 import mongoose_fuzzy_searching, { MongoosePluginModel } from "@imranbarbhuiya/mongoose-fuzzy-searching";
 import uniqueValidator from "mongoose-unique-validator";
-import { validateURL } from "../utils/modelUtilities";
-import Lesson, { ILessonModel } from "./Lesson";
+import Lesson from "./Lesson";
 import Rating from "./Rating";
+import { getVideoThumbnailUrl, isValidVideoLink } from "../services/videoServices";
 
 export interface ICourse {
     title: string;
@@ -16,6 +16,7 @@ export interface ICourse {
     totalHours: number;
     activePromotion?: mongoose.Types.ObjectId;
     preview: string;
+    thumbnail: string;
     lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
 }
@@ -45,17 +46,15 @@ const courseSchema = new Schema({
     preview: {
         type: String,
         validate: {
-            validator: validateURL,
-            message: "Invalid URL"
+            validator: isValidVideoLink,
+            message: "Invalid URL, must be a valid YouTube link"
         }
     },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
-    isFree: {
-        type: Boolean,
-        default: function (this: ICourseModel) {
-            return this.price === 0;
-        }
-    }
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }]
+});
+
+courseSchema.virtual("thumbnail").get(function (this: ICourseModel) {
+    return getVideoThumbnailUrl(this.preview);
 });
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });

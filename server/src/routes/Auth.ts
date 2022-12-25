@@ -1,8 +1,8 @@
 import express from "express";
 import AuthController from "../controllers/Auth";
 import PasswordResetTokenController from "../controllers/PasswordResetToken";
-import authenticated from "../middleware/isAuthenticated";
-import isAuthenticated from "../middleware/isAuthenticated";
+import authenticated from "../middleware/permissions/isAuthenticated";
+import isAuthenticated from "../middleware/permissions/isAuthenticated";
 import rateLimiter from "../middleware/rateLimiter";
 
 const router = express.Router();
