@@ -31,7 +31,8 @@ import {
     AllReports,
     ReportThread,
     Register,
-    PaymentCancelled
+    PaymentCancelled,
+    PrivacyPolicy
 } from "@internals/pages";
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
                         <Route path="/payment/cancel" element={<PaymentCancelled />} />
+                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
                         <Route
                             element={
