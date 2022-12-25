@@ -5,7 +5,7 @@ import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CourseContent, CourseHeader, CourseReviews, FloatingButton } from "@internals/components";
-import { useAuth, useFetchCourseById } from "@internals/hooks";
+import { useAuth, useFetchCourseById, useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
@@ -19,6 +19,7 @@ const InstructorCourse: React.FC = () => {
     } = useAuth();
     const { courseId } = useParams();
     useFetchCourseById(courseId);
+    useFetchMyEnrollment(courseId);
     const { data } = useAppSelector((state) => state.course);
 
     const onClick = () => {

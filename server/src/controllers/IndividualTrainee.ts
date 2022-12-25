@@ -12,7 +12,7 @@ const createIndividualTrainee = (req: Request, res: Response, next: NextFunction
     return individualTrainee
         .save()
         .then((individualTrainee) => res.status(StatusCodes.CREATED).json({ individualTrainee }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+        .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
 const listIndividualTrainees = (req: Request, res: Response, next: NextFunction) => {

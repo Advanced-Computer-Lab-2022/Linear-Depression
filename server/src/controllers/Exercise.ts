@@ -188,7 +188,10 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                     .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
             }
         })
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+        .catch((error) => {
+            console.log(error);
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        });
 };
 
 export default {

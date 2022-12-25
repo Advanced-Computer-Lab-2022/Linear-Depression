@@ -38,8 +38,8 @@ export const InstructorResource = {
             name: "Site Users",
             icon: "User"
         },
-        listProperties: ["userName", "email", "firstName", "lastName"],
+        listProperties: ["userName", "email", "firstName", "lastName", "balance"],
         editProperties: ["userName", "email", "firstName", "lastName", "password"],
-        showProperties: ["userName", "email", "firstName", "lastName"]
+        showProperties: ["userName", "email", "firstName", "lastName", "balance"]
     }
 };

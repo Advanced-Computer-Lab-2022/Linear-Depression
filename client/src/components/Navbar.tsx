@@ -41,7 +41,6 @@ const Navbar = () => {
     useFetchProfile();
 
     const { data } = useAppSelector((state) => state.profile);
-
     const options = [
         {
             label: "Profile",
@@ -150,13 +149,15 @@ const Navbar = () => {
                         )}
                         {auth.userType === User.GUEST && (
                             <>
-                                <button
-                                    className="navbar-item login-button"
-                                    onClick={() => navigate("/auth/login", { replace: true })}
-                                >
+                                <button className="navbar-item login-button" onClick={() => navigate("/auth/login")}>
                                     Log In
                                 </button>
-                                <button className="navbar-item signup-button">Sign Up</button>
+                                <button
+                                    className="navbar-item signup-button"
+                                    onClick={() => navigate("/auth/register")}
+                                >
+                                    Sign Up
+                                </button>
                             </>
                         )}
 

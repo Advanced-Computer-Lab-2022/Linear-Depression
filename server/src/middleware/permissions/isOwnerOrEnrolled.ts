@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { UserType } from "../enums/UserTypes";
+import { UserType } from "../../enums/UserTypes";
 import isCourseOwner from "./isCourseOwner";
 import isEnrolled from "./isEnrolled";
 
