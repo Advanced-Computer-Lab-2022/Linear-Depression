@@ -20,7 +20,8 @@ export function courseFactory(): ICourse {
         totalHours: faker.datatype.number(),
         preview: `https://www.youtube.com/watch?v=${faker.datatype.number()}`,
         lessons: [new mongoose.Types.ObjectId(faker.database.mongodbObjectId())],
-        isFree: faker.datatype.boolean()
+        isFree: faker.datatype.boolean(),
+        thumbnail: faker.image.imageUrl()
     };
 }
 
