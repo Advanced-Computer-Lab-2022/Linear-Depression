@@ -16,8 +16,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
 
-            console.log("TESTTSET");
-
             res.status(StatusCodes.OK).json({
                 accessToken: data.accessToken,
                 userType: data.userType

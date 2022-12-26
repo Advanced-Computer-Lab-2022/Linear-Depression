@@ -15,7 +15,7 @@ export const createAccessToken = (user: IUserModel): string => {
             userType: UserTypesNames.get(user.__t)
         },
         process.env.JWT_ACCESS_TOKEN_SECRET as jwt.Secret,
-        { expiresIn: "15m" }
+        { expiresIn: "15d" } // TODO: change to 15m and handle expiration in frontend
     );
 };
 
