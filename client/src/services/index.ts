@@ -10,3 +10,4 @@ export * from "./enrollment/index";
 export * from "./review/index";
 export * from "./request/index";
 export * from "./payment/index";
+export * from "./settlements/index";

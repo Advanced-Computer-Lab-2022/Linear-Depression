@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
 import AuthHandler from "./components/AuthHandler";
+import ViewMySettlements from "./components/modals/ViewMySettlements";
 import { User } from "./types";
 import { CountryContext } from "@internals/contexts";
 import { useGetLocalizationData } from "@internals/hooks";
@@ -32,6 +33,7 @@ import {
     ReportThread,
     Register,
     PaymentCancelled,
+    PaymentSuccess,
     PrivacyPolicy
 } from "@internals/pages";
 
@@ -50,7 +52,8 @@ function App() {
                         editCourse: EditCourse,
                         editLesson: EditLesson,
                         editProfile: EditProfile,
-                        viewAndAcceptContract: ViewAndAcceptContract
+                        viewAndAcceptContract: ViewAndAcceptContract,
+                        viewMySettlements: ViewMySettlements
                     }}
                 />
                 <Routes>
@@ -62,6 +65,7 @@ function App() {
                         <Route path="/auth/reset" element={<PasswordReset />} />
                         <Route path="/auth/forgot" element={<ForgotPassword />} />
                         <Route path="/payment/cancel" element={<PaymentCancelled />} />
+                        <Route path="/payment/success/:courseId" element={<PaymentSuccess />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
                         <Route
@@ -90,6 +94,8 @@ function App() {
                         <Route element={<AuthHandler roles={[User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]} />}>
                             <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
                         </Route>
+
+                        <Route path="*" element={<div>404</div>} />
                     </Route>
                 </Routes>
             </div>

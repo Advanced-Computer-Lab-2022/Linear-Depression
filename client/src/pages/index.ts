@@ -21,5 +21,5 @@ export { default as NewReport } from "./report/New";
 export { default as AllReports } from "./report/List";
 export { default as ReportThread } from "./report/Thread";
 
-export { default as PaymentCancelled } from "./PaymentCancelled";
+export * from "./payment";
 export { default as PrivacyPolicy } from "./PrivacyPolicy";
