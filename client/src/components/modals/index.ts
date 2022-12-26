@@ -8,3 +8,4 @@ export { default as EditCourse } from "./EditCourse";
 export { default as EditLesson } from "./EditLesson";
 export { default as EditProfile } from "./EditProfile";
 export { default as ViewAndAcceptContract } from "./ViewAndAcceptContract";
+export { default as ViewMySettlements } from "./ViewMySettlements";
