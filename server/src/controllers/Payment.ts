@@ -26,10 +26,7 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
 
     if (course.activePromotion) {
         const promotion = await Promotion.findById(course.activePromotion);
-        if (!promotion) {
-            return res.status(StatusCodes.NOT_FOUND).json({ message: "Promotion not found" });
-        }
-        if (promotion.status === PromotionStatus.Active) {
+        if (promotion && promotion.status === PromotionStatus.Active) {
             const coupon = await stripe.coupons.create({ percent_off: promotion.discountPercent, duration: "once" });
             discounts.push({ coupon: coupon.id });
         }
