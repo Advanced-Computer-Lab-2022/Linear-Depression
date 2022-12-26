@@ -22,3 +22,4 @@ export { default as AllReports } from "./report/List";
 export { default as ReportThread } from "./report/Thread";
 
 export { default as PaymentCancelled } from "./PaymentCancelled";
+export { default as PrivacyPolicy } from "./PrivacyPolicy";
