@@ -9,6 +9,7 @@ import CorporateTrainee from "./CorporateTrainee";
 import Instructor from "./Instructor";
 import { sendEnrollmentEmail } from "../services/emails/sendEnrollmentEmail";
 import Settlement from "./Settlement";
+import { getCoursePriceAfterPromotion } from "../services/CourseServices";
 
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
@@ -218,10 +219,10 @@ enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
             return next();
         }
         // credit the instructor if an individual trainee enrolled
-        Instructor.findById(course.instructor).then((instructor) => {
+        Instructor.findById(course.instructor).then(async (instructor) => {
             if (instructor) {
-                //FIXME: amount should be calculated based on the  promotion.
-                const amount = Math.ceil(course.price * INSTRUCTOR_CREDIT_PERCENTAGE * 100) / 100;
+                const amount =
+                    Math.ceil((await getCoursePriceAfterPromotion(course)) * INSTRUCTOR_CREDIT_PERCENTAGE * 100) / 100;
 
                 instructor.credit(amount);
                 console.log("instructor credited");
