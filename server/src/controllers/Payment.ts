@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import Course from "../models/Course";
 import Promotion, { PromotionStatus } from "../models/Promotion";
 import User from "../models/User";
+import { createEnrollmentService } from "../services/EnrollmentCreateServices";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createCheckoutSession = async (req: Request, res: Response, _next: NextFunction) => {
@@ -48,11 +49,14 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
                 quantity: 1
             }
         ],
-        client_reference_id: userId,
+        metadata: {
+            courseId,
+            userId
+        },
         customer_email: user.email,
         mode: "payment",
         ...(discounts.length && { discounts }),
-        success_url: `${process.env.FRONT_END_URL}/courses/${courseId}`,
+        success_url: `${process.env.FRONT_END_URL}/payment/success/${courseId}`,
         cancel_url: `${process.env.FRONT_END_URL}/payment/cancel`
     });
 
@@ -72,17 +76,22 @@ const stripeWebhook = async (req: Request, res: Response, _next: NextFunction) =
         return res.status(StatusCodes.BAD_REQUEST).send(`Webhook Error: ${err.message}`);
     }
 
-    console.log(event);
-
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
+        const { courseId, userId } = session.metadata;
 
-        console.log(session);
-        console.log(session.client_reference_id);
-        console.log(session.customer_email);
+        createEnrollmentService(userId, courseId)
+            .then(() => {
+                console.log("Enrollment created");
+                res.json({ received: true, payment: "success", enrollment: true });
+            })
+            .catch((err: any) => {
+                console.log(err);
+                res.json({ received: true, payment: "success", enrollment: false, message: "Enrollment not created" });
+            });
+    } else {
+        res.json({ received: true, payment: "failed" });
     }
-
-    res.json({ received: true });
 };
 
 export default { createCheckoutSession, stripeWebhook };
