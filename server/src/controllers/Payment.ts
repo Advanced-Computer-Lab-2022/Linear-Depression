@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import Course from "../models/Course";
+import IndividualTrainee from "../models/IndividualTrainee";
 import Promotion, { PromotionStatus } from "../models/Promotion";
 import User from "../models/User";
 import { createEnrollmentService } from "../services/EnrollmentCreateServices";
@@ -81,7 +82,15 @@ const stripeWebhook = async (req: Request, res: Response, _next: NextFunction) =
         const { courseId, userId } = session.metadata;
 
         createEnrollmentService(userId, courseId)
-            .then(() => {
+            .then((enrollment) => {
+                IndividualTrainee.findById(userId).then((trainee) => {
+                    if (!trainee) {
+                        return res.status(StatusCodes.NOT_FOUND).json({ message: "trainee not found" });
+                    }
+                    trainee.enrollments.push(enrollment._id);
+                    trainee.save();
+                });
+
                 console.log("Enrollment created");
                 res.json({ received: true, payment: "success", enrollment: true });
             })
