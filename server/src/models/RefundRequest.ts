@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
-import { sendRefundRequestApprovalEmail } from "../services/emails/sendRefundRequestApprovalEmail";
-import { sendRefundRequestCreationEmail } from "../services/emails/sendRefundRequestCreationEmail";
-import { sendRefundRequestRejectionEmail } from "../services/emails/sendRefundRequestRejectionEmail";
+import { sendRefundRequestApprovalEmail } from "../services/emails/refundRequests/sendRefundRequestApprovalEmail";
+import { sendRefundRequestCreationEmail } from "../services/emails/refundRequests/sendRefundRequestCreationEmail";
+import { sendRefundRequestRejectionEmail } from "../services/emails/refundRequests/sendRefundRequestRejectionEmail";
 import Course from "./Course";
 import Enrollment from "./Enrollment";
 import IndividualTrainee from "./IndividualTrainee";
@@ -61,7 +61,7 @@ refundRequestSchema.methods.approve = async function () {
             return;
         }
         trainee.enrollments.splice(trainee.enrollments.indexOf(this.enrollmentId), 1);
-        // await Enrollment.findByIdAndDelete(this.enrollmentId);
+        await Enrollment.findByIdAndDelete(this.enrollmentId);
         trainee.credit(this.refundAmount);
         sendRefundRequestApprovalEmail(trainee.email, this.refundAmount);
     });
