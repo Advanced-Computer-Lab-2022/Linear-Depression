@@ -1,4 +1,4 @@
-import { sendEmail } from "./sendMailService";
+import { sendEmail } from "../sendMailService";
 
 export const sendAccessRequestCreationEmail = async (email: string, courseTitle: string) => {
     const context = {

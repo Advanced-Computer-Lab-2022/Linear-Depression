@@ -50,13 +50,7 @@ const courseSchema = new Schema({
             message: "Invalid URL, must be a valid YouTube link"
         }
     },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
-    isFree: {
-        type: Boolean,
-        default: function (this: ICourseModel) {
-            return this.price === 0;
-        }
-    }
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }]
 });
 
 courseSchema.virtual("thumbnail").get(function (this: ICourseModel) {
