@@ -9,7 +9,7 @@ const theme = extendTheme({
             styleOverrides: {
                 root: {
                     borderRadius: "sm",
-                    boxShadow: "0 0 0 0px rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1)"
+                    boxShadow: "0 2px 8px 0 rgba(0, 0, 0, 0.1)"
                 }
             },
             defaultProps: {

@@ -1,5 +1,6 @@
 export { default as ReportPageHeader } from "./PageHeader";
 export { default as ReportPageContainer } from "./PageContainter";
+export { default as HorizontalCourseCard } from "./HorizontalCourseCard";
 
 export { default as ThreadContainer } from "./thread/Container";
 export { default as ThreadCardContainer } from "./thread/CardContainer";

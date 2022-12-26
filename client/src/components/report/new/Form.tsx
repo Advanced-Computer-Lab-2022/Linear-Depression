@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import { AddReport } from "@internals/api";
 import { HorizontalCourseCard } from "@internals/components";
 import { ReportType, ReportFormProps } from "@internals/types";
+import { Course as ICourseProps } from "@internals/types";
 import { validateFormData } from "@internals/utils";
 
 const reportTypes = Object.values(ReportType);
@@ -32,13 +33,15 @@ const validationRules = {
         .max(500, "Description must be less than 500 characters")
 };
 
-const Form: React.FC = () => {
+const Form: React.FC<{ course: ICourseProps }> = ({ course }) => {
     const [formErrors, setFormErrors] = useState(new Map());
     const [showAlert, setShowAlert] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+
+    const [searchParams] = useSearchParams();
+    const courseId = searchParams.get("course_id");
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -48,8 +51,8 @@ const Form: React.FC = () => {
         setFormErrors(new Map());
         setShowAlert(false);
 
-        const formData = getFormData(e) as unknown as ReportFormProps;
-        formData.courseId = searchParams.get("course_id") as string;
+        const formData = getFormData(e);
+        if (courseId) formData.courseId = courseId;
 
         validateFormData(formData, validationRules)
             .then(async (data) => {
@@ -86,19 +89,20 @@ const Form: React.FC = () => {
                 boxShadow: "0 2px 8px 0 rgba(0, 0, 0, 0.1)"
             }}
         >
-            <HorizontalCourseCard />
-
-            <Divider sx={{ my: 1 }}>
-                <Chip variant="soft" color="neutral">
-                    Report Form
-                </Chip>
-            </Divider>
+            {course && (
+                <>
+                    <HorizontalCourseCard course={course} />
+                    <Divider sx={{ my: 1 }}>
+                        <Chip variant="soft" color="neutral">
+                            Report Form
+                        </Chip>
+                    </Divider>
+                </>
+            )}
 
             <Sheet
                 component="form"
-                onSubmit={(e) => {
-                    handleFormSubmit(e);
-                }}
+                onSubmit={(e) => handleFormSubmit(e)}
                 sx={{
                     width: "100%",
                     display: "flex",
