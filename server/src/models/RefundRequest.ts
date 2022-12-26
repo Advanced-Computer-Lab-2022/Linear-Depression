@@ -61,7 +61,7 @@ refundRequestSchema.methods.approve = async function () {
             return;
         }
         trainee.enrollments.splice(trainee.enrollments.indexOf(this.enrollmentId), 1);
-        // await Enrollment.findByIdAndDelete(this.enrollmentId);
+        await Enrollment.findByIdAndDelete(this.enrollmentId);
         trainee.credit(this.refundAmount);
         sendRefundRequestApprovalEmail(trainee.email, this.refundAmount);
     });
