@@ -1,6 +1,8 @@
 // search for courses by name
 import fs from "fs";
 import axios from "axios";
+import { ICourseModel } from "../models/Course";
+import Promotion, { PromotionStatus } from "../models/Promotion";
 
 /**
  * Given a country name, return it's currency code
@@ -56,4 +58,18 @@ export const getCurrencyRateFromCache = async (currencyCode: string, baseCurrenc
     } else {
         return await getCurrencyRate(currencyCode, baseCurrency);
     }
+};
+
+export const getCoursePriceAfterPromotion = async (course: ICourseModel) => {
+    if (!course.activePromotion) {
+        return course.price;
+    }
+    const promotion = await Promotion.findById(course.activePromotion);
+    if (!promotion) {
+        return course.price;
+    }
+    if (promotion.status !== PromotionStatus.Active) {
+        return course.price;
+    }
+    return course.price * (1 - promotion.discountPercent / 100);
 };
