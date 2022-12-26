@@ -36,9 +36,7 @@ const HorizontalCourseCard: React.FC<{ course: ICourseProps }> = ({ course }) =>
         };
     };
 
-    let { regularPrice, discountedPrice } = getCoursePrice();
-    regularPrice = "USD 125";
-    discountedPrice = "USD 100";
+    const { regularPrice, discountedPrice } = getCoursePrice();
 
     return (
         <Card
