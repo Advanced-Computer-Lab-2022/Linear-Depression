@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
 import AuthHandler from "./components/AuthHandler";
+import ViewMySettlements from "./components/modals/ViewMySettlements";
 import { User } from "./types";
 import { CountryContext } from "@internals/contexts";
 import { useGetLocalizationData } from "@internals/hooks";
@@ -49,7 +50,8 @@ function App() {
                         editCourse: EditCourse,
                         editLesson: EditLesson,
                         editProfile: EditProfile,
-                        viewAndAcceptContract: ViewAndAcceptContract
+                        viewAndAcceptContract: ViewAndAcceptContract,
+                        viewMySettlements: ViewMySettlements
                     }}
                 />
                 <Routes>
