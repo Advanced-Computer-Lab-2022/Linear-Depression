@@ -1,4 +1,4 @@
-import { sendEmail } from "./sendMailService";
+import { sendEmail } from "../sendMailService";
 
 export const sendRefundRequestRejectionEmail = async (email: string) => {
     const context = {
