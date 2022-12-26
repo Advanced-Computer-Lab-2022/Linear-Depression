@@ -1,9 +1,9 @@
 import mongoose, { Document } from "mongoose";
-import { sendAccessRequestApprovalEmail } from "../services/emails/sendAccessRequestApprovalEmail";
+import { sendAccessRequestApprovalEmail } from "../services/emails/accessRequests/sendAccessRequestApprovalEmail";
 import CorporateTrainee from "./CorporateTrainee";
 import Course from "./Course";
-import { sendAccessRequestRejectionEmail } from "../services/emails/sendAccessRequestRejectionEmail";
-import { sendAccessRequestCreationEmail } from "../services/emails/sendAccessRequestCreationEmail";
+import { sendAccessRequestRejectionEmail } from "../services/emails/accessRequests/sendAccessRequestRejectionEmail";
+import { sendAccessRequestCreationEmail } from "../services/emails/accessRequests/sendAccessRequestCreationEmail";
 import { createEnrollmentService } from "../services/EnrollmentCreateServices";
 
 export interface IAccessRequest {

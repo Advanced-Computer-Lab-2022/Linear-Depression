@@ -1,5 +1,5 @@
 import mongoose, { Document } from "mongoose";
-import Course from "./Course";
+import Course, { ICourseModel } from "./Course";
 import Lesson from "./Lesson";
 
 import createCertificate from "../services/certificateService";
@@ -8,6 +8,7 @@ import { sendCertificateEmail } from "../services/emails/sendCertificateEmail";
 import CorporateTrainee from "./CorporateTrainee";
 import Instructor from "./Instructor";
 import { sendEnrollmentEmail } from "../services/emails/sendEnrollmentEmail";
+import Settlement from "./Settlement";
 
 interface IExerciseStatus {
     exerciseId: mongoose.Types.ObjectId;
@@ -202,11 +203,12 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
 
 // hook on create to send email to instructor and credit him
 enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
+    const INSTRUCTOR_CREDIT_PERCENTAGE = 0.4;
     const enrollment = this as IEnrollmentModel;
     if (!this.isNew) {
         return next();
     }
-    const course = await Course.findById(enrollment.courseId);
+    const course = (await Course.findById(enrollment.courseId)) as ICourseModel;
     if (!course) {
         console.log("course not found");
         return next();
@@ -218,8 +220,16 @@ enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
         // credit the instructor if an individual trainee enrolled
         Instructor.findById(course.instructor).then((instructor) => {
             if (instructor) {
-                instructor.credit(course.price * 0.4);
+                //FIXME: amount should be calculated based on the  promotion.
+                const amount = Math.ceil(course.price * INSTRUCTOR_CREDIT_PERCENTAGE * 100) / 100;
+
+                instructor.credit(amount);
                 console.log("instructor credited");
+                new Settlement({
+                    instructorId: instructor._id,
+                    courseId: course._id,
+                    amount: amount
+                }).save();
                 sendEnrollmentEmail(instructor.email, course.title);
             }
         });
