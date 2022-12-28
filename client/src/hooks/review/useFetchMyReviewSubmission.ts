@@ -12,7 +12,7 @@ const useFetchMyReviewSubmission = (courseId: string, instructorId: string) => {
     };
 
     const [review, setReview] = useState(initialReviewSubmission);
-    const [isNewReview, setIsNewReview] = useState(false);
+    const [isNewReview, setIsNewReview] = useState(true);
 
     useEffect(() => {
         const promise1 = fetchMyReviewForCourse(courseId);
@@ -21,11 +21,11 @@ const useFetchMyReviewSubmission = (courseId: string, instructorId: string) => {
         Promise.all([promise1, promise2])
             .then((values) => {
                 setReview({ ...review, ...values[0], ...values[1] });
-                setIsNewReview(true);
+                setIsNewReview(false);
             })
             .catch(() => {
                 setReview(initialReviewSubmission);
-                setIsNewReview(false);
+                setIsNewReview(true);
             });
     }, []);
 

@@ -5,7 +5,7 @@ import Course from "../../models/Course";
 
 const isCourseOwner = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.body.userId as unknown as mongoose.Types.ObjectId;
-    const courseId = req.body.courseId as unknown as mongoose.Types.ObjectId;
+    const courseId = req.params.courseId as unknown as mongoose.Types.ObjectId;
 
     const course = await Course.findById(courseId);
     if (!course) {

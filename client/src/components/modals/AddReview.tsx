@@ -1,3 +1,4 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField, Button, Typography } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import React, { useState } from "react";
@@ -48,8 +49,12 @@ const AddReview: React.FC = () => {
         isNewReview
     } = useFetchMyReviewSubmission(courseId, instructorId);
     const [formErrors, setFormErrors] = useState(new Map());
+    const [loading, setLoading] = useState(false);
 
     const handleCreate = async () => {
+        setLoading(true);
+        setFormErrors(new Map());
+
         validateFormData(formData, validationRules)
             .then(async (data: any) => {
                 const validatedData = data as unknown as ReviewSubmission;
@@ -65,13 +70,18 @@ const AddReview: React.FC = () => {
                     console.log(error);
                 } finally {
                     closeModal();
+                    setLoading(false);
                 }
             })
             .catch((errors: React.SetStateAction<Map<any, any>>) => {
                 setFormErrors(errors);
+                setLoading(false);
             });
     };
     const handleUpdate = () => {
+        setFormErrors(new Map());
+        setLoading(true);
+
         validateFormData(formData, validationRules)
             .then(async (data: any) => {
                 const validatedData = data as unknown as ReviewSubmission;
@@ -87,10 +97,12 @@ const AddReview: React.FC = () => {
                     console.log(error);
                 } finally {
                     closeModal();
+                    setLoading(false);
                 }
             })
             .catch((errors: React.SetStateAction<Map<any, any>>) => {
                 setFormErrors(errors);
+                setLoading(false);
             });
     };
 
@@ -112,7 +124,11 @@ const AddReview: React.FC = () => {
     return (
         <Dialog open={true}>
             <DialogContent>
-                <DialogContentText>Add a review</DialogContentText>
+                {isNewReview ? (
+                    <DialogContentText>Add a review</DialogContentText>
+                ) : (
+                    <DialogContentText>Update your review</DialogContentText>
+                )}
                 <SectionContainer>
                     <Typography component="legend">Course Review</Typography>
                     <RatingContainer>
@@ -197,9 +213,13 @@ const AddReview: React.FC = () => {
                 <Button onClick={handleClose}>Cancel</Button>
 
                 {isNewReview ? (
-                    <Button onClick={handleUpdate}>Update</Button>
+                    <LoadingButton loading={loading} onClick={handleCreate}>
+                        Add
+                    </LoadingButton>
                 ) : (
-                    <Button onClick={handleCreate}>Submit</Button>
+                    <LoadingButton loading={loading} onClick={handleUpdate}>
+                        Update
+                    </LoadingButton>
                 )}
             </DialogActions>
         </Dialog>
