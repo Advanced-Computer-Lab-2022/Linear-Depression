@@ -37,6 +37,7 @@ const profileSlice = createSlice({
         });
         builder.addCase(getProfile.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload;
+            state.data = null;
             state.loading = false;
         });
     }
