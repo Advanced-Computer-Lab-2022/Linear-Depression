@@ -23,6 +23,54 @@ const listRatings = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).json({ ratings: ratingsWithTrainee });
 };
 
+const getCourseRating = async (req: Request, res: Response) => {
+    const instructorId = req.params.instructorId;
+    const traineeId = req.body.userId;
+    const instructor = await Instructor.findById(instructorId);
+    if (!instructor) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+            message: "Instructor not found "
+        });
+    }
+
+    const instructorRatingIds = instructor?.ratings;
+    Rating.findOne({ _id: { $in: instructorRatingIds }, traineeId: traineeId }).then((rating) => {
+        if (!rating) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Rating not found"
+            });
+        }
+        res.status(StatusCodes.OK).json({ rating });
+    });
+};
+
+const updateRating = async (req: Request, res: Response) => {
+    const instructorId = req.params.instructorId;
+    const traineeId = req.body.userId;
+    const instructor = await Instructor.findById(instructorId);
+    if (!instructor) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+            message: "Instructor not found "
+        });
+    }
+    const instructorRatingIds = instructor?.ratings;
+    Rating.findOneAndUpdate(
+        { _id: { $in: instructorRatingIds }, traineeId: traineeId },
+        {
+            comment: req.body.comment,
+            rating: req.body.rating
+        }
+    ).then(async (rating) => {
+        if (!rating) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Rating not found"
+            });
+        }
+        await instructor?.save();
+        res.status(StatusCodes.OK).json({ rating });
+    });
+};
+
 const createRating = async (req: Request, res: Response) => {
     const instructorId = req.params.instructorId;
     const traineeId = req.body.userId;
@@ -45,7 +93,7 @@ const createRating = async (req: Request, res: Response) => {
                     message: "Invalid traineeId"
                 });
             } else {
-                req.body.traineeID = traineeId;
+                req.body.traineeId = traineeId;
                 await Rating.create(req.body)
                     .then((rating) => {
                         instructor?.ratings.push(rating._id);
@@ -87,7 +135,7 @@ const deleteRating = async (req: Request, res: Response) => {
                                 message: "Rating not found"
                             });
                         } else {
-                            if (rating.traineeID.toString() !== traineeId) {
+                            if (rating.traineeId.toString() !== traineeId) {
                                 res.status(StatusCodes.UNAUTHORIZED).json({
                                     message: "You are not authorized to delete this rating"
                                 });
@@ -113,5 +161,7 @@ const deleteRating = async (req: Request, res: Response) => {
 export default {
     listRatings,
     createRating,
-    deleteRating
+    deleteRating,
+    getCourseRating,
+    updateRating
 };

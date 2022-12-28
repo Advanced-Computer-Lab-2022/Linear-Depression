@@ -4,20 +4,20 @@ import mongoose from "mongoose";
 import Rating, { IRatingModel } from "../models/Rating";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
-import Course, { ICourse } from "../models/Course";
+import Course, { ICourse, ICourseModel } from "../models/Course";
 
 const createRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
 
-    const traineeID = req.body.userId;
-    if (traineeID) {
-        if (!mongoose.Types.ObjectId.isValid(traineeID)) {
+    const traineeId = req.body.userId;
+    if (traineeId) {
+        if (!mongoose.Types.ObjectId.isValid(traineeId)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Invalid traineeId"
             });
         }
-        const individualTrainee = await IndividualTrainee.findById(traineeID);
-        const corporateTrainee = await CorporateTrainee.findById(traineeID);
+        const individualTrainee = await IndividualTrainee.findById(traineeId);
+        const corporateTrainee = await CorporateTrainee.findById(traineeId);
         if (!individualTrainee && !corporateTrainee) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Invalid traineeId"
@@ -31,14 +31,14 @@ const createRating = async (req: Request, res: Response) => {
     // if there's existing rating for this trainee and course, return error
     const courseHavingRatings = (await Course.findById(courseId).populate({
         path: "ratings",
-        match: { traineeID: traineeID }
+        match: { traineeId: traineeId }
     })) as ICourse;
     if (courseHavingRatings.ratings.length > 0) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             message: "Rating already exists for this trainee and course"
         });
     }
-    req.body.traineeID = traineeID;
+    req.body.traineeId = traineeId;
     return new Rating(req.body)
         .save()
         .then((rating) => {
@@ -77,8 +77,8 @@ const listRatings = async (req: Request, res: Response) => {
 };
 
 const readRating = async (req: Request, res: Response) => {
-    const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
+    const traineeId = req.body.userId;
     const course = (await Course.findById(courseId).then((course) => {
         if (!course) {
             return res.status(StatusCodes.NOT_FOUND).json({
@@ -87,48 +87,38 @@ const readRating = async (req: Request, res: Response) => {
         }
         return course as ICourse;
     })) as ICourse;
-    return await Rating.findById(ratingId)
+    const courseRatings = course.ratings;
+    return await Rating.findOne({ traineeId: traineeId, _id: { $in: courseRatings } })
         .populate("IndividualTrainee", "firstName lastName")
         .populate("CorporateTrainee", "firstName lastName")
         .then((rating) => {
             if (!rating) {
-                res.status(StatusCodes.NOT_FOUND).json({
+                return res.status(StatusCodes.NOT_FOUND).json({
                     message: "Rating not found"
                 });
-            } else {
-                if (!course.ratings.includes(ratingId)) {
-                    res.status(StatusCodes.BAD_REQUEST).json({
-                        message: "Rating does not belong to this course"
-                    });
-                }
-                const ratingWithTrainee = serializeRating(rating);
-                res.status(StatusCodes.OK).json({ rating: ratingWithTrainee });
             }
+            const ratingWithTrainee = serializeRating(rating);
+            return res.status(StatusCodes.OK).json({ rating: ratingWithTrainee });
         })
         .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
 };
 
 const updateRating = async (req: Request, res: Response) => {
-    const ratingId = req.params.ratingId as unknown as mongoose.Types.ObjectId;
     const courseId = req.params.courseId;
+    const traineeId = req.body.userId;
 
-    const course: ICourse = (await Course.findById(courseId).then((course) => {
+    const course: ICourseModel = (await Course.findById(courseId).then((course) => {
         if (!course) {
             return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Course not found"
             });
         }
         return course;
-    })) as ICourse;
-    if (!course.ratings.includes(ratingId)) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            message: "Rating does not belong to this course"
-        });
-    }
+    })) as ICourseModel;
 
     // validate traineeId
-    if (req.body.traineeID) {
-        const traineeId = req.body.traineeID;
+    if (req.body.traineeId) {
+        const traineeId = req.body.traineeId;
         if (!mongoose.Types.ObjectId.isValid(traineeId)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "Invalid traineeId"
@@ -143,14 +133,20 @@ const updateRating = async (req: Request, res: Response) => {
         }
     }
 
-    Rating.findById(ratingId)
+    Rating.findOne({ traineeId: traineeId, _id: { $in: course.ratings } })
         .then((rating) => {
             if (rating) {
-                rating.set(req.body);
+                rating.set({
+                    rating: req.body.rating,
+                    comment: req.body.comment
+                });
 
                 return rating
                     .save()
-                    .then((rating) => res.status(StatusCodes.OK).json({ rating }))
+                    .then(async (rating) => {
+                        await course.save();
+                        res.status(StatusCodes.OK).json({ rating });
+                    })
                     .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
             } else {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
@@ -182,7 +178,7 @@ const deleteRating = async (req: Request, res: Response) => {
             await Rating.findByIdAndDelete(ratingId)
                 .then((rating) => {
                     if (rating) {
-                        if (rating.traineeID != traineeId) {
+                        if (rating.traineeId != traineeId) {
                             res.status(StatusCodes.BAD_REQUEST).json({
                                 message: "You are not allowed to delete this rating"
                             });

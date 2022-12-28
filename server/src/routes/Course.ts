@@ -19,7 +19,18 @@ router.get("/", controller.listCourses);
 router.get("/subjects", controller.listSubjects);
 router.get("/:courseId", controller.readCourse);
 router.get("/:courseId/ratings", ratingController.listRatings);
-router.get("/:courseId/ratings/:ratingId", ratingController.readRating);
+router.get(
+    "/:courseId/my-rating",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE, UserType.CORPORATE_TRAINEE]),
+    ratingController.readRating
+);
+router.put(
+    "/:courseId/my-rating",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE, UserType.CORPORATE_TRAINEE]),
+    ratingController.updateRating
+);
 
 // instructor
 router.post("/", isAuthenticated, isAuthorized([UserType.INSTRUCTOR]), controller.createCourse);

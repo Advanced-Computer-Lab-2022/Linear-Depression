@@ -1,11 +1,16 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField, Button, Typography } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import * as Yup from "yup";
 
+import { useFetchMyReviewSubmission, useToast } from "@internals/hooks";
 import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
-import { addCourseReview, addInstructorReview } from "@internals/services";
+import { addCourseReview, addInstructorReview, updateCourseReview, updateInstructorReview } from "@internals/services";
+import { ReviewSubmission } from "@internals/types";
+import { validateFormData } from "@internals/utils";
 
 const RatingContainer = styled.div`
     margin-top: 10px;
@@ -38,43 +43,131 @@ const AddReview: React.FC = () => {
     const instructorId = useAppSelector((state) => state.course).data?.instructor._id;
     const dispatch = useAppDispatch();
 
-    const [courseComment, setCourseComment] = useState("");
-    const [courseRating, setCourseRating] = useState(0);
-    const [instructorComment, setInstructorComment] = useState("");
-    const [instructorRating, setInstructorRating] = useState(0);
+    const {
+        review: formData,
+        setReview: setFormData,
+        isNewReview
+    } = useFetchMyReviewSubmission(courseId, instructorId);
+    const [formErrors, setFormErrors] = useState(new Map());
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async () => {
-        try {
-            await addCourseReview(courseId, courseRating, courseComment);
-            dispatch(getCourse(courseId));
-            await addInstructorReview(instructorId, instructorRating, instructorComment);
-            closeModal();
-        } catch (err) {
-            alert(err);
-        }
+    const { showToast } = useToast();
+
+    const handleCreate = async () => {
+        setLoading(true);
+        setFormErrors(new Map());
+
+        validateFormData(formData, validationRules)
+            .then(async (data: any) => {
+                const validatedData = data as unknown as ReviewSubmission;
+                try {
+                    await addCourseReview(courseId, validatedData.courseRating, validatedData.courseComment);
+                    await addInstructorReview(
+                        instructorId,
+                        validatedData.instructorRating,
+                        validatedData.instructorComment
+                    );
+                    dispatch(getCourse(courseId));
+                    showToast({
+                        message: "Review added successfully",
+                        type: "success"
+                    });
+                } catch (error) {
+                    console.log(error);
+                    showToast({
+                        message: "Failed to add review",
+                        type: "error"
+                    });
+                } finally {
+                    closeModal();
+                    setLoading(false);
+                }
+            })
+            .catch((errors: React.SetStateAction<Map<any, any>>) => {
+                setFormErrors(errors);
+                setLoading(false);
+            });
+    };
+    const handleUpdate = () => {
+        setFormErrors(new Map());
+        setLoading(true);
+
+        validateFormData(formData, validationRules)
+            .then(async (data: any) => {
+                const validatedData = data as unknown as ReviewSubmission;
+                try {
+                    await updateCourseReview(courseId, validatedData.courseRating, validatedData.courseComment);
+                    await updateInstructorReview(
+                        instructorId,
+                        validatedData.instructorRating,
+                        validatedData.instructorComment
+                    );
+                    dispatch(getCourse(courseId));
+                    showToast({
+                        message: "Review updated successfully",
+                        type: "success"
+                    });
+                } catch (error) {
+                    console.log(error);
+                    showToast({
+                        message: "Failed to add review",
+                        type: "error"
+                    });
+                } finally {
+                    closeModal();
+                    setLoading(false);
+                }
+            })
+            .catch((errors: React.SetStateAction<Map<any, any>>) => {
+                setFormErrors(errors);
+                setLoading(false);
+            });
     };
 
     const handleCourseReviewChange = (_event: React.SyntheticEvent<{}>, newValue: number | null) => {
-        setCourseRating(newValue);
+        setFormData({ ...formData, courseRating: newValue });
     };
 
     const handleInstructorReviewChange = (_event: React.SyntheticEvent<{}>, newValue: number | null) => {
-        setInstructorRating(newValue);
+        setFormData({ ...formData, instructorRating: newValue });
+    };
+
+    const validationRules = {
+        courseComment: Yup.string(),
+        courseRating: Yup.number().min(1, "Please rate the course"),
+        instructorComment: Yup.string(),
+        instructorRating: Yup.number().min(1, "Please rate the instructor")
     };
 
     return (
         <Dialog open={true}>
             <DialogContent>
-                <DialogContentText>Add a review</DialogContentText>
+                {isNewReview ? (
+                    <DialogContentText>Add a review</DialogContentText>
+                ) : (
+                    <DialogContentText>Update your review</DialogContentText>
+                )}
                 <SectionContainer>
                     <Typography component="legend">Course Review</Typography>
                     <RatingContainer>
                         <Rating
                             name="size-large"
                             size="large"
-                            value={courseRating}
+                            value={formData.courseRating}
                             onChange={handleCourseReviewChange}
+                            sx={
+                                formErrors.has("courseRating") && {
+                                    "& .MuiRating-iconEmpty": {
+                                        color: formData.courseRating === 0 && "#f44336"
+                                    }
+                                }
+                            }
                         />
+                        {formErrors.has("courseRating") && formData.courseRating === 0 && (
+                            <Typography variant="caption" color="error">
+                                {formErrors.get("courseRating")}
+                            </Typography>
+                        )}
                     </RatingContainer>
                     <TextField
                         autoFocus
@@ -87,8 +180,10 @@ const AddReview: React.FC = () => {
                         multiline
                         minRows={3}
                         maxRows={5}
-                        value={courseComment}
-                        onChange={(e) => setCourseComment(e.target.value)}
+                        value={formData.courseComment}
+                        onChange={(e) => setFormData({ ...formData, courseComment: e.target.value })}
+                        error={formErrors.has("courseComment")}
+                        helperText={formErrors.get("courseComment")}
                     />
                 </SectionContainer>
                 <SectionContainer>
@@ -97,9 +192,21 @@ const AddReview: React.FC = () => {
                         <Rating
                             name="size-large"
                             size="large"
-                            value={instructorRating}
+                            value={formData.instructorRating}
                             onChange={handleInstructorReviewChange}
+                            sx={
+                                formErrors.has("instructorRating") && {
+                                    "& .MuiRating-iconEmpty": {
+                                        color: formData.instructorRating === 0 && "#f44336"
+                                    }
+                                }
+                            }
                         />
+                        {formErrors.has("instructorRating") && formData.instructorRating === 0 && (
+                            <Typography variant="caption" color="error">
+                                {formErrors.get("instructorRating")}
+                            </Typography>
+                        )}
                     </RatingContainer>
                     <TextField
                         autoFocus
@@ -112,15 +219,26 @@ const AddReview: React.FC = () => {
                         multiline
                         minRows={3}
                         maxRows={5}
-                        value={instructorComment}
-                        onChange={(e) => setInstructorComment(e.target.value)}
+                        value={formData.instructorComment}
+                        onChange={(e) => setFormData({ ...formData, instructorComment: e.target.value })}
+                        error={formErrors.has("instructorComment")}
+                        helperText={formErrors.get("instructorComment")}
                     />
                 </SectionContainer>
             </DialogContent>
 
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSubmit}>Submit</Button>
+
+                {isNewReview ? (
+                    <LoadingButton loading={loading} onClick={handleCreate}>
+                        Add
+                    </LoadingButton>
+                ) : (
+                    <LoadingButton loading={loading} onClick={handleUpdate}>
+                        Update
+                    </LoadingButton>
+                )}
             </DialogActions>
         </Dialog>
     );
