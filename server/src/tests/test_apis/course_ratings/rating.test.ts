@@ -162,7 +162,7 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
         await trainee.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.traineeId = trainee._id as mongoose.Types.ObjectId;
         const rating = new Rating(ratingData);
         const courseData = courseFactory();
         courseData.ratings.push(rating._id);
@@ -182,7 +182,7 @@ describe("GET /courses/:courseId/ratings/:ratingId", () => {
         await trainee.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.traineeId = trainee._id as mongoose.Types.ObjectId;
         const rating = new Rating(ratingData);
         const courseData = courseFactory();
         courseData.ratings.push(rating._id);
@@ -215,14 +215,14 @@ describe("POST /courses/:courseId/ratings", () => {
         await course.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.traineeId = trainee._id as mongoose.Types.ObjectId;
 
         const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBe(ratingData.comment);
         expect(res.body.rating.rating).toBe(ratingData.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+        expect(res.body.rating.traineeId).toBe(ratingData.traineeId.toString());
 
         const courseRes = await request.get(`/courses/${course._id}`);
         expect(courseRes.status).toBe(StatusCodes.OK);
@@ -237,7 +237,7 @@ describe("POST /courses/:courseId/ratings", () => {
         await course.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.traineeId = trainee._id as mongoose.Types.ObjectId;
         ratingData.comment = undefined;
 
         const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData).set("Cookie", token);
@@ -245,14 +245,14 @@ describe("POST /courses/:courseId/ratings", () => {
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBeUndefined();
         expect(res.body.rating.rating).toBe(ratingData.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+        expect(res.body.rating.traineeId).toBe(ratingData.traineeId.toString());
     });
 
     it("Should return a 400 error if the rating is missing", async () => {
         const { token, trainee } = await getTraineeToken();
 
         const { course, rating } = await createCourseWithRatings();
-        rating.traineeID = trainee._id;
+        rating.traineeId = trainee._id;
         rating.rating = undefined!;
         const res = await request
             .post(`/courses/${course._id}/ratings`)
@@ -265,7 +265,7 @@ describe("POST /courses/:courseId/ratings", () => {
         const { token, trainee } = await getTraineeToken();
 
         const { course, rating } = await createCourseWithRatings();
-        rating.traineeID = trainee._id;
+        rating.traineeId = trainee._id;
         rating.save();
         await request.post(`/courses/${course._id}/ratings`).send(getRatingData(rating));
         const res = await request
@@ -285,7 +285,7 @@ describe("POST /courses/:courseId/ratings", () => {
         await course.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.traineeId = trainee._id as mongoose.Types.ObjectId;
         const rating = new Rating(ratingData);
         await rating.save();
 
@@ -294,14 +294,14 @@ describe("POST /courses/:courseId/ratings", () => {
         await trainee2.save();
 
         const ratingData2 = ratingFactory();
-        ratingData2.traineeID = trainee2._id as mongoose.Types.ObjectId;
+        ratingData2.traineeId = trainee2._id as mongoose.Types.ObjectId;
 
         const res = await request.post(`/courses/${course._id}/ratings`).send(ratingData2).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.CREATED);
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBe(ratingData2.comment);
         expect(res.body.rating.rating).toBe(ratingData2.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData2.traineeID.toString());
+        expect(res.body.rating.traineeId).toBe(ratingData2.traineeId.toString());
     });
 
     it("should return 200 if the rating exists for the trainee but not the course", async () => {
@@ -312,7 +312,7 @@ describe("POST /courses/:courseId/ratings", () => {
         await course.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = trainee._id as mongoose.Types.ObjectId;
+        ratingData.traineeId = trainee._id as mongoose.Types.ObjectId;
         const rating = new Rating(ratingData);
         await rating.save();
         course.ratings.push(rating._id);
@@ -327,7 +327,7 @@ describe("POST /courses/:courseId/ratings", () => {
         expect(res.body.rating._id).toBeDefined();
         expect(res.body.rating.comment).toBe(ratingData.comment);
         expect(res.body.rating.rating).toBe(ratingData.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+        expect(res.body.rating.traineeId).toBe(ratingData.traineeId.toString());
     });
     afterEach(async () => {
         await disconnectDBForTesting();
@@ -350,7 +350,7 @@ describe("PUT /courses/:courseId/ratings/:ratingId", () => {
         expect(res.body.rating._id).toBe(rating._id.toString());
         expect(res.body.rating.comment).toBe(ratingData.comment);
         expect(res.body.rating.rating).toBe(ratingData.rating);
-        expect(res.body.rating.traineeID).toBe(ratingData.traineeID.toString());
+        expect(res.body.rating.traineeId).toBe(ratingData.traineeId.toString());
     });
 
     it("Should return a 400 error if the rating is invalid", async () => {
@@ -362,10 +362,10 @@ describe("PUT /courses/:courseId/ratings/:ratingId", () => {
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    it("Should return a 400 error if the traineeID is invalid", async () => {
+    it("Should return a 400 error if the traineeId is invalid", async () => {
         const { course, rating } = await createCourseWithRatings();
         const ratingData = getRatingData(rating);
-        ratingData.traineeID = "invalid";
+        ratingData.traineeId = "invalid";
 
         const res = await request.put(`/courses/${course._id}/ratings/${rating._id}`).send(ratingData);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
@@ -384,14 +384,14 @@ describe("DELETE /courses/:courseId/ratings/:ratingId", () => {
     it("Should delete a rating Successfully", async () => {
         const { course, rating } = await createCourseWithRatings();
         const { token, trainee } = await getTraineeToken();
-        rating.traineeID = trainee._id;
+        rating.traineeId = trainee._id;
         await rating.save();
         const res = await request.delete(`/courses/${course._id}/ratings/${rating._id}`).set("Cookie", token);
         expect(res.status).toBe(StatusCodes.OK);
         expect(res.body.rating._id).toBe(rating._id.toString());
         expect(res.body.rating.comment).toBe(rating.comment);
         expect(res.body.rating.rating).toBe(rating.rating);
-        expect(res.body.rating.traineeID).toBe(rating.traineeID.toString());
+        expect(res.body.rating.traineeId).toBe(rating.traineeId.toString());
 
         expect(await Rating.findById(rating._id)).toBeNull();
         const courseAfterDelete = (await Course.findById(course._id)) as ICourse;

@@ -8,7 +8,7 @@ const isRatingOwner = async (req: Request, res: Response, next: NextFunction) =>
 
     const rating = await Rating.findById(ratingId);
 
-    if (userId !== rating?.traineeID) {
+    if (userId !== rating?.traineeId) {
         return res.status(StatusCodes.FORBIDDEN).json({ message: "You are not the owner of this rating" });
     }
 

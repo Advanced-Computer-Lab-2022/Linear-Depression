@@ -146,7 +146,7 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "traineeID": {
+                                "traineeId": {
                                     "example": "any"
                                 }
                             }
@@ -198,7 +198,7 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "traineeID": {
+                                "traineeId": {
                                     "example": "any"
                                 }
                             }
