@@ -26,6 +26,8 @@ const ReportThread: React.FC = () => {
                             authorType={report.user.type}
                             createdAt={report.createdAt}
                             content={report.description}
+                            isOwner={true}
+                            courseId={report.courseId}
                         />
 
                         <ThreadSubjectDivider repliesCount={report.thread.replies.length} />

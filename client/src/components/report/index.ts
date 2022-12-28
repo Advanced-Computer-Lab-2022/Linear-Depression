@@ -14,3 +14,4 @@ export { default as ReportsTableBodyContainer } from "./listing/table/BodyContai
 export { default as ReportsTableRow } from "./listing/table/Row";
 
 export { default as NewReportForm } from "./new/Form";
+export { default as HorizontalCourseCard } from "./new/HorizontalCourseCard";

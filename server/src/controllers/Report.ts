@@ -57,6 +57,10 @@ const createReport = async (req: Request, res: Response, next: NextFunction) => 
 
         return res.status(StatusCodes.CREATED).json({ report });
     } catch (error) {
+        if (error instanceof mongoose.Error.ValidationError) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+        }
+
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
 };
