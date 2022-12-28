@@ -72,7 +72,7 @@ export const populateTestDb = async () => {
             const rating = await Rating.findById(ratingId);
             if (rating) {
                 if (trainee) {
-                    rating.traineeID = trainee._id;
+                    rating.traineeId = trainee._id;
                 }
                 await rating.save();
             }
