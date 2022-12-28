@@ -5,8 +5,6 @@ import CourseCard from "./coursesList/CourseCard";
 import { Course as ICourseProps } from "@internals/types";
 
 const CoursesListContainer = styled.div`
-    width: 80%;
-    margin-left: auto !important;
     justify-content: right;
 `;
 
