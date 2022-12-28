@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
 
-import { useFetchMyReviewSubmission } from "@internals/hooks";
+import { useFetchMyReviewSubmission, useToast } from "@internals/hooks";
 import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
 import { addCourseReview, addInstructorReview, updateCourseReview, updateInstructorReview } from "@internals/services";
 import { ReviewSubmission } from "@internals/types";
@@ -51,6 +51,8 @@ const AddReview: React.FC = () => {
     const [formErrors, setFormErrors] = useState(new Map());
     const [loading, setLoading] = useState(false);
 
+    const { showToast } = useToast();
+
     const handleCreate = async () => {
         setLoading(true);
         setFormErrors(new Map());
@@ -66,8 +68,16 @@ const AddReview: React.FC = () => {
                         validatedData.instructorComment
                     );
                     dispatch(getCourse(courseId));
+                    showToast({
+                        message: "Review added successfully",
+                        type: "success"
+                    });
                 } catch (error) {
                     console.log(error);
+                    showToast({
+                        message: "Failed to add review",
+                        type: "error"
+                    });
                 } finally {
                     closeModal();
                     setLoading(false);
@@ -93,8 +103,16 @@ const AddReview: React.FC = () => {
                         validatedData.instructorComment
                     );
                     dispatch(getCourse(courseId));
+                    showToast({
+                        message: "Review updated successfully",
+                        type: "success"
+                    });
                 } catch (error) {
                     console.log(error);
+                    showToast({
+                        message: "Failed to add review",
+                        type: "error"
+                    });
                 } finally {
                     closeModal();
                     setLoading(false);
