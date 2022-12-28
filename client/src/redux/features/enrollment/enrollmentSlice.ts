@@ -36,6 +36,7 @@ const enrollmentSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(getEnrollment.rejected, (state, action: PayloadAction<any>) => {
+            state.data = null;
             state.error = action.payload;
             state.loading = false;
         });
