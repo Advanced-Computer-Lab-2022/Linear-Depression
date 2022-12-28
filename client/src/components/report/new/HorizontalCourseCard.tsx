@@ -1,7 +1,7 @@
 import { Person2Rounded } from "@mui/icons-material";
 import { Card, AspectRatio, Sheet, Typography, Chip } from "@mui/joy";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
@@ -13,8 +13,6 @@ const link = styled(Link)`
 `;
 
 const HorizontalCourseCard: React.FC<{ course: ICourseProps }> = ({ course }) => {
-    const navigate = useNavigate();
-
     const getCoursePrice = () => {
         let discount = 0;
         if (course.activePromotion) {
@@ -94,9 +92,9 @@ const HorizontalCourseCard: React.FC<{ course: ICourseProps }> = ({ course }) =>
                         variant="soft"
                         color="neutral"
                         startDecorator={<Person2Rounded />}
-                        onClick={() => {
-                            navigate(`/instructors/${course.instructor._id}`);
-                        }}
+                        // onClick={() => {
+                        //     navigate(`/instructors/${course.instructor._id}`);
+                        // }}
                         sx={{ mr: "auto" }}
                     >
                         {`${course.instructor.firstName} ${course.instructor.lastName}`}
