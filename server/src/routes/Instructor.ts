@@ -17,7 +17,7 @@ router.post("/:instructorId/ratings", isAuthenticated, ratingController.createRa
 router.delete("/:instructorId/ratings/:ratingId", isAuthenticated, ratingController.deleteRating);
 router.post("/:instructorId/ratings/:ratingId", isAuthenticated, ratingController.updateRating);
 router.get(
-    "/:instructorId/ratings",
+    "/:instructorId/my-rating",
     isAuthenticated,
     isAuthorized([UserType.CORPORATE_TRAINEE, UserType.INDIVIDUAL_TRAINEE]),
     ratingController.getCourseRating

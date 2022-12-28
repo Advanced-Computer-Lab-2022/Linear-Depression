@@ -2,11 +2,12 @@ import axios from "axios";
 
 import { config } from "@internals/config";
 
-const addCourseReview = (courseId: string, rating: number, comment: string) => {
-    const REVIEW_POST_URL = `${config.API_URL}/courses/${courseId}/ratings`;
+const updateInstructorReview = (instructorId: string, rating: number, comment: string) => {
+    const REVIEW_URL = `${config.API_URL}/instructors/${instructorId}/my-rating`;
+
     return new Promise((resolve, reject) => {
         axios
-            .post(REVIEW_POST_URL, {
+            .put(REVIEW_URL, {
                 rating,
                 comment
             })
@@ -19,4 +20,4 @@ const addCourseReview = (courseId: string, rating: number, comment: string) => {
     });
 };
 
-export default addCourseReview;
+export default updateInstructorReview;

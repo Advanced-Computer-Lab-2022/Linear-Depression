@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
 
-import { useFetchMyReviewForCourse, useFetchMyReviewForInstructor } from "@internals/hooks";
+import { useFetchMyReviewSubmission } from "@internals/hooks";
 import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
-import { addCourseReview, addInstructorReview } from "@internals/services";
+import { addCourseReview, addInstructorReview, updateCourseReview, updateInstructorReview } from "@internals/services";
 import { ReviewSubmission } from "@internals/types";
 import { validateFormData } from "@internals/utils";
 
@@ -42,19 +42,12 @@ const AddReview: React.FC = () => {
     const instructorId = useAppSelector((state) => state.course).data?.instructor._id;
     const dispatch = useAppDispatch();
 
-    const courseReview = useFetchMyReviewForCourse(courseId);
-    const instructorReview = useFetchMyReviewForInstructor(instructorId);
-
-    console.log(courseReview, instructorReview);
-
-    const [formData, setFormData] = useState({
-        courseComment: "",
-        courseRating: 0,
-        instructorComment: "",
-        instructorRating: 0
-    });
+    const {
+        review: formData,
+        setReview: setFormData,
+        isNewReview
+    } = useFetchMyReviewSubmission(courseId, instructorId);
     const [formErrors, setFormErrors] = useState(new Map());
-    const [isNew, _] = useState(true);
 
     const handleCreate = async () => {
         validateFormData(formData, validationRules)
@@ -78,7 +71,28 @@ const AddReview: React.FC = () => {
                 setFormErrors(errors);
             });
     };
-    const handleUpdate = () => {};
+    const handleUpdate = () => {
+        validateFormData(formData, validationRules)
+            .then(async (data: any) => {
+                const validatedData = data as unknown as ReviewSubmission;
+                try {
+                    await updateCourseReview(courseId, validatedData.courseRating, validatedData.courseComment);
+                    await updateInstructorReview(
+                        instructorId,
+                        validatedData.instructorRating,
+                        validatedData.instructorComment
+                    );
+                    dispatch(getCourse(courseId));
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    closeModal();
+                }
+            })
+            .catch((errors: React.SetStateAction<Map<any, any>>) => {
+                setFormErrors(errors);
+            });
+    };
 
     const handleCourseReviewChange = (_event: React.SyntheticEvent<{}>, newValue: number | null) => {
         setFormData({ ...formData, courseRating: newValue });
@@ -115,7 +129,6 @@ const AddReview: React.FC = () => {
                                 }
                             }
                         />
-                        {/* error */}
                         {formErrors.has("courseRating") && formData.courseRating === 0 && (
                             <Typography variant="caption" color="error">
                                 {formErrors.get("courseRating")}
@@ -183,10 +196,10 @@ const AddReview: React.FC = () => {
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
 
-                {isNew ? (
-                    <Button onClick={handleCreate}>Submit</Button>
-                ) : (
+                {isNewReview ? (
                     <Button onClick={handleUpdate}>Update</Button>
+                ) : (
+                    <Button onClick={handleCreate}>Submit</Button>
                 )}
             </DialogActions>
         </Dialog>

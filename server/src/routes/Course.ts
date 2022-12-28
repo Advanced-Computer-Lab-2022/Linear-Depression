@@ -23,7 +23,6 @@ router.get(
     "/:courseId/my-rating",
     isAuthenticated,
     isAuthorized([UserType.INDIVIDUAL_TRAINEE, UserType.CORPORATE_TRAINEE]),
-    isRatingOwner,
     ratingController.readRating
 );
 
