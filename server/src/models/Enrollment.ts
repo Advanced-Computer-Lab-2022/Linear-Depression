@@ -87,55 +87,6 @@ const enrollmentSchema = new mongoose.Schema({
     }
 });
 
-enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
-    const enrollment = this as IEnrollmentModel;
-    const courseId = enrollment.courseId;
-    const course = await Course.findById(courseId).populate("lessons");
-    if (this.isNew) {
-        if (course) {
-            const lessons = course.lessons;
-            for (const lessonId of lessons) {
-                const lesson = await Lesson.findById(lessonId).populate("exercises");
-                if (lesson) {
-                    const lessonStatus: ILessonStatus = {
-                        lessonId: lesson._id,
-                        isVideoWatched: false,
-                        exercisesStatus: []
-                    };
-                    const exercises = lesson.exercises;
-                    for (const exerciseId of exercises) {
-                        const exerciseStatus: IExerciseStatus = {
-                            exerciseId: exerciseId,
-                            isCompleted: false
-                        };
-                        lessonStatus.exercisesStatus.push(exerciseStatus);
-                    }
-                    enrollment.lessons.push(lessonStatus);
-                }
-            }
-        }
-    } else {
-        let totalElements = enrollment.lessons.length;
-        for (const lesson of enrollment.lessons) {
-            totalElements += lesson.exercisesStatus.length;
-        }
-        let totalWatchedVideos = 0;
-        let totalCompletedExercises = 0;
-        for (const lesson of enrollment.lessons) {
-            if (lesson.isVideoWatched) {
-                totalWatchedVideos++;
-            }
-            for (const exercise of lesson.exercisesStatus) {
-                if (exercise.isCompleted) {
-                    totalCompletedExercises++;
-                }
-            }
-        }
-        enrollment.progress = Math.round(((totalWatchedVideos + totalCompletedExercises) / totalElements) * 100);
-    }
-    next();
-});
-
 enrollmentSchema.virtual("IndividualTrainee", {
     ref: "IndividualTrainee",
     localField: "traineeId",
@@ -154,50 +105,67 @@ enrollmentSchema.methods.setCompletedExercise = async function (
     lessonId: mongoose.Types.ObjectId,
     exerciseId: mongoose.Types.ObjectId
 ) {
-    const enrollment = this as IEnrollmentModel;
-    for (const lesson of enrollment.lessons) {
+    for (const lesson of this.lessons) {
         if (lesson.lessonId.toString() === lessonId.toString()) {
             for (const exercise of lesson.exercisesStatus) {
-                if (exercise.exerciseId.toString() === exerciseId.toString()) {
-                    exercise.isCompleted = true;
-                }
+                exercise.isCompleted = exercise.exerciseId.toString() === exerciseId.toString();
             }
         }
     }
-    await enrollment.save();
+
+    await this.save();
 };
 
-// a hook on the progress, if it's 100 create a certificate
-enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
-    const enrollment = this as IEnrollmentModel;
-    if (enrollment.progress !== 100) {
-        return next();
-    }
-    const course_title = await Course.findById(enrollment.courseId).select("title");
-    if (!course_title) {
-        console.log("course not found");
-        return next();
-    }
+enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
+    const course = await Course.findById(this.courseId).populate("lessons");
 
-    let trainee_name = "";
-    let email = "";
-    const individualTrainee = await IndividualTrainee.findById(enrollment.traineeId).select("firstName lastName email");
-    if (individualTrainee) {
-        trainee_name = individualTrainee.firstName + " " + individualTrainee.lastName;
-        email = individualTrainee.email;
-    } else {
-        const corporateTrainee = await CorporateTrainee.findById(enrollment.traineeId).select(
-            "firstName lastName email"
-        );
-        if (corporateTrainee) {
-            trainee_name = corporateTrainee.firstName + " " + corporateTrainee.lastName;
-            email = corporateTrainee.email;
+    if (this.isNew) {
+        if (!course) {
+            return next();
         }
+
+        for (const lessonId of course.lessons) {
+            const lesson = await Lesson.findById(lessonId).populate("exercises");
+            if (lesson) {
+                const lessonStatus: ILessonStatus = {
+                    lessonId: lesson._id,
+                    isVideoWatched: false,
+                    exercisesStatus: []
+                };
+
+                for (const exerciseId of lesson.exercises) {
+                    const exerciseStatus: IExerciseStatus = {
+                        exerciseId: exerciseId,
+                        isCompleted: false
+                    };
+                    lessonStatus.exercisesStatus.push(exerciseStatus);
+                }
+
+                this.lessons.push(lessonStatus);
+            }
+        }
+    } else {
+        let totalElements = this.lessons.length;
+        for (const lesson of this.lessons) {
+            totalElements += lesson.exercisesStatus.length;
+        }
+
+        let totalWatchedVideos = 0;
+        let totalCompletedExercises = 0;
+        for (const lesson of this.lessons) {
+            if (lesson.isVideoWatched) {
+                totalWatchedVideos++;
+            }
+
+            for (const exercise of lesson.exercisesStatus) {
+                if (exercise.isCompleted) {
+                    totalCompletedExercises++;
+                }
+            }
+        }
+
+        this.progress = Math.round(((totalWatchedVideos + totalCompletedExercises) / totalElements) * 100);
     }
-
-    const filePath = createCertificate(trainee_name, course_title!.title, new Date().toDateString(), enrollment._id);
-
-    sendCertificateEmail(email, course_title!.title, filePath);
 
     next();
 });
@@ -205,19 +173,24 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
 // hook on create to send email to instructor and credit him
 enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
     const INSTRUCTOR_CREDIT_PERCENTAGE = 0.4;
-    const enrollment = this as IEnrollmentModel;
+
+    this.$locals.wasNew = this.isNew; // save the isNew state for the post save hook
+
     if (!this.isNew) {
         return next();
     }
-    const course = (await Course.findById(enrollment.courseId)) as ICourseModel;
+
+    const course = (await Course.findById(this.courseId)) as ICourseModel;
     if (!course) {
         console.log("course not found");
         return next();
     }
-    IndividualTrainee.findById(enrollment.traineeId).then((trainee) => {
+
+    IndividualTrainee.findById(this.traineeId).then((trainee) => {
         if (!trainee) {
             return next();
         }
+
         // credit the instructor if an individual trainee enrolled
         Instructor.findById(course.instructor).then(async (instructor) => {
             if (instructor) {
@@ -226,15 +199,66 @@ enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
 
                 instructor.credit(amount);
                 console.log("instructor credited");
+
                 new Settlement({
                     instructorId: instructor._id,
                     courseId: course._id,
                     amount: amount
                 }).save();
+
                 sendEnrollmentEmail(instructor.email, course.title);
             }
         });
     });
+});
+
+// a hook on the progress, if it's 100 create a certificate
+enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
+    if (this.progress !== 100) {
+        return next();
+    }
+
+    let traineeName = "";
+    let email = "";
+    const individualTrainee = await IndividualTrainee.findById(this.traineeId).select("firstName lastName email");
+    if (individualTrainee) {
+        traineeName = individualTrainee.firstName + " " + individualTrainee.lastName;
+        email = individualTrainee.email;
+    } else {
+        const corporateTrainee = await CorporateTrainee.findById(this.traineeId).select("firstName lastName email");
+
+        if (corporateTrainee) {
+            traineeName = corporateTrainee.firstName + " " + corporateTrainee.lastName;
+            email = corporateTrainee.email;
+        }
+    }
+
+    const courseTitle = await Course.findById(this.courseId).select("title");
+    if (!courseTitle) {
+        console.log("course not found");
+        return next();
+    }
+
+    const filePath = createCertificate(traineeName, courseTitle!.title, new Date().toDateString(), this._id);
+
+    sendCertificateEmail(email, courseTitle!.title, filePath);
+
+    next();
+});
+
+// a post save hook to update the course's enrollments count
+enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
+    if (!this.$locals.wasNew) {
+        return next();
+    }
+
+    try {
+        await Course.findByIdAndUpdate(this.courseId, { $inc: { enrollmentsCount: 1 } }).exec();
+    } catch (err) {
+        console.log("error updating course's enrollments count");
+    } finally {
+        next();
+    }
 });
 
 export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);
