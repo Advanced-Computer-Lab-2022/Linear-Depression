@@ -60,12 +60,13 @@ const updateRating = async (req: Request, res: Response) => {
             comment: req.body.comment,
             rating: req.body.rating
         }
-    ).then((rating) => {
+    ).then(async (rating) => {
         if (!rating) {
             return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Rating not found"
             });
         }
+        await instructor?.save();
         res.status(StatusCodes.OK).json({ rating });
     });
 };

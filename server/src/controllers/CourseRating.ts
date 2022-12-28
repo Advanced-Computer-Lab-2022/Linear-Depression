@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import Rating, { IRatingModel } from "../models/Rating";
 import CorporateTrainee from "../models/CorporateTrainee";
 import IndividualTrainee from "../models/IndividualTrainee";
-import Course, { ICourse } from "../models/Course";
+import Course, { ICourse, ICourseModel } from "../models/Course";
 
 const createRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
@@ -107,14 +107,14 @@ const updateRating = async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
     const traineeId = req.body.userId;
 
-    const course: ICourse = (await Course.findById(courseId).then((course) => {
+    const course: ICourseModel = (await Course.findById(courseId).then((course) => {
         if (!course) {
             return res.status(StatusCodes.NOT_FOUND).json({
                 message: "Course not found"
             });
         }
         return course;
-    })) as ICourse;
+    })) as ICourseModel;
 
     // validate traineeId
     if (req.body.traineeId) {
@@ -143,7 +143,10 @@ const updateRating = async (req: Request, res: Response) => {
 
                 return rating
                     .save()
-                    .then((rating) => res.status(StatusCodes.OK).json({ rating }))
+                    .then(async (rating) => {
+                        await course.save();
+                        res.status(StatusCodes.OK).json({ rating });
+                    })
                     .catch((error) => res.status(StatusCodes.BAD_REQUEST).json({ error }));
             } else {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
