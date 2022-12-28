@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { fetchMyReview } from "@internals/services";
+import { fetchMyReviewForInstructor } from "@internals/services";
 import { ReviewSubmission } from "@internals/types";
 
-const useFetchMyReview = (courseId: string) => {
+const useFetchMyReviewForInstructor = (courseId: string) => {
     const [review, setReview] = useState({
         data: null as ReviewSubmission | null,
         loading: true,
@@ -11,7 +11,7 @@ const useFetchMyReview = (courseId: string) => {
     });
 
     useEffect(() => {
-        fetchMyReview(courseId)
+        fetchMyReviewForInstructor(courseId)
             .then((data) => {
                 setReview({
                     data: data,
@@ -31,4 +31,4 @@ const useFetchMyReview = (courseId: string) => {
     return { review };
 };
 
-export default useFetchMyReview;
+export default useFetchMyReviewForInstructor;

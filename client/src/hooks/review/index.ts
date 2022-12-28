@@ -1,3 +1,4 @@
 export { default as useFetchMyReviews } from "./useFetchMyReviews";
 export { default as useFetchCourseReviews } from "./useFetchCourseReviews";
-export { default as useFetchMyReview } from "./useFetchMyReview";
+export { default as useFetchMyReviewForCourse } from "./useFetchMyReviewForCourse";
+export { default as useFetchMyReviewForInstructor } from "./useFetchMyReviewForInstructor";

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
 
+import { useFetchMyReviewForCourse, useFetchMyReviewForInstructor } from "@internals/hooks";
 import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
 import { addCourseReview, addInstructorReview } from "@internals/services";
 import { ReviewSubmission } from "@internals/types";
@@ -41,6 +42,11 @@ const AddReview: React.FC = () => {
     const instructorId = useAppSelector((state) => state.course).data?.instructor._id;
     const dispatch = useAppDispatch();
 
+    const courseReview = useFetchMyReviewForCourse(courseId);
+    const instructorReview = useFetchMyReviewForInstructor(instructorId);
+
+    console.log(courseReview, instructorReview);
+
     const [formData, setFormData] = useState({
         courseComment: "",
         courseRating: 0,
@@ -50,7 +56,7 @@ const AddReview: React.FC = () => {
     const [formErrors, setFormErrors] = useState(new Map());
     const [isNew, _] = useState(true);
 
-    const handleSubmit = async () => {
+    const handleCreate = async () => {
         validateFormData(formData, validationRules)
             .then(async (data: any) => {
                 const validatedData = data as unknown as ReviewSubmission;
@@ -178,7 +184,7 @@ const AddReview: React.FC = () => {
                 <Button onClick={handleClose}>Cancel</Button>
 
                 {isNew ? (
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <Button onClick={handleCreate}>Submit</Button>
                 ) : (
                     <Button onClick={handleUpdate}>Update</Button>
                 )}
