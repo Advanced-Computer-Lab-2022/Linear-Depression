@@ -13,5 +13,7 @@ router.delete("/:instructorId", controller.deleteInstructor);
 
 router.post("/:instructorId/ratings", authenticated, ratingController.createRating);
 router.delete("/:instructorId/ratings/:ratingId", authenticated, ratingController.deleteRating);
+router.post("/:instructorId/ratings/:ratingId", authenticated, ratingController.updateRating);
+router.get("/:instructorId/ratings", ratingController.getCourseRating);
 
 export default router;
