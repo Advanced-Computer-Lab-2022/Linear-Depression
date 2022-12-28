@@ -4,6 +4,7 @@ interface ReportFormProps {
     type: ReportType;
     subject: string;
     description: string;
+    courseId?: string;
 }
 
 export default ReportFormProps;

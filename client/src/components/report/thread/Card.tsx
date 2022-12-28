@@ -9,12 +9,20 @@ interface CardProps {
     authorType: string;
     createdAt: string;
     content: string;
+    isOwner?: boolean;
+    courseId?: string;
 }
 
-const Card: React.FC<CardProps> = ({ authorName, authorType, createdAt, content }) => {
+const Card: React.FC<CardProps> = ({ authorName, authorType, createdAt, content, isOwner, courseId }) => {
     return (
         <ThreadCardContainer>
-            <Author name={authorName} type={authorType} date={moment(createdAt).format("MMMM Do, YYYY - hh:mm A")} />
+            <Author
+                name={authorName}
+                type={authorType}
+                date={moment(createdAt).format("MMMM Do, YYYY - hh:mm A")}
+                isOwner={isOwner}
+                courseId={courseId}
+            />
 
             <Box sx={{ mt: 2 }}>
                 <Typography level="h6" sx={{ alignSelf: "flex-start" }}>

@@ -15,7 +15,7 @@ import {
     Typography
 } from "@mui/material";
 import { useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { Copyright } from "@internals/components";
@@ -34,11 +34,8 @@ const theme = createTheme({
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { auth, setAuth } = useAuth();
-
-    const from = location.state?.from?.pathname || "/";
 
     const [formErrors, setFormErrors] = useState(new Map());
     const [showAlert, setShowAlert] = useState(false);
@@ -62,7 +59,7 @@ const Register: React.FC = () => {
                     })
                     .then((data) => {
                         setAuth(data.accessToken, data.userType);
-                        navigate(from);
+                        navigate("/privacy-policy");
                     })
                     .catch((err) => {
                         if (err.response?.status === 400 && err.response?.data?.error?.code === 11000) {
@@ -107,7 +104,7 @@ const Register: React.FC = () => {
     };
 
     if (auth.isLoggedIn) {
-        return <Navigate to={from} />;
+        return <Navigate to="/" />;
     }
 
     return (

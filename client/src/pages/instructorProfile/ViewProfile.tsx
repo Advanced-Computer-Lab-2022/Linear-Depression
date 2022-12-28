@@ -1,6 +1,7 @@
 import EmailIcon from "@mui/icons-material/Email";
 import React from "react";
 import StarRatings from "react-star-ratings";
+import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { Avatar } from "@internals/components";
@@ -72,6 +73,8 @@ const CustomEmailIcon = styled(EmailIcon)`
 const ViewProfile: React.FC<{
     instructor: Instructor;
 }> = ({ instructor }) => {
+    const rating = Number(instructor.averageRating.toFixed(1));
+
     return (
         <Header>
             <div>
@@ -82,9 +85,9 @@ const ViewProfile: React.FC<{
                     <Name>{`${instructor.firstName} ${instructor.lastName}`}</Name>
                     <Biography>{instructor.biography}</Biography>
                     <HorizontalContainer>
-                        <Rating>{instructor.averageRating}</Rating>
+                        <Rating>{rating}</Rating>
                         <StyledStarRatings
-                            rating={instructor.averageRating}
+                            rating={rating}
                             starDimension="14px"
                             starSpacing="1px"
                             starRatedColor="#f2ca8c"
@@ -94,6 +97,16 @@ const ViewProfile: React.FC<{
                         <CustomEmailIcon />
                         {instructor.email}
                     </Email>
+
+                    <button
+                        onClick={() =>
+                            openModal({
+                                name: "viewMySettlements"
+                            })
+                        }
+                    >
+                        my settlements
+                    </button>
                 </div>
             </Container>
         </Header>

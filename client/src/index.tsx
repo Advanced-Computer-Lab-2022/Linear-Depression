@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider } from "@internals/contexts";
+import { AuthProvider, ToastProvider } from "@internals/contexts";
 import { store } from "@internals/redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
@@ -13,7 +13,9 @@ root.render(
     <BrowserRouter>
         <Provider store={store}>
             <AuthProvider>
-                <App />
+                <ToastProvider>
+                    <App />
+                </ToastProvider>
             </AuthProvider>
         </Provider>
     </BrowserRouter>

@@ -85,7 +85,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         await instructor.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = undefined!;
+        ratingData.traineeId = undefined!;
         const { trainee, token } = await getTraineeToken();
         await trainee.save();
         const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
@@ -118,7 +118,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         const { token, instructor } = await getInstructorToken();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = new mongoose.Types.ObjectId();
+        ratingData.traineeId = new mongoose.Types.ObjectId();
 
         const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
@@ -129,7 +129,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         await instructor.save();
 
         const ratingData = ratingFactory();
-        ratingData.traineeID = undefined!;
+        ratingData.traineeId = undefined!;
         const { trainee, token } = await getTraineeToken();
         await trainee.save();
         const res = await request.post(`/instructors/${instructor._id}/ratings`).set("Cookie", token).send(ratingData);
@@ -156,7 +156,7 @@ describe("DELETE /instructors/:instructorId/ratings/:ratingId", () => {
         await rating.save();
 
         const { token, trainee } = await getTraineeToken();
-        rating.traineeID = trainee._id;
+        rating.traineeId = trainee._id;
         await rating.save();
         const instructor = new Instructor(instructorFactory());
         instructor.ratings.push(rating._id);

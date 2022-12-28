@@ -9,6 +9,6 @@ export function ratingFactory(): IRating {
             min: 1,
             max: 5
         }),
-        traineeID: new mongoose.Types.ObjectId(faker.database.mongodbObjectId())
+        traineeId: new mongoose.Types.ObjectId(faker.database.mongodbObjectId())
     };
 }

@@ -6,14 +6,10 @@ const addCourseReview = (courseId: string, rating: number, comment: string) => {
     const REVIEW_POST_URL = `${config.API_URL}/courses/${courseId}/ratings`;
     return new Promise((resolve, reject) => {
         axios
-            .post(
-                REVIEW_POST_URL,
-                {
-                    rating,
-                    comment
-                },
-                { withCredentials: true }
-            )
+            .post(REVIEW_POST_URL, {
+                rating,
+                comment
+            })
             .then((res) => {
                 resolve(res.data);
             })
