@@ -12,6 +12,7 @@ import Profile from "./Profile";
 import Promotion from "./Promotion";
 import RefundRequest from "./RefundRequest";
 import Review from "./Review";
+import ReviewSubmission from "./ReviewSubmission";
 import { ReportStatus, ReportType, UserType } from "./enums/index";
 import { Report, ReportThread, ReportFormProps } from "./report/index";
 
@@ -35,7 +36,8 @@ export {
     type ReportThread,
     type ReportFormProps,
     type AccessRequest,
-    type RefundRequest
+    type RefundRequest,
+    type ReviewSubmission
 };
 
 export * from "./auth";
