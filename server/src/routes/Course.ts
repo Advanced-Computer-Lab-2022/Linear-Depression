@@ -20,7 +20,7 @@ router.get("/subjects", controller.listSubjects);
 router.get("/:courseId", controller.readCourse);
 router.get("/:courseId/ratings", ratingController.listRatings);
 router.get(
-    "/:courseId/my-ratings",
+    "/:courseId/my-rating",
     isAuthenticated,
     isAuthorized([UserType.INDIVIDUAL_TRAINEE, UserType.CORPORATE_TRAINEE]),
     isRatingOwner,
