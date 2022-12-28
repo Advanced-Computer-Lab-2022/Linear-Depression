@@ -25,6 +25,12 @@ router.get(
     isAuthorized([UserType.INDIVIDUAL_TRAINEE, UserType.CORPORATE_TRAINEE]),
     ratingController.readRating
 );
+router.put(
+    "/:courseId/my-rating",
+    isAuthenticated,
+    isAuthorized([UserType.INDIVIDUAL_TRAINEE, UserType.CORPORATE_TRAINEE]),
+    ratingController.updateRating
+);
 
 // instructor
 router.post("/", isAuthenticated, isAuthorized([UserType.INSTRUCTOR]), controller.createCourse);
