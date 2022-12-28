@@ -173,7 +173,7 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const updateCourse = (req: Request, res: Response, _next: NextFunction) => {
+const updateCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
 
     return Course.findById(courseId)
@@ -192,7 +192,7 @@ const updateCourse = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deleteCourse = (req: Request, res: Response, _next: NextFunction) => {
+const deleteCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
 
     return Course.findByIdAndDelete(courseId)
@@ -204,14 +204,15 @@ const deleteCourse = (req: Request, res: Response, _next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const listSubjects = (req: Request, res: Response, _next: NextFunction) => {
+const listSubjects = async (req: Request, res: Response, _next: NextFunction) => {
+    req.query.isPublished = "true";
     return Course.find(req.query)
         .distinct("subject")
         .then((subjects) => res.status(StatusCodes.OK).json({ subjects }))
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-function searchWithTitleSubject(
+async function searchWithTitleSubject(
     searchTerm: string,
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     currencyRate: number,
@@ -241,7 +242,7 @@ function searchWithTitleSubject(
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 }
 
-function searchWithInstructors(
+async function searchWithInstructors(
     instructors: IInstructorModel[],
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     currencyRate: number,
@@ -276,7 +277,7 @@ function searchWithInstructors(
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 }
 
-function listCoursesOnlyFilter(
+async function listCoursesOnlyFilter(
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     currencyRate: number,
     res: Response<any, Record<string, any>>,
