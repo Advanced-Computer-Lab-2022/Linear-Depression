@@ -22,6 +22,7 @@ import EnrollmentRouter from "./routes/Enrollment";
 import AuthRouter from "./routes/Auth";
 import MeRouter from "./routes/Me";
 import PaymentRouter from "./routes/Payment";
+import ReportThreadRouter from "./routes/ReportThread";
 
 import { populateTestDb } from "./utils/populateTestDb";
 
@@ -39,9 +40,9 @@ app.use(
         credentials: true
     })
 );
-app.use(express.urlencoded({ extended: true }));
+
 app.use("/payment/stripe-webhook", express.raw({ type: "*/*" }));
-app.use(express.json());
+
 app.use(cookieParser());
 const swaggerFile = require("./swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -70,7 +71,22 @@ app.use((req, res, next) => {
 app.use(logger);
 app.use(rateLimiter());
 
-/* Routers*/
+/* --- Health Check --- */
+app.get("/ping", (req, res) => {
+    return res.status(StatusCodes.OK).json({ message: "pong" });
+});
+/* --- End Health Check --- */
+
+/* --- Create AdminJS --- */
+AdminJS.registerAdapter({ Database, Resource });
+app.use(express.static(path.join(__dirname, "../public")));
+CreateAdminJS(app);
+/* --- End Create AdminJS --- */
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+/* Routers */
 app.use("/courses", CourseRouter);
 app.use("/instructors", InstructorRouter);
 app.use("/corporate-trainees", CorporateTraineeRouter);
@@ -81,22 +97,7 @@ app.use("/enrollments", EnrollmentRouter);
 app.use("/auth", AuthRouter);
 app.use("/me", MeRouter);
 app.use("/payment", PaymentRouter);
-
-/*Health Check*/
-app.get("/ping", (req, res) => {
-    return res.status(StatusCodes.OK).json({ message: "pong" });
-});
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-/*Health Check*/
-
-/* --- Create AdminJS --- */
-AdminJS.registerAdapter({ Database, Resource });
-app.use(express.static(path.join(__dirname, "../public")));
-CreateAdminJS(app);
-/* --- End Create AdminJS --- */
+app.use("/report-thread", ReportThreadRouter);
 
 /* --- Basic Routes --- */
 // Health Check

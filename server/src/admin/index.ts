@@ -1,18 +1,20 @@
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
-import { AdminResource } from "./resources/Admin";
-import { InstructorResource } from "./resources/Instructor";
-import { AccessRequestResource } from "./resources/AccessRequest";
-import { CorporateTraineeResource } from "./resources/CorporateTrainee";
-import { ReportResource } from "./resources/Report";
-import { CourseResource } from "./resources/Course";
+
 import Lesson from "../models/Lesson";
 import Exercise from "../models/Exercise";
 import Rating from "../models/Rating";
 import Promotion from "../models/Promotion";
 import Enrollment from "../models/Enrollment";
 import User from "../models/User";
-import ReportThread from "../models/ReportThread";
+
+import { AdminResource } from "./resources/Admin";
+import { InstructorResource } from "./resources/Instructor";
+import { AccessRequestResource } from "./resources/AccessRequest";
+import { CorporateTraineeResource } from "./resources/CorporateTrainee";
+import { ReportResource } from "./resources/Report";
+import { ReportThreadResource } from "./resources/ReportThread";
+import { CourseResource } from "./resources/Course";
 import { RefundRequestResource } from "./resources/RefundRequest";
 import { IndividualTraineeResource } from "./resources/IndividualTrainee";
 
@@ -26,6 +28,7 @@ export function CreateAdminJS(app: any) {
             IndividualTraineeResource,
             AdminResource,
             ReportResource,
+            ReportThreadResource,
             CourseResource,
             AccessRequestResource,
             RefundRequestResource,
@@ -37,12 +40,6 @@ export function CreateAdminJS(app: any) {
             },
             {
                 resource: User,
-                options: {
-                    navigation: false
-                }
-            },
-            {
-                resource: ReportThread,
                 options: {
                     navigation: false
                 }
@@ -86,6 +83,30 @@ export function CreateAdminJS(app: any) {
         locale: enLocale
     });
 
-    const router = AdminJSExpress.buildRouter(admin);
+    const authenticate = async (email: string, password: string) => {
+        const user = await User.findOne({ email, __t: "Admin" });
+
+        if (user && user.isCorrectPassword(password)) {
+            return user;
+        }
+
+        return null;
+    };
+
+    const router = AdminJSExpress.buildAuthenticatedRouter(
+        admin,
+        {
+            cookieName: process.env.ADMIN_COOKIE_NAME as string,
+            cookiePassword: process.env.ADMIN_COOKIE_PASSWORD as string,
+            authenticate
+        },
+        null,
+        {
+            resave: false,
+            saveUninitialized: true,
+            secret: process.env.ADMIN_COOKIE_PASSWORD as string
+        }
+    );
+
     app.use(admin.options.rootPath, router);
 }
