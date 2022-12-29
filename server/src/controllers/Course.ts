@@ -179,6 +179,10 @@ const updateCourse = async (req: Request, res: Response, _next: NextFunction) =>
     return Course.findById(courseId)
         .then((course) => {
             if (course) {
+                if (course.isPublished) {
+                    return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is published" });
+                }
+
                 course.set(req.body);
 
                 return course
@@ -196,11 +200,17 @@ const deleteCourse = async (req: Request, res: Response, _next: NextFunction) =>
     const courseId = req.params.courseId;
 
     return Course.findByIdAndDelete(courseId)
-        .then((course) =>
-            course
-                ? res.status(StatusCodes.OK).json({ course, message: "Deleted" })
-                : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" })
-        )
+        .then((course) => {
+            if (course) {
+                if (course.isPublished) {
+                    return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is published" });
+                }
+                return res.status(StatusCodes.OK).json({ message: "Course is deleted Successfully" });
+            } else {
+                return res.status(StatusCodes.NOT_FOUND).json({ message: "Course Not found" });
+            }
+        })
+
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
@@ -235,6 +245,7 @@ async function searchWithTitleSubject(
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
+            courses = courses.filter((course) => course.isPublished);
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course) => ({ ...course.toObject({ virtuals: true }), currency }));
             res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
@@ -268,6 +279,7 @@ async function searchWithInstructors(
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
+            courses = courses.filter((course) => course.isPublished);
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
                 return { ...course.toObject({ virtuals: true }), currency };
@@ -299,6 +311,7 @@ async function listCoursesOnlyFilter(
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
+            courses = courses.filter((course) => course.isPublished);
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
                 return { ...course.toObject({ virtuals: true }), currency };
