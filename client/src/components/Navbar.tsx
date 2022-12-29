@@ -1,5 +1,6 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import BugReportIcon from "@mui/icons-material/BugReport";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useContext, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -46,6 +47,12 @@ const Navbar: React.FC<{ search?: boolean }> = ({ search = false }) => {
             label: "Profile",
             onClick: () => navigate("/me/profile"),
             icon: <AccountCircleIcon />
+        },
+
+        {
+            label: "Reports",
+            onClick: () => navigate("/me/reports"),
+            icon: <BugReportIcon />
         },
         {
             label: "Change Password",
