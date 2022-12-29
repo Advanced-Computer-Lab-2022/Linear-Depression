@@ -1,7 +1,11 @@
 import EmailIcon from "@mui/icons-material/Email";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+import LoadingButton from "@mui/lab/LoadingButton";
 import React from "react";
 import styled from "styled-components";
-import { CorporateTrainee, IndividualTrainee } from "@internals/types";
+import { useAuth } from "@internals/hooks";
+import { CorporateTrainee, IndividualTrainee, User } from "@internals/types";
+import { openModal } from "react-url-modal";
 
 import { Avatar } from "@internals/components";
 
@@ -12,7 +16,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-    height: 300px;
+    height: 200px;
     background-color: #1e1f1f;
     padding: 32px 96px;
     color: white;
@@ -28,7 +32,7 @@ const Name = styled.div`
     margin-bottom: 8px;
 `;
 
-const Email = styled.div`
+const Section = styled.div`
     font-size: 19px;
     color: white;
     max-width: 700px;
@@ -41,10 +45,29 @@ const Email = styled.div`
 const CustomEmailIcon = styled(EmailIcon)`
     margin-right: 8px;
 `;
+const CustomCompanyIcon = styled(CorporateFareIcon)`
+    margin-right: 8px;
+`;
+const Button = styled(LoadingButton)`
+    width: 240px;
+    height: 48px;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: #a435f0;
+    border: none;
+    color: white;
+    &:hover {
+        background-color: #8a2ed6;
+        color: white;
+    }
+`;
 
 const ViewProfile: React.FC<{
-    trainee: CorporateTrainee | IndividualTrainee;
+    trainee: CorporateTrainee | IndividualTrainee | any;
 }> = ({ trainee }) => {
+    const { auth } = useAuth();
     return (
         <Header>
             <div>
@@ -53,12 +76,31 @@ const ViewProfile: React.FC<{
             <Container>
                 <div>
                     <Name>{`${trainee.firstName} ${trainee.lastName}`}</Name>
-                    <Email>
+                    <Section>
                         <CustomEmailIcon />
                         {trainee.email}
-                    </Email>
+                    </Section>
+                    {trainee.corporate && (
+                        <Section>
+                            <CustomCompanyIcon />
+                            {trainee.corporate}
+                        </Section>
+                    )}
                 </div>
             </Container>
+
+            {auth.userType == User.INDIVIDUAL_TRAINEE && (
+                <Button
+                    onClick={() =>
+                        openModal({
+                            name: "viewMyWallet"
+                        })
+                    }
+                >
+                    {" "}
+                    My Wallet
+                </Button>
+            )}
         </Header>
     );
 };
