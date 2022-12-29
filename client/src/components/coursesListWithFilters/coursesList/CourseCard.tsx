@@ -109,15 +109,19 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     {instructor && (
                         <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
                     )}
-                    <CourseRatingContainer>
-                        <CourseRatingText>{averageRating}</CourseRatingText>
-                        <StarRatings
-                            rating={averageRating}
-                            starDimension="14px"
-                            starSpacing="1px"
-                            starRatedColor="#E59719"
-                        />
-                    </CourseRatingContainer>
+                    {averageRating > 0 ? (
+                        <CourseRatingContainer>
+                            <CourseRatingText>{averageRating}</CourseRatingText>
+                            <StarRatings
+                                rating={averageRating}
+                                starDimension="14px"
+                                starSpacing="1px"
+                                starRatedColor="#E59719"
+                            />
+                        </CourseRatingContainer>
+                    ) : (
+                        <br />
+                    )}
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
                 <CoursePrice currency={currency} price={price} promotion={activePromotion} />
