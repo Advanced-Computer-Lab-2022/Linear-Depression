@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogContentText, DialogActions, TextField, But
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useAuth } from "@internals/hooks";
 import { getProfile, useAppDispatch } from "@internals/redux";
 import { editProfile } from "@internals/services";
 
@@ -25,6 +26,8 @@ const EditProfile: React.FC<{
         closeModal();
     };
 
+    const { auth } = useAuth();
+
     const { instructorFirstName, instructorLastName, instructorEmail, instructorBiography } = params;
 
     const [firstName, setFirstName] = useState(instructorFirstName);
@@ -42,7 +45,7 @@ const EditProfile: React.FC<{
 
         editProfile(profile)
             .then(() => {
-                dispatch(getProfile());
+                dispatch(getProfile(auth.accessToken));
                 closeModal();
             })
             .catch((err) => {
