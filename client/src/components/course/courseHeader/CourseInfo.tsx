@@ -6,7 +6,7 @@ import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import BadgeRatedEnrolled from "./courseInfo/BadgeRatedEnrolled";
-import { useAuth } from "@internals/hooks";
+import { useAuth, useToast } from "@internals/hooks";
 import { getCourse, useAppDispatch } from "@internals/redux";
 import { editCourse } from "@internals/services";
 import { User } from "@internals/types";
@@ -67,6 +67,8 @@ const CourseInfo: React.FC<{
         auth: { userType }
     } = useAuth();
 
+    const { showToast } = useToast();
+
     rating = Number(rating.toFixed(1));
     const dispatch = useAppDispatch();
 
@@ -87,9 +89,17 @@ const CourseInfo: React.FC<{
         editCourse(courseId, { isPublished: true })
             .then(() => {
                 dispatch(getCourse(courseId));
+                showToast({
+                    type: "success",
+                    message: "Course published successfully"
+                });
             })
             .catch((err) => {
                 console.log(err);
+                showToast({
+                    type: "error",
+                    message: "Publishing failed, please try again later"
+                });
             })
             .finally(() => {
                 setLoading(false);
