@@ -29,7 +29,7 @@ const getUserName = (userType: User, data: any) => {
     }
 };
 
-const Navbar = () => {
+const Navbar: React.FC<{ search?: boolean }> = ({ search = false }) => {
     const { auth, logout: authLogout } = useAuth();
     const navigate = useNavigate();
 
@@ -107,32 +107,34 @@ const Navbar = () => {
                             </a>
                         </li>
                         {/* TODO: make search field fill the navbar */}
-                        <li className="search-container container-fluid flex-fill">
-                            <button className="search-button" type="button">
-                                <img
-                                    className="search-button-img"
-                                    src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
-                                    alt="search icon"
-                                    onClick={() => {
-                                        searchParams.delete("searchTerm");
-                                        if (searchTerm.length !== 0) {
-                                            searchParams.append("searchTerm", searchTerm);
-                                        }
-                                        setSearchParams(searchParams);
+                        {search && (
+                            <li className="search-container container-fluid flex-fill">
+                                <button className="search-button" type="button">
+                                    <img
+                                        className="search-button-img"
+                                        src="https://img.icons8.com/ios-glyphs/344/search--v1.png"
+                                        alt="search icon"
+                                        onClick={() => {
+                                            searchParams.delete("searchTerm");
+                                            if (searchTerm.length !== 0) {
+                                                searchParams.append("searchTerm", searchTerm);
+                                            }
+                                            setSearchParams(searchParams);
+                                        }}
+                                    />
+                                </button>
+                                <input
+                                    id="search-box"
+                                    className="search-box"
+                                    type="text"
+                                    placeholder="Search for anything"
+                                    aria-label="Search"
+                                    onChange={(e) => {
+                                        setSearchTerm(e.target.value);
                                     }}
                                 />
-                            </button>
-                            <input
-                                id="search-box"
-                                className="search-box"
-                                type="text"
-                                placeholder="Search for anything"
-                                aria-label="Search"
-                                onChange={(e) => {
-                                    setSearchTerm(e.target.value);
-                                }}
-                            />
-                        </li>
+                            </li>
+                        )}
                     </ul>
                     <ul className="navbar-nav buttons-list">
                         <li className="nav-item">
