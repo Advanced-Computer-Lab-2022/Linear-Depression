@@ -22,12 +22,12 @@ const MyCourses: React.FC = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar search={true} />
             {!loading && (
                 <CoursesListWithFilters
                     courses={data}
                     addCourse={true}
-                    showPrice={false}
+                    showPrice={auth.userType === User.INSTRUCTOR}
                     showStatus={auth.userType === User.INSTRUCTOR}
                 />
             )}
