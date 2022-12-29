@@ -302,6 +302,15 @@ async function listCoursesOnlyFilter(
     currency: string,
     skipPublishCheck: boolean = false
 ) {
+    let sortOptions = {};
+    if (req.query.sort) {
+        if (req.query.sort === "popularity") {
+            sortOptions = { enrollmentsCount: -1 };
+        } else if (req.query.sort === "new") {
+            sortOptions = { createdAt: -1 };
+        }
+    }
+
     return Course.find(req.query)
         .populate("instructor", "firstName lastName")
         .populate("ratings")
@@ -317,6 +326,7 @@ async function listCoursesOnlyFilter(
             select: "name discountPercent startDate endDate",
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
+        .sort(sortOptions)
         .then((courses) => {
             if (!skipPublishCheck) {
                 courses = courses.filter((course) => course.isPublished);

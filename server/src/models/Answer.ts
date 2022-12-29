@@ -23,14 +23,14 @@ const answerSchema = new mongoose.Schema(
 
 answerSchema.virtual("IndividualTrainee", {
     ref: "IndividualTrainee",
-    localField: "traineeID",
+    localField: "traineeId",
     foreignField: "_id",
     justOne: true
 });
 
 answerSchema.virtual("CorporateTrainee", {
     ref: "CorporateTrainee",
-    localField: "traineeID",
+    localField: "traineeId",
     foreignField: "_id",
     justOne: true
 });

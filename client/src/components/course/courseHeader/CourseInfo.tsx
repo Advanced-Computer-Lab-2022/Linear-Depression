@@ -1,3 +1,4 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Chip, Tooltip } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
@@ -37,7 +38,7 @@ const Instructor = styled.span`
     text-decoration: underline;
 `;
 
-const Button = styled.button`
+const Button = styled(LoadingButton)`
     width: 240px;
     height: 48px;
     font-weight: 700;
@@ -47,6 +48,10 @@ const Button = styled.button`
     background-color: #a435f0;
     border: none;
     color: white;
+    &:hover {
+        background-color: #8a2ed6;
+        color: white;
+    }
 `;
 
 const CourseInfo: React.FC<{
@@ -82,7 +87,7 @@ const CourseInfo: React.FC<{
                 Created by <Instructor>{instructor}</Instructor>
             </div>
             {(userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
-                <Button onClick={onClick}>Add Review</Button>
+                <Button onClick={onClick}>Review</Button>
             )}
             <br />
             {userType === User.INSTRUCTOR &&

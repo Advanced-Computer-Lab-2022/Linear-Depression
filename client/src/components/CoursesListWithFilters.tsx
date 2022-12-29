@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
+import BrowseBy from "./coursesListWithFilters/BrowseBy";
 import CoursesList from "./coursesListWithFilters/CoursesList";
 import Filter from "./coursesListWithFilters/Filter";
 import { Course as ICourseProps } from "@internals/types";
 
-const CoursesContainer = styled.div`
+const PageContentContainer = styled.div`
     display: flex;
 `;
 
@@ -13,18 +14,29 @@ const SideMenu = styled.div`
     width: 20%;
 `;
 
+const CoursesListContainer = styled.div`
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+`;
+
 const CoursesListWithFilters: React.FC<{
     courses: ICourseProps[];
     addCourse?: boolean;
     showStatus?: boolean;
-}> = ({ courses, showStatus }) => {
+    showPrice?: boolean;
+}> = ({ courses, showPrice, showStatus }) => {
     return (
-        <CoursesContainer>
+        <PageContentContainer>
             <SideMenu>
                 <Filter />
             </SideMenu>
-            <CoursesList courses={courses} showStatus={showStatus} />
-        </CoursesContainer>
+
+            <CoursesListContainer>
+                <BrowseBy />
+                <CoursesList courses={courses} showPrice={showPrice} showStatus={showStatus} />
+            </CoursesListContainer>
+        </PageContentContainer>
     );
 };
 

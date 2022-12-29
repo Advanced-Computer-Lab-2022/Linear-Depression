@@ -5,16 +5,18 @@ import CourseCard from "./coursesList/CourseCard";
 import { Course as ICourseProps } from "@internals/types";
 
 const CoursesListContainer = styled.div`
-    width: 80%;
-    margin-left: auto !important;
     justify-content: right;
 `;
 
-const CoursesList: React.FC<{ courses: ICourseProps[]; showStatus: boolean }> = ({ courses, showStatus }) => {
+const CoursesList: React.FC<{ courses: ICourseProps[]; showPrice: boolean; showStatus: boolean }> = ({
+    courses,
+    showPrice,
+    showStatus
+}) => {
     return (
         <CoursesListContainer>
             {courses.map((course) => (
-                <CourseCard key={course._id} course={course} showStatus={showStatus} />
+                <CourseCard key={course._id} course={course} showPrice={showPrice} showStatus={showStatus} />
             ))}
         </CoursesListContainer>
     );

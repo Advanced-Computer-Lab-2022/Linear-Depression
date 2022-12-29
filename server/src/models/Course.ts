@@ -14,6 +14,7 @@ export interface ICourse {
     averageRating: number;
     ratings: Array<mongoose.Types.ObjectId>;
     totalHours: number;
+    enrollmentsCount: number;
     activePromotion?: mongoose.Types.ObjectId;
     preview: string;
     thumbnail: string;
@@ -24,36 +25,42 @@ export interface ICourse {
 
 export interface ICourseModel extends ICourse, Document {}
 
-const courseSchema = new Schema({
-    title: { type: String, required: true, trim: true },
-    description: { type: String, required: true, trim: true },
-    instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
-    subject: { type: String, required: true },
-    price: { type: Number, required: true, min: 0 },
-    averageRating: {
-        type: Number,
-        min: 0,
-        max: 5,
-        default: 0
+const courseSchema = new Schema(
+    {
+        title: { type: String, required: true, trim: true },
+        description: { type: String, required: true, trim: true },
+        instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
+        subject: { type: String, required: true },
+        price: { type: Number, required: true, min: 0 },
+        averageRating: {
+            type: Number,
+            min: 0,
+            max: 5,
+            default: 0
+        },
+        ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
+        totalHours: {
+            type: Number,
+            // calculate total hours from lessons
+            default: 10
+        },
+        enrollmentsCount: { type: Number, default: 0 },
+        discount: { type: Number, min: 0, max: 100, default: 0 },
+        activePromotion: { type: mongoose.Types.ObjectId, ref: "Promotion", default: null },
+        preview: {
+            type: String,
+            validate: {
+                validator: isValidVideoLink,
+                message: "Invalid URL, must be a valid YouTube link"
+            }
+        },
+        lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
+        isPublished: { type: Boolean, default: false }
     },
-    ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
-    totalHours: {
-        type: Number,
-        // calculate total hours from lessons
-        default: 10
-    },
-    discount: { type: Number, min: 0, max: 100, default: 0 },
-    activePromotion: { type: mongoose.Types.ObjectId, ref: "Promotion", default: null },
-    preview: {
-        type: String,
-        validate: {
-            validator: isValidVideoLink,
-            message: "Invalid URL, must be a valid YouTube link"
-        }
-    },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
-    isPublished: { type: Boolean, default: false }
-});
+    {
+        timestamps: true
+    }
+);
 
 courseSchema.virtual("thumbnail").get(function (this: ICourseModel) {
     return getVideoThumbnailUrl(this.preview);

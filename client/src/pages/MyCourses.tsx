@@ -10,10 +10,9 @@ import { User } from "@internals/types";
 const MyCourses: React.FC = () => {
     useFetchMyCourses();
     useGetInstructorContractStatus();
+    const { auth } = useAuth();
 
     const { data, loading } = useAppSelector((state) => state.coursesList);
-
-    const { auth } = useAuth();
 
     const onClick = () => {
         openModal({
@@ -28,12 +27,15 @@ const MyCourses: React.FC = () => {
                 <CoursesListWithFilters
                     courses={data}
                     addCourse={true}
+                    showPrice={false}
                     showStatus={auth.userType === User.INSTRUCTOR}
                 />
             )}
-            <FloatingButton color="primary" aria-label="add" onClick={onClick}>
-                <AddIcon />
-            </FloatingButton>
+            {auth.userType === User.INSTRUCTOR && (
+                <FloatingButton color="primary" aria-label="add" onClick={onClick}>
+                    <AddIcon />
+                </FloatingButton>
+            )}
         </>
     );
 };

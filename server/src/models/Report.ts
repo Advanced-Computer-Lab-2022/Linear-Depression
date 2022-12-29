@@ -31,7 +31,7 @@ const reportSchema = new mongoose.Schema(
         threadId: { type: mongoose.Types.ObjectId, ref: "ReportThread", required: true },
         type: { type: String, required: true, trim: true, enum: Object.values(ReportType) },
         subject: { type: String, required: true, trim: true, maxlength: 45 },
-        description: { type: String, required: true, trim: true },
+        description: { type: String, required: true, trim: true, maxlength: 500 },
         seen: { type: Boolean, required: false, default: false },
         status: {
             type: String,
