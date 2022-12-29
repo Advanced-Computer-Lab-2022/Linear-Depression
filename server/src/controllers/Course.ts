@@ -130,13 +130,13 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
         await Instructor.fuzzySearch(searchTerm).then((instructors) => {
             if (instructors.length > 0) {
                 // if instructor found, search by instructor
-                return searchWithInstructors(instructors, req, currencyRate, res, currency);
+                return searchWithInstructors(instructors, req, currencyRate, res, currency, true);
             } else {
-                return searchWithTitleSubject(searchTerm, req, currencyRate, res, currency);
+                return searchWithTitleSubject(searchTerm, req, currencyRate, res, currency, true);
             }
         });
     } else {
-        return listCoursesOnlyFilter(req, currencyRate, res, currency);
+        return listCoursesOnlyFilter(req, currencyRate, res, currency, true);
     }
 };
 
@@ -227,7 +227,8 @@ async function searchWithTitleSubject(
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     currencyRate: number,
     res: Response<any, Record<string, any>>,
-    currency: string
+    currency: string,
+    skipPublishCheck: boolean = false
 ) {
     return Course.fuzzySearch(searchTerm, req.query)
         .populate("instructor", "firstName lastName")
@@ -245,7 +246,9 @@ async function searchWithTitleSubject(
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
-            courses = courses.filter((course) => course.isPublished);
+            if (!skipPublishCheck) {
+                courses = courses.filter((course) => course.isPublished);
+            }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course) => ({ ...course.toObject({ virtuals: true }), currency }));
             res.status(StatusCodes.OK).json({ courses: coursesWithCurrency });
@@ -258,7 +261,8 @@ async function searchWithInstructors(
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     currencyRate: number,
     res: Response<any, Record<string, any>>,
-    currency: string
+    currency: string,
+    skipPublishCheck: boolean = false
 ) {
     return Course.find({
         instructor: { $in: instructors.map((instructor: IInstructorModel) => instructor._id) },
@@ -279,7 +283,9 @@ async function searchWithInstructors(
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
-            courses = courses.filter((course) => course.isPublished);
+            if (!skipPublishCheck) {
+                courses = courses.filter((course) => course.isPublished);
+            }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
                 return { ...course.toObject({ virtuals: true }), currency };
@@ -293,7 +299,8 @@ async function listCoursesOnlyFilter(
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     currencyRate: number,
     res: Response<any, Record<string, any>>,
-    currency: string
+    currency: string,
+    skipPublishCheck: boolean = false
 ) {
     return Course.find(req.query)
         .populate("instructor", "firstName lastName")
@@ -311,7 +318,9 @@ async function listCoursesOnlyFilter(
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
-            courses = courses.filter((course) => course.isPublished);
+            if (!skipPublishCheck) {
+                courses = courses.filter((course) => course.isPublished);
+            }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
                 return { ...course.toObject({ virtuals: true }), currency };
