@@ -23,6 +23,7 @@ interface ICourseProps {
     preview: string;
     thumbnail: string;
     subject?: string;
+    isPublished: boolean;
 }
 
 export default ICourseProps;
