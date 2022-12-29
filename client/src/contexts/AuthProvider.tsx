@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextValue>({
     auth: {
         accessToken: null,
         userType: User.GUEST,
-        isLoggedIn: localStorage.getItem("logged") === "true"
+        isLoggedIn: false
     },
     setAuth: () => {},
     logout: () => {},
@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{
     const [authState, setAuthState] = useState<Auth>({
         accessToken: null,
         userType: User.GUEST,
-        isLoggedIn: localStorage.getItem("logged") === "true"
+        isLoggedIn: false
     });
 
     const setAuth = (accessToken: string, userType: User) => {
@@ -43,7 +43,6 @@ export const AuthProvider: React.FC<{
             userType,
             isLoggedIn: true
         });
-        localStorage.setItem("logged", "true");
 
         axios.interceptors.request.use((config) => {
             config.headers.Authorization = `Bearer ${accessToken}`;
@@ -57,7 +56,6 @@ export const AuthProvider: React.FC<{
             userType: User.GUEST,
             isLoggedIn: false
         });
-        localStorage.removeItem("logged");
 
         axios.interceptors.request.use((config) => {
             config.headers.Authorization = null;

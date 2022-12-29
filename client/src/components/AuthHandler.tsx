@@ -14,21 +14,17 @@ const AuthHandler: React.FC<{
     const location = useLocation();
 
     useEffect(() => {
-        if (auth.isLoggedIn && auth.userType === User.GUEST) {
-            refresh()
-                .then((data) => {
-                    setAuth(data.accessToken, data.userType);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    logout();
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
-        } else {
-            setIsLoading(false);
-        }
+        refresh()
+            .then((data) => {
+                setAuth(data.accessToken, data.userType);
+            })
+            .catch((err) => {
+                console.log(err);
+                logout();
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, []);
 
     const userType = auth.userType;
