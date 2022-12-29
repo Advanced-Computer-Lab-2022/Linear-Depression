@@ -239,7 +239,7 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
         }
 
         const coursePrice = await getCoursePriceAfterPromotion(course);
-        if (coursePrice < 0) {
+        if (coursePrice <= 0) {
             return next();
         }
         // credit the instructor if an individual trainee enrolled
