@@ -170,46 +170,12 @@ enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
     next();
 });
 
-// hook on create to send email to instructor and credit him
 enrollmentSchema.pre<IEnrollmentModel>("save", async function (next) {
-    const INSTRUCTOR_CREDIT_PERCENTAGE = 0.4;
-
     this.$locals.wasNew = this.isNew; // save the isNew state for the post save hook
 
     if (!this.isNew) {
         return next();
     }
-
-    const course = (await Course.findById(this.courseId)) as ICourseModel;
-    if (!course) {
-        console.log("course not found");
-        return next();
-    }
-
-    IndividualTrainee.findById(this.traineeId).then((trainee) => {
-        if (!trainee) {
-            return next();
-        }
-
-        // credit the instructor if an individual trainee enrolled
-        Instructor.findById(course.instructor).then(async (instructor) => {
-            if (instructor) {
-                const amount =
-                    Math.ceil((await getCoursePriceAfterPromotion(course)) * INSTRUCTOR_CREDIT_PERCENTAGE * 100) / 100;
-
-                instructor.credit(amount);
-                console.log("instructor credited");
-
-                new Settlement({
-                    instructorId: instructor._id,
-                    courseId: course._id,
-                    amount: amount
-                }).save();
-
-                sendEnrollmentEmail(instructor.email, course.title);
-            }
-        });
-    });
 });
 
 // a hook on the progress, if it's 100 create a certificate
@@ -246,7 +212,7 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
     next();
 });
 
-// a post save hook to update the course's enrollments count
+// a post save hook to update the course's enrollments count and credit the instructor
 enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
     if (!this.$locals.wasNew) {
         return next();
@@ -259,6 +225,41 @@ enrollmentSchema.post<IEnrollmentModel>("save", async function (doc, next) {
     } finally {
         next();
     }
+
+    const INSTRUCTOR_CREDIT_PERCENTAGE = 0.4;
+    const course = (await Course.findById(this.courseId)) as ICourseModel;
+    if (!course) {
+        console.log("course not found");
+        return next();
+    }
+
+    IndividualTrainee.findById(this.traineeId).then(async (trainee) => {
+        if (!trainee) {
+            return next();
+        }
+
+        const coursePrice = await getCoursePriceAfterPromotion(course);
+        if (coursePrice <= 0) {
+            return next();
+        }
+        // credit the instructor if an individual trainee enrolled
+        Instructor.findById(course.instructor).then(async (instructor) => {
+            if (instructor) {
+                const amount = Math.ceil(coursePrice * INSTRUCTOR_CREDIT_PERCENTAGE * 100) / 100;
+
+                instructor.credit(amount);
+                console.log("instructor credited");
+
+                new Settlement({
+                    instructorId: instructor._id,
+                    courseId: course._id,
+                    amount: amount
+                }).save();
+
+                sendEnrollmentEmail(instructor.email, course.title);
+            }
+        });
+    });
 });
 
 export default mongoose.model<IEnrollmentModel>("Enrollment", enrollmentSchema);
