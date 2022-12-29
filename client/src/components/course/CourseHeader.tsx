@@ -71,7 +71,9 @@ const CourseHeader: React.FC = () => {
                 isPublished={isPublished}
             />
 
-            {userType === User.INSTRUCTOR && <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />}
+            {userType === User.INSTRUCTOR && !isPublished && (
+                <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />
+            )}
         </Header>
     );
 };

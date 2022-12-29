@@ -5,14 +5,8 @@ import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
 import { useAuth, useFetchMyAccessRequest, useFetchMyRefundRequest } from "@internals/hooks";
-import { getEnrollment, getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
-import {
-    cancelRefundRequest,
-    enrollOnCourse,
-    editCourse,
-    sendAccessRequest,
-    sendRefundRequest
-} from "@internals/services";
+import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
+import { cancelRefundRequest, enrollOnCourse, sendAccessRequest, sendRefundRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
@@ -51,7 +45,7 @@ const CourseActions: React.FC<{
     courseId: string;
     videoUrl?: string;
     isPublished: boolean;
-}> = ({ price, promotion, currency, courseId, videoUrl, isPublished }) => {
+}> = ({ price, promotion, currency, courseId, videoUrl }) => {
     const enrollment = useAppSelector((state) => state.enrollment);
     const dispatch = useAppDispatch();
 
@@ -71,16 +65,6 @@ const CourseActions: React.FC<{
                 courseId
             }
         });
-    };
-
-    const handlePublish = () => {
-        editCourse(courseId, { isPublished: true })
-            .then(() => {
-                dispatch(getCourse(courseId));
-            })
-            .catch((err) => {
-                console.log(err);
-            });
     };
 
     const handleEnroll = () => {
@@ -157,11 +141,7 @@ const CourseActions: React.FC<{
                 ) : (
                     <br />
                 )}
-                {userType === User.INSTRUCTOR && isPublished ? (
-                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
-                ) : (
-                    <Button onClick={handlePublish}>Publish</Button>
-                )}
+                {userType === User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&
                     accessRequest.data == null && (
