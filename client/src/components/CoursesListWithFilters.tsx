@@ -23,7 +23,9 @@ const CoursesListContainer = styled.div`
 const CoursesListWithFilters: React.FC<{
     courses: ICourseProps[];
     addCourse?: boolean;
-}> = ({ courses }) => {
+    showStatus?: boolean;
+    showPrice?: boolean;
+}> = ({ courses, showPrice, showStatus }) => {
     return (
         <PageContentContainer>
             <SideMenu>
@@ -32,7 +34,7 @@ const CoursesListWithFilters: React.FC<{
 
             <CoursesListContainer>
                 <BrowseBy />
-                <CoursesList courses={courses} />
+                <CoursesList courses={courses} showPrice={showPrice} showStatus={showStatus} />
             </CoursesListContainer>
         </PageContentContainer>
     );

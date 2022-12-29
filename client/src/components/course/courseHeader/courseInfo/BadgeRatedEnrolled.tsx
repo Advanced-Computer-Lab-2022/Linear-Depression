@@ -38,8 +38,17 @@ const BadgeRatedEnrolled: React.FC<{
 }> = ({ rating }) => {
     return (
         <Container>
-            <Rating>{rating}</Rating>
-            <StyledStarRatings rating={rating} starDimension="14px" starSpacing="1px" starRatedColor="#f2ca8c" />
+            {rating > 0 && (
+                <>
+                    <Rating>{rating}</Rating>
+                    <StyledStarRatings
+                        rating={rating}
+                        starDimension="14px"
+                        starSpacing="1px"
+                        starRatedColor="#f2ca8c"
+                    />
+                </>
+            )}
             <RatesCount>18,097 ratings</RatesCount>
             <EnrollsCount>191,375 students</EnrollsCount>
         </Container>

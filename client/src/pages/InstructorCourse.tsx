@@ -43,7 +43,7 @@ const InstructorCourse: React.FC = () => {
                 <CourseContent lessons={data.lessons} />
                 <CourseReviews />
             </Container>
-            {userType === User.INSTRUCTOR && (
+            {userType === User.INSTRUCTOR && !data.isPublished && (
                 <FloatingButton onClick={onClick}>
                     <AddIcon />
                 </FloatingButton>

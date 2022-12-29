@@ -1,3 +1,4 @@
+import { Chip, Tooltip } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
@@ -79,7 +80,7 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CourseCard: React.FC<{ course: ICourseProps }> = ({
+const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean; showStatus: boolean }> = ({
     course: {
         _id,
         title,
@@ -90,8 +91,11 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         price,
         activePromotion,
         currency,
-        thumbnail
-    }
+        thumbnail,
+        isPublished
+    },
+    showPrice = true,
+    showStatus
 }) => {
     const navigate = useNavigate();
     averageRating = Number(averageRating.toFixed(1));
@@ -109,18 +113,32 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     {instructor && (
                         <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
                     )}
-                    <CourseRatingContainer>
-                        <CourseRatingText>{averageRating}</CourseRatingText>
-                        <StarRatings
-                            rating={averageRating}
-                            starDimension="14px"
-                            starSpacing="1px"
-                            starRatedColor="#E59719"
-                        />
-                    </CourseRatingContainer>
+                    {averageRating > 0 ? (
+                        <CourseRatingContainer>
+                            <CourseRatingText>{averageRating}</CourseRatingText>
+                            <StarRatings
+                                rating={averageRating}
+                                starDimension="14px"
+                                starSpacing="1px"
+                                starRatedColor="#E59719"
+                            />
+                        </CourseRatingContainer>
+                    ) : (
+                        <br />
+                    )}
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
+                    {showStatus &&
+                        (isPublished ? (
+                            <Tooltip title="The course is published and can be viewed by trainees" arrow>
+                                <Chip label="PUBLISHED COURSE" color="primary" />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
+                                <Chip label="DRAFT COURSE" color="secondary" />
+                            </Tooltip>
+                        ))}
                 </CourseDetails>
-                <CoursePrice currency={currency} price={price} promotion={activePromotion} />
+                {showPrice && <CoursePrice currency={currency} price={price} promotion={activePromotion} />}
             </HorizontalLayout>
             <hr />
         </CardContainer>
