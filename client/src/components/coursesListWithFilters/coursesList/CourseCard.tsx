@@ -79,7 +79,7 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CourseCard: React.FC<{ course: ICourseProps }> = ({
+const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean }> = ({
     course: {
         _id,
         title,
@@ -91,7 +91,8 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         activePromotion,
         currency,
         thumbnail
-    }
+    },
+    showPrice = true
 }) => {
     const navigate = useNavigate();
     averageRating = Number(averageRating.toFixed(1));
@@ -124,7 +125,7 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                     )}
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                 </CourseDetails>
-                <CoursePrice currency={currency} price={price} promotion={activePromotion} />
+                {showPrice && <CoursePrice currency={currency} price={price} promotion={activePromotion} />}
             </HorizontalLayout>
             <hr />
         </CardContainer>
