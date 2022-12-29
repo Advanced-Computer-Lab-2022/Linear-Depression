@@ -24,7 +24,7 @@ const MyCourses: React.FC = () => {
         <>
             <Title>My Courses</Title>
             <Containter>
-                <CoursesList courses={courses.data} showPrice={false} />
+                <CoursesList courses={courses.data} showPrice={false} showStatus={false} />
             </Containter>
         </>
     );
