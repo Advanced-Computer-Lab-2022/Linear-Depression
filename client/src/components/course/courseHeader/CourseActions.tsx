@@ -1,3 +1,4 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import React from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
@@ -5,7 +6,7 @@ import styled from "styled-components";
 import { CoursePrice, VideoPlayer } from "@internals/components";
 import { useAuth, useFetchMyAccessRequest, useFetchMyRefundRequest } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
-import { cancelRefundRequest, sendAccessRequest, sendRefundRequest } from "@internals/services";
+import { cancelRefundRequest, enrollOnCourse, sendAccessRequest, sendRefundRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
@@ -15,12 +16,18 @@ const SubContainer = styled.div`
     margin: 0 16px;
 `;
 
-const Button = styled.button`
+const Button = styled(LoadingButton)`
     width: 100%;
     height: 48px;
     font-weight: 700;
     font-size: 16px;
     margin: 0 auto;
+    background-color: white;
+    color: black;
+    &:hover {
+        background-color: #f5f3fe;
+        color: black;
+    }
 `;
 
 const PriceSection = styled.div`
@@ -46,6 +53,9 @@ const CourseActions: React.FC<{
     const {
         auth: { userType }
     } = useAuth();
+
+    const [loading, setLoading] = React.useState(false);
+
     const openAddPromotionModal = () => {
         openModal({
             name: "addPromotion",
@@ -56,6 +66,7 @@ const CourseActions: React.FC<{
     };
 
     const handleEnroll = () => {
+        setLoading(true);
         if (userType === User.CORPORATE_TRAINEE) {
             sendAccessRequest(courseId)
                 .then(() => {
@@ -63,17 +74,30 @@ const CourseActions: React.FC<{
                 })
                 .catch((err) => {
                     console.log(err);
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         } else if (userType === User.INDIVIDUAL_TRAINEE) {
             if (price > 0) {
                 handleCheckout(courseId);
             } else {
-                console.log("free course");
+                enrollOnCourse(courseId)
+                    .then(() => {
+                        // FIXME: update the course after enrollment without reloading
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
             }
         }
     };
 
     const handleRefund = () => {
+        setLoading(true);
         if (userType === User.INDIVIDUAL_TRAINEE) {
             sendRefundRequest(enrollment.data?._id)
                 .then(() => {
@@ -81,11 +105,15 @@ const CourseActions: React.FC<{
                 })
                 .catch((err) => {
                     console.log(err);
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         }
     };
 
     const handleCancelRefund = () => {
+        setLoading(true);
         if (userType === User.INDIVIDUAL_TRAINEE) {
             cancelRefundRequest(enrollment.data?._id)
                 .then(() => {
@@ -93,6 +121,9 @@ const CourseActions: React.FC<{
                 })
                 .catch((err) => {
                     console.log(err);
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         }
     };
@@ -109,13 +140,23 @@ const CourseActions: React.FC<{
                 {userType === User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&
-                    accessRequest.data == null && <Button onClick={handleEnroll}>Enroll Now</Button>}
+                    accessRequest.data == null && (
+                        <Button loading={loading} onClick={handleEnroll}>
+                            Enroll Now
+                        </Button>
+                    )}
                 {userType === User.INDIVIDUAL_TRAINEE &&
                     enrollment.data !== null &&
                     enrollment.data?.progress < 50 &&
-                    refundRequest.data == null && <Button onClick={handleRefund}>Request Refund</Button>}
+                    refundRequest.data == null && (
+                        <Button loading={loading} onClick={handleRefund}>
+                            Request Refund
+                        </Button>
+                    )}
                 {userType === User.INDIVIDUAL_TRAINEE && enrollment.data && refundRequest.data && (
-                    <Button onClick={handleCancelRefund}>Cancel Refund</Button>
+                    <Button loading={loading} onClick={handleCancelRefund}>
+                        Cancel Refund
+                    </Button>
                 )}
                 {enrollment.data !== null && accessRequest.data && accessRequest.data.status === "PENDING" && (
                     <Button disabled>Access Request Sent</Button>
