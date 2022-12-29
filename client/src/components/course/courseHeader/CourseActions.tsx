@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
 import { useAuth, useFetchMyAccessRequest, useFetchMyRefundRequest } from "@internals/hooks";
-import { useAppSelector } from "@internals/redux";
-import { cancelRefundRequest, sendAccessRequest, sendRefundRequest } from "@internals/services";
+import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
+import { cancelRefundRequest, editCourse, sendAccessRequest, sendRefundRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
@@ -37,8 +37,10 @@ const CourseActions: React.FC<{
     promotion: Promotion;
     courseId: string;
     videoUrl?: string;
-}> = ({ price, promotion, currency, courseId, videoUrl }) => {
+    isPublished: boolean;
+}> = ({ price, promotion, currency, courseId, videoUrl, isPublished }) => {
     const enrollment = useAppSelector((state) => state.enrollment);
+    const dispatch = useAppDispatch();
 
     const { accessRequest, updateAccessRequest } = useFetchMyAccessRequest(courseId);
     const { refundRequest, updateRefundRequest } = useFetchMyRefundRequest(enrollment.data?._id);
@@ -53,6 +55,16 @@ const CourseActions: React.FC<{
                 courseId
             }
         });
+    };
+
+    const handlePublish = () => {
+        editCourse(courseId, { isPublished: true })
+            .then(() => {
+                dispatch(getCourse(courseId));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     const handleEnroll = () => {
@@ -106,7 +118,11 @@ const CourseActions: React.FC<{
                         <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />
                     </PriceSection>
                 )}
-                {userType === User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
+                {userType === User.INSTRUCTOR && isPublished ? (
+                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
+                ) : (
+                    <Button onClick={handlePublish}>Publish</Button>
+                )}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&
                     accessRequest.data == null && <Button onClick={handleEnroll}>Enroll Now</Button>}

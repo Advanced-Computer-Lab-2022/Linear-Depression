@@ -1,3 +1,4 @@
+import { Chip, Tooltip } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
@@ -79,7 +80,7 @@ const CourseDuration = styled.p`
     margin-top: 5px;
 `;
 
-const CourseCard: React.FC<{ course: ICourseProps }> = ({
+const CourseCard: React.FC<{ course: ICourseProps; showStatus?: boolean }> = ({
     course: {
         _id,
         title,
@@ -90,8 +91,10 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
         price,
         activePromotion,
         currency,
-        thumbnail
-    }
+        thumbnail,
+        isPublished
+    },
+    showStatus
 }) => {
     const navigate = useNavigate();
     averageRating = Number(averageRating.toFixed(1));
@@ -119,6 +122,16 @@ const CourseCard: React.FC<{ course: ICourseProps }> = ({
                         />
                     </CourseRatingContainer>
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
+                    {showStatus &&
+                        (isPublished ? (
+                            <Tooltip title="The course is published and can be viewed by trainees" arrow>
+                                <Chip label="PUBLISHED COURSE" color="primary" />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
+                                <Chip label="DRAFT COURSE" color="secondary" />
+                            </Tooltip>
+                        ))}
                 </CourseDetails>
                 <CoursePrice currency={currency} price={price} promotion={activePromotion} />
             </HorizontalLayout>

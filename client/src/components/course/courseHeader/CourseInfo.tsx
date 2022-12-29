@@ -1,3 +1,4 @@
+import { Chip, Tooltip } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
@@ -53,7 +54,8 @@ const CourseInfo: React.FC<{
     description: string;
     instructor: string;
     rating: number;
-}> = ({ title, description, rating, instructor }) => {
+    isPublished: boolean;
+}> = ({ title, description, rating, instructor, isPublished }) => {
     const {
         auth: { userType }
     } = useAuth();
@@ -82,6 +84,17 @@ const CourseInfo: React.FC<{
             {(userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
                 <Button onClick={onClick}>Add Review</Button>
             )}
+            <br />
+            {userType === User.INSTRUCTOR &&
+                (isPublished ? (
+                    <Tooltip title="The course is published and can be viewed by trainees" arrow>
+                        <Chip label="PUBLISHED COURSE" color="primary" />
+                    </Tooltip>
+                ) : (
+                    <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
+                        <Chip label="DRAFT COURSE" color="secondary" />
+                    </Tooltip>
+                ))}
         </Container>
     );
 };

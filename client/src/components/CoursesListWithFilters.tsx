@@ -16,13 +16,14 @@ const SideMenu = styled.div`
 const CoursesListWithFilters: React.FC<{
     courses: ICourseProps[];
     addCourse?: boolean;
-}> = ({ courses }) => {
+    showStatus?: boolean;
+}> = ({ courses, showStatus }) => {
     return (
         <CoursesContainer>
             <SideMenu>
                 <Filter />
             </SideMenu>
-            <CoursesList courses={courses} />
+            <CoursesList courses={courses} showStatus={showStatus} />
         </CoursesContainer>
     );
 };

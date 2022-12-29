@@ -10,11 +10,11 @@ const CoursesListContainer = styled.div`
     justify-content: right;
 `;
 
-const CoursesList: React.FC<{ courses: ICourseProps[] }> = ({ courses }) => {
+const CoursesList: React.FC<{ courses: ICourseProps[]; showStatus: boolean }> = ({ courses, showStatus }) => {
     return (
         <CoursesListContainer>
             {courses.map((course) => (
-                <CourseCard key={course._id} course={course} />
+                <CourseCard key={course._id} course={course} showStatus={showStatus} />
             ))}
         </CoursesListContainer>
     );
