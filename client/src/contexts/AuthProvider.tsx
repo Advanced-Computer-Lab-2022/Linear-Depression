@@ -58,6 +58,11 @@ export const AuthProvider: React.FC<{
             isLoggedIn: false
         });
         localStorage.removeItem("logged");
+
+        axios.interceptors.request.use((config) => {
+            config.headers.Authorization = null;
+            return config;
+        });
     };
 
     const refreshAuth = async () => {

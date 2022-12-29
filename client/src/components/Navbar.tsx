@@ -18,16 +18,14 @@ import { logout } from "@internals/services";
 import { User } from "@internals/types";
 
 const getUserName = (userType: User, data: any) => {
-    if (data) {
-        if (userType === User.INSTRUCTOR) {
-            return `${data.instructor.firstName} ${data.instructor.lastName}`;
-        } else if (userType === User.INDIVIDUAL_TRAINEE) {
-            return `${data.individualTrainee.firstName} ${data.individualTrainee.lastName}`;
-        } else if (userType === User.CORPORATE_TRAINEE) {
-            return `${data.corporateTrainee.firstName} ${data.corporateTrainee.lastName}`;
-        } else {
-            return "";
-        }
+    if (userType === User.INSTRUCTOR) {
+        return `${data?.instructor?.firstName} ${data?.instructor?.lastName}`;
+    } else if (userType === User.INDIVIDUAL_TRAINEE) {
+        return `${data?.individualTrainee?.firstName} ${data?.individualTrainee?.lastName}`;
+    } else if (userType === User.CORPORATE_TRAINEE) {
+        return `${data?.corporateTrainee?.firstName} ${data?.corporateTrainee?.lastName}`;
+    } else {
+        return "";
     }
 };
 
@@ -175,7 +173,7 @@ const Navbar = () => {
                                 }
                             />
                         </button>
-                        {auth.userType !== User.GUEST && data !== null && (
+                        {auth.userType !== User.GUEST && data && (
                             <div className="navbar-item">
                                 <OptionsButton
                                     options={options}
