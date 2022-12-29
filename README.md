@@ -958,7 +958,7 @@ Response
 
 <details>
 <summary>
-Request
+Response
 </summary>
 
 ```json
