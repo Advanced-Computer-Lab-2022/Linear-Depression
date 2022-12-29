@@ -44,8 +44,10 @@ const CourseActions: React.FC<{
     promotion: Promotion;
     courseId: string;
     videoUrl?: string;
+    isPublished: boolean;
 }> = ({ price, promotion, currency, courseId, videoUrl }) => {
     const enrollment = useAppSelector((state) => state.enrollment);
+    const dispatch = useAppDispatch();
 
     const { accessRequest, updateAccessRequest } = useFetchMyAccessRequest(courseId);
     const { refundRequest, updateRefundRequest } = useFetchMyRefundRequest(enrollment.data?._id);
@@ -53,8 +55,6 @@ const CourseActions: React.FC<{
     const {
         auth: { userType }
     } = useAuth();
-
-    const dispatch = useAppDispatch();
 
     const [loading, setLoading] = useState(false);
 
