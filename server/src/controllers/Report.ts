@@ -110,7 +110,14 @@ const addThreadReply = async (req: Request, res: Response, next: NextFunction) =
 const getThread = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const thread = await ReportThread.findById(req.params.threadId)
-            .populate("reportId", "subject _id")
+            .populate("reportId", "subject description createdAt userId _id")
+            .populate({
+                path: "reportId",
+                populate: {
+                    path: "userId",
+                    select: "firstName lastName _id __t"
+                }
+            })
             .populate("replies.userId", "firstName lastName _id __t");
 
         return res.status(StatusCodes.OK).json({ thread });

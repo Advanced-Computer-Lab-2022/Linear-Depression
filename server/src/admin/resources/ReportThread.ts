@@ -19,7 +19,7 @@ export const ReportThreadResource = {
                 isVisible: false
             },
             show: {
-                component: AdminJS.bundle("../components/reportsThreads/ShowPage")
+                component: AdminJS.bundle("../components/report.thread/ShowPage")
             }
         },
         navigation: false

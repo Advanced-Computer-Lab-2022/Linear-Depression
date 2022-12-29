@@ -71,19 +71,6 @@ app.use((req, res, next) => {
 app.use(logger);
 app.use(rateLimiter());
 
-/* Routers*/
-app.use("/courses", CourseRouter);
-app.use("/instructors", InstructorRouter);
-app.use("/corporate-trainees", CorporateTraineeRouter);
-app.use("/individual-trainees", IndividualTraineeRouter);
-app.use("/country", LangRouter);
-app.use("/promotions", PromotionRouter);
-app.use("/enrollments", EnrollmentRouter);
-app.use("/auth", AuthRouter);
-app.use("/me", MeRouter);
-app.use("/payment", PaymentRouter);
-app.use("/report-thread", ReportThreadRouter);
-
 /* --- Health Check --- */
 app.get("/ping", (req, res) => {
     return res.status(StatusCodes.OK).json({ message: "pong" });
@@ -98,6 +85,19 @@ CreateAdminJS(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+/* Routers */
+app.use("/courses", CourseRouter);
+app.use("/instructors", InstructorRouter);
+app.use("/corporate-trainees", CorporateTraineeRouter);
+app.use("/individual-trainees", IndividualTraineeRouter);
+app.use("/country", LangRouter);
+app.use("/promotions", PromotionRouter);
+app.use("/enrollments", EnrollmentRouter);
+app.use("/auth", AuthRouter);
+app.use("/me", MeRouter);
+app.use("/payment", PaymentRouter);
+app.use("/report-thread", ReportThreadRouter);
 
 /* --- Basic Routes --- */
 // Health Check

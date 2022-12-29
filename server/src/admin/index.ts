@@ -1,8 +1,5 @@
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
-import session from "express-session";
-import MongoStore from "connect-mongo";
-import mongoose from "mongoose";
 
 import Lesson from "../models/Lesson";
 import Exercise from "../models/Exercise";
@@ -87,11 +84,7 @@ export function CreateAdminJS(app: any) {
     });
 
     const authenticate = async (email: string, password: string) => {
-        const user = await User.findOne({
-            where: {
-                email: email
-            }
-        });
+        const user = await User.findOne({ email, __t: "Admin" });
 
         if (user && user.isCorrectPassword(password)) {
             return user;
@@ -103,15 +96,15 @@ export function CreateAdminJS(app: any) {
     const router = AdminJSExpress.buildAuthenticatedRouter(
         admin,
         {
-            cookieName: "admin-bro",
-            cookiePassword: "superlongandcomplicatedname",
+            cookieName: process.env.ADMIN_COOKIE_NAME as string,
+            cookiePassword: process.env.ADMIN_COOKIE_PASSWORD as string,
             authenticate
         },
         null,
         {
             resave: false,
             saveUninitialized: true,
-            secret: "secret"
+            secret: process.env.ADMIN_COOKIE_PASSWORD as string
         }
     );
 

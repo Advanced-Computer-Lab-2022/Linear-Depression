@@ -36,13 +36,10 @@ const AddPromotion = (props: ActionProps) => {
     const [startDate, setStartDate] = React.useState(new Date());
     const [endDate, setEndDate] = React.useState(new Date());
     const { records } = props;
-    console.log("props", props);
 
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        console.log("props", props);
-
         if (records) {
             const courseIds = records.map((record) => record.id);
             const promotion = {
