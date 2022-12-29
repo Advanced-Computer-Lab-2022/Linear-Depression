@@ -15,6 +15,8 @@ import Review from "./Review";
 import ReviewSubmission from "./ReviewSubmission";
 import { ReportStatus, ReportType, UserType } from "./enums/index";
 import { Report, ReportThread, ReportFormProps } from "./report/index";
+import IndividualTrainee from "./IndividualTrainee";
+import CorporateTrainee from "./CorporateTrainee";
 
 export {
     UserType as User, // TODO: Change all usages of this to UserType
@@ -37,7 +39,9 @@ export {
     type ReportFormProps,
     type AccessRequest,
     type RefundRequest,
-    type ReviewSubmission
+    type ReviewSubmission,
+    type IndividualTrainee,
+    type CorporateTrainee
 };
 
 export * from "./auth";

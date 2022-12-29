@@ -2,7 +2,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Alert, AlertTitle, Avatar, Box, Container, CssBaseline, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import * as Yup from "yup";
 
 import { useAuth } from "@internals/hooks";
@@ -19,7 +19,6 @@ const theme = createTheme({
 });
 
 const Login: React.FC = () => {
-    const navigate = useNavigate();
     const location = useLocation();
 
     const { auth, setAuth } = useAuth();
@@ -45,7 +44,6 @@ const Login: React.FC = () => {
                 await login(validatedData.email, validatedData.password)
                     .then((data) => {
                         setAuth(data.accessToken, data.userType);
-                        navigate(from);
                     })
                     .catch((err) => {
                         if (err.response.status === 401) {
@@ -79,7 +77,8 @@ const Login: React.FC = () => {
     };
 
     if (auth.isLoggedIn) {
-        return <Navigate to={from} />;
+        window.location.href = from;
+        return;
     }
 
     return (

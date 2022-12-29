@@ -3,6 +3,7 @@ import React from "react";
 import StarRatings from "react-star-ratings";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 import { Avatar } from "@internals/components";
 import { Instructor } from "@internals/types";
@@ -70,6 +71,22 @@ const CustomEmailIcon = styled(EmailIcon)`
     margin-right: 8px;
 `;
 
+const Button = styled(LoadingButton)`
+    width: 240px;
+    height: 48px;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: #a435f0;
+    border: none;
+    color: white;
+    &:hover {
+        background-color: #8a2ed6;
+        color: white;
+    }
+`;
+
 const ViewProfile: React.FC<{
     instructor: Instructor;
 }> = ({ instructor }) => {
@@ -97,18 +114,17 @@ const ViewProfile: React.FC<{
                         <CustomEmailIcon />
                         {instructor.email}
                     </Email>
-
-                    <button
-                        onClick={() =>
-                            openModal({
-                                name: "viewMySettlements"
-                            })
-                        }
-                    >
-                        my settlements
-                    </button>
                 </div>
             </Container>
+            <Button
+                onClick={() =>
+                    openModal({
+                        name: "viewMySettlements"
+                    })
+                }
+            >
+                My settlements
+            </Button>
         </Header>
     );
 };

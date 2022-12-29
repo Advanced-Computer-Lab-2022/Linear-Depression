@@ -20,6 +20,7 @@ export interface ICourse {
     thumbnail: string;
     lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
+    isPublished: boolean;
 }
 
 export interface ICourseModel extends ICourse, Document {}
@@ -53,7 +54,8 @@ const courseSchema = new Schema(
                 message: "Invalid URL, must be a valid YouTube link"
             }
         },
-        lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }]
+        lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
+        isPublished: { type: Boolean, default: false }
     },
     {
         timestamps: true

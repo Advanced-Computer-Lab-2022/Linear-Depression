@@ -1,6 +1,6 @@
 import { Navbar } from "@internals/components";
 import { useAuth, useFetchProfile } from "@internals/hooks";
-import { InstructorProfile, IndividualTraineeProfile, CorporateTraineeProfile } from "@internals/pages";
+import { InstructorProfile, TraineeProfile } from "@internals/pages";
 import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
@@ -17,8 +17,8 @@ const Profile = () => {
         <>
             <Navbar />
             {userType === User.INSTRUCTOR && data !== null && <InstructorProfile instructor={data.instructor} />}
-            {userType === User.INDIVIDUAL_TRAINEE && <IndividualTraineeProfile />}
-            {userType === User.CORPORATE_TRAINEE && <CorporateTraineeProfile />}
+            {userType === User.INDIVIDUAL_TRAINEE && data && <TraineeProfile trainee={data.individualTrainee} />}
+            {userType === User.CORPORATE_TRAINEE && data && <TraineeProfile trainee={data.corporateTrainee} />}
         </>
     );
 };

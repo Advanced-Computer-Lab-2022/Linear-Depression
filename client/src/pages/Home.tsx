@@ -6,7 +6,7 @@ import { Navbar } from "@internals/components";
 const Home: React.FC = () => {
     return (
         <>
-            <Navbar />
+            <Navbar search={true} />
             <AllCourses />
         </>
     );
