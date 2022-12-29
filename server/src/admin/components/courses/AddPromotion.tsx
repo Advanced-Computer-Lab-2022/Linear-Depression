@@ -18,7 +18,7 @@ import { ActionProps } from "adminjs";
 import styled from "styled-components";
 import axios from "axios";
 
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 const InputContainer = styled.div`
     margin: 10px 0;
