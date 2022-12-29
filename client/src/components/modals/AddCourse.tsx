@@ -35,7 +35,7 @@ const AddCourse: React.FC = () => {
 
     const [title, setTitle] = useState("");
     const [subject, setSubject] = useState("");
-    const [subjects, setSubjects] = useState(initialSubjects.data);
+    const [subjects, setSubjects] = useState(initialSubjects.data ? initialSubjects.data : []);
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const dispatch = useAppDispatch();
@@ -57,9 +57,9 @@ const AddCourse: React.FC = () => {
     const handleCloseSubjectModal = (data: string) => {
         setOpenSubjectModal(false);
         if (data) {
+            console.log(data);
             setSubjects([...subjects, data]);
             setSubject(data);
-            document.getElementById("demo-simple-select").innerText = data;
         }
     };
 
