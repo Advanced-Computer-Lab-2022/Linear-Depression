@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Course from "../models/Course";
 import Enrollment from "../models/Enrollment";
 
 export const createEnrollmentService = async (
@@ -13,7 +14,10 @@ export const createEnrollmentService = async (
             throw new Error("Enrollment already exists");
         }
     });
-
+    const course = await Course.findById(courseId);
+    if (!course!.isPublished) {
+        throw new Error("Course is not published");
+    }
     return new Enrollment({
         traineeId: traineeId,
         courseId: courseId

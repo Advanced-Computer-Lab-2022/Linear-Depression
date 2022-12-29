@@ -23,7 +23,14 @@ const MyCourses: React.FC = () => {
     return (
         <>
             <Navbar />
-            {!loading && <CoursesListWithFilters courses={data} addCourse={true} showPrice={false} />}
+            {!loading && (
+                <CoursesListWithFilters
+                    courses={data}
+                    addCourse={true}
+                    showPrice={false}
+                    showStatus={auth.userType === User.INSTRUCTOR}
+                />
+            )}
             {auth.userType === User.INSTRUCTOR && (
                 <FloatingButton color="primary" aria-label="add" onClick={onClick}>
                     <AddIcon />
