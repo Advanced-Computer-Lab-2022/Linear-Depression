@@ -1,11 +1,11 @@
 import LoadingButton from "@mui/lab/LoadingButton";
-import React from "react";
+import React, { useState } from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
 import { useAuth, useFetchMyAccessRequest, useFetchMyRefundRequest } from "@internals/hooks";
-import { useAppSelector } from "@internals/redux";
+import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
 import { cancelRefundRequest, enrollOnCourse, sendAccessRequest, sendRefundRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
@@ -54,7 +54,9 @@ const CourseActions: React.FC<{
         auth: { userType }
     } = useAuth();
 
-    const [loading, setLoading] = React.useState(false);
+    const dispatch = useAppDispatch();
+
+    const [loading, setLoading] = useState(false);
 
     const openAddPromotionModal = () => {
         openModal({
@@ -84,7 +86,7 @@ const CourseActions: React.FC<{
             } else {
                 enrollOnCourse(courseId)
                     .then(() => {
-                        // FIXME: update the course after enrollment without reloading
+                        dispatch(getEnrollment(courseId));
                     })
                     .catch((err) => {
                         console.log(err);
@@ -132,10 +134,12 @@ const CourseActions: React.FC<{
         <MainContainer>
             <VideoPlayer videoUrl={videoUrl} height={191} />
             <SubContainer>
-                {(userType === User.INSTRUCTOR || userType === User.INDIVIDUAL_TRAINEE) && enrollment.data == null && (
+                {(userType === User.INSTRUCTOR || userType === User.INDIVIDUAL_TRAINEE) && enrollment.data == null ? (
                     <PriceSection>
                         <CoursePrice currency={currency} price={price} promotion={promotion} horizontalView={true} />
                     </PriceSection>
+                ) : (
+                    <br />
                 )}
                 {userType === User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
