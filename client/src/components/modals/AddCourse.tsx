@@ -22,7 +22,7 @@ import { addCourse } from "@internals/services";
 
 const AddCourse: React.FC = () => {
     useFetchSubjects();
-    const subjects = useAppSelector((state) => state.subjects);
+    const initialSubjects = useAppSelector((state) => state.subjects);
 
     const navigate = useNavigate();
     const closeModal = () => {
@@ -35,6 +35,7 @@ const AddCourse: React.FC = () => {
 
     const [title, setTitle] = useState("");
     const [subject, setSubject] = useState("");
+    const [subjects, setSubjects] = useState(initialSubjects.data);
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const dispatch = useAppDispatch();
@@ -56,6 +57,7 @@ const AddCourse: React.FC = () => {
     const handleCloseSubjectModal = (data: string) => {
         setOpenSubjectModal(false);
         if (data) {
+            setSubjects([...subjects, data]);
             setSubject(data);
             document.getElementById("demo-simple-select").innerText = data;
         }
@@ -130,7 +132,7 @@ const AddCourse: React.FC = () => {
                                     />
                                     Add new Subject
                                 </MenuItem>
-                                {subjects.data?.map((subject) => (
+                                {subjects.map((subject) => (
                                     <MenuItem value={subject}>{subject}</MenuItem>
                                 ))}
                             </Select>
