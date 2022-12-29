@@ -65,7 +65,7 @@ const createReport = async (req: Request, res: Response, next: NextFunction) => 
     }
 };
 
-const addThreadReply = async (req: Request, res: Response, next: NextFunction) => {
+const addThreadReplyByReport = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const report = await Report.findById(req.params.reportId);
 
@@ -87,9 +87,43 @@ const addThreadReply = async (req: Request, res: Response, next: NextFunction) =
     }
 };
 
+const addThreadReply = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reply = {
+            _id: new mongoose.Types.ObjectId(),
+            createdAt: new Date(),
+            ...req.body
+        };
+
+        const thread = await ReportThread.findByIdAndUpdate(
+            req.params.threadId,
+            { $push: { replies: reply } },
+            { new: true, useFindAndModify: false }
+        );
+
+        return res.status(StatusCodes.OK).json({ thread });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
+};
+
+const getThread = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const thread = await ReportThread.findById(req.params.threadId)
+            .populate("reportId", "subject _id")
+            .populate("replies.userId", "firstName lastName _id __t");
+
+        return res.status(StatusCodes.OK).json({ thread });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
+};
+
 export default {
     listReportsByUser,
     getReport,
     createReport,
-    addThreadReply
+    addThreadReply,
+    addThreadReplyByReport,
+    getThread
 };

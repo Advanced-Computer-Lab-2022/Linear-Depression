@@ -1,0 +1,8 @@
+{
+    "properties": {
+        "reportId": "Report",
+        "replies.userId": "User",
+        "replies.message": "Message",
+        "replies.createdAt": "Created At"
+    }
+}
