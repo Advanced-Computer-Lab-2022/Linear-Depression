@@ -27,7 +27,7 @@ This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is 
 
 ## Code Style
 
-The code style is enforced using `eslint` and `prettier`. The code style is enforced using `pre-commit` hooks. The code style is enforced using `eslint` and `prettier`. The code style is enforced using `pre-commit` hooks.
+The code style is enforced using `eslint` and `prettier`. The code style is enforced using `pre-commit` hooks and `pre-commit github action.`
 
 ### Pre-commit
 
