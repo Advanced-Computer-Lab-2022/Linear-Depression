@@ -984,6 +984,7 @@ Request
 }
 ```
 
+</details>
 ### Generate API Documentation
 
 ```bash
