@@ -30,8 +30,7 @@ const AddSubject: React.FC<{
                     fullWidth
                     variant="outlined"
                     value={subject}
-                    multiline
-                    minRows={1}
+                    maxRows={1}
                     onChange={(e) => setSubject(e.target.value)}
                 />
             </DialogContent>
