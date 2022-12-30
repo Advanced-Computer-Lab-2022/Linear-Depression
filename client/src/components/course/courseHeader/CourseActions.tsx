@@ -4,9 +4,9 @@ import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
 import { CoursePrice, VideoPlayer } from "@internals/components";
-import { useAuth, useFetchMyAccessRequest, useFetchMyRefundRequest } from "@internals/hooks";
+import { useAuth, useFetchMyAccessRequest, useToast } from "@internals/hooks";
 import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
-import { cancelRefundRequest, enrollOnCourse, sendAccessRequest, sendRefundRequest } from "@internals/services";
+import { enrollOnCourse, sendAccessRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
 import { Promotion, User } from "@internals/types";
 
@@ -50,11 +50,11 @@ const CourseActions: React.FC<{
     const dispatch = useAppDispatch();
 
     const { accessRequest, updateAccessRequest } = useFetchMyAccessRequest(courseId);
-    const { refundRequest, updateRefundRequest } = useFetchMyRefundRequest(enrollment.data?._id);
 
     const {
         auth: { userType }
     } = useAuth();
+    const { showToast } = useToast();
 
     const [loading, setLoading] = useState(false);
 
@@ -72,9 +72,17 @@ const CourseActions: React.FC<{
         if (userType === User.CORPORATE_TRAINEE) {
             sendAccessRequest(courseId)
                 .then(() => {
+                    showToast({
+                        message: "Access Request sent successfully",
+                        type: "success"
+                    });
                     updateAccessRequest();
                 })
                 .catch((err) => {
+                    showToast({
+                        message: "Failed to send access request.Try Later",
+                        type: "error"
+                    });
                     console.log(err);
                 })
                 .finally(() => {
@@ -87,46 +95,21 @@ const CourseActions: React.FC<{
                 enrollOnCourse(courseId)
                     .then(() => {
                         dispatch(getEnrollment(courseId));
+                        showToast({
+                            message: "Enrolled Successfully successfully",
+                            type: "success"
+                        });
                     })
-                    .catch((err) => {
-                        console.log(err);
+                    .catch(() => {
+                        showToast({
+                            message: "Failed to enroll",
+                            type: "error"
+                        });
                     })
                     .finally(() => {
                         setLoading(false);
                     });
             }
-        }
-    };
-
-    const handleRefund = () => {
-        setLoading(true);
-        if (userType === User.INDIVIDUAL_TRAINEE) {
-            sendRefundRequest(enrollment.data?._id)
-                .then(() => {
-                    updateRefundRequest();
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        }
-    };
-
-    const handleCancelRefund = () => {
-        setLoading(true);
-        if (userType === User.INDIVIDUAL_TRAINEE) {
-            cancelRefundRequest(enrollment.data?._id)
-                .then(() => {
-                    updateRefundRequest();
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
         }
     };
 
@@ -149,19 +132,7 @@ const CourseActions: React.FC<{
                             Enroll Now
                         </Button>
                     )}
-                {userType === User.INDIVIDUAL_TRAINEE &&
-                    enrollment.data !== null &&
-                    enrollment.data?.progress < 50 &&
-                    refundRequest.data == null && (
-                        <Button loading={loading} onClick={handleRefund}>
-                            Request Refund
-                        </Button>
-                    )}
-                {userType === User.INDIVIDUAL_TRAINEE && enrollment.data && refundRequest.data && (
-                    <Button loading={loading} onClick={handleCancelRefund}>
-                        Cancel Refund
-                    </Button>
-                )}
+
                 {enrollment.data !== null && accessRequest.data && accessRequest.data.status === "PENDING" && (
                     <Button disabled>Access Request Sent</Button>
                 )}

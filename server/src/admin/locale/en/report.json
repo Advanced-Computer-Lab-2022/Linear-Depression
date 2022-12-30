@@ -1,6 +1,7 @@
 {
     "properties": {
         "userId": "User",
-        "courseId": "Course"
+        "courseId": "Course",
+        "threadId": "Thread URL"
     }
 }
