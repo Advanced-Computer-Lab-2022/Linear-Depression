@@ -5,7 +5,7 @@ import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
 import { CoursePrice } from "@internals/components";
-import { Course as ICourseProps } from "@internals/types";
+import { Course as ICourseProps, CourseStatus } from "@internals/types";
 
 const HorizontalLayout = styled.div`
     display: flex;
@@ -92,7 +92,7 @@ const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean; showStatu
         activePromotion,
         currency,
         thumbnail,
-        isPublished
+        status
     },
     showPrice = true,
     showStatus
@@ -128,13 +128,17 @@ const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean; showStatu
                     )}
                     <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
                     {showStatus &&
-                        (isPublished ? (
+                        (status === CourseStatus.DRAFT ? (
+                            <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
+                                <Chip label="DRAFT COURSE" color="secondary" />
+                            </Tooltip>
+                        ) : status === CourseStatus.PUBLISHED ? (
                             <Tooltip title="The course is published and can be viewed by trainees" arrow>
                                 <Chip label="PUBLISHED COURSE" color="primary" />
                             </Tooltip>
                         ) : (
-                            <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
-                                <Chip label="DRAFT COURSE" color="secondary" />
+                            <Tooltip title="The course is closed and not accepting new enrollments" arrow>
+                                <Chip label="CLOSED COURSE" color="secondary" />
                             </Tooltip>
                         ))}
                 </CourseDetails>

@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
-import { CourseContent, CourseHeader, CourseReviews, FloatingButton } from "@internals/components";
+import { CourseContent, CourseHeader, CourseReviews, FloatingButton, LoadingHeader } from "@internals/components";
 import { useAuth, useFetchCourseById, useFetchMyEnrollment, useFetchMyRefundRequest, useToast } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { sendRefundRequest, cancelRefundRequest } from "@internals/services";
-import { User } from "@internals/types";
+import { CourseStatus, User } from "@internals/types";
 
 const Container = styled.div`
     margin: 0 30% 0 100px;
@@ -41,7 +41,7 @@ const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();
     useFetchCourseById(courseId);
     useFetchMyEnrollment(courseId);
-    const { data } = useAppSelector((state) => state.course);
+    const { data, loading: dataLoading } = useAppSelector((state) => state.course);
     const enrollment = useAppSelector((state) => state.enrollment);
     const { refundRequest, updateRefundRequest } = useFetchMyRefundRequest(enrollment.data?._id);
     const [loading, setLoading] = useState(false);
@@ -93,9 +93,8 @@ const InstructorCourse: React.FC = () => {
         }
     };
 
-    // TODO: To be replaced with suspense
-    if (!data) {
-        return <div>Loading...</div>;
+    if (dataLoading || !data) {
+        return <LoadingHeader />;
     }
 
     return (
@@ -127,7 +126,7 @@ const InstructorCourse: React.FC = () => {
                     )}
                 </HorizontalContainer>
             </Container>
-            {userType === User.INSTRUCTOR && !data.isPublished && (
+            {userType === User.INSTRUCTOR && data.status === CourseStatus.DRAFT && (
                 <FloatingButton onClick={onClick}>
                     <AddIcon />
                 </FloatingButton>

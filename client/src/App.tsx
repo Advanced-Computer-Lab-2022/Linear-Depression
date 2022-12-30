@@ -35,7 +35,8 @@ import {
     Register,
     PaymentCancelled,
     PaymentSuccess,
-    PrivacyPolicy
+    PrivacyPolicy,
+    NotFound
 } from "@internals/pages";
 
 function App() {
@@ -97,7 +98,7 @@ function App() {
                             <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
                         </Route>
 
-                        <Route path="*" element={<div>404</div>} />
+                        <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
             </div>

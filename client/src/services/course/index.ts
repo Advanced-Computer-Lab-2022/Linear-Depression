@@ -5,3 +5,4 @@ export { default as editCourse } from "./editCourse";
 export { default as fetchMyCourses } from "./fetchMyCourses";
 export { default as fetchCourseById } from "./fetchCourseById";
 export { default as addPromotion } from "./addPromotion";
+export { publish, close, open } from "./updateCourseStatus";

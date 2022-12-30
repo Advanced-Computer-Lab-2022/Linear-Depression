@@ -2,6 +2,8 @@ import React from "react";
 import StarRatings from "react-star-ratings";
 import styled from "styled-components";
 
+import { useAppSelector } from "@internals/redux";
+
 const Container = styled.div`
     display: flex;
 `;
@@ -36,6 +38,7 @@ const EnrollsCount = styled.span`
 const BadgeRatedEnrolled: React.FC<{
     rating: number;
 }> = ({ rating }) => {
+    const course = useAppSelector((state) => state.course);
     return (
         <Container>
             {rating > 0 && (
@@ -49,8 +52,8 @@ const BadgeRatedEnrolled: React.FC<{
                     />
                 </>
             )}
-            <RatesCount>18,097 ratings</RatesCount>
-            <EnrollsCount>191,375 students</EnrollsCount>
+            <RatesCount>{course.data ? course.data.ratings.length : 0} rating(s)</RatesCount>
+            <EnrollsCount>{course.data ? course.data.enrollmentsCount : 0} student(s)</EnrollsCount>
         </Container>
     );
 };
