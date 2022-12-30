@@ -142,6 +142,7 @@ const listMyCourses = async (req: Request, res: Response, _next: NextFunction) =
 
 const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
+    const userId = req.body.userId;
     const { currencyRate, currency }: { currencyRate: number; currency: any } = await getCurrencyRateByCookie(
         req,
         "us"
@@ -165,7 +166,10 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
         .then((course) => {
             if (course) {
                 course.price = course.price * currencyRate;
-                res.status(StatusCodes.OK).json({ course: { ...course.toObject({ virtuals: true }), currency } });
+                const isOwner = userId && userId === course.instructor._id.toString();
+                res.status(StatusCodes.OK).json({
+                    course: { ...course.toObject({ virtuals: true }), currency, isOwner }
+                });
             } else {
                 res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
             }
