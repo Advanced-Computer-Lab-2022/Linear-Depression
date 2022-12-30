@@ -4,6 +4,7 @@ import Course from "../models/Course";
 import IndividualTrainee from "../models/IndividualTrainee";
 import Promotion, { PromotionStatus } from "../models/Promotion";
 import User from "../models/User";
+import { getCoursePriceAfterPromotion } from "../services/CourseServices";
 import { createEnrollmentService } from "../services/EnrollmentCreateServices";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -16,20 +17,53 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
         return res.status(StatusCodes.NOT_FOUND).json({ message: "Course not found" });
     }
 
-    const user = await User.findById(userId);
+    const trainee = await IndividualTrainee.findById(userId);
 
-    if (!user) {
-        return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+    if (!trainee) {
+        return res.status(StatusCodes.NOT_FOUND).json({ message: "Trainee not found" });
     }
 
-    const discounts = [];
+    let coursePriceAfterPromotion = await getCoursePriceAfterPromotion(course);
 
-    if (course.activePromotion) {
+    const discounts = [];
+    let amount_off = 0;
+
+    if (trainee.wallet > 0) {
+        // console.log("wallet"");
+        amount_off = Math.min(trainee.wallet, coursePriceAfterPromotion);
+
+        const coupon = await stripe.coupons.create({
+            amount_off: Math.ceil(amount_off * 100),
+            duration: "once",
+            currency: "usd"
+        });
+        discounts.push({ coupon: coupon.id });
+    } else if (course.activePromotion) {
         const promotion = await Promotion.findById(course.activePromotion);
         if (promotion && promotion.status === PromotionStatus.Active) {
             const coupon = await stripe.coupons.create({ percent_off: promotion.discountPercent, duration: "once" });
             discounts.push({ coupon: coupon.id });
         }
+        coursePriceAfterPromotion = course.price;
+    }
+
+    if (coursePriceAfterPromotion <= 0.5 || coursePriceAfterPromotion - amount_off <= 0.5) {
+        createEnrollmentService(userId, courseId)
+            .then((enrollment) => {
+                IndividualTrainee.findById(userId).then(async (trainee) => {
+                    if (!trainee) {
+                        return res.status(StatusCodes.NOT_FOUND).json({ message: "trainee not found" });
+                    }
+                    trainee.enrollments.push(enrollment._id);
+                    await trainee.debit(amount_off);
+                });
+
+                console.log("Enrollment created");
+            })
+            .catch((err: any) => {
+                console.log(err);
+            });
+        return res.status(StatusCodes.OK).json({ url: `${process.env.FRONT_END_URL}/payment/success/${courseId}` });
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -42,16 +76,17 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
                         name: course.title,
                         images: [course.thumbnail]
                     },
-                    unit_amount: Math.ceil(course.price * 100)
+                    unit_amount: Math.ceil(coursePriceAfterPromotion * 100)
                 },
                 quantity: 1
             }
         ],
         metadata: {
             courseId,
-            userId
+            userId,
+            amount_off
         },
-        customer_email: user.email,
+        customer_email: trainee.email,
         mode: "payment",
         ...(discounts.length && { discounts }),
         success_url: `${process.env.FRONT_END_URL}/payment/success/${courseId}`,
@@ -76,16 +111,16 @@ const stripeWebhook = async (req: Request, res: Response, _next: NextFunction) =
 
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
-        const { courseId, userId } = session.metadata;
+        const { courseId, userId, amount_off } = session.metadata;
 
         createEnrollmentService(userId, courseId)
             .then((enrollment) => {
-                IndividualTrainee.findById(userId).then((trainee) => {
+                IndividualTrainee.findById(userId).then(async (trainee) => {
                     if (!trainee) {
                         return res.status(StatusCodes.NOT_FOUND).json({ message: "trainee not found" });
                     }
                     trainee.enrollments.push(enrollment._id);
-                    trainee.save();
+                    await trainee.debit(amount_off);
                 });
 
                 console.log("Enrollment created");
