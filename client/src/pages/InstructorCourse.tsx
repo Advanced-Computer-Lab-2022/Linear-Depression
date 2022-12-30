@@ -10,7 +10,7 @@ import { CourseContent, CourseHeader, CourseReviews, FloatingButton, LoadingHead
 import { useAuth, useFetchCourseById, useFetchMyEnrollment, useFetchMyRefundRequest, useToast } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { sendRefundRequest, cancelRefundRequest } from "@internals/services";
-import { User } from "@internals/types";
+import { CourseStatus, User } from "@internals/types";
 
 const Container = styled.div`
     margin: 0 30% 0 100px;
@@ -126,7 +126,7 @@ const InstructorCourse: React.FC = () => {
                     )}
                 </HorizontalContainer>
             </Container>
-            {userType === User.INSTRUCTOR && !data.isPublished && (
+            {userType === User.INSTRUCTOR && data.status === CourseStatus.DRAFT && (
                 <FloatingButton onClick={onClick}>
                     <AddIcon />
                 </FloatingButton>
