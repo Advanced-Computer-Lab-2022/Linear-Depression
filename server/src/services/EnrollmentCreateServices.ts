@@ -15,7 +15,7 @@ export const createEnrollmentService = async (
         }
     });
     const course = await Course.findById(courseId);
-    if (course!.status === CourseStatus.PUBLISHED) {
+    if (course!.status !== CourseStatus.PUBLISHED) {
         throw new Error("Course is not published");
     }
     return new Enrollment({
