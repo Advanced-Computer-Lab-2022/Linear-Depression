@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { useAuth } from "@internals/hooks";
+import { useAppSelector } from "@internals/redux";
 import { User } from "@internals/types";
 
 const Item = styled.li`
@@ -54,6 +55,7 @@ const ContentItem: React.FC<{
     lessonId?: string;
     seen?: boolean;
 }> = ({ title, link, exerciseId, lessonId, seen }) => {
+    const enrollment = useAppSelector((state) => state.enrollment);
     const { courseId } = useParams();
     const {
         auth: { userType }
@@ -67,10 +69,11 @@ const ContentItem: React.FC<{
             {seen === false && <CustomCheckbox disabled />}
             <Icon>{link ? <MdPlayCircleFilled /> : <MdInsertDriveFile />}</Icon>
             <Title>{title}</Title>
-            {link && <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>}
+            {link && enrollment.data && <Preview to={`/courses/${courseId}/lessons/${lessonId}/`}>Preview</Preview>}
             {exerciseId &&
                 lessonId &&
-                (userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
+                (userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) &&
+                enrollment.data && (
                     <OpenExercise
                         onClick={() => {
                             navigate(`/courses/${courseId}/lessons/${lessonId}/exercises/${exerciseId}`);

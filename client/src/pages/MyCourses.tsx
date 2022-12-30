@@ -28,6 +28,7 @@ const MyCourses: React.FC = () => {
                 addCourse={true}
                 showPrice={auth.userType === User.INSTRUCTOR}
                 showStatus={auth.userType === User.INSTRUCTOR}
+                showBrowseBy={false}
             />
             {auth.userType === User.INSTRUCTOR && (
                 <FloatingButton color="primary" aria-label="add" onClick={onClick}>

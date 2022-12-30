@@ -10,3 +10,4 @@ export { default as EditLesson } from "./EditLesson";
 export { default as EditProfile } from "./EditProfile";
 export { default as ViewAndAcceptContract } from "./ViewAndAcceptContract";
 export { default as ViewMySettlements } from "./ViewMySettlements";
+export { default as ViewMyWallet } from "./ViewMyWallet";

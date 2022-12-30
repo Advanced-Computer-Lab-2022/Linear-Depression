@@ -59,7 +59,7 @@ router.put("/profile", isAuthenticated, profileController.updateProfile);
 router.get("/reports", isAuthenticated, reportController.listReportsByUser);
 router.get("/reports/:reportId", isAuthenticated, reportController.getReport);
 router.post("/reports", isAuthenticated, reportController.createReport);
-router.post("/reports/:reportId", isAuthenticated, reportController.addThreadReply);
+router.post("/reports/:reportId", isAuthenticated, reportController.addThreadReplyByReport);
 
 // instructor settlement
 router.get("/settlements", isAuthenticated, isAuthorized([UserType.INSTRUCTOR]), settlementController.listSettlements);

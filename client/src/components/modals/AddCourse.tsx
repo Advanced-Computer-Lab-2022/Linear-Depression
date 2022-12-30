@@ -57,9 +57,12 @@ const AddCourse: React.FC = () => {
     const handleCloseSubjectModal = (data: string) => {
         setOpenSubjectModal(false);
         if (data) {
-            console.log(data);
-            setSubjects([...subjects, data]);
-            setSubject(data);
+            const subject = data.toLowerCase();
+
+            if (!subjects.includes(subject)) {
+                setSubjects([...subjects, subject]);
+            }
+            setSubject(subject);
         }
     };
 

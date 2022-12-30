@@ -14,7 +14,8 @@ import {
     EditCourse,
     ViewAndAcceptContract,
     EditLesson,
-    EditProfile
+    EditProfile,
+    ViewMyWallet
 } from "@internals/modals";
 import {
     Home,
@@ -34,7 +35,8 @@ import {
     Register,
     PaymentCancelled,
     PaymentSuccess,
-    PrivacyPolicy
+    PrivacyPolicy,
+    NotFound
 } from "@internals/pages";
 
 function App() {
@@ -53,7 +55,8 @@ function App() {
                         editLesson: EditLesson,
                         editProfile: EditProfile,
                         viewAndAcceptContract: ViewAndAcceptContract,
-                        viewMySettlements: ViewMySettlements
+                        viewMySettlements: ViewMySettlements,
+                        viewMyWallet: ViewMyWallet
                     }}
                 />
                 <Routes>
@@ -95,7 +98,7 @@ function App() {
                             <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
                         </Route>
 
-                        <Route path="*" element={<div>404</div>} />
+                        <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
             </div>

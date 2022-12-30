@@ -30,7 +30,7 @@ const courseSchema = new Schema(
         title: { type: String, required: true, trim: true },
         description: { type: String, required: true, trim: true },
         instructor: { type: mongoose.Types.ObjectId, ref: "Instructor", required: true },
-        subject: { type: String, required: true },
+        subject: { type: String, required: true, lowercase: true },
         price: { type: Number, required: true, min: 0 },
         averageRating: {
             type: Number,

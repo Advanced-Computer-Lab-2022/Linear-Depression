@@ -1,4 +1,4 @@
-import { Lesson as ILessonProps } from "@internals/types";
+import { Lesson as ILessonProps, Review as IReviewProps } from "@internals/types";
 
 interface ICourseProps {
     _id: string;
@@ -10,6 +10,7 @@ interface ICourseProps {
         lastName: string;
     } | null;
     averageRating: number;
+    enrollmentsCount: number;
     totalHours: number;
     price: number;
     activePromotion: {
@@ -20,6 +21,7 @@ interface ICourseProps {
     } | null;
     currency: string;
     lessons: ILessonProps[];
+    ratings: IReviewProps[];
     preview: string;
     thumbnail: string;
     subject?: string;
