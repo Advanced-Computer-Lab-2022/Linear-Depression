@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
     Dialog,
     DialogContent,
@@ -14,13 +15,19 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import * as Yup from "yup";
+import { validateFormData } from "@internals/utils";
 
-import { useFetchSubjects } from "@internals/hooks";
+import { useFetchSubjects, useToast } from "@internals/hooks";
 import { AddSubject } from "@internals/modals";
 import { getMyCourses, getSubjects, useAppDispatch, useAppSelector } from "@internals/redux";
 import { addCourse } from "@internals/services";
 
 const AddCourse: React.FC = () => {
+    const [formErrors, setFormErrors] = useState(new Map());
+    const [loading, setLoading] = useState(false);
+    const { showToast } = useToast();
+
     useFetchSubjects();
     const initialSubjects = useAppSelector((state) => state.subjects);
 
@@ -33,21 +40,65 @@ const AddCourse: React.FC = () => {
         closeModal();
     };
 
+    const validationRules = {
+        title: Yup.string().required("Please enter a comment"),
+        subject: Yup.string().required("Please select a subject"),
+        description: Yup.string().required("Please enter a description"),
+        price: Yup.number().min(0, "Price must be greater than 0")
+    };
+
     const [title, setTitle] = useState("");
     const [subject, setSubject] = useState("");
     const [subjects, setSubjects] = useState(initialSubjects.data ? initialSubjects.data : []);
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(0);
     const dispatch = useAppDispatch();
     const [searchParams] = useSearchParams();
     const [openSubjectModal, setOpenSubjectModal] = useState(false);
 
     const handleSubmit = () => {
-        addCourse({ title, subject, description, price }).then(() => {
-            dispatch(getSubjects());
-            dispatch(getMyCourses(searchParams));
-            closeModal();
-        });
+        setLoading(true);
+        setFormErrors(new Map());
+        const formData = {
+            title,
+            subject,
+            description,
+            price
+        };
+        validateFormData(formData, validationRules)
+            .then(async (data) => {
+                const validatedData = data as unknown as {
+                    title: string;
+                    subject: string;
+                    description: string;
+                    price: number;
+                };
+
+                const addedCourse = {
+                    title: validatedData.title,
+                    subject: validatedData.subject,
+                    description: validatedData.description,
+                    price: validatedData.price
+                };
+
+                addCourse(addedCourse)
+                    .then(() => {
+                        showToast({ message: "Course Added Successfully", type: "success" });
+                        dispatch(getSubjects());
+                        dispatch(getMyCourses(searchParams));
+                        closeModal();
+                    })
+                    .catch(() => {
+                        showToast({ message: "Failed to Add Course Try Later", type: "error" });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            })
+            .catch((errors) => {
+                setFormErrors(errors);
+                setLoading(false);
+            });
     };
 
     const handleOpenSubjectModal = () => {
@@ -79,6 +130,8 @@ const AddCourse: React.FC = () => {
                         variant="outlined"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        error={formErrors.has("title")}
+                        helperText={formErrors.get("title")}
                     />
                     <TextField
                         required
@@ -94,6 +147,8 @@ const AddCourse: React.FC = () => {
                         maxRows={4}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        error={formErrors.has("description")}
+                        helperText={formErrors.get("description")}
                     />
                     <Box
                         sx={{
@@ -117,6 +172,7 @@ const AddCourse: React.FC = () => {
                                 fullWidth
                                 autoFocus
                                 onChange={(e) => setSubject(e.target.value)}
+                                error={formErrors.has("subject")}
                             >
                                 <MenuItem
                                     onClick={handleOpenSubjectModal}
@@ -151,12 +207,16 @@ const AddCourse: React.FC = () => {
                         fullWidth
                         variant="outlined"
                         value={price}
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) => setPrice(e.target.value as unknown as number)}
+                        error={formErrors.has("price")}
+                        helperText={formErrors.get("price")}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <LoadingButton loading={loading} onClick={handleSubmit}>
+                        Submit
+                    </LoadingButton>
                 </DialogActions>
                 <AddSubject open={openSubjectModal} onClose={handleCloseSubjectModal} />
             </Dialog>
