@@ -1,3 +1,5 @@
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -62,7 +64,19 @@ const TraineeExercise = () => {
         return (
             <>
                 <CourseNavbar />
-                <div>Loading...</div>
+                <div
+                    style={{
+                        marginLeft: "10px"
+                    }}
+                >
+                    <br />
+                    <Skeleton height={40} width={200} />
+                    <br />
+                    <Skeleton height={250} width={900} />
+                    <br />
+                    <Skeleton height={250} width={900} />
+                    <br />
+                </div>
             </>
         );
     }
@@ -77,6 +91,7 @@ const TraineeExercise = () => {
                             <Title>{data.title}</Title>
                             <TotalGrade totalGrade={evaluation.data.totalGrade} />
                         </Header>
+
                         {data.questions.map((question, index) => (
                             <QuestionCard>
                                 <div key={index}>
