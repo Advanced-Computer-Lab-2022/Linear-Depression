@@ -31,7 +31,8 @@ const CourseHeader: React.FC = () => {
         activePromotion,
         currency,
         preview,
-        status
+        status,
+        isOwner
     } = data;
     const {
         auth: { userType }
@@ -77,6 +78,7 @@ const CourseHeader: React.FC = () => {
                 instructor={`${firstName} ${lastName}`}
                 rating={averageRating}
                 status={status}
+                isOwner={isOwner}
             />
             <CourseActions
                 price={price}
@@ -85,9 +87,10 @@ const CourseHeader: React.FC = () => {
                 courseId={_id}
                 videoUrl={preview}
                 status={status}
+                isOwner={isOwner}
             />
 
-            {userType === User.INSTRUCTOR && status === CourseStatus.DRAFT && (
+            {userType === User.INSTRUCTOR && status === CourseStatus.DRAFT && isOwner && (
                 <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />
             )}
         </Header>

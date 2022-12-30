@@ -45,7 +45,8 @@ const CourseActions: React.FC<{
     courseId: string;
     videoUrl?: string;
     status: CourseStatus;
-}> = ({ price, promotion, currency, courseId, videoUrl, status }) => {
+    isOwner: boolean;
+}> = ({ price, promotion, currency, courseId, videoUrl, status, isOwner }) => {
     const enrollment = useAppSelector((state) => state.enrollment);
     const dispatch = useAppDispatch();
 
@@ -124,7 +125,7 @@ const CourseActions: React.FC<{
                 ) : (
                     <br />
                 )}
-                {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && (
+                {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && isOwner && (
                     <Button onClick={openAddPromotionModal}>Add Promotion</Button>
                 )}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&

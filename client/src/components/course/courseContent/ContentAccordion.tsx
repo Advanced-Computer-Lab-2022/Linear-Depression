@@ -11,7 +11,7 @@ import { useAuth } from "@internals/hooks";
 import { AddExercise } from "@internals/modals";
 import { useAppSelector } from "@internals/redux";
 import { getLessonElementsStatus } from "@internals/services";
-import { Lesson as ILessonProps, User } from "@internals/types";
+import { Lesson as ILessonProps, User, CourseStatus } from "@internals/types";
 
 const ContentAccordion: React.FC<{
     lesson: ILessonProps;
@@ -22,6 +22,7 @@ const ContentAccordion: React.FC<{
     } = useAuth();
 
     const enrollment = useAppSelector((state) => state.enrollment);
+    const course = useAppSelector((state) => state.course);
 
     const { courseId } = useParams();
     const lessonId = _id;
@@ -86,7 +87,9 @@ const ContentAccordion: React.FC<{
                     <MdKeyboardArrowDown className="accordion-icon" />
                     <div className="accordion-title">{title}</div>
                     <div className="accordion-subtitle">{`${totalHours} hours`}</div>
-                    {userType === User.INSTRUCTOR && <OptionsButton options={options} icon={<MoreVertIcon />} />}
+                    {userType === User.INSTRUCTOR &&
+                        course.data?.status === CourseStatus.DRAFT &&
+                        course.data?.isOwner && <OptionsButton options={options} icon={<MoreVertIcon />} />}
                 </div>
             </h2>
             <div

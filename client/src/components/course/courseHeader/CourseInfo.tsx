@@ -69,7 +69,8 @@ const CourseInfo: React.FC<{
     instructor: string;
     rating: number;
     status: CourseStatus;
-}> = ({ title, description, rating, instructor, status }) => {
+    isOwner: boolean;
+}> = ({ title, description, rating, instructor, status, isOwner }) => {
     const {
         auth: { userType }
     } = useAuth();
@@ -190,6 +191,7 @@ const CourseInfo: React.FC<{
             )}
 
             {userType === User.INSTRUCTOR &&
+                isOwner &&
                 (status === CourseStatus.DRAFT ? (
                     <Button loading={loading} onClick={handlePublish}>
                         Publish
