@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import CircularProgressBar from "./CircularProgressBar";
+import { useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { downloadCertificate } from "@internals/services";
 
@@ -37,6 +38,7 @@ const ProgressContainer = styled.div`
 
 const CourseNavbar: React.FC = () => {
     const course = useAppSelector((state) => state.course);
+    useFetchMyEnrollment(course.data?._id);
     const enrollment = useAppSelector((state) => state.enrollment);
 
     const handleDownloadCertificate = () => {
@@ -57,9 +59,7 @@ const CourseNavbar: React.FC = () => {
                 </Link>
             </NavItem>
             <ProgressContainer>
-                <NavItem>
-                    <CircularProgressBar value={enrollment.data?.progress} />
-                </NavItem>
+                <NavItem>{enrollment.data && <CircularProgressBar value={enrollment.data?.progress} />}</NavItem>
                 {enrollment.data?.progress === 100 ? (
                     <Button
                         sx={{
