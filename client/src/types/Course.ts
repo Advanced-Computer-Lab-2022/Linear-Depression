@@ -1,3 +1,4 @@
+import CourseStatus from "./enums/CourseStatus";
 import { Lesson as ILessonProps, Review as IReviewProps } from "@internals/types";
 
 interface ICourseProps {
@@ -25,7 +26,7 @@ interface ICourseProps {
     preview: string;
     thumbnail: string;
     subject?: string;
-    isPublished: boolean;
+    status: CourseStatus;
 }
 
 export default ICourseProps;

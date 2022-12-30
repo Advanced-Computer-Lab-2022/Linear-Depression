@@ -9,7 +9,7 @@ import CourseActions from "./courseHeader/CourseActions";
 import CourseInfo from "./courseHeader/CourseInfo";
 import { useAuth } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
-import { User } from "@internals/types";
+import { CourseStatus, User } from "@internals/types";
 
 const Header = styled.div`
     height: 370px;
@@ -31,7 +31,7 @@ const CourseHeader: React.FC = () => {
         activePromotion,
         currency,
         preview,
-        isPublished
+        status
     } = data;
     const {
         auth: { userType }
@@ -72,7 +72,7 @@ const CourseHeader: React.FC = () => {
                 description={description}
                 instructor={`${firstName} ${lastName}`}
                 rating={averageRating}
-                isPublished={isPublished}
+                status={status}
             />
             <CourseActions
                 price={price}
@@ -80,10 +80,10 @@ const CourseHeader: React.FC = () => {
                 promotion={activePromotion}
                 courseId={_id}
                 videoUrl={preview}
-                isPublished={isPublished}
+                status={status}
             />
 
-            {userType === User.INSTRUCTOR && !isPublished && (
+            {userType === User.INSTRUCTOR && status === CourseStatus.DRAFT && (
                 <OptionsButton options={options} color="white" icon={<MoreVertIcon />} />
             )}
         </Header>

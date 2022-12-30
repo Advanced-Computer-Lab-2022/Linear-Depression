@@ -5,6 +5,12 @@ import Lesson from "./Lesson";
 import Rating from "./Rating";
 import { getVideoThumbnailUrl, isValidVideoLink } from "../services/videoServices";
 
+export enum CourseStatus {
+    DRAFT = "draft",
+    PUBLISHED = "published",
+    CLOSED = "closed"
+}
+
 export interface ICourse {
     title: string;
     description: string;
@@ -20,7 +26,11 @@ export interface ICourse {
     thumbnail: string;
     lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
-    isPublished: boolean;
+    status: CourseStatus;
+
+    close(): Promise<void>;
+    publish(): Promise<void>;
+    reOpen(): Promise<void>;
 }
 
 export interface ICourseModel extends ICourse, Document {}
@@ -41,7 +51,6 @@ const courseSchema = new Schema(
         ratings: [{ type: mongoose.Types.ObjectId, ref: "Rating", default: [] }],
         totalHours: {
             type: Number,
-            // calculate total hours from lessons
             default: 10
         },
         enrollmentsCount: { type: Number, default: 0 },
@@ -55,7 +64,11 @@ const courseSchema = new Schema(
             }
         },
         lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
-        isPublished: { type: Boolean, default: false }
+        status: {
+            type: String,
+            enum: Object.values(CourseStatus),
+            default: CourseStatus.DRAFT
+        }
     },
     {
         timestamps: true
@@ -65,6 +78,30 @@ const courseSchema = new Schema(
 courseSchema.virtual("thumbnail").get(function (this: ICourseModel) {
     return getVideoThumbnailUrl(this.preview);
 });
+
+courseSchema.methods.close = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.PUBLISHED) {
+        throw new Error("Invalid Transition, course must be published to be closed");
+    }
+    this.status = CourseStatus.CLOSED;
+    await this.save();
+};
+
+courseSchema.methods.publish = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.DRAFT) {
+        throw new Error("Invalid Transition, course must be draft to be published");
+    }
+    this.status = CourseStatus.PUBLISHED;
+    await this.save();
+};
+
+courseSchema.methods.reOpen = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.CLOSED) {
+        throw new Error("Invalid Transition, course must be closed to be re-opened");
+    }
+    this.status = CourseStatus.PUBLISHED;
+    await this.save();
+};
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
 courseSchema.plugin(mongoose_fuzzy_searching, {
