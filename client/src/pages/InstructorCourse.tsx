@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import { CircularProgress } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { openModal } from "react-url-modal";
@@ -20,7 +21,7 @@ const InstructorCourse: React.FC = () => {
     const { courseId } = useParams();
     useFetchCourseById(courseId);
     useFetchMyEnrollment(courseId);
-    const { data } = useAppSelector((state) => state.course);
+    const { data, loading } = useAppSelector((state) => state.course);
 
     const onClick = () => {
         openModal({
@@ -31,9 +32,17 @@ const InstructorCourse: React.FC = () => {
         });
     };
 
-    // TODO: To be replaced with suspense
-    if (!data) {
-        return <div>Loading...</div>;
+    if (loading || !data) {
+        return (
+            <CircularProgress
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)"
+                }}
+            />
+        );
     }
 
     return (
