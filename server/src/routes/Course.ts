@@ -44,6 +44,13 @@ router.delete(
     isCourseOwner,
     controller.deleteCourse
 );
+router.delete(
+    "/:courseId/lessons/:lessonId",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR]),
+    isCourseOwner,
+    lessonController.deleteLesson
+);
 
 router.post(
     "/:courseId/close",
