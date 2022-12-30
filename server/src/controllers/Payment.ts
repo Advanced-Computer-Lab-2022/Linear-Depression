@@ -29,7 +29,6 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
     let amount_off = 0;
 
     if (trainee.wallet > 0) {
-        // console.log("wallet"");
         amount_off = Math.min(trainee.wallet, coursePriceAfterPromotion);
 
         const coupon = await stripe.coupons.create({
