@@ -15,7 +15,9 @@ import {
     ViewAndAcceptContract,
     EditLesson,
     EditProfile,
-    ViewMyWallet
+    ViewMyWallet,
+    DeleteCourse,
+    DeleteLesson
 } from "@internals/modals";
 import {
     Home,
@@ -56,7 +58,9 @@ function App() {
                         editProfile: EditProfile,
                         viewAndAcceptContract: ViewAndAcceptContract,
                         viewMySettlements: ViewMySettlements,
-                        viewMyWallet: ViewMyWallet
+                        viewMyWallet: ViewMyWallet,
+                        deleteCourse: DeleteCourse,
+                        deleteLesson: DeleteLesson
                     }}
                 />
                 <Routes>

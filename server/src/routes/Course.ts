@@ -11,13 +11,14 @@ import isCourseOwner from "../middleware/permissions/isCourseOwner";
 import isEnrolled from "../middleware/permissions/isEnrolled";
 import isOwnerOrEnrolled from "../middleware/permissions/isOwnerOrEnrolled";
 import isRatingOwner from "../middleware/permissions/isRatingOwner";
+import extractUserId from "../middleware/extractUserId";
 
 const router = express.Router();
 
 // all users
 router.get("/", controller.listCourses);
 router.get("/subjects", controller.listSubjects);
-router.get("/:courseId", controller.readCourse);
+router.get("/:courseId", extractUserId, controller.readCourse);
 router.get("/:courseId/ratings", ratingController.listRatings);
 router.get(
     "/:courseId/my-rating",
@@ -43,6 +44,13 @@ router.delete(
     isAuthorized([UserType.INSTRUCTOR]),
     isCourseOwner,
     controller.deleteCourse
+);
+router.delete(
+    "/:courseId/lessons/:lessonId",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR]),
+    isCourseOwner,
+    lessonController.deleteLesson
 );
 
 router.post(

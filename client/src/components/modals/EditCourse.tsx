@@ -1,10 +1,14 @@
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector, getCourse } from "@internals/redux";
 import { editCourse } from "@internals/services";
+import * as Yup from "yup";
+import { validateFormData } from "@internals/utils";
+import { useToast } from "@internals/hooks";
 
 const HorizontalView = styled.div`
     display: flex;
@@ -24,30 +28,80 @@ const EditCourse: React.FC = () => {
     const [subject, setSubject] = useState(data.subject);
     const [description, setDescription] = useState(data.description);
     const [price, setPrice] = useState(data.price);
-    const [preview, setPreview] = useState("");
+    const [preview, setPreview] = useState(data.preview ? data.preview : "");
+
+    const [formErrors, setFormErrors] = useState(new Map());
+    const [loading, setLoading] = useState(false);
+    const { showToast } = useToast();
+
+    const validationRules = {
+        title: Yup.string().required("Please enter a title"),
+        subject: Yup.string().required("Please select a subject"),
+        description: Yup.string().required("Please enter a description"),
+        price: Yup.number().min(0, "Price must be greater than 0"),
+
+        // youtube video url validation
+        preview: Yup.string().matches(
+            /^(http(s)?:\/\/)?((w){3}.)?youtube\.com\/watch\?v=/,
+            "Please enter a valid youtube video url"
+        )
+    };
 
     const dispatch = useAppDispatch();
     const handleSubmit = () => {
-        const course: { title: string; subject: string; description: string; price: number; preview?: string } = {
+        setLoading(true);
+        const formData = {
             title,
             subject,
             description,
-            price
+            price,
+            preview: preview.length > 0 ? preview : undefined
         };
 
-        if (preview.length > 0) {
-            course.preview = preview;
-        }
+        validateFormData(formData, validationRules)
+            .then(async (outputData) => {
+                const validatedData = outputData as unknown as {
+                    title: string;
+                    subject: string;
+                    description: string;
+                    price: number;
+                    preview?: string;
+                };
 
-        editCourse(data._id, course)
-            .then(() => {
-                dispatch(getCourse(data._id));
+                const addedCourse: {
+                    title: string;
+                    subject: string;
+                    description: string;
+                    price: number;
+                    preview?: string;
+                } = {
+                    title: validatedData.title,
+                    subject: validatedData.subject,
+                    description: validatedData.description,
+                    price: validatedData.price
+                };
+
+                if (validatedData.preview) {
+                    addedCourse.preview = validatedData.preview;
+                }
+
+                editCourse(data._id, addedCourse)
+                    .then(() => {
+                        showToast({ message: "Course Updated Successfully", type: "success" });
+                        dispatch(getCourse(data._id));
+                        closeModal();
+                    })
+                    .catch(() => {
+                        showToast({ message: "Failed to Update Course Try Later", type: "error" });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
             })
-            .catch((error) => {
-                console.log(error);
+            .catch((errors) => {
+                setFormErrors(errors);
+                setLoading(false);
             });
-
-        closeModal();
     };
 
     return (
@@ -65,6 +119,8 @@ const EditCourse: React.FC = () => {
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    error={formErrors.has("title")}
+                    helperText={formErrors.get("title")}
                 />
                 <TextField
                     required
@@ -80,6 +136,8 @@ const EditCourse: React.FC = () => {
                     maxRows={4}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    error={formErrors.has("description")}
+                    helperText={formErrors.get("description")}
                 />
                 <TextField
                     autoFocus
@@ -91,6 +149,8 @@ const EditCourse: React.FC = () => {
                     variant="outlined"
                     value={preview}
                     onChange={(e) => setPreview(e.target.value)}
+                    error={formErrors.has("preview")}
+                    helperText={formErrors.get("preview")}
                 />
                 <HorizontalView>
                     <TextField
@@ -116,12 +176,16 @@ const EditCourse: React.FC = () => {
                         variant="outlined"
                         value={price}
                         onChange={(e) => setPrice(e.target.value as unknown as number)}
+                        error={formErrors.has("price")}
+                        helperText={formErrors.get("price")}
                     />
                 </HorizontalView>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSubmit}>Submit</Button>
+                <LoadingButton loading={loading} onClick={handleSubmit}>
+                    Submit
+                </LoadingButton>
             </DialogActions>
         </Dialog>
     );

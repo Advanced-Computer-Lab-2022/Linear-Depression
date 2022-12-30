@@ -1,10 +1,14 @@
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
+import { useToast } from "@internals/hooks";
 import { getCourse, useAppDispatch } from "@internals/redux";
 import { addLesson } from "@internals/services";
+import { validateFormData } from "@internals/utils";
 
 const AddLesson: React.FC<{
     params: {
@@ -24,14 +28,73 @@ const AddLesson: React.FC<{
 
     const [title, setTitle] = useState("");
     const [totalHours, setTotalHours] = useState(0);
+    const [videoTitle, setVideoTitle] = useState("");
+    const [videoLink, setVideoLink] = useState("");
+    const [videoDescription, setVideoDescription] = useState("");
+
+    const [formErrors, setFormErrors] = useState(new Map());
+    const [loading, setLoading] = useState(false);
+    const { showToast } = useToast();
+
+    const validationRules = {
+        title: Yup.string().required("Please enter a title"),
+        totalHours: Yup.number().required("Please enter a duration"),
+        videoTitle: Yup.string().required("Please enter a video title"),
+        videoLink: Yup.string()
+            .required("Please enter video link ")
+            .matches(/^(http(s)?:\/\/)?((w){3}.)?youtube\.com\/watch\?v=/, "Please enter a valid youtube video url"),
+        videoDescription: Yup.string().required("Please enter a video description")
+    };
 
     const dispatch = useAppDispatch();
 
     const handleSubmit = () => {
-        addLesson(courseId, { title, totalHours }).then(() => {
-            dispatch(getCourse(courseId));
-            closeModal();
-        });
+        setLoading(true);
+        setFormErrors(new Map());
+        const formData = {
+            title,
+            totalHours,
+            videoTitle,
+            videoLink,
+            videoDescription
+        };
+        validateFormData(formData, validationRules)
+            .then(async (data) => {
+                const validatedData = data as unknown as {
+                    title: string;
+                    totalHours: number;
+                    videoTitle: string;
+                    videoLink: string;
+                    videoDescription: string;
+                };
+
+                const addedLesson = {
+                    title: validatedData.title,
+                    totalHours: validatedData.totalHours,
+                    video: {
+                        title: validatedData.videoTitle,
+                        videoLink: validatedData.videoLink,
+                        description: validatedData.videoDescription
+                    }
+                };
+
+                addLesson(courseId, addedLesson)
+                    .then(() => {
+                        showToast({ message: "Lesson Added Successfully", type: "success" });
+                        dispatch(getCourse(courseId));
+                        closeModal();
+                    })
+                    .catch(() => {
+                        showToast({ message: "Failed to Add Lesson Try Later", type: "error" });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            })
+            .catch((errors) => {
+                setFormErrors(errors);
+                setLoading(false);
+            });
     };
 
     return (
@@ -49,6 +112,8 @@ const AddLesson: React.FC<{
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    error={formErrors.has("title")}
+                    helperText={formErrors.get("title")}
                 />
                 <TextField
                     required
@@ -61,11 +126,57 @@ const AddLesson: React.FC<{
                     variant="outlined"
                     value={totalHours}
                     onChange={(e) => setTotalHours(e.target.value as unknown as number)}
+                    error={formErrors.has("totalHours")}
+                    helperText={formErrors.get("totalHours")}
+                />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="videoTitle"
+                    label="Video Title"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    value={videoTitle}
+                    onChange={(e) => setVideoTitle(e.target.value)}
+                    error={formErrors.has("videoTitle")}
+                    helperText={formErrors.get("videoTitle")}
+                />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="videoURL"
+                    label="Video URL"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    value={videoLink}
+                    onChange={(e) => setVideoLink(e.target.value)}
+                    error={formErrors.has("videoLink")}
+                    helperText={formErrors.get("videoLink")}
+                />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="videoDescription"
+                    label="Video Description"
+                    type="text"
+                    fullWidth
+                    multiline
+                    minRows={2}
+                    maxRows={4}
+                    variant="outlined"
+                    value={videoDescription}
+                    onChange={(e) => setVideoDescription(e.target.value)}
+                    error={formErrors.has("videoDescription")}
+                    helperText={formErrors.get("videoDescription")}
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSubmit}>Submit</Button>
+                <LoadingButton loading={loading} onClick={handleSubmit}>
+                    Submit
+                </LoadingButton>
             </DialogActions>
         </Dialog>
     );

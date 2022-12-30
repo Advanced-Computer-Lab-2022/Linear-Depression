@@ -126,7 +126,7 @@ const InstructorCourse: React.FC = () => {
                     )}
                 </HorizontalContainer>
             </Container>
-            {userType === User.INSTRUCTOR && data.status === CourseStatus.DRAFT && (
+            {userType === User.INSTRUCTOR && data.status === CourseStatus.DRAFT && data.isOwner && (
                 <FloatingButton onClick={onClick}>
                     <AddIcon />
                 </FloatingButton>
