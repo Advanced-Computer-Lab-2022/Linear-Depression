@@ -8,12 +8,19 @@ import styled from "styled-components";
 import BadgeRatedEnrolled from "./courseInfo/BadgeRatedEnrolled";
 import { useAuth, useToast } from "@internals/hooks";
 import { getCourse, useAppDispatch } from "@internals/redux";
-import { editCourse } from "@internals/services";
-import { User } from "@internals/types";
+import { publish, close, open } from "@internals/services";
+import { CourseStatus, User } from "@internals/types";
 
 const Container = styled.div`
     margin: 0 40px;
     flex: 1;
+`;
+
+const HorizontalContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
 `;
 
 const Title = styled.div`
@@ -22,7 +29,7 @@ const Title = styled.div`
     max-width: 700px;
     font-size: 32px;
     line-height: 1.2;
-    margin-bottom: 8px;
+    margin-right: 20px;
 `;
 
 const Description = styled.div`
@@ -61,8 +68,8 @@ const CourseInfo: React.FC<{
     description: string;
     instructor: string;
     rating: number;
-    isPublished: boolean;
-}> = ({ title, description, rating, instructor, isPublished }) => {
+    status: CourseStatus;
+}> = ({ title, description, rating, instructor, status }) => {
     const {
         auth: { userType }
     } = useAuth();
@@ -86,7 +93,8 @@ const CourseInfo: React.FC<{
 
     const handlePublish = () => {
         setLoading(true);
-        editCourse(courseId, { isPublished: true })
+
+        publish(courseId)
             .then(() => {
                 dispatch(getCourse(courseId));
                 showToast({
@@ -106,9 +114,72 @@ const CourseInfo: React.FC<{
             });
     };
 
+    const handleClose = () => {
+        setLoading(true);
+
+        close(courseId)
+            .then(() => {
+                dispatch(getCourse(courseId));
+                showToast({
+                    type: "success",
+                    message: "Course closed successfully"
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                showToast({
+                    type: "error",
+                    message: "closing failed, please try again later"
+                });
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+    const handleOpen = () => {
+        setLoading(true);
+
+        open(courseId)
+            .then(() => {
+                dispatch(getCourse(courseId));
+                showToast({
+                    type: "success",
+                    message: "Course opened successfully"
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                showToast({
+                    type: "error",
+                    message: "Opening failed, please try again later"
+                });
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
     return (
         <Container>
-            <Title>{title}</Title>
+            <HorizontalContainer>
+                <Title>{title}</Title>
+
+                {userType === User.INSTRUCTOR &&
+                    (status === CourseStatus.DRAFT ? (
+                        <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
+                            <Chip label="DRAFT COURSE" color="secondary" />
+                        </Tooltip>
+                    ) : status === CourseStatus.PUBLISHED ? (
+                        <Tooltip title="The course is published and can be viewed by trainees" arrow>
+                            <Chip label="PUBLISHED COURSE" color="primary" />
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="The course is closed and not accepting new enrollments" arrow>
+                            <Chip label="CLOSED COURSE" color="secondary" />
+                        </Tooltip>
+                    ))}
+            </HorizontalContainer>
             <Description>{description}</Description>
             <BadgeRatedEnrolled rating={rating} />
             <div>
@@ -117,26 +188,20 @@ const CourseInfo: React.FC<{
             {(userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
                 <Button onClick={onClick}>Review</Button>
             )}
-            <br />
+
             {userType === User.INSTRUCTOR &&
-                (isPublished ? (
-                    <>
-                        {" "}
-                        <Tooltip title="The course is published and can be viewed by trainees" arrow>
-                            <Chip label="PUBLISHED COURSE" color="primary" />
-                        </Tooltip>
-                        {/* TODO: add close for enrollments */}
-                    </>
+                (status === CourseStatus.DRAFT ? (
+                    <Button loading={loading} onClick={handlePublish}>
+                        Publish
+                    </Button>
+                ) : status === CourseStatus.PUBLISHED ? (
+                    <Button loading={loading} onClick={handleClose}>
+                        Close
+                    </Button>
                 ) : (
-                    <>
-                        <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
-                            <Chip label="DRAFT COURSE" color="secondary" />
-                        </Tooltip>
-                        <br />
-                        <Button loading={loading} onClick={handlePublish}>
-                            Publish
-                        </Button>
-                    </>
+                    <Button loading={loading} onClick={handleOpen}>
+                        Open
+                    </Button>
                 ))}
         </Container>
     );

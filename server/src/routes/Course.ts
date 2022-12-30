@@ -44,6 +44,31 @@ router.delete(
     isCourseOwner,
     controller.deleteCourse
 );
+
+router.post(
+    "/:courseId/close",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR]),
+    isCourseOwner,
+    controller.closeCourse
+);
+
+router.post(
+    "/:courseId/publish",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR]),
+    isCourseOwner,
+    controller.publishCourse
+);
+
+router.post(
+    "/:courseId/open",
+    isAuthenticated,
+    isAuthorized([UserType.INSTRUCTOR]),
+    isCourseOwner,
+    controller.reOpenCourse
+);
+
 router.post(
     "/:courseId/lessons",
     isAuthenticated,

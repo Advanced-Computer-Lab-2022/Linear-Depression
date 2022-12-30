@@ -1,7 +1,7 @@
 import rateLimit from "express-rate-limit";
 import { Request, Response, NextFunction } from "express";
 
-const rateLimiter = (requestsPerMinute: number = 60) => {
+const rateLimiter = (requestsPerMinute: number = 120) => {
     return rateLimit({
         windowMs: 60 * 1000, // 1 minute
         max: requestsPerMinute, // Limit each IP to n requests per `window` per minute

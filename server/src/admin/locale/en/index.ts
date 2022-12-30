@@ -13,7 +13,11 @@ const enLocale = {
             Instructor: "Instructors",
             CorporateTrainee: "Corporate Trainees",
             Report: "Reports",
-            Course: "Courses"
+            Course: "Courses",
+            loginWelcome: "Admin Dashboard"
+        },
+        messages: {
+            loginWelcome: ""
         }
     }
 };
