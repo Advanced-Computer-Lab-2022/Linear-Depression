@@ -1,13 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
-import { CourseContent, CourseHeader, CourseReviews, FloatingButton } from "@internals/components";
+import { CourseContent, CourseHeader, CourseReviews, FloatingButton, LoadingHeader } from "@internals/components";
 import { useAuth, useFetchCourseById, useFetchMyEnrollment, useFetchMyRefundRequest, useToast } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { sendRefundRequest, cancelRefundRequest } from "@internals/services";
@@ -95,16 +94,7 @@ const InstructorCourse: React.FC = () => {
     };
 
     if (dataLoading || !data) {
-        return (
-            <CircularProgress
-                sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)"
-                }}
-            />
-        );
+        return <LoadingHeader />;
     }
 
     return (
