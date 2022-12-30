@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Course from "../models/Course";
+import Course, { CourseStatus } from "../models/Course";
 import Enrollment from "../models/Enrollment";
 
 export const createEnrollmentService = async (
@@ -15,11 +15,8 @@ export const createEnrollmentService = async (
         }
     });
     const course = await Course.findById(courseId);
-    if (!course!.isPublished) {
+    if (course!.status === CourseStatus.PUBLISHED) {
         throw new Error("Course is not published");
-    }
-    if (course!.isClosed) {
-        throw new Error("Course is closed");
     }
     return new Enrollment({
         traineeId: traineeId,

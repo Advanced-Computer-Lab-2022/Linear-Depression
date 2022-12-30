@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
-import Course, { ICourse, ICourseModel } from "../models/Course";
+import Course, { CourseStatus, ICourse, ICourseModel } from "../models/Course";
 import Instructor, { IInstructorModel } from "../models/Instructor";
 import { getCurrencyCode, getCurrencyRateFromCache } from "../services/CourseServices";
 import { ParamsDictionary } from "express-serve-static-core";
@@ -179,7 +179,7 @@ const updateCourse = async (req: Request, res: Response, _next: NextFunction) =>
     return Course.findById(courseId)
         .then((course) => {
             if (course) {
-                if (course.isPublished) {
+                if (course.status === CourseStatus.PUBLISHED) {
                     return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is published" });
                 }
 
@@ -202,7 +202,7 @@ const deleteCourse = async (req: Request, res: Response, _next: NextFunction) =>
     return Course.findByIdAndDelete(courseId)
         .then((course) => {
             if (course) {
-                if (course.isPublished) {
+                if (course.status !== CourseStatus.DRAFT) {
                     return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is published" });
                 }
                 return res.status(StatusCodes.OK).json({ message: "Course is deleted Successfully" });
@@ -215,7 +215,7 @@ const deleteCourse = async (req: Request, res: Response, _next: NextFunction) =>
 };
 
 const listSubjects = async (req: Request, res: Response, _next: NextFunction) => {
-    req.query.isPublished = "true";
+    req.query.status = CourseStatus.PUBLISHED;
     return Course.find(req.query)
         .distinct("subject")
         .then((subjects) => res.status(StatusCodes.OK).json({ subjects }))
@@ -247,7 +247,7 @@ async function searchWithTitleSubject(
         })
         .then((courses) => {
             if (!skipPublishCheck) {
-                courses = courses.filter((course) => course.isPublished! && course.isClosed);
+                courses = courses.filter((course) => course.status === CourseStatus.PUBLISHED);
             }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course) => ({ ...course.toObject({ virtuals: true }), currency }));
@@ -284,7 +284,7 @@ async function searchWithInstructors(
         })
         .then((courses) => {
             if (!skipPublishCheck) {
-                courses = courses.filter((course) => course.isPublished! && course.isClosed);
+                courses = courses.filter((course) => course.status === CourseStatus.PUBLISHED);
             }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
@@ -329,7 +329,7 @@ async function listCoursesOnlyFilter(
         .sort(sortOptions)
         .then((courses) => {
             if (!skipPublishCheck) {
-                courses = courses.filter((course) => course.isPublished && !course.isClosed);
+                courses = courses.filter((course) => course.status === CourseStatus.PUBLISHED);
             }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
@@ -343,8 +343,26 @@ async function listCoursesOnlyFilter(
 const closeCourse = async (req: Request, res: Response, _next: NextFunction) => {
     const courseId = req.params.courseId;
     return Course.findById(courseId).then((course) => {
-        course?.closeCourse().then((course) => {
+        course?.close().then((_course) => {
             res.status(StatusCodes.OK).json({ message: "Course closed successfully" });
+        });
+    });
+};
+
+const publishCourse = async (req: Request, res: Response, _next: NextFunction) => {
+    const courseId = req.params.courseId;
+    return Course.findById(courseId).then((course) => {
+        course?.publish().then((_course) => {
+            res.status(StatusCodes.OK).json({ message: "Course published successfully" });
+        });
+    });
+};
+
+const reOpenCourse = async (req: Request, res: Response, _next: NextFunction) => {
+    const courseId = req.params.courseId;
+    return Course.findById(courseId).then((course) => {
+        course?.reOpen().then((_course) => {
+            res.status(StatusCodes.OK).json({ message: "Course re-opened successfully" });
         });
     });
 };
@@ -357,5 +375,7 @@ export default {
     deleteCourse,
     listSubjects,
     listMyCourses,
-    closeCourse
+    closeCourse,
+    publishCourse,
+    reOpenCourse
 };
