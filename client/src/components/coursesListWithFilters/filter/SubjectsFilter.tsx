@@ -7,14 +7,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
 
 import { useFetchSubjects } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
-
-const CheckboxItem = styled(Checkbox)`
-    color: red;
-`;
 
 const SubjectsFilter: React.FC = () => {
     const [checked, setChecked] = useState(-1);
@@ -48,7 +43,7 @@ const SubjectsFilter: React.FC = () => {
                             >
                                 <ListItemButton role={undefined} onClick={handleToggle(subject, index)} dense>
                                     <ListItemIcon>
-                                        <CheckboxItem
+                                        <Checkbox
                                             edge="start"
                                             checked={checked === index}
                                             tabIndex={-1}
