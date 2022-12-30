@@ -1,8 +1,8 @@
-import { CircularProgress } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 
 import CourseCard from "./coursesList/CourseCard";
+import LoadingCard from "./coursesList/LoadingCard";
 import { useAppSelector } from "@internals/redux";
 import { Course as ICourseProps } from "@internals/types";
 
@@ -20,14 +20,9 @@ const CoursesList: React.FC<{ courses: ICourseProps[]; showPrice: boolean; showS
     if (loading) {
         return (
             <CoursesListContainer>
-                <CircularProgress
-                    sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)"
-                    }}
-                />
+                <LoadingCard />
+                <LoadingCard />
+                <LoadingCard />
             </CoursesListContainer>
         );
     }
@@ -40,7 +35,8 @@ const CoursesList: React.FC<{ courses: ICourseProps[]; showPrice: boolean; showS
                         textAlign: "center",
                         fontSize: "1.5rem",
                         fontWeight: "bold",
-                        color: "var(--color-grey-dark-1)"
+                        color: "var(--color-grey-dark-1)",
+                        margin: "100px 0"
                     }}
                 >
                     No courses available right now
