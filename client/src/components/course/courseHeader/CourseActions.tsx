@@ -8,7 +8,7 @@ import { useAuth, useFetchMyAccessRequest, useToast } from "@internals/hooks";
 import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
 import { enrollOnCourse, sendAccessRequest } from "@internals/services";
 import { handleCheckout } from "@internals/services";
-import { Promotion, User } from "@internals/types";
+import { CourseStatus, Promotion, User } from "@internals/types";
 
 const MainContainer = styled.div``;
 
@@ -44,8 +44,8 @@ const CourseActions: React.FC<{
     promotion: Promotion;
     courseId: string;
     videoUrl?: string;
-    isPublished: boolean;
-}> = ({ price, promotion, currency, courseId, videoUrl }) => {
+    status: CourseStatus;
+}> = ({ price, promotion, currency, courseId, videoUrl, status }) => {
     const enrollment = useAppSelector((state) => state.enrollment);
     const dispatch = useAppDispatch();
 
@@ -124,7 +124,9 @@ const CourseActions: React.FC<{
                 ) : (
                     <br />
                 )}
-                {userType === User.INSTRUCTOR && <Button onClick={openAddPromotionModal}>Add Promotion</Button>}
+                {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && (
+                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
+                )}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&
                     accessRequest.data == null && (
