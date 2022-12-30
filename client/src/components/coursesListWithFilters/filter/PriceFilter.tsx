@@ -1,4 +1,4 @@
-import { Button, InputAdornment, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React, { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -30,30 +30,20 @@ const PriceFilter: React.FC = () => {
     return (
         <HorizontalLayout>
             <TextField
-                style={{ width: "45%", margin: "2px", marginTop: "4px" }}
-                label="min "
+                style={{ width: "45%", margin: "2px", marginTop: "6px" }}
+                label={`min ${currency}`}
                 id="outlined-start-adornment"
                 type="number"
-                InputProps={{
-                    startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
-                }}
                 onChange={(e) => setMinValue(e.target.value)}
             />
             <TextField
-                style={{ width: "45%", margin: "2px", marginTop: "4px" }}
-                label="max "
+                style={{ width: "45%", margin: "2px", marginTop: "6px" }}
+                label={`max ${currency}`}
                 id="outlined-start-adornment"
                 type="number"
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start" style={{ fontSize: "0.5em" }}>
-                            {currency}
-                        </InputAdornment>
-                    )
-                }}
                 onChange={(e) => setMaxValue(e.target.value)}
             />
-            <Button variant="outlined" size="small" style={{ margin: "2px", marginTop: "4px" }} onClick={handleClick}>
+            <Button variant="outlined" size="small" style={{ margin: "2px", marginTop: "6px" }} onClick={handleClick}>
                 set
             </Button>
         </HorizontalLayout>
