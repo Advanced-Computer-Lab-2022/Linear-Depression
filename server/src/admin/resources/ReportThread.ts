@@ -20,6 +20,10 @@ export const ReportThreadResource = {
             },
             show: {
                 component: AdminJS.bundle("../components/report.thread/ShowPage")
+            },
+            delete: {
+                isAccessible: false,
+                isVisible: false
             }
         },
         navigation: false
