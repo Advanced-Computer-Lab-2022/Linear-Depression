@@ -179,8 +179,8 @@ const updateCourse = async (req: Request, res: Response, _next: NextFunction) =>
     return Course.findById(courseId)
         .then((course) => {
             if (course) {
-                if (course.status === CourseStatus.PUBLISHED) {
-                    return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is published" });
+                if (course.status !== CourseStatus.DRAFT) {
+                    return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is not draft" });
                 }
 
                 course.set(req.body);
@@ -203,7 +203,7 @@ const deleteCourse = async (req: Request, res: Response, _next: NextFunction) =>
         .then((course) => {
             if (course) {
                 if (course.status !== CourseStatus.DRAFT) {
-                    return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is published" });
+                    return res.status(StatusCodes.BAD_REQUEST).json({ message: "course is not draft" });
                 }
                 return res.status(StatusCodes.OK).json({ message: "Course is deleted Successfully" });
             } else {
