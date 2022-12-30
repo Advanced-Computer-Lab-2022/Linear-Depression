@@ -61,7 +61,15 @@ const ContentAccordion: React.FC<{
         },
         {
             label: "Delete",
-            onClick: () => console.log("Delete")
+            onClick: () => {
+                openModal({
+                    name: "deleteLesson",
+                    params: {
+                        courseId,
+                        lessonId
+                    }
+                });
+            }
         }
     ];
 

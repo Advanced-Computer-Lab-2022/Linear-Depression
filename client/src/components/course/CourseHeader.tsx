@@ -47,7 +47,11 @@ const CourseHeader: React.FC = () => {
         },
         {
             label: "Delete",
-            onClick: () => console.log("Delete")
+            onClick: () => {
+                openModal({
+                    name: "deleteCourse"
+                });
+            }
         }
     ];
 
