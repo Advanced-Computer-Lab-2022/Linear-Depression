@@ -247,7 +247,7 @@ async function searchWithTitleSubject(
         })
         .then((courses) => {
             if (!skipPublishCheck) {
-                courses = courses.filter((course) => course.isPublished);
+                courses = courses.filter((course) => course.isPublished! && course.isClosed);
             }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course) => ({ ...course.toObject({ virtuals: true }), currency }));
@@ -284,7 +284,7 @@ async function searchWithInstructors(
         })
         .then((courses) => {
             if (!skipPublishCheck) {
-                courses = courses.filter((course) => course.isPublished);
+                courses = courses.filter((course) => course.isPublished! && course.isClosed);
             }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
@@ -329,7 +329,7 @@ async function listCoursesOnlyFilter(
         .sort(sortOptions)
         .then((courses) => {
             if (!skipPublishCheck) {
-                courses = courses.filter((course) => course.isPublished);
+                courses = courses.filter((course) => course.isPublished && !course.isClosed);
             }
             adjustCoursePrice(courses, currencyRate);
             const coursesWithCurrency = courses.map((course: ICourseModel) => {
@@ -340,6 +340,15 @@ async function listCoursesOnlyFilter(
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 }
 
+const closeCourse = async (req: Request, res: Response, _next: NextFunction) => {
+    const courseId = req.params.courseId;
+    return Course.findById(courseId).then((course) => {
+        course?.closeCourse().then((course) => {
+            res.status(StatusCodes.OK).json({ message: "Course closed successfully" });
+        });
+    });
+};
+
 export default {
     listCourses,
     createCourse,
@@ -347,5 +356,6 @@ export default {
     updateCourse,
     deleteCourse,
     listSubjects,
-    listMyCourses
+    listMyCourses,
+    closeCourse
 };

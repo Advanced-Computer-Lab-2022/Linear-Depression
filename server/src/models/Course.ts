@@ -21,6 +21,9 @@ export interface ICourse {
     lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
     isPublished: boolean;
+    isClosed: boolean;
+
+    closeCourse(): Promise<void>;
 }
 
 export interface ICourseModel extends ICourse, Document {}
@@ -55,7 +58,8 @@ const courseSchema = new Schema(
             }
         },
         lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson", default: [] }],
-        isPublished: { type: Boolean, default: false }
+        isPublished: { type: Boolean, default: false },
+        isClosed: { type: Boolean, default: false }
     },
     {
         timestamps: true
@@ -65,6 +69,14 @@ const courseSchema = new Schema(
 courseSchema.virtual("thumbnail").get(function (this: ICourseModel) {
     return getVideoThumbnailUrl(this.preview);
 });
+
+courseSchema.methods.closeCourse = async function (this: ICourseModel) {
+    if (!this.isPublished) {
+        throw new Error("Course is not published yet");
+    }
+    this.isClosed = true;
+    await this.save();
+};
 
 courseSchema.plugin(uniqueValidator, { message: "is already taken." });
 courseSchema.plugin(mongoose_fuzzy_searching, {

@@ -18,6 +18,9 @@ export const createEnrollmentService = async (
     if (!course!.isPublished) {
         throw new Error("Course is not published");
     }
+    if (course!.isClosed) {
+        throw new Error("Course is closed");
+    }
     return new Enrollment({
         traineeId: traineeId,
         courseId: courseId
