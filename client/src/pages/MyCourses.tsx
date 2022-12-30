@@ -12,7 +12,7 @@ const MyCourses: React.FC = () => {
     useGetInstructorContractStatus();
     const { auth } = useAuth();
 
-    const { data, loading } = useAppSelector((state) => state.coursesList);
+    const { data } = useAppSelector((state) => state.coursesList);
 
     const onClick = () => {
         openModal({
@@ -23,15 +23,13 @@ const MyCourses: React.FC = () => {
     return (
         <>
             <Navbar search={true} />
-            {!loading && (
-                <CoursesListWithFilters
-                    courses={data}
-                    addCourse={true}
-                    showPrice={auth.userType === User.INSTRUCTOR}
-                    showStatus={auth.userType === User.INSTRUCTOR}
-                    showBrowseBy={false}
-                />
-            )}
+            <CoursesListWithFilters
+                courses={data}
+                addCourse={true}
+                showPrice={auth.userType === User.INSTRUCTOR}
+                showStatus={auth.userType === User.INSTRUCTOR}
+                showBrowseBy={false}
+            />
             {auth.userType === User.INSTRUCTOR && (
                 <FloatingButton color="primary" aria-label="add" onClick={onClick}>
                     <AddIcon />

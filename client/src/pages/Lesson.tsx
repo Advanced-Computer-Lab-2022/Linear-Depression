@@ -1,6 +1,8 @@
 import DescriptionIcon from "@mui/icons-material/Description";
 import { Popover } from "@mui/material";
 import React, { useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -56,18 +58,28 @@ const Lesson: React.FC = () => {
 
     const [open, setOpen] = useState(false);
 
-    if (!lesson.data) return <div>Loading....</div>;
     return (
         <>
             <CourseNavbar />
             <HorizontalContainer>
                 <Container>
                     <VideoContainer>
-                        <VideoPlayer videoUrl={lesson.data.video?.videoLink} height={550} />
+                        {lesson.data ? (
+                            <VideoPlayer videoUrl={lesson.data.video?.videoLink} height={550} />
+                        ) : (
+                            <Skeleton height={550} width={1.7 * 550} />
+                        )}
                     </VideoContainer>
                     <VideoInfoContainer>
-                        <Title>{lesson.data.video?.title}</Title>
-                        <Description>{lesson.data.video?.description}</Description>
+                        {lesson.data ? <Title>{lesson.data.video?.title}</Title> : <Skeleton width={300} height={30} />}
+                        {lesson.data ? (
+                            <Description>{lesson.data.video?.description}</Description>
+                        ) : (
+                            <>
+                                <Skeleton width={500} height={40} />
+                                <Skeleton width={500} height={40} />
+                            </>
+                        )}
                     </VideoInfoContainer>
                     <FloatingButton
                         color="primary"
@@ -94,16 +106,18 @@ const Lesson: React.FC = () => {
                         <Note setOpen={setOpen} />
                     </Popover>
                 </Container>
-                <SideMenu>
-                    <CourseContentTitle>Course Content</CourseContentTitle>
-                    {course.data?.lessons.map((lesson) => {
-                        return (
-                            <div>
-                                <ContentAccordion key={lesson._id} lesson={lesson} showLessonStatus={true} />
-                            </div>
-                        );
-                    })}
-                </SideMenu>
+                {lesson.data && (
+                    <SideMenu>
+                        <CourseContentTitle>Course Content</CourseContentTitle>
+                        {course.data?.lessons.map((lesson) => {
+                            return (
+                                <div>
+                                    <ContentAccordion key={lesson._id} lesson={lesson} showLessonStatus={true} />
+                                </div>
+                            );
+                        })}
+                    </SideMenu>
+                )}
             </HorizontalContainer>
         </>
     );
