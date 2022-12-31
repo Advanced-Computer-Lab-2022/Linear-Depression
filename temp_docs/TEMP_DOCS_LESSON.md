@@ -20,14 +20,14 @@ Response
 ```json
 {
     "lesson": {
-        "_id" : ObjectId("63b08018229f88974896da6f"),
+        "_id" : "63b08018229f88974896da6f",
         "title" : "Rust for beginners",
         "exercises" : [ ],
         "totalHours" : 23,
         "video" : {
                 "title" : "Rust for beginners",
                 "videoLink" : "https://www.youtube.com/watch?v=gvgBUY8iNO4",
-                "description": "Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes performance, type safety, and concurrency."
+                "description": "Rust is a multi-paradigm, general-purpose programming language."
         },
         "__v" : 0
     }
@@ -66,7 +66,7 @@ Response
         "video": {
             "title": "Rust for beginners",
             "videoLink": "https://www.youtube.com/watch?v=gvgBUY8iNO4",
-            "description": "Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes performance, type safety, and concurrency."
+            "description": "Rust is a multi-paradigm, general-purpose programming language."
         },
         "_id": "63b080e6784b76b62a2afc80",
         "__v": 0
@@ -106,7 +106,7 @@ Response
         "video": {
             "title": "Rust for beginners",
             "videoLink": "https://www.youtube.com/watch?v=gvgBUY8iNO4",
-            "description": "Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes performance, type safety, and concurrency."
+            "description": "Rust is a multi-paradigm, general-purpose programming language."
         },
         "_id": "63b080e6784b76b62a2afc80",
         "__v": 0
