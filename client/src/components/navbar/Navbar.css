@@ -10,6 +10,16 @@
     z-index: 3;
 }
 
+.all-courses {
+    margin-top: 4px;
+}
+
+.logo {
+    width: 200px;
+    height: 30px;
+    cursor: pointer;
+}
+
 .buttons-list {
     display: flex;
     flex-direction: row;
@@ -18,7 +28,7 @@
 
 .search-container {
     height: 45px;
-    width: 400px;
+    width: 800px;
     display: flex;
     border: 1px solid black;
     border-radius: 50px;
