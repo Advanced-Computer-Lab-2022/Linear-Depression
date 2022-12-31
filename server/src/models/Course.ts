@@ -27,6 +27,7 @@ export interface ICourse {
     lessons: Array<mongoose.Types.ObjectId>;
     isFree: boolean;
     status: CourseStatus;
+    isOwner?: boolean;
 
     close(): Promise<void>;
     publish(): Promise<void>;

@@ -27,6 +27,7 @@ interface ICourseProps {
     thumbnail: string;
     subject?: string;
     status: CourseStatus;
+    isOwner: boolean;
 }
 
 export default ICourseProps;

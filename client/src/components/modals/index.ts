@@ -11,3 +11,5 @@ export { default as EditProfile } from "./EditProfile";
 export { default as ViewAndAcceptContract } from "./ViewAndAcceptContract";
 export { default as ViewMySettlements } from "./ViewMySettlements";
 export { default as ViewMyWallet } from "./ViewMyWallet";
+export { default as DeleteCourse } from "./DeleteCourse";
+export { default as DeleteLesson } from "./DeleteLesson";
