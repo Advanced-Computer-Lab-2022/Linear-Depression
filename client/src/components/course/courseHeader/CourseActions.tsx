@@ -1,4 +1,5 @@
 import LoadingButton from "@mui/lab/LoadingButton";
+import Tooltip from "@mui/material/Tooltip";
 import React, { useState } from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
@@ -126,7 +127,13 @@ const CourseActions: React.FC<{
                     <br />
                 )}
                 {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && isOwner && (
-                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
+                    <Tooltip title={price === 0 ? "Cannot add a promotion to a free course." : ""}>
+                        <span>
+                            <Button onClick={openAddPromotionModal} disabled={price === 0}>
+                                Add Promotion
+                            </Button>
+                        </span>
+                    </Tooltip>
                 )}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&
