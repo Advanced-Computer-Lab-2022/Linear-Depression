@@ -6,6 +6,11 @@ export enum PromotionStatus {
     Expired = "Expired"
 }
 
+export enum PromotionSource {
+    Instructor = "Instructor",
+    Admin = "Admin"
+}
+
 export interface IPromotion {
     name: string;
     courses: Array<mongoose.Types.ObjectId>;
@@ -13,6 +18,7 @@ export interface IPromotion {
     endDate: Date;
     discountPercent: number;
     status: PromotionStatus;
+    source: PromotionSource;
 }
 
 export interface IPromotionModel extends IPromotion, mongoose.Document {}
@@ -22,18 +28,25 @@ const promotionSchema = new mongoose.Schema({
     courses: [{ type: mongoose.Types.ObjectId, ref: "Course", default: [] }],
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    discountPercent: { type: Number, required: true, min: 0, max: 100 }
+    discountPercent: { type: Number, required: true, min: 0, max: 100 },
+    source: {
+        type: String,
+        enum: Object.values(PromotionSource),
+        default: PromotionSource.Admin
+    }
 });
 
 promotionSchema.virtual("status").get(function (this: IPromotionModel) {
     const now = new Date();
     if (this.startDate > now) {
         return PromotionStatus.Upcoming;
-    } else if (this.endDate < now) {
-        return PromotionStatus.Expired;
-    } else {
-        return PromotionStatus.Active;
     }
+    const endOfDay = new Date(this.endDate);
+    endOfDay.setHours(23, 59, 59, 999);
+    if (endOfDay < now) {
+        return PromotionStatus.Expired;
+    }
+    return PromotionStatus.Active;
 });
 
 export default mongoose.model<IPromotionModel>("Promotion", promotionSchema);

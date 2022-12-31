@@ -1,68 +1,54 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
-import Promotion from "../models/Promotion";
+import Promotion, { PromotionSource } from "../models/Promotion";
 import Course from "../models/Course";
+import { PromotionValidator } from "../validators/validators";
 
-const listPromotions = (req: Request, res: Response, next: NextFunction) => {
-    return Promotion.find()
-        .populate("courses")
-        .then((promotions) => res.status(StatusCodes.OK).json({ promotions }))
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+const listPromotions = async (_req: Request, res: Response, _next: NextFunction) => {
+    try {
+        const promotions = await Promotion.find().populate("courses");
+        return res.status(StatusCodes.OK).json({ promotions });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
 };
 
-const getPromotion = (req: Request, res: Response, next: NextFunction) => {
+const getPromotion = async (req: Request, res: Response, _next: NextFunction) => {
     const promotionId = req.params.promotionId;
 
-    return Promotion.findById(promotionId)
-        .populate("courses")
-        .then((promotion) =>
-            promotion
-                ? res.status(StatusCodes.OK).json({ promotion })
-                : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" })
-        )
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    try {
+        const promotion = await Promotion.findById(promotionId).populate("courses");
+        return promotion
+            ? res.status(StatusCodes.OK).json({ promotion })
+            : res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
 };
 
-function addPromotionToCourse(courseId: mongoose.Types.ObjectId, promotionId: mongoose.Types.ObjectId) {
-    return new Promise((resolve, reject) => {
-        Course.findById(courseId)
-            .then((course) => {
-                if (course) {
-                    course.activePromotion = promotionId;
-                    course
-                        .save()
-                        .then(() => resolve("success"))
-                        .catch((error) => reject(error));
-                } else {
-                    reject(new Error("Course not found"));
-                }
-            })
-            .catch((error) => reject(error));
-    });
-}
-
-const createPromotion = async (req: Request, res: Response, next: NextFunction) => {
+const createPromotion = async (req: Request, res: Response, _next: NextFunction) => {
     const promotion = new Promotion({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
     });
-
-    return promotion
-        .save()
-        .then(async (promotion) => {
-            Promise.all(promotion.courses.map((courseId) => addPromotionToCourse(courseId, promotion._id)))
-                .then(() => {
-                    res.status(StatusCodes.CREATED).json({ promotion });
-                })
-                .catch((error) => {
-                    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
-                });
-        })
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    try {
+        await PromotionValidator.validate(promotion);
+        return promotion
+            .save()
+            .then(async (promotion) => {
+                res.status(StatusCodes.CREATED).json({ promotion });
+            })
+            .catch((error) => {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+            });
+    } catch (error) {
+        console.log(error);
+        return res.status(StatusCodes.BAD_REQUEST).json({ error });
+    }
 };
 
-const updatePromotion = (req: Request, res: Response, next: NextFunction) => {
+const updatePromotion = async (req: Request, res: Response, _next: NextFunction) => {
     const promotionId = req.params.promotionId;
 
     return Promotion.findById(promotionId)
@@ -81,16 +67,17 @@ const updatePromotion = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deletePromotion = (req: Request, res: Response, next: NextFunction) => {
+const deletePromotion = async (req: Request, res: Response, _next: NextFunction) => {
     const promotionId = req.params.promotionId;
 
-    return Promotion.findByIdAndDelete(promotionId)
-        .then((promotion) =>
-            promotion
-                ? res.status(StatusCodes.OK).json({ message: "Promotion Deleted" })
-                : res.status(StatusCodes.NOT_FOUND).json({ message: "Promotion Not Found" })
-        )
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+    try {
+        const promotion = await Promotion.findByIdAndDelete(promotionId);
+        return promotion
+            ? res.status(StatusCodes.OK).json({ message: "Promotion Deleted" })
+            : res.status(StatusCodes.NOT_FOUND).json({ message: "Promotion Not Found" });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
 };
 
 export default {

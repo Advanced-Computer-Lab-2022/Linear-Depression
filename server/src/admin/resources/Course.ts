@@ -38,7 +38,7 @@ export const CourseResource = {
             icon: "Book"
         }
     },
-    listProperties: ["title", "description", "price", "subject", "averageRating"],
+    listProperties: ["title", "description", "price", "subject", "averageRating", "status"],
     editProperties: ["title", "description", "price", "subject", "averageRating"],
-    showProperties: ["title", "description", "price", "subject", "averageRating"]
+    showProperties: ["title", "description", "price", "subject", "averageRating", "status"]
 };

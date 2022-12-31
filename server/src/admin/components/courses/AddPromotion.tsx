@@ -51,9 +51,8 @@ const AddPromotion = (props: ActionProps) => {
             };
 
             axios
-                .post(`${API_URL}/promotions`, promotion)
-                .then((res) => {
-                    console.log("res", res);
+                .post(`${API_URL}/promotions`, { ...promotion, source: "Admin" })
+                .then((_res) => {
                     navigate("/admin/resources/Course");
                 })
                 .catch((err) => {
@@ -67,7 +66,13 @@ const AddPromotion = (props: ActionProps) => {
             <FormGroup>
                 <InputContainer>
                     <Label htmlFor="name">Name</Label>
-                    <Input required id="name" width={1} value={name} onChange={(e) => setName(e.target.value)} />
+                    <Input
+                        required
+                        id="name"
+                        width={1}
+                        value={name}
+                        onChange={(e: { target: { value: React.SetStateAction<string> } }) => setName(e.target.value)}
+                    />
                 </InputContainer>
                 <InputContainer>
                     <Label htmlFor="percentage">Percentage</Label>
@@ -79,7 +84,9 @@ const AddPromotion = (props: ActionProps) => {
                         id="percentage"
                         width={1}
                         value={discountPercent}
-                        onChange={(e) => setDiscountPercent(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<number> } }) =>
+                            setDiscountPercent(e.target.value)
+                        }
                     />
                 </InputContainer>
                 <InputContainer>
@@ -90,7 +97,9 @@ const AddPromotion = (props: ActionProps) => {
                         id="startDate"
                         width={1}
                         value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<Date> } }) =>
+                            setStartDate(e.target.value)
+                        }
                     />
                 </InputContainer>
                 <InputContainer>
@@ -101,7 +110,7 @@ const AddPromotion = (props: ActionProps) => {
                         id="endDate"
                         width={1}
                         value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<Date> } }) => setEndDate(e.target.value)}
                     />
                 </InputContainer>
                 <FormAction>
