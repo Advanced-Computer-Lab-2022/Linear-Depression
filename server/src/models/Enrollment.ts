@@ -108,7 +108,9 @@ enrollmentSchema.methods.setCompletedExercise = async function (
     for (const lesson of this.lessons) {
         if (lesson.lessonId.toString() === lessonId.toString()) {
             for (const exercise of lesson.exercisesStatus) {
-                exercise.isCompleted = exercise.exerciseId.toString() === exerciseId.toString();
+                if (exerciseId.toString() == exercise.exerciseId.toString()) {
+                    exercise.isCompleted = true;
+                }
             }
         }
     }
