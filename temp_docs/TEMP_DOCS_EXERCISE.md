@@ -185,7 +185,7 @@ Response
 
 </details>
 
-### Delete a Lesson
+### Delete a specific exercise
 
 ```http
   DELETE /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
