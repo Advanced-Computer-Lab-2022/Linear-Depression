@@ -6,9 +6,9 @@
   GET /courses/:courseId/lessons/:lessonId
 ```
 
-| Parameter       | Type     | Description                             |
-| :-------------- | :------- | :-------------------------------------- |
-| `Authorization` | `string` | **Required**. Bearer token of the user. |
+| Parameter       | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the trainee. |
 
 NOTE: you need to be a trainee as well as enrolled in the course to access this endpoint
 
@@ -20,16 +20,16 @@ Response
 ```json
 {
     "lesson": {
-        "_id" : "63b08018229f88974896da6f",
-        "title" : "Rust for beginners",
-        "exercises" : [ ],
-        "totalHours" : 23,
-        "video" : {
-                "title" : "Rust for beginners",
-                "videoLink" : "https://www.youtube.com/watch?v=gvgBUY8iNO4",
-                "description": "Rust is a multi-paradigm, general-purpose programming language."
+        "_id": "63b08018229f88974896da6f",
+        "title": "Rust for beginners",
+        "exercises": [],
+        "totalHours": 23,
+        "video": {
+            "title": "Rust for beginners",
+            "videoLink": "https://www.youtube.com/watch?v=gvgBUY8iNO4",
+            "description": "Rust is a multi-paradigm, general-purpose programming language."
         },
-        "__v" : 0
+        "__v": 0
     }
 }
 ```
@@ -44,7 +44,7 @@ Response
 
 | Parameter       | Type            | Description                                                     |
 | :-------------- | :-------------- | :-------------------------------------------------------------- |
-| `Authorization` | `string`        | **Required**. Bearer token of the user.                         |
+| `Authorization` | `string`        | **Required**. Bearer token of the instructor.                   |
 | `title`         | `number`        | **Required**. Title of the lesson.                              |
 | `totalHours`    | `string`        | **Required**. Duration of the lesson.                           |
 | `video`         | `json`          | **Optional**. Video of the lesson.                              |
@@ -84,7 +84,7 @@ Response
 
 | Parameter       | Type            | Description                                                     |
 | :-------------- | :-------------- | :-------------------------------------------------------------- |
-| `Authorization` | `string`        | **Required**. Bearer token of the user.                         |
+| `Authorization` | `string`        | **Required**. Bearer token of the instructor.                   |
 | `title`         | `number`        | **Optional**. Title of the lesson.                              |
 | `totalHours`    | `string`        | **Optional**. Duration of the lesson.                           |
 | `video`         | `json`          | **Optional**. Video of the lesson.                              |
@@ -122,9 +122,9 @@ Response
   DELETE /courses/:courseId/lessons/:lessonId
 ```
 
-| Parameter       | Type     | Description                             |
-| :-------------- | :------- | :-------------------------------------- |
-| `Authorization` | `string` | **Required**. Bearer token of the user. |
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
 
 NOTE: you need to be an instructor as well as the course owner to access this endpoint
 
