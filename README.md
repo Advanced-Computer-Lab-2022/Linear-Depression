@@ -182,7 +182,7 @@ If you have any feedback, please reach out to us at [ibrahim.abouelenein@student
 ## Optimizations
 
 -   Currency rates are cached using an cron job that runs at 12 AM.
--   Aysyncoureous programming was used.
+-   Asynchronous programming was used.
 -   Index was used on db to optimize search
 
 ## Authors
@@ -1002,6 +1002,7 @@ Response
 ```
 
 </details>
+
 #### Create Corporate Trainee
 
 ```http
