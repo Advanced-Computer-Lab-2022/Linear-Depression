@@ -50,7 +50,7 @@ const getVideoThumbnailUrl = (videoLink: string) => {
         const videoId = getVideoId(videoLink);
         return `https://img.youtube.com/vi/${videoId}/0.jpg`;
     } catch {
-        return "https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg";
+        return "https://www.messagetech.com/wp-content/themes/ml_mti/images/no-image.jpg";
     }
 };
 

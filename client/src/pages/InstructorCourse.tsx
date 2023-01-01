@@ -6,7 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
 
-import { CourseContent, CourseHeader, CourseReviews, FloatingButton, LoadingHeader } from "@internals/components";
+import {
+    CourseContent,
+    CourseHeader,
+    CourseDescription,
+    CourseReviews,
+    FloatingButton,
+    LoadingHeader
+} from "@internals/components";
 import { useAuth, useFetchCourseById, useFetchMyEnrollment, useFetchMyRefundRequest, useToast } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { sendRefundRequest, cancelRefundRequest } from "@internals/services";
@@ -101,6 +108,7 @@ const InstructorCourse: React.FC = () => {
         <>
             <CourseHeader />
             <Container>
+                <CourseDescription description={data.description} />
                 <CourseContent lessons={data.lessons} />
                 <CourseReviews />
                 <HorizontalContainer>
