@@ -206,7 +206,6 @@ const CreateExercise: React.FC<{
                         </SubmitButton>
                     )}
                     <CancelButton
-                        loading={loading}
                         variant="contained"
                         color="error"
                         onClick={() => {
