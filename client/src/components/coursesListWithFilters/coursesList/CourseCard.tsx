@@ -1,4 +1,4 @@
-import { Chip, Tooltip } from "@mui/material";
+import { Avatar, Chip, Tooltip } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
@@ -12,9 +12,16 @@ const HorizontalLayout = styled.div`
 `;
 
 const CardContainer = styled.div`
-    height: 170px;
-    margin-bottom: 20px;
+    height: 200px;
+    margin: 10px;
     padding: 10px;
+    cursor: pointer;
+    &:hover {
+        background-color: #f5f5f5;
+    }
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
 `;
 
 const Image = styled.img`
@@ -24,7 +31,7 @@ const Image = styled.img`
 
 const CourseDetails = styled.div`
     width: 100%;
-    height: 100%;
+    height: auto;
     padding-left: 20px;
     flex: 4;
 `;
@@ -50,18 +57,10 @@ const CourseDescription = styled.p`
     -webkit-box-orient: vertical;
 `;
 
-const CourseInstructor = styled.p`
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 100%;
-    margin-bottom: 0px;
-    margin-top: 5px;
-`;
-
 const CourseRatingContainer = styled.div`
     display: flex;
     height: 25px;
-    margin-bottom: 0px;
+    margin-bottom: 5px;
     margin-top: 0px;
 `;
 
@@ -78,6 +77,15 @@ const CourseDuration = styled.p`
     font-weight: 400;
     line-height: 100%;
     margin-top: 5px;
+    margin-bottom: 0px;
+`;
+
+const RightSideContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
 `;
 
 const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean; showStatus: boolean }> = ({
@@ -107,26 +115,34 @@ const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean; showStatu
         >
             <HorizontalLayout>
                 <Image src={thumbnail} />
+
                 <CourseDetails>
                     <CourseTitle>{title}</CourseTitle>
                     <CourseDescription>{description + "  ..."}</CourseDescription>
-                    {instructor && (
-                        <CourseInstructor>{`${instructor.firstName} ${instructor.lastName}`}</CourseInstructor>
-                    )}
-                    {averageRating > 0 ? (
-                        <CourseRatingContainer>
-                            <CourseRatingText>{averageRating}</CourseRatingText>
-                            <StarRatings
-                                rating={averageRating}
-                                starDimension="14px"
-                                starSpacing="1px"
-                                starRatedColor="#E59719"
-                            />
-                        </CourseRatingContainer>
-                    ) : (
-                        <br />
-                    )}
-                    <CourseDuration>{`Duration: ${totalHours} hours`}</CourseDuration>
+                    <CourseDuration>{totalHours} total hours</CourseDuration>
+                    <CourseRatingContainer
+                        style={{
+                            visibility: averageRating > 0 ? "visible" : "hidden"
+                        }}
+                    >
+                        <CourseRatingText>{averageRating}</CourseRatingText>
+                        <StarRatings
+                            rating={averageRating}
+                            starDimension="14px"
+                            starSpacing="1px"
+                            starRatedColor="#E59719"
+                        />
+                    </CourseRatingContainer>
+
+                    <Chip
+                        avatar={<Avatar />}
+                        label={`${instructor.firstName} ${instructor.lastName}`}
+                        variant="outlined"
+                    />
+                </CourseDetails>
+                <RightSideContainer>
+                    {showPrice && <CoursePrice currency={currency} price={price} promotion={activePromotion} />}
+
                     {showStatus &&
                         (status === CourseStatus.DRAFT ? (
                             <Tooltip title="The course is not published and can not be viewed by trainees" arrow>
@@ -141,10 +157,8 @@ const CourseCard: React.FC<{ course: ICourseProps; showPrice: boolean; showStatu
                                 <Chip label="CLOSED COURSE" color="secondary" />
                             </Tooltip>
                         ))}
-                </CourseDetails>
-                {showPrice && <CoursePrice currency={currency} price={price} promotion={activePromotion} />}
+                </RightSideContainer>
             </HorizontalLayout>
-            <hr />
         </CardContainer>
     );
 };

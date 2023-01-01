@@ -6,7 +6,7 @@ export interface IIndividualTrainee extends ITrainee {
     wallet: number;
 
     credit(amount: number): void;
-    debit(amount: number): void;
+    debit(amount: number): Promise<void>;
 }
 
 export interface IIndividualTraineeModel extends IIndividualTrainee, Document {}
@@ -21,12 +21,12 @@ class IndividualTraineeSchema extends TraineeSchema {
             this.save();
         };
 
-        this.methods.debit = function (amount: number) {
+        this.methods.debit = async function (amount: number) {
             if (this.wallet < amount) {
                 throw new Error("Insufficient funds");
             }
             this.wallet -= amount;
-            this.save();
+            await this.save();
         };
     }
 }

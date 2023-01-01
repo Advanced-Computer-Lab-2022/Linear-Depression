@@ -160,7 +160,7 @@ const readCourse = async (req: Request, res: Response, _next: NextFunction) => {
         })
         .populate({
             path: "activePromotion",
-            select: "name discountPercent startDate endDate",
+            select: "name discountPercent startDate endDate source",
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((course) => {
@@ -246,7 +246,7 @@ async function searchWithTitleSubject(
         })
         .populate({
             path: "activePromotion",
-            select: "name discountPercent startDate endDate",
+            select: "name discountPercent startDate endDate source",
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
@@ -283,7 +283,7 @@ async function searchWithInstructors(
         })
         .populate({
             path: "activePromotion",
-            select: "name discountPercent startDate endDate",
+            select: "name discountPercent startDate endDate source",
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .then((courses) => {
@@ -327,7 +327,7 @@ async function listCoursesOnlyFilter(
         })
         .populate({
             path: "activePromotion",
-            select: "name discountPercent startDate endDate",
+            select: "name discountPercent startDate endDate source",
             match: { startDate: { $lte: new Date() }, endDate: { $gte: new Date() } }
         })
         .sort(sortOptions)

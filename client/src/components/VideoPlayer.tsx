@@ -65,7 +65,7 @@ const VideoPlayer: React.FC<{ videoUrl?: string; height: number }> = ({ videoUrl
             </Container>
         );
     } catch (error) {
-        return <Image src="https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg" />;
+        return <Image src="https://www.messagetech.com/wp-content/themes/ml_mti/images/no-image.jpg" />;
     }
 };
 

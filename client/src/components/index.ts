@@ -22,5 +22,6 @@ export { default as Avatar } from "./Avatar";
 export { default as ReviewItem } from "./ReviewItem";
 export { default as Copyright } from "./Copyright";
 export { default as CoursesList } from "./coursesListWithFilters/CoursesList";
+export { default as CourseDescription } from "./course/CourseDescription";
 
 export * from "./report/index";

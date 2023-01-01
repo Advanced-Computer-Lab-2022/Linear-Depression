@@ -1,4 +1,5 @@
 import LoadingButton from "@mui/lab/LoadingButton";
+import Tooltip from "@mui/material/Tooltip";
 import React, { useState } from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
@@ -63,7 +64,8 @@ const CourseActions: React.FC<{
         openModal({
             name: "addPromotion",
             params: {
-                courseId
+                courseId,
+                activePromotion: promotion
             }
         });
     };
@@ -125,8 +127,23 @@ const CourseActions: React.FC<{
                 ) : (
                     <br />
                 )}
-                {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && isOwner && (
-                    <Button onClick={openAddPromotionModal}>Add Promotion</Button>
+                {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && isOwner && !promotion && (
+                    <Tooltip title={price === 0 ? "Cannot add a promotion to a free course." : ""}>
+                        <span>
+                            <Button onClick={openAddPromotionModal} disabled={price === 0}>
+                                Add Promotion
+                            </Button>
+                        </span>
+                    </Tooltip>
+                )}
+                {userType === User.INSTRUCTOR && status !== CourseStatus.CLOSED && isOwner && promotion && (
+                    <Tooltip title={promotion.source === "Admin" ? "Cannot edit a promotion added by Admin." : ""}>
+                        <span>
+                            <Button onClick={openAddPromotionModal} disabled={promotion.source === "Admin"}>
+                                Edit Active Promotion
+                            </Button>
+                        </span>
+                    </Tooltip>
                 )}
                 {(userType === User.CORPORATE_TRAINEE || userType === User.INDIVIDUAL_TRAINEE) &&
                     enrollment.data == null &&

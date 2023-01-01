@@ -181,7 +181,7 @@ const CourseInfo: React.FC<{
                         </Tooltip>
                     ))}
             </HorizontalContainer>
-            <Description>{description}</Description>
+            <Description>{description.substring(0, 300).trim() + "..."}</Description>
             <BadgeRatedEnrolled rating={rating} />
             <div>
                 Created by <Instructor>{instructor}</Instructor>

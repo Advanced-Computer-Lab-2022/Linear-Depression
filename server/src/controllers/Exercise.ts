@@ -69,7 +69,7 @@ const deleteExercise = (req: Request, res: Response, next: NextFunction) => {
         .then((exercise) => {
             if (exercise) {
                 Lesson.findByIdAndUpdate(lessonId, { $pull: { exercises: exercise._id } }).then(() => {
-                    res.status(StatusCodes.OK).json({ exercise });
+                    res.status(StatusCodes.OK).json({ message: "Exercise deleted Successfully" });
                 });
             } else {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
