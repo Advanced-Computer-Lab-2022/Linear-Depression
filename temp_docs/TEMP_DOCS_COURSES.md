@@ -106,6 +106,8 @@ Response
 ]
 ```
 
+</details>
+
 #### Read Course
 
 ```http
