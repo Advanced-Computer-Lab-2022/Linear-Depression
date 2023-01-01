@@ -22,8 +22,6 @@ export { default as ReportThread } from "./report/Thread";
 
 export { default as NotFound } from "./NotFound";
 
-export { default as Footer } from "./Footer";
-
 export { default as AboutUs } from "./AboutUs";
 
 export * from "./payment";
