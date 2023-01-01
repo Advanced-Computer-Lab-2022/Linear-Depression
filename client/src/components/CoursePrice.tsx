@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 import { Promotion } from "@internals/types";
 
-const VerticalContainter = styled.div`
-    width: 100%;
+const VerticalContainer = styled.div`
+    // width: 100%;
     flex: 1;
 `;
 
@@ -15,7 +15,7 @@ const HorizontalContainer = styled.div`
 
 const Price = styled.p`
     font-weight: 800;
-    margin-right: 8px;
+    // margin-right: 8px;
 `;
 
 const CrossedPrice = styled.p<{ small?: boolean }>`
@@ -48,10 +48,10 @@ const CoursePrice: React.FC<{ currency: string; price: number; promotion?: Promo
         );
     } else {
         return (
-            <VerticalContainter>
+            <VerticalContainer>
                 {discount ? <CrossedPrice>{priceString}</CrossedPrice> : <Price>{priceString}</Price>}
                 {discount ? <Price>{discountedPriceString}</Price> : null}
-            </VerticalContainter>
+            </VerticalContainer>
         );
     }
 };
