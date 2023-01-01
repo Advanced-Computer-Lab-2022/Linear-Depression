@@ -11,6 +11,7 @@ const EditQuestion: React.FC<{
     onClose: (data: IQuestionProps | null) => void;
     questionToEdit?: IQuestionProps;
 }> = ({ open, onClose, questionToEdit }) => {
+    console.log(questionToEdit);
     const clearData = () => {
         setQuestion("");
         setChoices(["", "", "", ""]);
@@ -21,8 +22,10 @@ const EditQuestion: React.FC<{
         onClose(null);
     };
 
-    const [question, setQuestion] = useState(questionToEdit?.question || "");
-    const [choices, setChoices] = useState(questionToEdit?.choices || ["", "", "", ""]);
+    const [question, setQuestion] = useState(questionToEdit.question);
+    console.log("question state");
+    console.log(question);
+    const [choices, setChoices] = useState(questionToEdit.choices);
     const [formErrors, setFormErrors] = useState(new Map());
     const [loading, setLoading] = useState(false);
 
@@ -79,7 +82,7 @@ const EditQuestion: React.FC<{
     return (
         <Dialog open={open}>
             <DialogContent>
-                <DialogContentText>Add a new Question</DialogContentText>
+                <DialogContentText>Edit Question</DialogContentText>
                 <TextField
                     required
                     autoFocus

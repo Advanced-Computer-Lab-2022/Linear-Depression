@@ -1,22 +1,23 @@
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Dialog, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import Button from "@mui/material/Button";
-import { deleteLesson } from "@internals/services";
+import { deleteExercise } from "@internals/services";
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@internals/hooks";
 import { useAppDispatch, getCourse } from "@internals/redux";
 
-const DeleteLesson: React.FC<{
+const DeleteExercise: React.FC<{
     params: {
         courseId: string;
         lessonId: string;
+        exerciseId: string;
     };
 }> = ({ params }) => {
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
-    const { courseId, lessonId } = params;
+    const { courseId, lessonId, exerciseId } = params;
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const closeModal = () => {
@@ -29,16 +30,16 @@ const DeleteLesson: React.FC<{
 
     const handleSubmit = () => {
         setLoading(true);
-        deleteLesson(courseId, lessonId)
+        deleteExercise(courseId, lessonId, exerciseId)
             .then(() => {
                 setLoading(false);
                 dispatch(getCourse(courseId));
-                showToast({ message: "Lesson deleted successfully", type: "success" });
+                showToast({ message: "Exercise deleted successfully", type: "success" });
                 closeModal();
             })
             .catch(() => {
                 setLoading(false);
-                showToast({ message: "Failed to delete Lesson", type: "error" });
+                showToast({ message: "Failed to delete Exercise", type: "error" });
                 closeModal();
             });
     };
@@ -47,9 +48,9 @@ const DeleteLesson: React.FC<{
         <>
             <Dialog open={true}>
                 <DialogContent>
-                    <DialogContentText>Delete Lesson</DialogContentText>
+                    <DialogContentText>Delete Exercise</DialogContentText>
                     <br />
-                    <DialogContentText>Are you sure you want to delete this lesson?</DialogContentText>
+                    <DialogContentText>Are you sure you want to delete this Exercise?</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
@@ -62,4 +63,4 @@ const DeleteLesson: React.FC<{
     );
 };
 
-export default DeleteLesson;
+export default DeleteExercise;

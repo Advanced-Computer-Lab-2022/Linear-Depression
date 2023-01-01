@@ -1,21 +1,17 @@
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const AddExercise: React.FC<{
-    courseId: string;
-    lessonId: string;
+const EditExerciseTitle: React.FC<{
     open: boolean;
-    onClose: () => void;
-}> = ({ courseId, lessonId, open, onClose }) => {
-    const navigate = useNavigate();
-
+    onClose: (data: string | null) => void;
+    titleToEdit: string;
+}> = ({ open, onClose, titleToEdit }) => {
     const handleClose = () => {
-        onClose();
+        onClose(null);
     };
 
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState(titleToEdit);
     const [error, setError] = useState(false);
 
     const handleSubmit = () => {
@@ -23,13 +19,13 @@ const AddExercise: React.FC<{
             setError(true);
             return;
         }
-        navigate(`/courses/${courseId}/lessons/${lessonId}/exercise`, { state: { title: title } });
+        onClose(title);
     };
 
     return (
         <Dialog open={open}>
             <DialogContent sx={{ width: "600px" }}>
-                <DialogContentText>Add a new Exercise</DialogContentText>
+                <DialogContentText>Edit Exercise Title</DialogContentText>
                 <TextField
                     required
                     autoFocus
@@ -53,4 +49,4 @@ const AddExercise: React.FC<{
     );
 };
 
-export default AddExercise;
+export default EditExerciseTitle;
