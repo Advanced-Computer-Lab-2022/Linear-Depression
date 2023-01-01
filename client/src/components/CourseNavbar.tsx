@@ -1,12 +1,19 @@
 import { Button } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import CircularProgressBar from "./CircularProgressBar";
+import logo from "./navbar/logo-black.png";
 import { useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { downloadCertificate } from "@internals/services";
+
+const Image = styled.img`
+    width: 200px;
+    height: 30px;
+    cursor: pointer;
+`;
 
 const HorizontalContainer = styled.div`
     display: flex;
@@ -41,6 +48,8 @@ const CourseNavbar: React.FC = () => {
     useFetchMyEnrollment(course.data?._id);
     const enrollment = useAppSelector((state) => state.enrollment);
 
+    const navigate = useNavigate();
+
     const handleDownloadCertificate = () => {
         downloadCertificate(enrollment.data?._id);
     };
@@ -48,9 +57,7 @@ const CourseNavbar: React.FC = () => {
     return (
         <HorizontalContainer>
             <NavItem>
-                <Link className="navbar-brand" to="/">
-                    Linear Depression
-                </Link>
+                <Image src={logo} alt="logo" onClick={() => navigate("/")} />
             </NavItem>
             <CustomDivider orientation="vertical" flexItem />
             <NavItem>
