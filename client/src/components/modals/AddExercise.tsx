@@ -16,8 +16,13 @@ const AddExercise: React.FC<{
     };
 
     const [title, setTitle] = useState("");
+    const [error, setError] = useState(false);
 
     const handleSubmit = () => {
+        if (title === "") {
+            setError(true);
+            return;
+        }
         navigate(`/courses/${courseId}/lessons/${lessonId}/exercise`, { state: { title: title } });
     };
 
@@ -36,6 +41,8 @@ const AddExercise: React.FC<{
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    error={error}
+                    helperText={error ? "Title is required" : ""}
                 />
             </DialogContent>
             <DialogActions>

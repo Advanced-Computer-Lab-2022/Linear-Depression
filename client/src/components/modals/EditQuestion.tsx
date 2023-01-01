@@ -6,10 +6,11 @@ import * as Yup from "yup";
 import { validateFormData } from "@internals/utils";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-const AddQuestion: React.FC<{
+const EditQuestion: React.FC<{
     open: boolean;
     onClose: (data: IQuestionProps | null) => void;
-}> = ({ open, onClose }) => {
+    questionToEdit?: IQuestionProps;
+}> = ({ open, onClose, questionToEdit }) => {
     const clearData = () => {
         setQuestion("");
         setChoices(["", "", "", ""]);
@@ -20,8 +21,8 @@ const AddQuestion: React.FC<{
         onClose(null);
     };
 
-    const [question, setQuestion] = useState("");
-    const [choices, setChoices] = useState(["", "", "", ""]);
+    const [question, setQuestion] = useState(questionToEdit?.question || "");
+    const [choices, setChoices] = useState(questionToEdit?.choices || ["", "", "", ""]);
     const [formErrors, setFormErrors] = useState(new Map());
     const [loading, setLoading] = useState(false);
 
@@ -130,4 +131,4 @@ const AddQuestion: React.FC<{
     );
 };
 
-export default AddQuestion;
+export default EditQuestion;

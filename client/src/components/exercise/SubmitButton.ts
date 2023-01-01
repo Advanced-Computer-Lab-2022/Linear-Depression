@@ -1,7 +1,7 @@
-import { Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import styled from "styled-components";
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled(LoadingButton)`
     margin-top: 1rem;
     margin-left: auto;
     margin-right: 1rem;
