@@ -231,3 +231,92 @@ Response
 ```
 
 </details>
+
+### List my notes of a lesson
+
+```http
+  GET /me/lessons/:lessonId/notes
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "note": {
+        "_id": "63b14db79483581561b7d57c",
+        "lessonId": "63aed9da4073c1fce794277b",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "content": "this a new note",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Create a new note
+
+```http
+  POST /me/lessons/:lessonId/notes
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `content`       | `string` | **Required**. note content.                   |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "note": {
+        "lessonId": "63aed9da4073c1fce794277b",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "content": "this a new note",
+        "_id": "63b14db79483581561b7d57c",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Update a note
+
+```http
+  PUT /me/lessons/:lessonId/notes/:noteId
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `content`       | `string` | **Required**. note content.                   |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "note": {
+        "_id": "63b14db79483581561b7d57c",
+        "lessonId": "63aed9da4073c1fce794277b",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "content": "this a new note UPDATED",
+        "__v": 0
+    }
+}
+```
+
+</details>
