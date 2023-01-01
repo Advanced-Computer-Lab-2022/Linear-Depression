@@ -1,11 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import IQuestionProps from "src/types/Question";
-import styled from "styled-components";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import IQuestionProps from "src/types/Question";
+import styled from "styled-components";
+import * as Yup from "yup";
 
 import {
     FloatingButton,
@@ -17,12 +18,11 @@ import {
     Header,
     CourseNavbar
 } from "@internals/components";
+import { useToast } from "@internals/hooks";
 import { AddQuestion, EditQuestion, EditExerciseTitle } from "@internals/modals";
 import { addExercise, updateExercise } from "@internals/services";
-import * as Yup from "yup";
-import { validateFormData } from "@internals/utils";
-import { useToast } from "@internals/hooks";
 import { Exercise } from "@internals/types";
+import { validateFormData } from "@internals/utils";
 
 const ErrorCourseCard = styled.div`
     display: flex;
@@ -133,7 +133,7 @@ const CreateExercise: React.FC<{
         setLoading(true);
         const formData: any = {};
         for (let i = 0; i < questions.length; i++) {
-            formData[`question${i}Answer`] = questions[i].answerIndex ? questions[i].answerIndex : -1;
+            formData[`question${i}Answer`] = questions[i].answerIndex >= 0 ? questions[i].answerIndex : -1;
         }
         validateFormData(formData, validationRules)
             .then(() => {
