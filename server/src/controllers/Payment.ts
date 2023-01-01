@@ -39,7 +39,7 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
         discounts.push({ coupon: coupon.id });
     } else if (course.activePromotion) {
         const promotion = await Promotion.findById(course.activePromotion);
-        if (promotion && promotion.status === PromotionStatus.Active) {
+        if (promotion && promotion.status === PromotionStatus.ACTIVE) {
             const coupon = await stripe.coupons.create({ percent_off: promotion.discountPercent, duration: "once" });
             discounts.push({ coupon: coupon.id });
         }

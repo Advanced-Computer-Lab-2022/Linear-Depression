@@ -27,16 +27,19 @@ const getPromotion = (req: Request, res: Response, next: NextFunction) => {
 function addPromotionToCourse(courseId: mongoose.Types.ObjectId, promotionId: mongoose.Types.ObjectId) {
     return new Promise((resolve, reject) => {
         Course.findById(courseId)
-            .then((course) => {
-                if (course) {
-                    course.activePromotion = promotionId;
-                    course
-                        .save()
-                        .then(() => resolve("success"))
-                        .catch((error) => reject(error));
-                } else {
+            .then(async (course) => {
+                if (!course) {
                     reject(new Error("Course not found"));
+                    return;
                 }
+
+                await Promotion.findByIdAndDelete(course.activePromotion);
+
+                course.activePromotion = promotionId;
+                course
+                    .save()
+                    .then(() => resolve("success"))
+                    .catch((error) => reject(error));
             })
             .catch((error) => reject(error));
     });
@@ -81,7 +84,7 @@ const updatePromotion = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
 };
 
-const deletePromotion = (req: Request, res: Response, next: NextFunction) => {
+const deletePromotion = async (req: Request, res: Response, next: NextFunction) => {
     const promotionId = req.params.promotionId;
 
     return Promotion.findByIdAndDelete(promotionId)

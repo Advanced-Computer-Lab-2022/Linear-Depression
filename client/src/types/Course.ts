@@ -19,6 +19,7 @@ interface ICourseProps {
         discountPercent: number;
         startDate: Date;
         endDate: Date;
+        source: string;
     } | null;
     currency: string;
     lessons: ILessonProps[];
