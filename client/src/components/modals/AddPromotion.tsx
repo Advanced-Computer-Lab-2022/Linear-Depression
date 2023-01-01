@@ -59,7 +59,9 @@ const AddPromotion: React.FC<{
                     .catch((err) => {
                         console.log(err);
                         showToast({
-                            message: "Failed to add promotion",
+                            message: `Error Adding Promotion: ${
+                                err?.response?.data?.error || "Please try again later"
+                            }`,
                             type: "error"
                         });
                     });

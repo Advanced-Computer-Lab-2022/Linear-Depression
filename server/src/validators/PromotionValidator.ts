@@ -40,10 +40,6 @@ const noConflictWithAdminPromotion = async (promotion: IPromotionModel) => {
 
 export const PromotionValidator = {
     validate: async (promotion: IPromotionModel) => {
-        if (!isNotExpired(promotion)) {
-            throw new Error("Promotion is expired");
-        }
-
         if (!isValidStartDate(promotion)) {
             throw new Error("Promotion start date is invalid");
         }
