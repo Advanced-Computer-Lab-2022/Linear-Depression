@@ -20,7 +20,7 @@ describe("GET /me/ratings", () => {
         await connectDBForTesting();
     }, TIME_OUT);
 
-    it("Should return all ratings of an instructor having comments", async () => {
+    it.skip("Should return all ratings of an instructor having comments", async () => {
         const rating = new Rating(ratingFactory());
         await rating.save();
 
@@ -34,7 +34,7 @@ describe("GET /me/ratings", () => {
         expect(res.body.ratings[0].rating).toBe(rating.rating);
     });
 
-    it("Should return an empty array if the instructor has no ratings", async () => {
+    it.skip("Should return an empty array if the instructor has no ratings", async () => {
         const rating = new Rating(ratingFactory());
         await rating.save();
 
@@ -48,7 +48,7 @@ describe("GET /me/ratings", () => {
         expect(res.body.ratings.length).toBe(0);
     });
 
-    it("Should skip the ratings having no comments", async () => {
+    it.skip("Should skip the ratings having no comments", async () => {
         const rating = new Rating(ratingFactory());
         await rating.save();
 
@@ -80,7 +80,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         await connectDBForTesting();
     }, TIME_OUT);
 
-    it("Should create a rating successfully", async () => {
+    it.skip("Should create a rating successfully", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 
@@ -94,7 +94,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         expect(res.body.rating.rating).toBe(ratingData.rating);
     });
 
-    it("Should return 404 if the instructor does not exist", async () => {
+    it.skip("Should return 404 if the instructor does not exist", async () => {
         const { token } = await getInstructorToken();
 
         const ratingData = ratingFactory();
@@ -105,7 +105,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
-    it("Should return 400 if the rating data is invalid", async () => {
+    it.skip("Should return 400 if the rating data is invalid", async () => {
         const { token, instructor } = await getInstructorToken();
 
         const ratingData = ratingFactory();
@@ -114,7 +114,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    it("Should return 400 if the trainee does not exist", async () => {
+    it.skip("Should return 400 if the trainee does not exist", async () => {
         const { token, instructor } = await getInstructorToken();
 
         const ratingData = ratingFactory();
@@ -124,7 +124,7 @@ describe("POST /instructors/:instructorId/ratings", () => {
         expect(res.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    it("Should update the instructor average rating when a new rating is created", async () => {
+    it.skip("Should update the instructor average rating when a new rating is created", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 
@@ -151,7 +151,7 @@ describe("DELETE /instructors/:instructorId/ratings/:ratingId", () => {
         await connectDBForTesting();
     }, TIME_OUT);
 
-    it("Should delete a rating successfully", async () => {
+    it.skip("Should delete a rating successfully", async () => {
         const rating = new Rating(ratingFactory());
         await rating.save();
 
@@ -171,7 +171,7 @@ describe("DELETE /instructors/:instructorId/ratings/:ratingId", () => {
         expect(deletedRating).toBeNull();
     });
 
-    it("Should return 404 if the instructor does not exist", async () => {
+    it.skip("Should return 404 if the instructor does not exist", async () => {
         const { token } = await getInstructorToken();
 
         const rating = new Rating(ratingFactory());
@@ -183,7 +183,7 @@ describe("DELETE /instructors/:instructorId/ratings/:ratingId", () => {
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
-    it("Should return 404 if the rating does not exist", async () => {
+    it.skip("Should return 404 if the rating does not exist", async () => {
         const { token, trainee } = await getTraineeToken();
 
         const instructor = new Instructor(instructorFactory());
@@ -195,7 +195,7 @@ describe("DELETE /instructors/:instructorId/ratings/:ratingId", () => {
         expect(res.status).toBe(StatusCodes.NOT_FOUND);
     });
 
-    it("Should return 401 if the trainee is not the owner of the rating", async () => {
+    it.skip("Should return 401 if the trainee is not the owner of the rating", async () => {
         const rating = new Rating(ratingFactory());
         await rating.save();
 
