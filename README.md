@@ -942,19 +942,66 @@ Response
 
 </details>
 
+#### Read Course
+
+```http
+  GET /courses/:id
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "enrollmentsCount": 0,
+    "_id": "63602a25823c823dda883245",
+    "title": "java in 3 days",
+    "description": "java in 3 days",
+    "instructor": {
+        "_id": "636020ca8701caab59e5dc30",
+        "firstName": "Elshimaa",
+        "lastName": "Ahmed",
+        "__t": "Instructor",
+        "id": "636020ca8701caab59e5dc30"
+    },
+    "subject": "backend",
+    "price": 266.17,
+    "averageRating": 0,
+    "ratings": [],
+    "totalHours": 0,
+    "discount": 0,
+    "lessons": [],
+    "isFree": false,
+    "__v": 0,
+    "activePromotion": null,
+    "thumbnail": "https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg",
+    "id": "63602a25823c823dda883245",
+    "currency": "USD"
+}
+```
+
+</details>
+
+</details>
+
 #### Create Course
 
 ```http
   POST /courses
 ```
 
-| Parameter       | Type     | Description                                   |
+| Headers         | Type     | Description                                   |
 | :-------------- | :------- | :-------------------------------------------- |
 | `Authorization` | `string` | **Required**. Bearer token of the instructor. |
-| `title`         | `string` | **Required**. Title of the course             |
-| `subject`       | `string` | **Required**. Subject of the course           |
-| `description`   | `string` | **Required**. Description of the course       |
-| `price`         | `number` | **Required**. Price of the course             |
+
+| Parameter     | Type     | Description                             |
+| :------------ | :------- | :-------------------------------------- |
+| `title`       | `string` | **Required**. Title of the course       |
+| `subject`     | `string` | **Required**. Subject of the course     |
+| `description` | `string` | **Required**. Description of the course |
+| `price`       | `number` | **Required**. Price of the course       |
 
 <details>
 <summary>
@@ -985,6 +1032,1816 @@ Response
 ```
 
 </details>
+
+### Update Course
+
+```http
+  PUT /courses/:id
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+| Parameter     | Type     | Description                             |
+| :------------ | :------- | :-------------------------------------- |
+| `title`       | `string` | **Required**. Title of the course       |
+| `subject`     | `string` | **Required**. Subject of the course     |
+| `description` | `string` | **Required**. Description of the course |
+| `price`       | `number` | **Required**. Price of the course       |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "course": {
+        "title": "How to use curl",
+        "description": "Learn how to use curl to make HTTP requests from the command line or scripts",
+        "instructor": "6384904acf1b15bc21323b81",
+        "subject": "Programming",
+        "price": 10,
+        "averageRating": 0,
+        "ratings": [],
+        "totalHours": 0,
+        "enrollmentsCount": 0,
+        "discount": 0,
+        "activePromotion": null,
+        "lessons": [],
+        "_id": "63ade6b9840f840cca37802f",
+        "createdAt": "2022-12-29T19:12:57.494Z",
+        "updatedAt": "2022-12-29T19:12:57.494Z",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Delete Course
+
+```http
+  DELETE /courses/:id
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Course deleted successfully"
+}
+```
+
+</details>
+
+### List Course Subjects
+
+```http
+  GET /courses/subjects
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "subjects": [
+        "docker",
+        "backend",
+        "frontend",
+        "mobile",
+        "devops",
+        "programming",
+        "data science",
+        "typescript",
+        "python",
+        "ocaml",
+        "haskell",
+        "testing",
+        "software engineering"
+    ]
+}
+```
+
+</details>
+
+### Close Course
+
+```http
+  PUT /courses/:id/close
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Course closed successfully"
+}
+```
+
+</details>
+
+### Open Course
+
+```http
+  PUT /courses/:id/open
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Course opened successfully"
+}
+```
+
+</details>
+
+### Publish Course
+
+```http
+  PUT /courses/:id/publish
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Course published successfully"
+}
+```
+
+</details>
+
+### Me
+
+### My courses
+
+```http
+  GET /me/courses
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "courses": [
+        {
+            "_id": "63aef6afd3303e06746e3e17",
+            "title": "Docker Tutorial for Beginners",
+            "description": "Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers. The service has both free and premium tiers. The software that hosts the containers is called Docker Engine.",
+            "instructor": {
+                "_id": "6384904acf1b15bc21323b81",
+                "firstName": "Ibrahim",
+                "lastName": "Abou Elenein",
+                "__t": "Instructor",
+                "id": "6384904acf1b15bc21323b81"
+            },
+            "subject": "docker",
+            "price": 100,
+            "averageRating": 0,
+            "ratings": [],
+            "totalHours": 0,
+            "enrollmentsCount": 1,
+            "discount": 0,
+            "activePromotion": {
+                "_id": "63aff8901abdb0eceface57f",
+                "name": "t",
+                "startDate": "2022-12-24T00:00:00.000Z",
+                "endDate": "2023-01-07T00:00:00.000Z",
+                "discountPercent": 12,
+                "status": "Active",
+                "id": "63aff8901abdb0eceface57f"
+            },
+            "lessons": [],
+            "status": "closed",
+            "createdAt": "2022-12-30T14:33:20.331Z",
+            "updatedAt": "2022-12-31T08:53:37.426Z",
+            "__v": 0,
+            "thumbnail": "https://vishwaentertainers.com/wp-content/uploads/2020/04/No-Preview-Available.jpg",
+            "id": "63aef6afd3303e06746e3e17",
+            "currency": "USD"
+        }
+    ]
+}
+```
+
+</details>
+
+### List my enrollments
+
+```http
+  GET /me/enrollments
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "enrollment": [
+        {
+            "_id": "63aed9d94073c1fce7942775",
+            "courseId": "63a6241205424927cbfab326",
+            "traineeId": "63aece85d4bc1b83e09cb687",
+            "progress": 0,
+            "lessons": [
+                {
+                    "lessonId": "63a6255249c44631dc3a1044",
+                    "isVideoWatched": false,
+                    "exercisesStatus": [
+                        {
+                            "exerciseId": "63a6258c465fff5c68c15d16",
+                            "isCompleted": false,
+                            "_id": "63aed9da4073c1fce794277c"
+                        }
+                    ],
+                    "_id": "63aed9da4073c1fce794277b"
+                }
+            ],
+            "__v": 0
+        }
+    ]
+}
+```
+
+</details>
+
+### Create a new enrollment
+
+```http
+  POST /me/enrollments
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `courseId`      | `string` | **Required**. course id.                      |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "enrollment": {
+        "courseId": "63aff9641abdb0eceface5c9",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "progress": 0,
+        "_id": "63b003bda014ee9567f07138",
+        "lessons": [],
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Get your refund requests
+
+```http
+  GET /me/enrollments/:enrollmentId/refunds
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+NOTE: you need to be individual trainee to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "refundRequest": {
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "enrollmentId": "63b003bda014ee9567f07138",
+        "refundAmount": 100,
+        "status": "PENDING",
+        "_id": "63b0081fa014ee9567f07152",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Create a new refund request
+
+```http
+  POST /me/enrollments/:enrollmentId/refunds
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+NOTE: you need to be individual trainee to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "refundRequest": {
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "enrollmentId": "63b003bda014ee9567f07138",
+        "refundAmount": 100,
+        "status": "PENDING",
+        "_id": "63b0081fa014ee9567f07152",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Delete a refund request
+
+```http
+  DELETE /me/enrollments/:enrollmentId/refunds/
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+NOTE: you need to be individual trainee to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "refundRequest": {
+        "_id": "63b0081fa014ee9567f07152",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "enrollmentId": "63b003bda014ee9567f07138",
+        "refundAmount": 100,
+        "status": "PENDING",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### List my notes of a lesson
+
+```http
+  GET /me/lessons/:lessonId/notes
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "note": {
+        "_id": "63b14db79483581561b7d57c",
+        "lessonId": "63aed9da4073c1fce794277b",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "content": "this a new note",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Create a new note
+
+```http
+  POST /me/lessons/:lessonId/notes
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `content`       | `string` | **Required**. note content.                   |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "note": {
+        "lessonId": "63aed9da4073c1fce794277b",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "content": "this a new note",
+        "_id": "63b14db79483581561b7d57c",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Update a note
+
+```http
+  PUT /me/lessons/:lessonId/notes/:noteId
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `content`       | `string` | **Required**. note content.                   |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "note": {
+        "_id": "63b14db79483581561b7d57c",
+        "lessonId": "63aed9da4073c1fce794277b",
+        "traineeId": "63aece85d4bc1b83e09cb687",
+        "content": "this a new note UPDATED",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+
+### Payment
+
+#### Create a checkout session
+
+```http
+  POST /payment/checkout-session
+```
+
+| Header          | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+| Parameter | Type     | Description              |
+| :-------- | :------- | :----------------------- |
+| courseId  | `string` | **Required**. Course id. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "url": "https://checkout.stripe.com/c/pay/cs_test_a1gDqrqiCS6myj4aA7ul7JJ2ZzWfu2KqkMRgJOZJ1jLLkdgt3FC58Xl5g5#fidkdWxOYHwnPyd1blpxYHZxWjA0SExPYmpObFVLPWF1PXxqR1NPfW9Ac3VKbHdPQnZxTTduRkFqS2ldNFJ3NVJmaG99SV9wREs3NTZQQ11AVUh%2FMW49X1xyYTRIVTZwUmIzZGsxd0dCf2JWNTVvcmcxdzQyNicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl",
+    "id": "cs_test_a1gDqrqiCS6myj4aA7ul7JJ2ZzWfu2KqkMRgJOZJ1jLLkdgt3FC58Xl5g5"
+}
+```
+
+</details>
+
+#### Stripe Webhook
+
+```http
+  POST /payment/stripe-webhook
+```
+
+| Header             | Type     | Description                     |
+| :----------------- | :------- | :------------------------------ |
+| `stripe-signature` | `string` | **Required**. Stripe signature. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "received": true,
+    "payment": "success",
+    "enrollment": true
+}
+```
+
+</details>
+
+
+### Enrollments
+
+### Get enrollment
+
+```http
+GET /enrollments/:enrollmentId
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "enrollment": [
+        {
+            "_id": "63aed9d94073c1fce7942775",
+            "courseId": "63a6241205424927cbfab326",
+            "traineeId": "63aece85d4bc1b83e09cb687",
+            "progress": 0,
+            "lessons": [
+                {
+                    "lessonId": "63a6255249c44631dc3a1044",
+                    "isVideoWatched": false,
+                    "exercisesStatus": [
+                        {
+                            "exerciseId": "63a6258c465fff5c68c15d16",
+                            "isCompleted": false,
+                            "_id": "63aed9da4073c1fce794277c"
+                        }
+                    ],
+                    "_id": "63aed9da4073c1fce794277b"
+                }
+            ],
+            "__v": 0
+        }
+    ]
+}
+```
+
+</details>
+
+---
+
+### Update enrollment
+
+```http
+PUT /enrollments/:enrollmentId
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+| Body       | Type     | Description             |
+| :--------- | :------- | :---------------------- |
+| `progress` | `number` | Progress of the course. |
+| `lessons`  | `array`  | Array of lessons.       |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "enrollment": [
+        {
+            "_id": "63aed9d94073c1fce7942775",
+            "courseId": "63a6241205424927cbfab326",
+            "traineeId": "63aece85d4bc1b83e09cb687",
+            "progress": 0,
+            "lessons": [
+                {
+                    "lessonId": "63a6255249c44631dc3a1044",
+                    "isVideoWatched": false,
+                    "exercisesStatus": [
+                        {
+                            "exerciseId": "63a6258c465fff5c68c15d16",
+                            "isCompleted": false,
+                            "_id": "63aed9da4073c1fce794277c"
+                        }
+                    ],
+                    "_id": "63aed9da4073c1fce794277b"
+                }
+            ],
+            "__v": 0
+        }
+    ]
+}
+```
+
+</details>
+
+
+### Authentication
+
+#### Login
+
+```http
+  POST /auth/login
+```
+
+| Parameter  | Type     | Description                   |
+| :--------- | :------- | :---------------------------- |
+| `email`    | `string` | **Required**. user's email    |
+| `password` | `string` | **Required**. user's password |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYWZmNzlmYTAxNGVlOTU2N2YwNzEwZSIsInVzZXJUeXBlIjozLCJpYXQiOjE2NzI0NzY2NzMsImV4cCI6MTY3Mzc3MjY3M30.SXWK_GY0fzWSVKQYmPe1fTQQbDddJ4AsuoHbUmkjp-Y",
+    "userType": 3
+}
+```
+
+</details>
+
+#### Refresh
+
+```http
+  GET /auth/refresh
+```
+
+NOTE: this endpoint requires to have jwt cookie set
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYWZmNzlmYTAxNGVlOTU2N2YwNzEwZSIsInVzZXJUeXBlIjozLCJpYXQiOjE2NzI0Nzc3ODksImV4cCI6MTY3Mzc3Mzc4OX0.XLS1DC6I2IHs93ahkPSDH2UNTXQK9x14AB4szyvBtrs",
+    "userType": 3
+}
+```
+
+</details>
+
+#### Logout
+
+```http
+  POST /auth/logout
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Logout successful"
+}
+```
+
+</details>
+
+#### Forgot Password
+
+```http
+  POST /auth/forgot
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email`   | `string` | **Required**. user's email |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "success": true
+}
+```
+
+</details>
+
+#### Reset Password
+
+<!-- TODO: not correct -->
+
+```http
+  GET /auth/reset
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "success": true
+}
+```
+
+</details>
+
+```http
+  POST /auth/reset
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email`   | `string` | **Required**. user's email |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "success": true
+}
+```
+
+</details>
+
+#### Change Password
+
+```http
+  POST /auth/change
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `oldPassword`   | `string` | **Required**. user's old password             |
+| `newPassword`   | `string` | **Required**. user's new password             |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "success": true
+}
+```
+
+</details>
+
+### Course Ratings
+
+#### Get Course Ratings
+
+```http
+POST /courses/:course_id/ratings
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+| Parameter   | Type     | Description                         |
+| :---------- | :------- | :---------------------------------- |
+| `course_id` | `string` | **Required**. ID of the course.     |
+| `rating`    | `number` | **Required**. Rating of the course. |
+| `comment`   | `string` | Comment of the course.              |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "course_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "rating": 5,
+    "comment": "This is a comment",
+    "created_at": "2020-11-01T00:00:00.000Z",
+    "updated_at": "2020-11-01T00:00:00.000Z"
+}
+```
+
+</details>
+
+#### Update Course Ratings
+
+```http
+PUT /courses/:course_id/ratings
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+| Parameter   | Type     | Description                         |
+| :---------- | :------- | :---------------------------------- |
+| `course_id` | `string` | **Required**. ID of the course.     |
+| `rating`    | `number` | **Required**. Rating of the course. |
+| `comment`   | `string` | Comment of the course.              |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "course_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "rating": 5,
+    "comment": "This is a comment"
+}
+```
+
+</details>
+
+#### Delete Course Ratings
+
+```http
+DELETE /courses/:course_id/ratings
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+| Parameter   | Type     | Description                     |
+| :---------- | :------- | :------------------------------ |
+| `course_id` | `string` | **Required**. ID of the course. |
+
+<details>
+<summary>
+
+Response
+
+</summary>
+
+```json
+{
+    "message": "Course ratings deleted successfully"
+}
+```
+
+</details>
+
+### Exercise
+
+### Get all exercises in a specific lesson
+
+```http
+  GET /courses/:courseId/lessons/:lessonId/exercises
+```
+
+| Parameter       | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "exercises": [
+        {
+            "_id": "63b091de2e8cd50e5db3711f",
+            "title": "What is Jenkins",
+            "questions": [
+                {
+                    "question": "What is Jenkins",
+                    "choices": [
+                        "Version Control System",
+                        "Note taking app",
+                        "Automation server",
+                        "Programmin Language"
+                    ],
+                    "answerIndex": 2,
+                    "_id": "63b091de2e8cd50e5db37121"
+                },
+                {
+                    "question": "Which one is a type of CI/CD Jenkins Pipeline?",
+                    "choices": [
+                        "Programming Pipeline",
+                        "Declarative Pipeline",
+                        "Abstract Pipeline",
+                        "Concrete Pipeline"
+                    ],
+                    "answerIndex": 1,
+                    "_id": "63b091de2e8cd50e5db37122"
+                }
+            ],
+            "__v": 0
+        },
+        {
+            "_id": "63b092362e8cd50e5db37135",
+            "title": "Execution Pipeline Stages",
+            "questions": [
+                {
+                    "question": "Which one is not a execution pipeline stage ?",
+                    "choices": ["Fetch stage", "Decode stage", "Execute stage", "Memory stage"],
+                    "answerIndex": 3,
+                    "_id": "63b092362e8cd50e5db37137"
+                }
+            ],
+            "__v": 0
+        }
+    ]
+}
+```
+
+</details>
+
+### Get a specific exercise in a specific lesson
+
+```http
+  GET /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
+```
+
+| Parameter       | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "exercise": {
+        "_id": "63b091de2e8cd50e5db3711f",
+        "title": "What is Jenkins",
+        "questions": [
+            {
+                "question": "What is Jenkins",
+                "choices": ["Version Control System", "Note taking app", "Automation server", "Programmin Language"],
+                "answerIndex": 2,
+                "_id": "63b091de2e8cd50e5db37121"
+            },
+            {
+                "question": "Which one is a type of CI/CD Jenkins Pipeline?",
+                "choices": ["Programming Pipeline", "Declarative Pipeline", "Abstract Pipeline", "Concrete Pipeline"],
+                "answerIndex": 1,
+                "_id": "63b091de2e8cd50e5db37122"
+            }
+        ],
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Create a new Exercise in a specific lesson
+
+```http
+  POST /courses/:courseId/lessons/:lessonId/exercises
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `title`         | `string` | **Required**. Title of the exercise.          |
+| `questions`     | `json`   | **Optional**. Questions of the exercise.      |
+
+NOTE: you need to be an instructor as well as the course owner to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "exercise": {
+        "title": "Jenkins Language",
+        "questions": [
+            {
+                "question": "What is the language of jenkins ?",
+                "choices": ["Python", "Java", "Groovy", "C++"],
+                "answerIndex": 2,
+                "_id": "63b096502c0a3671b4f79110"
+            }
+        ],
+        "_id": "63b096502c0a3671b4f7910e",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Update a exercise in a specific lesson
+
+```http
+  PUT /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+| `title`         | `string` | **Required**. Title of the exercise.          |
+| `questions`     | `json`   | **Optional**. Questions of the exercise.      |
+
+NOTE: you need to be an instructor as well as the course owner to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "exercise": {
+        "title": "Jenkins Language",
+        "questions": [
+            {
+                "question": "What is the language of jenkins ?",
+                "choices": ["Python", "Java", "Groovy", "Golang"],
+                "answerIndex": 2,
+                "_id": "63b0979e2c0a3671b4f7911e"
+            }
+        ],
+        "_id": "63b091de2e8cd50e5db3711f",
+        "__v": 1
+    }
+}
+```
+
+</details>
+
+### Delete a specific exercise
+
+```http
+  DELETE /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+NOTE: you need to be an instructor as well as the course owner to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Exercise deleted Successfully"
+}
+```
+
+</details>
+
+### Get a specifc submission of a exercise in a specific lesson
+
+```http
+  GET /courses/:courseId/lessons/:lessonId/exercises/:exerciseId/submission
+```
+
+| Parameter       | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the trainee. |
+
+NOTE: you need to be a trainee as well as enrolled in the course to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "evaluation": {
+        "totalGrade": 100,
+        "results": [
+            {
+                "isCorrect": true,
+                "correctAnswer": 1,
+                "userAnswer": 1
+            }
+        ]
+    }
+}
+```
+
+</details>
+
+### Submit a exercise in a specific lesson
+
+```http
+  POST /courses/:courseId/lessons/:lessonId/exercises/:exerciseId/submission
+```
+
+| Parameter       | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the trainee. |
+
+NOTE: you need to be a trainee as well as enrolled in the course to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "evaluation": {
+        "totalGrade": 100,
+        "results": [
+            {
+                "isCorrect": true,
+                "correctAnswer": 1,
+                "userAnswer": 1
+            }
+        ]
+    }
+}
+```
+
+</details>
+
+### Lesson
+
+### Get a specific Lesson
+
+```http
+  GET /courses/:courseId/lessons/:lessonId
+```
+
+| Parameter       | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the trainee. |
+
+NOTE: you need to be a trainee as well as enrolled in the course to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "lesson": {
+        "_id": "63b08018229f88974896da6f",
+        "title": "Rust for beginners",
+        "exercises": [],
+        "totalHours": 23,
+        "video": {
+            "title": "Rust for beginners",
+            "videoLink": "https://www.youtube.com/watch?v=gvgBUY8iNO4",
+            "description": "Rust is a multi-paradigm, general-purpose programming language."
+        },
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Create a new Lesson
+
+```http
+  POST /courses/:courseId/lessons
+```
+
+| Parameter       | Type            | Description                                                     |
+| :-------------- | :-------------- | :-------------------------------------------------------------- |
+| `Authorization` | `string`        | **Required**. Bearer token of the instructor.                   |
+| `title`         | `number`        | **Required**. Title of the lesson.                              |
+| `totalHours`    | `string`        | **Required**. Duration of the lesson.                           |
+| `video`         | `json`          | **Optional**. Video of the lesson.                              |
+| `exercises`     | `Array<string>` | **Optional**. Exercise IDs referencing exercises in the lesson. |
+
+NOTE: you need to be an instructor as well as the course owner to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "lesson": {
+        "title": "Rust for beginners",
+        "exercises": ["63b0081fa014ee9567f07152"],
+        "totalHours": 23,
+        "video": {
+            "title": "Rust for beginners",
+            "videoLink": "https://www.youtube.com/watch?v=gvgBUY8iNO4",
+            "description": "Rust is a multi-paradigm, general-purpose programming language."
+        },
+        "_id": "63b080e6784b76b62a2afc80",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Update a Lesson
+
+```http
+  PUT /courses/:courseId/lessons/:lessonId
+```
+
+| Parameter       | Type            | Description                                                     |
+| :-------------- | :-------------- | :-------------------------------------------------------------- |
+| `Authorization` | `string`        | **Required**. Bearer token of the instructor.                   |
+| `title`         | `number`        | **Optional**. Title of the lesson.                              |
+| `totalHours`    | `string`        | **Optional**. Duration of the lesson.                           |
+| `video`         | `json`          | **Optional**. Video of the lesson.                              |
+| `exercises`     | `Array<string>` | **Optional**. Exercise IDs referencing exercises in the lesson. |
+
+NOTE: you need to be an instructor as well as the course owner to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "lesson": {
+        "title": "Rust for amateurs",
+        "exercises": [],
+        "totalHours": 23,
+        "video": {
+            "title": "Rust for beginners",
+            "videoLink": "https://www.youtube.com/watch?v=gvgBUY8iNO4",
+            "description": "Rust is a multi-paradigm, general-purpose programming language."
+        },
+        "_id": "63b080e6784b76b62a2afc80",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Delete a Lesson
+
+```http
+  DELETE /courses/:courseId/lessons/:lessonId
+```
+
+| Parameter       | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+NOTE: you need to be an instructor as well as the course owner to access this endpoint
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Lesson deleted Successfully"
+}
+```
+
+</details>
+
+### Promotions
+
+### Get all promotions
+
+```http
+GET /promotions
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "promotions": [
+        {
+            "_id": "63b168e70087317dde042f45",
+            "name": "brand",
+            "courses": [
+                {
+                    "_id": "63b11e5ca6c2dc8b7b1fa1bd",
+                    "title": "Docker in 30 seconds",
+                    "description": "Learn Docker in 30 seconds",
+                    "instructor": "63847b66f067f8a676dd1df3",
+                    "subject": "paid",
+                    "price": 69420,
+                    "averageRating": 0,
+                    "ratings": [],
+                    "totalHours": 1,
+                    "enrollmentsCount": 0,
+                    "discount": 0,
+                    "activePromotion": "63b168e70087317dde042f45",
+                    "lessons": [],
+                    "status": "draft",
+                    "createdAt": "2023-01-01T05:47:08.247Z",
+                    "updatedAt": "2023-01-01T11:05:12.069Z",
+                    "__v": 0
+                }
+            ],
+            "startDate": "2023-01-18T22:00:00.000Z",
+            "endDate": "2023-01-27T21:59:59.999Z",
+            "discountPercent": 10,
+            "source": "Admin",
+            "__v": 0
+        }
+    ]
+}
+```
+
+</details>
+
+---
+
+### Get a promotion
+
+```http
+GET /promotions/:promotionId
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "promotion": {
+        "_id": "63b168e70087317dde042f45",
+        "name": "brand",
+        "courses": [
+            {
+                "_id": "63b11e5ca6c2dc8b7b1fa1bd",
+                "title": "Docker in 30 seconds",
+                "description": "Learn Docker in 30 seconds",
+                "instructor": "63847b66f067f8a676dd1df3",
+                "subject": "paid",
+                "price": 69420,
+                "averageRating": 0,
+                "ratings": [],
+                "totalHours": 1,
+                "enrollmentsCount": 0,
+                "discount": 0,
+                "activePromotion": "63b168e70087317dde042f45",
+                "lessons": [],
+                "status": "draft",
+                "createdAt": "2023-01-01T05:47:08.247Z",
+                "updatedAt": "2023-01-01T11:05:12.069Z",
+                "__v": 0
+            }
+        ],
+        "startDate": "2023-01-18T22:00:00.000Z",
+        "endDate": "2023-01-27T21:59:59.999Z",
+        "discountPercent": 10,
+        "source": "Admin",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+---
+
+### Create a promotion
+
+```http
+POST /promotions
+```
+
+| Body              | Type     | Description                                     |
+| :---------------- | :------- | :---------------------------------------------- |
+| `name`            | `string` | **Required**. Name of the promotion             |
+| `discountPercent` | `number` | **Required**. Discount percent of the promotion |
+| `startDate`       | `date`   | **Required**. Start date of the promotion       |
+| `endDate`         | `date`   | **Required**. End date of the promotion         |
+| `courses`         | `array`  | **Required**. Courses of the promotion          |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "promotion": {
+        "_id": "63b168e70087317dde042f45",
+        "name": "brand",
+        "courses": [
+            {
+                "_id": "63b11e5ca6c2dc8b7b1fa1bd",
+                "title": "Docker in 30 seconds",
+                "description": "Learn Docker in 30 seconds",
+                "instructor": "63847b66f067f8a676dd1df3",
+                "subject": "paid",
+                "price": 69420,
+                "averageRating": 0,
+                "ratings": [],
+                "totalHours": 1,
+                "enrollmentsCount": 0,
+                "discount": 0,
+                "activePromotion": "63b168e70087317dde042f45",
+                "lessons": [],
+                "status": "draft",
+                "createdAt": "2023-01-01T05:47:08.247Z",
+                "updatedAt": "2023-01-01T11:05:12.069Z",
+                "__v": 0
+            }
+        ],
+        "startDate": "2023-01-18T22:00:00.000Z",
+        "endDate": "2023-01-27T21:59:59.999Z",
+        "discountPercent": 10,
+        "source": "Admin",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+---
+
+### Update a promotion
+
+```http
+PUT /promotions/:promotionId
+```
+
+| Body              | Type     | Description                       |
+| :---------------- | :------- | :-------------------------------- |
+| `name`            | `string` | Name of the promotion             |
+| `courses`         | `array`  | Courses of the promotion          |
+| `startDate`       | `date`   | Start date of the promotion       |
+| `endDate`         | `date`   | End date of the promotion         |
+| `discountPercent` | `number` | Discount percent of the promotion |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "promotion": {
+        "_id": "63b168e70087317dde042f45",
+        "name": "brand",
+        "courses": [
+            {
+                "_id": "63b11e5ca6c2dc8b7b1fa1bd",
+                "title": "Docker in 30 seconds",
+                "description": "Learn Docker in 30 seconds",
+                "instructor": "63847b66f067f8a676dd1df3",
+                "subject": "paid",
+                "price": 69420,
+                "averageRating": 0,
+                "ratings": [],
+                "totalHours": 1,
+                "enrollmentsCount": 0,
+                "discount": 0,
+                "activePromotion": "63b168e70087317dde042f45",
+                "lessons": [],
+                "status": "draft",
+                "createdAt": "2023-01-01T05:47:08.247Z",
+                "updatedAt": "2023-01-01T11:05:12.069Z",
+                "__v": 0
+            }
+        ],
+        "startDate": "2023-01-18T22:00:00.000Z",
+        "endDate": "2023-01-27T21:59:59.999Z",
+        "discountPercent": 10,
+        "source": "Admin",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+---
+
+### Delete a promotion
+
+```http
+DELETE /promotions/:promotionId
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "message": "Promotion deleted successfully"
+}
+```
+
+</details>
+
+
+### Reports
+
+### Get all user's reports
+
+```http
+GET /me/reports
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+<details>
+
+<summary>
+Response
+</summary>
+
+```json
+{
+    "reports": [
+        {
+            "_id": "63aeb2dd728c859d4601ac08",
+            "userId": "63847b66f067f8a676dd1df3",
+            "courseId": "63abefa6485cfbc7e2c4ac6c",
+            "threadId": {
+                "_id": "63aeb2dd728c859d4601ac07",
+                "updatedAt": "2022-12-30T09:44:28.084Z"
+            },
+            "type": "Financial",
+            "subject": "Refund didn't come through",
+            "description": "I have requested a refund but still didn't come through.",
+            "seen": false,
+            "status": "Pending",
+            "createdAt": "2022-12-30T09:43:57.993Z",
+            "updatedAt": "2022-12-30T09:43:57.993Z",
+            "__v": 0
+        }
+    ]
+}
+```
+
+</details>
+
+---
+
+### Get a specific report
+
+```http
+GET /me/reports/:reportId
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+<details>
+
+<summary>
+Response
+</summary>
+
+```json
+{
+    "report": {
+        "_id": "63aeb2dd728c859d4601ac08",
+        "userId": {
+            "_id": "63847b66f067f8a676dd1df3",
+            "firstName": "Mohammad",
+            "lastName": "Omar",
+            "__t": "Instructor"
+        },
+        "courseId": "63abefa6485cfbc7e2c4ac6c",
+        "threadId": {
+            "_id": "63aeb2dd728c859d4601ac07",
+            "reportId": "63aeb2dd728c859d4601ac08",
+            "replies": [
+                {
+                    "userId": {
+                        "_id": "63ada239aef4bb883ee72eb2",
+                        "firstName": "Admin",
+                        "lastName": "ElAdmoon",
+                        "__t": "Admin"
+                    },
+                    "message": "The refund will be processed within 3-5 business days.",
+                    "createdAt": "2022-12-30T09:44:28.083Z",
+                    "_id": "63aeb2fc728c859d4601ac5d"
+                }
+            ],
+            "createdAt": "2022-12-30T09:43:58.169Z",
+            "updatedAt": "2022-12-30T09:44:28.084Z",
+            "__v": 0
+        },
+        "type": "Financial",
+        "subject": "Refund didn't come through",
+        "description": "I have requested a refund but still didn't come through.",
+        "seen": true,
+        "status": "Resolved",
+        "createdAt": "2022-12-30T09:43:57.993Z",
+        "updatedAt": "2022-12-30T09:43:57.993Z",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+---
+
+### Create a new report
+
+```http
+POST /me/reports
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+| Body          | Type     | Description                             |
+| :------------ | :------- | :-------------------------------------- |
+| `courseId`    | `string` | Id of the course.                       |
+| `type`        | `string` | **Required** Type of the report.        |
+| `subject`     | `string` | **Required** Subject of the report.     |
+| `description` | `string` | **Required** Description of the report. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "report": {
+        "userId": "63aac5c4ee11bad5c3c2e6bc",
+        "threadId": "63b1bf1f11c8cc4b8c62cccc",
+        "type": "Technical",
+        "subject": "Video not playing",
+        "description": "The video is not playing",
+        "seen": true,
+        "status": "Pending",
+        "_id": "63b1bf1f11c8cc4b8c62cccd",
+        "createdAt": "2023-01-01T17:13:03.600Z",
+        "updatedAt": "2023-01-01T17:13:03.600Z",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+---
+
+### Post a reply to a report
+
+```http
+POST /me/reports/:reportId
+
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+| Body      | Type     | Description                        |
+| :-------- | :------- | :--------------------------------- |
+| `message` | `string` | **Required** Message of the reply. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "thread": {
+        "_id": "63b1bf1f11c8cc4b8c62cccc",
+        "reportId": "63b1bf1f11c8cc4b8c62cccd",
+        "replies": [
+            {
+                "userId": "63847b66f067f8a676dd1df3",
+                "message": "now pay $8",
+                "createdAt": "2023-01-01T17:19:56.261Z",
+                "_id": "63b1c0bc11c8cc4b8c62ccd3"
+            }
+        ],
+        "createdAt": "2023-01-01T17:13:03.750Z",
+        "updatedAt": "2023-01-01T17:19:56.262Z",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+---
+
+### Get report thread
+
+```http
+GET /me/report-thread/:threadId
+```
+
+| Header          | Type     | Description                             |
+| :-------------- | :------- | :-------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the user. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "thread": {
+        "_id": "63b1bf1f11c8cc4b8c62cccc",
+        "reportId": "63b1bf1f11c8cc4b8c62cccd",
+        "replies": [
+            {
+                "userId": "63847b66f067f8a676dd1df3",
+                "message": "now pay $8",
+                "createdAt": "2023-01-01T17:19:56.261Z",
+                "_id": "63b1c0bc11c8cc4b8c62ccd3"
+            }
+        ],
+        "createdAt": "2023-01-01T17:13:03.750Z",
+        "updatedAt": "2023-01-01T17:19:56.262Z",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+
 ### Generate API Documentation
 
 ```bash
