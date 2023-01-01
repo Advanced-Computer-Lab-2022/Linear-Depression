@@ -17,11 +17,11 @@ const Button = styled(LoadingButton)`
     font-size: 16px;
     margin: 0 auto;
     margin-top: 16px;
-    background-color: #4268f6;
+    background-color: #a435f0;
     border: none;
     color: white;
     &:hover {
-        background-color: #4268f6;
+        background-color: #a435f0;
         color: white;
     }
 `;
