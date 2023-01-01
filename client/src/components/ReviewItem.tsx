@@ -35,12 +35,6 @@ const Comment = styled.div`
     font-size: 14px;
 `;
 
-const Subtitle = styled.div`
-    font-size: 12px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-`;
-
 const HorizontalLine = styled.hr`
     border: 1px solid #e6e6e6;
     margin-top: 24px;
