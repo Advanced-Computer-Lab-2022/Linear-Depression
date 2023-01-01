@@ -974,6 +974,7 @@ Response
             "__v": 0
         }]
 ```
+</details>
 #### Create Corporate Trainee
 
 ```http
