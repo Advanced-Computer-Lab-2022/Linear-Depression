@@ -21,13 +21,13 @@ const ProfileContainer = styled.div`
 `;
 
 const Title = styled(Typography)`
-    margin-top: 20px;
+    margin-top: 20px !important;
     margin-bottom: 20px;
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
     text-align: center;
-    font-size: 30px;
+    font-size: 40px !important;
 `;
 
 const ProfileCards = styled.div`
