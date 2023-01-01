@@ -28,6 +28,8 @@ This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is 
 
 ## Build Status
 
+![example workflow](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression/actions/workflows/test.yml/badge.svg)
+
 -   The project is currently in development.
 -   The Unit tests needs modifications.
 -   A CI/CD pipeline needs to be migrated to Jenkins.
