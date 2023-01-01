@@ -32,9 +32,9 @@ function addPromotionToCourse(courseId: mongoose.Types.ObjectId, promotionId: mo
                     reject(new Error("Course not found"));
                     return;
                 }
-
-                await Promotion.findByIdAndDelete(course.activePromotion);
-
+                if (course.activePromotion) {
+                    await Promotion.findByIdAndDelete(course.activePromotion).catch((error) => reject(error));
+                }
                 course.activePromotion = promotionId;
                 course
                     .save()
@@ -59,10 +59,14 @@ const createPromotion = async (req: Request, res: Response, next: NextFunction) 
                     res.status(StatusCodes.CREATED).json({ promotion });
                 })
                 .catch((error) => {
+                    console.log(error);
                     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
                 });
         })
-        .catch((error) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error }));
+        .catch((error) => {
+            console.log(error.message);
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        });
 };
 
 const updatePromotion = (req: Request, res: Response, next: NextFunction) => {
