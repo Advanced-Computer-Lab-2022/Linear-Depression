@@ -23,5 +23,6 @@ export { default as ReviewItem } from "./ReviewItem";
 export { default as Copyright } from "./Copyright";
 export { default as CoursesList } from "./coursesListWithFilters/CoursesList";
 export { default as CourseDescription } from "./course/CourseDescription";
+export { default as Footer } from "./Footer";
 
 export * from "./report/index";

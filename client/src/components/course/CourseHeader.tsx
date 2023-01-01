@@ -1,5 +1,4 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { CircularProgress } from "@mui/material";
 import React from "react";
 import { openModal } from "react-url-modal";
 import styled from "styled-components";
@@ -20,7 +19,7 @@ const Header = styled.div`
 `;
 
 const CourseHeader: React.FC = () => {
-    const { data, loading } = useAppSelector((state) => state.course);
+    const { data } = useAppSelector((state) => state.course);
     const {
         _id,
         title,
@@ -56,20 +55,6 @@ const CourseHeader: React.FC = () => {
         }
     ];
 
-    if (loading || !data) {
-        return (
-            <Header>
-                <CircularProgress
-                    sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)"
-                    }}
-                />
-            </Header>
-        );
-    }
     return (
         <Header>
             <CourseInfo
