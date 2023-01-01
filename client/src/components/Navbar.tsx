@@ -5,19 +5,26 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useContext, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Flag from "react-world-flags";
+import styled from "styled-components";
 
 import countries from "../media/country-currency.json";
 import Avatar from "./Avatar";
 import OptionsButton from "./OptionsButton";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
-import logo from "./navbar/logo.png";
+import logo from "./navbar/logo-white.png";
 import { config } from "@internals/config";
 import { CountryContext } from "@internals/contexts";
 import { useAuth, useFetchProfile } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { logout } from "@internals/services";
 import { User } from "@internals/types";
+
+const Image = styled.img`
+    width: 200px;
+    height: 30px;
+    cursor: pointer;
+`;
 
 const getUserName = (userType: User, data: any) => {
     if (userType === User.INSTRUCTOR) {
@@ -93,7 +100,7 @@ const Navbar: React.FC<{ search?: boolean }> = ({ search = false }) => {
     return (
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
-                <img src={logo} alt="logo" className="logo" onClick={() => navigate("/")} />
+                <Image src={logo} alt="logo" onClick={() => navigate("/")} />
                 <div className="collapse navbar-collapse" id="navbarText">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
                         <li className="nav-item">
