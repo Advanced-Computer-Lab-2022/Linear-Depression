@@ -38,7 +38,8 @@ import {
     PaymentCancelled,
     PaymentSuccess,
     PrivacyPolicy,
-    NotFound
+    NotFound,
+    AboutUs
 } from "@internals/pages";
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
                         <Route path="/payment/cancel" element={<PaymentCancelled />} />
                         <Route path="/payment/success/:courseId" element={<PaymentSuccess />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="/about-us" element={<AboutUs />} />
 
                         <Route
                             element={
