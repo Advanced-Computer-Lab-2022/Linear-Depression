@@ -68,7 +68,7 @@ export const getCoursePriceAfterPromotion = async (course: ICourseModel) => {
     if (!promotion) {
         return course.price;
     }
-    if (promotion.status !== PromotionStatus.Active) {
+    if (promotion.status !== PromotionStatus.ACTIVE) {
         return course.price;
     }
     return course.price * (1 - promotion.discountPercent / 100);

@@ -1,5 +1,5 @@
-import { Add, ArrowForwardIosRounded, BugReportTwoTone } from "@mui/icons-material";
-import { Avatar, Typography, Button, Sheet } from "@mui/joy";
+import { Add, ArrowForwardIosRounded, BugReportTwoTone, ArrowBackRounded } from "@mui/icons-material";
+import { Avatar, Typography, Button, Sheet, Box } from "@mui/joy";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -60,17 +60,28 @@ const Header: React.FC<HeaderProps> = ({ reportSubject, newReport }) => {
                 </>
             )}
 
-            {!reportSubject && !newReport && (
+            <Box sx={{ ml: "auto", display: "flex", gap: 2 }}>
                 <Button
-                    sx={{ ml: "auto" }}
                     variant="soft"
-                    color="primary"
-                    startDecorator={<Add />}
-                    onClick={() => navigate("/me/reports/new")}
+                    startDecorator={<ArrowBackRounded />}
+                    onClick={() => navigate("/")}
+                    sx={{ backgroundColor: "#0000" }}
                 >
-                    <b>Report an Issue</b>
+                    <b>Return to Home</b>
                 </Button>
-            )}
+
+                {!reportSubject && !newReport && (
+                    <Button
+                        sx={{ ml: "auto" }}
+                        variant="soft"
+                        color="primary"
+                        startDecorator={<Add />}
+                        onClick={() => navigate("/me/reports/new")}
+                    >
+                        <b>Report an Issue</b>
+                    </Button>
+                )}
+            </Box>
         </Sheet>
     );
 };

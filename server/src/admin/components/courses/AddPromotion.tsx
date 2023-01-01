@@ -1,19 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    Box,
-    H3,
-    Input,
-    InputProps,
-    InputCSS,
-    FormGroup,
-    InputGroup,
-    Button,
-    FormMessage,
-    Icon,
-    Label
-} from "@adminjs/design-system";
-import { ActionProps } from "adminjs";
+import { Box, Input, FormGroup, Button, Label } from "@adminjs/design-system";
+import { ActionProps, useNotice } from "adminjs";
 
 import styled from "styled-components";
 import axios from "axios";
@@ -37,6 +25,8 @@ const AddPromotion = (props: ActionProps) => {
     const [endDate, setEndDate] = React.useState(new Date());
     const { records } = props;
 
+    const sendNotice = useNotice();
+
     const navigate = useNavigate();
 
     const handleSubmit = () => {
@@ -47,17 +37,24 @@ const AddPromotion = (props: ActionProps) => {
                 discountPercent,
                 startDate,
                 endDate,
-                courses: courseIds
+                courses: courseIds,
+                source: "Admin"
             };
 
             axios
                 .post(`${API_URL}/promotions`, promotion)
-                .then((res) => {
-                    console.log("res", res);
+                .then(() => {
+                    sendNotice({
+                        message: "Promotion created successfully!",
+                        type: "success"
+                    });
                     navigate("/admin/resources/Course");
                 })
-                .catch((err) => {
-                    console.log("err", err);
+                .catch(() => {
+                    sendNotice({
+                        message: "Failed to create promotion.",
+                        type: "error"
+                    });
                 });
         }
     };

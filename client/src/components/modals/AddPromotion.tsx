@@ -1,6 +1,7 @@
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Dialog, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import moment from "moment";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -8,11 +9,13 @@ import * as Yup from "yup";
 import { useToast } from "@internals/hooks";
 import { getCourse, useAppDispatch } from "@internals/redux";
 import { addPromotion } from "@internals/services";
+import { Promotion } from "@internals/types";
 import { validateFormData } from "@internals/utils";
 
 const AddPromotion: React.FC<{
     params: {
         courseId: string;
+        activePromotion: Promotion;
     };
 }> = ({ params }) => {
     const navigate = useNavigate();
@@ -20,16 +23,16 @@ const AddPromotion: React.FC<{
         navigate(-1);
     };
 
-    const { courseId } = params;
+    const { courseId, activePromotion } = params;
 
     const handleClose = () => {
         closeModal();
     };
 
-    const [name, setName] = useState("");
-    const [discountPercent, setDiscountPercent] = useState(0);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [name, setName] = useState(activePromotion?.name || "");
+    const [discountPercent, setDiscountPercent] = useState(activePromotion?.discountPercent || 0);
+    const [startDate, setStartDate] = useState(moment(activePromotion?.startDate).format("YYYY-MM-DD") || new Date());
+    const [endDate, setEndDate] = useState(moment(activePromotion?.endDate).format("YYYY-MM-DD") || new Date());
     const [formErrors, setFormErrors] = useState(new Map());
     const [loading, setLoading] = useState(false);
 
@@ -83,7 +86,8 @@ const AddPromotion: React.FC<{
     return (
         <Dialog open={true}>
             <DialogContent>
-                <DialogContentText>Add a new Promotion</DialogContentText>
+                {!activePromotion && <DialogContentText>Add Promotion</DialogContentText>}
+                {activePromotion && <DialogContentText>Edit Active Promotion</DialogContentText>}
                 <TextField
                     required
                     autoFocus

@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import StarRatings from "react-star-ratings";
@@ -103,7 +104,7 @@ const ReviewItem: React.FC<{
                                 starRatedColor="#e59819"
                             />
                         </Rating>
-                        <Date>{date}</Date>
+                        <Date>{moment(date).fromNow()}</Date>
                     </RatingContainer>
                     <Comment>{comment}</Comment>
                     <Subtitle>Was this review helpful?</Subtitle>
