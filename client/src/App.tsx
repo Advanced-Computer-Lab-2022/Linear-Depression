@@ -17,7 +17,8 @@ import {
     EditProfile,
     ViewMyWallet,
     DeleteCourse,
-    DeleteLesson
+    DeleteLesson,
+    DeleteExercise
 } from "@internals/modals";
 import {
     Home,
@@ -60,7 +61,8 @@ function App() {
                         viewMySettlements: ViewMySettlements,
                         viewMyWallet: ViewMyWallet,
                         deleteCourse: DeleteCourse,
-                        deleteLesson: DeleteLesson
+                        deleteLesson: DeleteLesson,
+                        deleteExercise: DeleteExercise
                     }}
                 />
                 <Routes>

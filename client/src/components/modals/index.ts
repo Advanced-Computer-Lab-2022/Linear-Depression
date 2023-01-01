@@ -13,3 +13,6 @@ export { default as ViewMySettlements } from "./ViewMySettlements";
 export { default as ViewMyWallet } from "./ViewMyWallet";
 export { default as DeleteCourse } from "./DeleteCourse";
 export { default as DeleteLesson } from "./DeleteLesson";
+export { default as DeleteExercise } from "./DeleteExercise";
+export { default as EditQuestion } from "./EditQuestion";
+export { default as EditExerciseTitle } from "./EditExerciseTitle";

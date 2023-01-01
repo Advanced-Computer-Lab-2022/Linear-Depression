@@ -5,11 +5,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import * as React from "react";
 
 const ControlledRadioButtonsGroup: React.FC<{
+    answer?: number;
     questionNumber: number;
     choices: string[];
     onChange: (questionNumber: number, answerIndex: number) => void;
-}> = ({ questionNumber, choices, onChange }) => {
-    const [value, setValue] = React.useState("");
+}> = ({ questionNumber, choices, onChange, answer }) => {
+    const [value, setValue] = React.useState(answer ? answer.toString() : "");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const answerIndex = (event.target as HTMLInputElement).value;

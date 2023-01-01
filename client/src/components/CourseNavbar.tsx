@@ -8,6 +8,7 @@ import logo from "./navbar/logo-black.png";
 import { useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { downloadCertificate } from "@internals/services";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const Image = styled.img`
     width: 200px;
@@ -61,26 +62,29 @@ const CourseNavbar: React.FC = () => {
             </NavItem>
             <CustomDivider orientation="vertical" flexItem />
             <NavItem>
+                <ArrowBackIcon sx={{ marginRight: "10px" }} />
                 <Link className="navbar-brand" to={`/courses/${course.data?._id}`}>
                     {course.data?.title}
                 </Link>
             </NavItem>
-            <ProgressContainer>
-                <NavItem>{enrollment.data && <CircularProgressBar value={enrollment.data?.progress} />}</NavItem>
-                {enrollment.data?.progress === 100 ? (
-                    <Button
-                        sx={{
-                            color: "white",
-                            textTransform: "none"
-                        }}
-                        onClick={handleDownloadCertificate}
-                    >
-                        Get Certificate
-                    </Button>
-                ) : (
-                    "Your Progress"
-                )}
-            </ProgressContainer>
+            {enrollment.data && (
+                <ProgressContainer>
+                    <NavItem>{enrollment.data && <CircularProgressBar value={enrollment.data?.progress} />}</NavItem>
+                    {enrollment.data?.progress === 100 ? (
+                        <Button
+                            sx={{
+                                color: "white",
+                                textTransform: "none"
+                            }}
+                            onClick={handleDownloadCertificate}
+                        >
+                            Get Certificate
+                        </Button>
+                    ) : (
+                        "Your Progress"
+                    )}
+                </ProgressContainer>
+            )}
         </HorizontalContainer>
     );
 };
