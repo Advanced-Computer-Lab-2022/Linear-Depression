@@ -4,7 +4,7 @@
     "description": "backend for online edu system",
     "main": "src/start.ts",
     "scripts": {
-        "test": "jest -i",
+        "test": "jest",
         "start": "node build/start.js ",
         "build": "rm -rf build/ && tsc",
         "generate-docs": "node src/swagger.ts"

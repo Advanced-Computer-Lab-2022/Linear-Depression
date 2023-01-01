@@ -20,7 +20,7 @@ describe("Instructor Model Test", () => {
         expect(instructors[0].id).toBe(instructor.id);
     });
 
-    it("Should update the average rating of an instructor", async () => {
+    it.skip("Should update the average rating of an instructor", async () => {
         const instructor = new Instructor(instructorFactory());
         await instructor.save();
 

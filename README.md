@@ -4,9 +4,18 @@ An implementation of full stack web application using the MERN stack. The applic
 
 ## Badges
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 
 ## Motivation
+
 
 This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is a project-based course that aims to teach students
 
@@ -119,6 +128,31 @@ export const sendCertificateEmail = async (email: string, courseName: string, ce
     sendEmail(email, context, "certificateUponCompletion", "Linear Depression | Congrats 🎉", attachments);
 };
 ```
+```typescript
+courseSchema.methods.close = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.PUBLISHED) {
+        throw new Error("Invalid Transition, course must be published to be closed");
+    }
+    this.status = CourseStatus.CLOSED;
+    await this.save();
+};
+
+courseSchema.methods.publish = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.DRAFT) {
+        throw new Error("Invalid Transition, course must be draft to be published");
+    }
+    this.status = CourseStatus.PUBLISHED;
+    await this.save();
+};
+
+courseSchema.methods.reOpen = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.CLOSED) {
+        throw new Error("Invalid Transition, course must be closed to be re-opened");
+    }
+    this.status = CourseStatus.PUBLISHED;
+    await this.save();
+};
+```
 
 ## Running Tests
 
@@ -133,7 +167,7 @@ The testing is done using `jest`. To run the tests, run the following command
 Install my-project with `npm`
 
 ```bash
-> npm https://github.com/Advanced-Computer-Lab-2022/Linear-Depression
+> git clone https://github.com/Advanced-Computer-Lab-2022/Linear-Depression
 > cd Linear-Depression/
 > cd server && npm i && cd -
 > cd client && npm i -f && cd -
@@ -155,7 +189,7 @@ If you have any feedback, please reach out to us at [ibrahim.abouelenein@student
 -   [@AhmedNasserG](https://www.github.com/AhmedNasserG)
 -   [@ShimaaBetah](https://www.github.com/ShimaaBetah)
 -   [@MohammadOTaha](https://www.github.com/MohammadOTaha)
--   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassaan)
+-   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassan)
 
 ## Contributing
 
@@ -831,6 +865,200 @@ http://localhost:PORT/api-docs
 ```
 
 ![API Documentation](docs/APIDocs.png)
+
+### Instructor Resource
+
+#### Get all instructors
+
+```http
+  GET /instructors
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+[
+    {
+        "_id": "636020ca8701caab59e5dc30",
+        "firstName": "Elshimaa",
+        "lastName": "Ahmed",
+        "email": "shimaabetah1911@gmail.com",
+        "userName": "shimaa",
+        "passwordHash": "$2b$10$3rrug5dUKTgB6.seFk6vhuqFgBfV5KUvtcixDahQDBYTzTVj3XxNe",
+        "__t": "Instructor",
+        "__v": 5,
+        "averageRating": 2.6666666666666665,
+        "ratings": [
+            "638ca04b782e6628906298d4",
+            "638cc5130d13c06915eb4c66",
+            "63ac8bc27d024a636f415c69",
+            "63ac93a3264852bad3d5b0ec",
+            "63ade060eca5f43cb35bbe75"
+        ],
+        "balance": 226.04818069639646
+    },
+    {
+        "_id": "6362ed27802b350e006822cd",
+        "firstName": "Ibrahim",
+        "lastName": "Abouelenien",
+        "email": "ibrahim@gmail.com",
+        "userName": "ibrahim",
+        "passwordHash": "$2b$10$3IEAfS7gyXKfy1fYzIIUV.hzEkUOX9t9LUTVjitoKq0cK7kSJXx.m",
+        "__t": "Instructor",
+        "__v": 1,
+        "averageRating": 3,
+        "ratings": ["638ca5430f9e6923d6fbc561"],
+        "balance": 127.76157985710933
+    }
+]
+```
+
+</details>
+
+#### Create Instructor
+
+```http
+  POST /instructors
+```
+
+| Headers         | Type     | Description                              |
+| :-------------- | :------- | :--------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the Admin. |
+
+| Body        | Type     | Description                               |
+| :---------- | :------- | :---------------------------------------- |
+| `firstName` | `string` | **Required**. firstName of instructor     |
+| `lastName`  | `string` | **Required**. lastName of the instructor  |
+| `email`     | `string` | **Required**. email of instructor         |
+| `userName`  | `string` | **Required**. user name of the instructor |
+| `password`  | `string` | **Required**. password of the instructor  |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "instructor": {
+        "_id": "63b20325aa432ea8fa2da329",
+        "firstName": "shimaa",
+        "lastName": "Ahmed",
+        "email": "nkhk11@test.com",
+        "userName": "shejljlmmooo",
+        "passwordHash": "$2b$10$47BPoAqwAcSqNK7b5HKlKudH8/H9EdC6NL.M69cd9E6z4XIX5eW1O",
+        "ratings": [],
+        "averageRating": 0,
+        "balance": 0,
+        "__t": "Instructor",
+        "__v": 0
+    }
+}
+```
+
+</details>
+
+### Corporate Trainee Resource
+
+#### Get all Corporate Trainees
+
+```http
+  GET /corporate-trainees
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+[
+    {
+        "enrollments": [],
+        "_id": "6362ed5b802b350e006822d6",
+        "firstName": "john",
+        "lastName": "barker",
+        "email": "john@example.com",
+        "userName": "john",
+        "passwordHash": "$2b$10$i5aOe7TqSsmVx8IWz7JCjOQ.ymyHdOFk.vPeUY61O1m9TZIEs3XIy",
+        "courses": [],
+        "gender": "male",
+        "corporate": "amazon",
+        "status": "ACTIVE",
+        "expiredAt": "2022-11-23T22:00:00.000Z",
+        "__t": "CorporateTrainee",
+        "__v": 0
+    },
+    {
+        "enrollments": [],
+        "_id": "63638d2dfa52a234ba846b39",
+        "firstName": "jhalskjdghajkld",
+        "lastName": "jklhgakjshgd",
+        "email": "asjdg@gmail.com",
+        "userName": "kjashdjk",
+        "passwordHash": "$2b$10$EAQbim1cSB6FcAqT0hOYFuRDEEgc/6ddc9DdlvlDAoR6ON6YzmwWa",
+        "courses": [],
+        "gender": "male",
+        "corporate": "hjagsdhj",
+        "status": "ACTIVE",
+        "expiredAt": "2022-11-14T22:00:00.000Z",
+        "__t": "CorporateTrainee",
+        "__v": 0
+    }
+]
+```
+
+</details>
+#### Create Corporate Trainee
+
+```http
+  POST /corporate-trainees
+```
+
+| Headers         | Type     | Description                              |
+| :-------------- | :------- | :--------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the Admin. |
+
+| Body        | Type     | Description                                          |
+| :---------- | :------- | :--------------------------------------------------- |
+| `firstName` | `string` | **Required**. firstName of corporate trainee         |
+| `lastName`  | `string` | **Required**. lastName of the corporate trainee      |
+| `email`     | `string` | **Required**. email of corporate trainee             |
+| `userName`  | `string` | **Required**. user name of the corporate trainee     |
+| `password`  | `string` | **Required**. password of the corporate trainee      |
+| `gender`    | enum     | **Required**. gender of the corporate trainee        |
+| `corporate` | `string` | **Required**. corporate of the corporate trainee     |
+| `expiredAt` | `date`   | **Required** . expiration date the corporate trainee |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "corporateTrainee": {
+        "_id": "63b201f1aa432ea8fa2da31e",
+        "firstName": "shimaa",
+        "lastName": "Ahmed",
+        "email": "corporate11@test.com",
+        "userName": "shejlmmooo",
+        "passwordHash": "$2b$10$ObuAW/UuRq2jssTt.d5gweTSYXDZEZLabda2yEh19BN8dRcdyKTxS",
+        "courses": [],
+        "enrollments": [],
+        "gender": "female",
+        "corporate": "google",
+        "expiredAt": "2023-01-01T22:00:00.000Z",
+        "__t": "CorporateTrainee",
+        "__v": 0
+    }
+}
+```
+
+</details>
 
 ### Courses Resource
 
@@ -1528,7 +1756,6 @@ Response
 
 </details>
 
-
 ### Payment
 
 #### Create a checkout session
@@ -1583,7 +1810,6 @@ Response
 ```
 
 </details>
-
 
 ### Enrollments
 
@@ -1683,7 +1909,6 @@ Response
 ```
 
 </details>
-
 
 ### Authentication
 
@@ -1939,6 +2164,160 @@ Response
 ```json
 {
     "message": "Course ratings deleted successfully"
+}
+```
+
+</details>
+
+## Instructor Ratings
+
+#### Get Instructor Ratings
+
+```http
+GET /me/ratings
+```
+
+| Headers         | Type     | Description                                   |
+| :-------------- | :------- | :-------------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the instructor. |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+[{
+    "_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "trainee": {
+                "_id": "63aece85d4bc1b83e09cb687",
+                "firstName": "ahmed",
+                "lastName": "nasser",
+                "__t": "IndividualTrainee"
+    }
+    "rating": 5,
+    "comment": "This is a comment",
+    "created_at": "2020-11-01T00:00:00.000Z",
+    "updated_at": "2020-11-01T00:00:00.000Z"
+},
+{
+    "_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "trainee": {
+                "_id": "63aece85d4bc1b83e09cb687",
+                "firstName": "ahmed",
+                "lastName": "nasser",
+                "__t": "IndividualTrainee"
+    }
+    "rating": 5,
+    "comment": "This is a comment",
+    "created_at": "2020-11-01T00:00:00.000Z",
+    "updated_at": "2020-11-01T00:00:00.000Z"
+}]
+```
+
+</details>
+
+#### Create Instructor Ratings
+
+```http
+POST /instructors/:instructorId/ratings
+```
+
+| Headers         | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the Trainee. |
+
+| Parameter      | Type     | Description                         |
+| :------------- | :------- | :---------------------------------- |
+| `instructorId` | `string` | **Required**. ID of the instructor. |
+
+| Body      | Type     | Description                             |
+| :-------- | :------- | :-------------------------------------- |
+| `rating`  | `number` | **Required**. Rating of the instructor. |
+| `comment` | `string` | Comment of the instructor.              |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "trainee": {
+                "_id": "63aece85d4bc1b83e09cb687",
+                "firstName": "ahmed",
+                "lastName": "nasser",
+                "__t": "IndividualTrainee"
+    }
+    "rating": 5,
+    "comment": "This is a comment",
+    "created_at": "2020-11-01T00:00:00.000Z",
+    "updated_at": "2020-11-01T00:00:00.000Z"
+}
+```
+
+</details>
+
+#### Update Instructor Ratings
+
+```http
+PUT /courses/:instructorId/ratings
+```
+
+| Headers         | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the trainee. |
+
+| Parameter      | Type     | Description                         |
+| :------------- | :------- | :---------------------------------- |
+| `instructorId` | `string` | **Required**. ID of the instructor. |
+
+| Body      | Type     | Description                             |
+| :-------- | :------- | :-------------------------------------- |
+| `rating`  | `number` | **Required**. Rating of the instructor. |
+| `comment` | `string` | Comment of the course.                  |
+
+<details>
+<summary>
+Response
+</summary>
+
+```json
+{
+    "_id": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "traineeId": "5f9f9b9b9b9b9b9b9b9b9b9b",
+    "rating": 5,
+    "comment": "This is a comment"
+}
+```
+
+</details>
+
+#### Delete instructor Ratings
+
+```http
+DELETE /instructors/:instructorId/ratings
+```
+
+| Headers         | Type     | Description                                |
+| :-------------- | :------- | :----------------------------------------- |
+| `Authorization` | `string` | **Required**. Bearer token of the trainee. |
+
+| Parameter      | Type     | Description                         |
+| :------------- | :------- | :---------------------------------- |
+| `instructorId` | `string` | **Required**. ID of the instructor. |
+
+<details>
+<summary>
+
+Response
+
+</summary>
+
+```json
+{
+    "message": "instructor ratings deleted successfully"
 }
 ```
 
@@ -2606,7 +2985,6 @@ Response
 
 </details>
 
-
 ### Reports
 
 ### Get all user's reports
@@ -2840,7 +3218,6 @@ Response
 ```
 
 </details>
-
 
 ### Generate API Documentation
 
