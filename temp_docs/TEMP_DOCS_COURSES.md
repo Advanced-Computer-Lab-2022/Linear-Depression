@@ -256,6 +256,8 @@ Response
 }
 ```
 
+</details>
+
 ### Close Course
 
 ```http
