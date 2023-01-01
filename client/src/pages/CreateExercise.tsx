@@ -45,6 +45,15 @@ const QuestionAction = styled.div`
     flex-direction: row;
     justify-content: space-between;
 `;
+const ExerciseAction = styled.div`
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+const CancelButton = styled(SubmitButton)`
+    background-color: #d32f2f;
+`;
 
 const CreateExercise: React.FC<{
     edit?: boolean;
@@ -106,6 +115,9 @@ const CreateExercise: React.FC<{
         const newQuestions = [...questions];
         newQuestions.splice(index, 1);
         setQuestions(newQuestions);
+        if (formErrors.has(`question${index}Answer`)) {
+            formErrors.delete(`question${index}Answer`);
+        }
     };
     const validationRules: any = {};
     for (let i = 0; i < questions.length; i++) {
@@ -115,7 +127,6 @@ const CreateExercise: React.FC<{
         const newQuestions = [...questions];
         newQuestions[index].answerIndex = answer;
         setQuestions(newQuestions);
-        console.log(newQuestions);
     };
 
     const handleSubmit = () => {
@@ -183,16 +194,29 @@ const CreateExercise: React.FC<{
                         onClick={handleOpenEditExerciseTitle}
                     />
                 </HorizontalContainer>
-                {edit ? (
-                    <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
-                        Update
-                    </SubmitButton>
-                ) : (
-                    <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
+                <ExerciseAction>
+                    {edit ? (
+                        <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
+                            Update
+                        </SubmitButton>
+                    ) : (
+                        <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
+                            {" "}
+                            submit
+                        </SubmitButton>
+                    )}
+                    <CancelButton
+                        loading={loading}
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                            navigate(`/courses/${courseId}`);
+                        }}
+                    >
                         {" "}
-                        submit
-                    </SubmitButton>
-                )}
+                        Cancel
+                    </CancelButton>
+                </ExerciseAction>
             </Header>
             {questions.map((question, index) =>
                 !formErrors.has(`question${index}Answer`) ? (
@@ -217,7 +241,7 @@ const CreateExercise: React.FC<{
                                             deleteQuestion(index);
                                         }}
                                         sx={{
-                                            color: "red",
+                                            color: "error.main",
                                             "&:hover": {
                                                 fontSize: "1.8rem"
                                             },
@@ -267,7 +291,7 @@ const CreateExercise: React.FC<{
                                                 deleteQuestion(index);
                                             }}
                                             sx={{
-                                                color: "red",
+                                                color: "error.main",
                                                 "&:hover": {
                                                     fontSize: "1.8rem"
                                                 },
