@@ -4,9 +4,18 @@ An implementation of full stack web application using the MERN stack. The applic
 
 ## Badges
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 
 ## Motivation
+
 
 This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is a project-based course that aims to teach students
 
@@ -119,6 +128,31 @@ export const sendCertificateEmail = async (email: string, courseName: string, ce
     sendEmail(email, context, "certificateUponCompletion", "Linear Depression | Congrats 🎉", attachments);
 };
 ```
+```typescript
+courseSchema.methods.close = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.PUBLISHED) {
+        throw new Error("Invalid Transition, course must be published to be closed");
+    }
+    this.status = CourseStatus.CLOSED;
+    await this.save();
+};
+
+courseSchema.methods.publish = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.DRAFT) {
+        throw new Error("Invalid Transition, course must be draft to be published");
+    }
+    this.status = CourseStatus.PUBLISHED;
+    await this.save();
+};
+
+courseSchema.methods.reOpen = async function (this: ICourseModel) {
+    if (this.status !== CourseStatus.CLOSED) {
+        throw new Error("Invalid Transition, course must be closed to be re-opened");
+    }
+    this.status = CourseStatus.PUBLISHED;
+    await this.save();
+};
+```
 
 ## Running Tests
 
@@ -133,7 +167,7 @@ The testing is done using `jest`. To run the tests, run the following command
 Install my-project with `npm`
 
 ```bash
-> npm https://github.com/Advanced-Computer-Lab-2022/Linear-Depression
+> git clone https://github.com/Advanced-Computer-Lab-2022/Linear-Depression
 > cd Linear-Depression/
 > cd server && npm i && cd -
 > cd client && npm i -f && cd -
@@ -155,7 +189,7 @@ If you have any feedback, please reach out to us at [ibrahim.abouelenein@student
 -   [@AhmedNasserG](https://www.github.com/AhmedNasserG)
 -   [@ShimaaBetah](https://www.github.com/ShimaaBetah)
 -   [@MohammadOTaha](https://www.github.com/MohammadOTaha)
--   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassaan)
+-   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassan)
 
 ## Contributing
 
