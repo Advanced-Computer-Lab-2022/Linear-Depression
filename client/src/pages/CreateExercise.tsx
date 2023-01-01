@@ -15,13 +15,14 @@ import {
     Title,
     SubmitButton,
     Header,
-    Navbar
+    CourseNavbar
 } from "@internals/components";
-import { AddQuestion, EditQuestion } from "@internals/modals";
-import { addExercise } from "@internals/services";
+import { AddQuestion, EditQuestion, EditExerciseTitle } from "@internals/modals";
+import { addExercise, updateExercise } from "@internals/services";
 import * as Yup from "yup";
 import { validateFormData } from "@internals/utils";
 import { useToast } from "@internals/hooks";
+import { Exercise } from "@internals/types";
 
 const ErrorCourseCard = styled.div`
     display: flex;
@@ -45,17 +46,21 @@ const QuestionAction = styled.div`
     justify-content: space-between;
 `;
 
-const CreateExercise = () => {
+const CreateExercise: React.FC<{
+    edit?: boolean;
+    exercise?: Exercise;
+    exerciseId?: string;
+}> = ({ exercise, edit, exerciseId }) => {
     const location = useLocation();
 
     const navigate = useNavigate();
 
     const { courseId, lessonId } = useParams();
-    const title = location.state.title;
-
-    const [questions, setQuestions] = useState<IQuestionProps[]>([]);
+    const [title, setTitle] = useState(exercise ? exercise.title : location.state.title);
+    const [questions, setQuestions] = useState<IQuestionProps[]>(exercise ? exercise.questions : []);
     const [openQuestionModal, setOpenQuestionModal] = useState(false);
     const [openEditQuestionModal, setOpenEditQuestionModal] = useState(false);
+    const [openEditExerciseTitleModal, setOpenEditExerciseTitleModal] = useState(false);
     const [editQuestionIndex, setEditQuestionIndex] = useState(-1);
     const [formErrors, setFormErrors] = useState(new Map());
     const [loading, setLoading] = useState(false);
@@ -73,8 +78,8 @@ const CreateExercise = () => {
     };
 
     const handleOpenEditQuestion = (index: number) => {
-        setOpenEditQuestionModal(true);
         setEditQuestionIndex(index);
+        setOpenEditQuestionModal(true);
     };
 
     const handleCloseEditQuestionModal = (data: IQuestionProps) => {
@@ -83,6 +88,17 @@ const CreateExercise = () => {
             const newQuestions = [...questions];
             newQuestions[editQuestionIndex] = data;
             setQuestions(newQuestions);
+        }
+    };
+
+    const handleOpenEditExerciseTitle = () => {
+        setOpenEditExerciseTitleModal(true);
+    };
+
+    const handleCloseEditExerciseTitleModal = (data: string) => {
+        setOpenEditExerciseTitleModal(false);
+        if (data) {
+            setTitle(data);
         }
     };
 
@@ -109,22 +125,39 @@ const CreateExercise = () => {
             formData[`question${i}Answer`] = questions[i].answerIndex ? questions[i].answerIndex : -1;
         }
         validateFormData(formData, validationRules)
-            .then((x) => {
-                console.log(x);
+            .then(() => {
                 const exercise = {
                     title,
                     questions
                 };
-                addExercise(exercise, courseId, lessonId)
-                    .then(() => {
-                        setLoading(false);
-                        showToast({ message: "Exercise created successfully", type: "success" });
-                        navigate(`/courses/${courseId}`);
-                    })
-                    .catch(() => {
-                        setLoading(false);
-                        showToast({ message: "Failed to create exercise . Try later", type: "error" });
-                    });
+                if (questions.length == 0) {
+                    setLoading(false);
+                    showToast({ message: "Please add at least one question", type: "error" });
+                    return;
+                }
+                if (edit) {
+                    updateExercise(exercise, courseId, lessonId, exerciseId)
+                        .then(() => {
+                            setLoading(false);
+                            showToast({ message: "Exercise Updated successfully", type: "success" });
+                            navigate(`/courses/${courseId}`);
+                        })
+                        .catch(() => {
+                            setLoading(false);
+                            showToast({ message: "Failed to update Exercise . Try later", type: "error" });
+                        });
+                } else {
+                    addExercise(exercise, courseId, lessonId)
+                        .then(() => {
+                            setLoading(false);
+                            showToast({ message: "Exercise created successfully", type: "success" });
+                            navigate(`/courses/${courseId}`);
+                        })
+                        .catch(() => {
+                            setLoading(false);
+                            showToast({ message: "Failed to create exercise . Try later", type: "error" });
+                        });
+                }
             })
             .catch((errors) => {
                 setFormErrors(errors);
@@ -134,12 +167,32 @@ const CreateExercise = () => {
 
     return (
         <>
-            <Navbar />
+            <CourseNavbar />
             <Header>
-                <Title>{title}</Title>
-                <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
-                    Submit
-                </SubmitButton>
+                <HorizontalContainer>
+                    <Title>{title}</Title>
+                    <ModeEditIcon
+                        sx={{
+                            fontSize: "1.7",
+                            margin: "5px",
+                            marginLeft: "15px",
+                            "&:hover": {
+                                fontSize: "2rem"
+                            }
+                        }}
+                        onClick={handleOpenEditExerciseTitle}
+                    />
+                </HorizontalContainer>
+                {edit ? (
+                    <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
+                        Update
+                    </SubmitButton>
+                ) : (
+                    <SubmitButton loading={loading} variant="contained" color="primary" onClick={handleSubmit}>
+                        {" "}
+                        submit
+                    </SubmitButton>
+                )}
             </Header>
             {questions.map((question, index) =>
                 !formErrors.has(`question${index}Answer`) ? (
@@ -148,6 +201,17 @@ const CreateExercise = () => {
                             <HorizontalContainer>
                                 <QuestionTitle>{question.question}</QuestionTitle>
                                 <QuestionAction>
+                                    <ModeEditIcon
+                                        onClick={() => {
+                                            handleOpenEditQuestion(index);
+                                        }}
+                                        sx={{
+                                            "&:hover": {
+                                                fontSize: "1.8rem"
+                                            },
+                                            margin: "5px"
+                                        }}
+                                    />
                                     <DeleteIcon
                                         onClick={() => {
                                             deleteQuestion(index);
@@ -156,16 +220,28 @@ const CreateExercise = () => {
                                             color: "red",
                                             "&:hover": {
                                                 fontSize: "1.8rem"
-                                            }
+                                            },
+                                            margin: "5px"
                                         }}
                                     />
                                 </QuestionAction>
                             </HorizontalContainer>
-                            <GroupRadioButton
-                                questionNumber={index}
-                                choices={question.choices}
-                                onChange={handleSetAnswer}
-                            />
+                            {exercise && (
+                                <GroupRadioButton
+                                    answer={question.answerIndex}
+                                    questionNumber={index}
+                                    choices={question.choices}
+                                    onChange={handleSetAnswer}
+                                />
+                            )}
+                            {!exercise && (
+                                <GroupRadioButton
+                                    answer={question.answerIndex}
+                                    questionNumber={index}
+                                    choices={question.choices}
+                                    onChange={handleSetAnswer}
+                                />
+                            )}
                         </div>
                     </QuestionCard>
                 ) : (
@@ -175,15 +251,33 @@ const CreateExercise = () => {
                                 <HorizontalContainer>
                                     <QuestionTitle>{question.question}</QuestionTitle>
                                     <QuestionAction>
+                                        <ModeEditIcon
+                                            onClick={() => {
+                                                handleOpenEditQuestion(index);
+                                            }}
+                                            sx={{
+                                                "&:hover": {
+                                                    fontSize: "1.8rem"
+                                                },
+                                                margin: "5px"
+                                            }}
+                                        />
                                         <DeleteIcon
                                             onClick={() => {
                                                 deleteQuestion(index);
                                             }}
-                                            sx={{ color: "red" }}
+                                            sx={{
+                                                color: "red",
+                                                "&:hover": {
+                                                    fontSize: "1.8rem"
+                                                },
+                                                margin: "5px"
+                                            }}
                                         />
                                     </QuestionAction>
                                 </HorizontalContainer>
                                 <GroupRadioButton
+                                    answer={question.answerIndex}
                                     questionNumber={index}
                                     choices={question.choices}
                                     onChange={handleSetAnswer}
@@ -200,11 +294,20 @@ const CreateExercise = () => {
                 <AddIcon />
             </FloatingButton>
             <AddQuestion open={openQuestionModal} onClose={handleCloseQuestionModal} />
-            <EditQuestion
-                open={openEditQuestionModal}
-                onClose={handleCloseEditQuestionModal}
-                questionToEdit={questions[editQuestionIndex]}
-            />
+            {openEditQuestionModal && (
+                <EditQuestion
+                    open={openEditQuestionModal}
+                    onClose={handleCloseEditQuestionModal}
+                    questionToEdit={questions[editQuestionIndex]}
+                />
+            )}
+            {openEditExerciseTitleModal && (
+                <EditExerciseTitle
+                    open={openEditExerciseTitleModal}
+                    onClose={handleCloseEditExerciseTitleModal}
+                    titleToEdit={title}
+                />
+            )}
         </>
     );
 };

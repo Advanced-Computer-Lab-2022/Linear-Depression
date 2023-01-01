@@ -3,10 +3,13 @@ import React from "react";
 import { MdPlayCircleFilled, MdInsertDriveFile } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { openModal } from "react-url-modal";
+import OptionsButton from "../../OptionsButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { useAuth } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
-import { User } from "@internals/types";
+import { User, CourseStatus } from "@internals/types";
 
 const Item = styled.li`
     height: 35px;
@@ -60,6 +63,29 @@ const ContentItem: React.FC<{
     const {
         auth: { userType }
     } = useAuth();
+    const course = useAppSelector((state) => state.course);
+
+    const options = [
+        {
+            label: "Edit",
+            onClick: () => {
+                navigate(`/courses/${courseId}/lessons/${lessonId}/exercises/${exerciseId}`);
+            }
+        },
+        {
+            label: "Delete",
+            onClick: () => {
+                openModal({
+                    name: "deleteExercise",
+                    params: {
+                        courseId,
+                        lessonId,
+                        exerciseId
+                    }
+                });
+            }
+        }
+    ];
 
     const navigate = useNavigate();
 
@@ -81,6 +107,14 @@ const ContentItem: React.FC<{
                     >
                         Solve
                     </OpenExercise>
+                )}
+            {exerciseId &&
+                lessonId &&
+                userType === User.INSTRUCTOR &&
+                course.data &&
+                course.data.isOwner &&
+                course.data.status === CourseStatus.DRAFT && (
+                    <OptionsButton options={options} icon={<MoreVertIcon />} />
                 )}
         </Item>
     );
