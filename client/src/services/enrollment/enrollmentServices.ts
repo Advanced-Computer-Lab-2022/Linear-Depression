@@ -1,5 +1,23 @@
 import { Enrollment } from "@internals/types";
 
+const updateExerciseOfLessonAsCompleted = (
+    enrollment: Enrollment,
+    lessonId: string,
+    exerciseId: string
+): Enrollment => {
+    const newEnrollment = JSON.parse(JSON.stringify(enrollment));
+    for (const lesson of newEnrollment.lessons) {
+        if (lesson.lessonId == lessonId) {
+            for (const exercise of lesson.exercisesStatus) {
+                if (exercise.exerciseId == exerciseId) {
+                    exercise.isCompleted = true;
+                }
+            }
+        }
+    }
+    return newEnrollment;
+};
+
 const updateVideoOfLessonAsSeen = (enrollment: Enrollment, lessonId: string): Enrollment => {
     const newEnrollment = JSON.parse(JSON.stringify(enrollment));
     for (const lesson of newEnrollment.lessons) {
@@ -23,4 +41,4 @@ const getLessonElementsStatus = (lessonId: string, enrollment: Enrollment): Arra
     return lessonElementsStatus;
 };
 
-export { updateVideoOfLessonAsSeen, getLessonElementsStatus };
+export { updateExerciseOfLessonAsCompleted, updateVideoOfLessonAsSeen, getLessonElementsStatus };

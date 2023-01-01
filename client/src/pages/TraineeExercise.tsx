@@ -18,7 +18,7 @@ import {
 } from "@internals/components";
 import { useFetchExerciseById, useFetchEvaluation, useFetchMyEnrollment, useFetchCourseById } from "@internals/hooks";
 import { getEnrollment, useAppDispatch, useAppSelector } from "@internals/redux";
-import { submitExercise } from "@internals/services";
+import { submitExercise, updateEnrollment, updateExerciseOfLessonAsCompleted } from "@internals/services";
 
 const SideMenu = styled.div`
     width: 50%;
@@ -31,6 +31,7 @@ const TraineeExercise = () => {
     useFetchCourseById(courseId);
 
     const course = useAppSelector((state) => state.course);
+    const enrollment = useAppSelector((state) => state.enrollment);
 
     const dispatch = useAppDispatch();
 
@@ -48,7 +49,15 @@ const TraineeExercise = () => {
     const handleSubmit = () => {
         submitExercise(courseId, lessonId, exerciseId, answers)
             .then((data) => {
-                dispatch(getEnrollment(courseId));
+                const newEnrollment = updateExerciseOfLessonAsCompleted(enrollment.data, lessonId, exerciseId);
+                updateEnrollment(enrollment.data?._id, newEnrollment)
+                    .then(() => {
+                        console.log("Updated enrollment", newEnrollment);
+                        dispatch(getEnrollment(courseId));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
                 setEvaluation({
                     data: data,
                     loading: false,

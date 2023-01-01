@@ -1,5 +1,9 @@
 export { default as updateEnrollment } from "./updateEnrollment";
 export { default as fetchMyEnrollment } from "./fetchMyEnrollment";
 export { default as downloadCertificate } from "./downloadCertificate";
-export { updateVideoOfLessonAsSeen, getLessonElementsStatus } from "./enrollmentServices";
+export {
+    updateExerciseOfLessonAsCompleted,
+    updateVideoOfLessonAsSeen,
+    getLessonElementsStatus
+} from "./enrollmentServices";
 export { default as enrollOnCourse } from "./enrollOnCourse";
