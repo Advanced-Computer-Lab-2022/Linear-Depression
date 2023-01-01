@@ -1,6 +1,7 @@
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import { URLModal } from "react-url-modal";
 
+import { Footer } from "./components";
 import AuthHandler from "./components/AuthHandler";
 import ViewMySettlements from "./components/modals/ViewMySettlements";
 import { User } from "./types";
@@ -39,7 +40,8 @@ import {
     PaymentCancelled,
     PaymentSuccess,
     PrivacyPolicy,
-    NotFound
+    NotFound,
+    AboutUs // Footer
 } from "@internals/pages";
 
 function App() {
@@ -67,49 +69,69 @@ function App() {
                 />
                 <Routes>
                     <Route element={<AuthHandler />}>
-                        <Route path="/" element={<Home />} />
-                        <Route path="courses/:courseId" element={<Course />} />
-                        <Route path="/auth/login" element={<Login />} />
-                        <Route path="/auth/register" element={<Register />} />
-                        <Route path="/auth/reset" element={<PasswordReset />} />
-                        <Route path="/auth/forgot" element={<ForgotPassword />} />
-                        <Route path="/payment/cancel" element={<PaymentCancelled />} />
-                        <Route path="/payment/success/:courseId" element={<PaymentSuccess />} />
-                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-
-                        <Route
-                            element={
-                                <AuthHandler
-                                    roles={[User.INSTRUCTOR, User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]}
-                                />
-                            }
-                        >
-                            <Route path="/me/profile" element={<Profile />} />
-                            <Route path="/auth/change" element={<ChangePassword />} />
-                            <Route path="me/courses" element={<MyCourses />} />
+                        <Route element={<LayoutWithFooter />}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="courses/:courseId" element={<Course />} />
+                            <Route path="/auth/login" element={<Login />} />
+                            <Route path="/auth/register" element={<Register />} />
+                            <Route path="/auth/reset" element={<PasswordReset />} />
+                            <Route path="/auth/forgot" element={<ForgotPassword />} />
+                            <Route path="/payment/cancel" element={<PaymentCancelled />} />
+                            <Route path="/payment/success/:courseId" element={<PaymentSuccess />} />
+                            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                            <Route path="/about-us" element={<AboutUs />} />
                             <Route
-                                path="courses/:courseId/lessons/:lessonId/exercises/:exerciseId"
-                                element={<Exercise />}
-                            />
-                            <Route path="/me/reports/new" element={<NewReport />} />
-                            <Route path="/me/reports" element={<AllReports />} />
-                            <Route path="/me/reports/:reportId" element={<ReportThread />} />
-                        </Route>
+                                element={
+                                    <AuthHandler
+                                        roles={[User.INSTRUCTOR, User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]}
+                                    />
+                                }
+                            >
+                                <Route path="/me/profile" element={<Profile />} />
+                                <Route path="/auth/change" element={<ChangePassword />} />
+                                <Route path="me/courses" element={<MyCourses />} />
+                                <Route
+                                    path="courses/:courseId/lessons/:lessonId/exercises/:exerciseId"
+                                    element={<Exercise />}
+                                />
+                                <Route path="/me/reports/new" element={<NewReport />} />
+                                <Route path="/me/reports" element={<AllReports />} />
+                                <Route path="/me/reports/:reportId" element={<ReportThread />} />
+                            </Route>
 
-                        <Route element={<AuthHandler roles={[User.INSTRUCTOR]} />}>
-                            <Route path="courses/:courseId/lessons/:lessonId/exercise" element={<CreateExercise />} />
-                        </Route>
+                            <Route element={<AuthHandler roles={[User.INSTRUCTOR]} />}>
+                                <Route
+                                    path="courses/:courseId/lessons/:lessonId/exercise"
+                                    element={<CreateExercise />}
+                                />
+                            </Route>
 
-                        <Route element={<AuthHandler roles={[User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]} />}>
-                            <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
-                        </Route>
+                            <Route element={<AuthHandler roles={[User.CORPORATE_TRAINEE, User.INDIVIDUAL_TRAINEE]} />}>
+                                <Route path="courses/:courseId/lessons/:lessonId" element={<Lesson />} />
+                            </Route>
 
-                        <Route path="*" element={<NotFound />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Route>
                     </Route>
                 </Routes>
             </div>
         </CountryContext.Provider>
     );
 }
+
+const LayoutWithFooter = () => {
+    return (
+        <>
+            <div
+                style={{
+                    minHeight: "calc(100vh - 100px)"
+                }}
+            >
+                <Outlet />
+            </div>
+            <Footer />
+        </>
+    );
+};
 
 export default App;

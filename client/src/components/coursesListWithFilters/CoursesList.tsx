@@ -36,7 +36,8 @@ const CoursesList: React.FC<{ courses: ICourseProps[]; showPrice: boolean; showS
                         fontSize: "1.5rem",
                         fontWeight: "bold",
                         color: "var(--color-grey-dark-1)",
-                        margin: "100px 0"
+                        margin: "100px 0",
+                        height: "30vh"
                     }}
                 >
                     No courses available right now

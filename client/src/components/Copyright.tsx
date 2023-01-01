@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 
 const Copyright = (props: any) => {
     return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography variant="body2" color="white" align="center" {...props}>
             {"Copyright © "}
-            <Link color="inherit" to="/">
+            <Link
+                color="#a435f0"
+                to="/"
+                style={{
+                    color: "#a435f0"
+                }}
+            >
                 Linear Depression
             </Link>{" "}
             {new Date().getFullYear()}
