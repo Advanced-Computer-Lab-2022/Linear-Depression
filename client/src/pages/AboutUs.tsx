@@ -12,7 +12,7 @@ import { Navbar } from "@internals/components";
 
 const SocialMediaContainer = styled.div`
     display: flex;
-    felx-direction: row;
+    flex-direction: row;
     margin-top: 20px;
 `;
 
@@ -34,11 +34,11 @@ const ProfileCards = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px auto;
+    width: 700px;
 `;
 
-const CirucularCard: React.FC<{
+const CircularCard: React.FC<{
     name: string;
     imageURL: string;
     country: string;
@@ -55,7 +55,8 @@ const CirucularCard: React.FC<{
                     width: 500,
                     gap: 2,
                     borderRadius: 50000,
-                    marginRight: alternate ? "500px" : "0px",
+                    margin: "10px 0",
+                    marginLeft: alternate ? "auto" : "0px",
                     "&:hover": { boxShadow: "md", borderColor: "neutral.outlinedHoverBorder" }
                 }}
             >
@@ -76,7 +77,7 @@ const CirucularCard: React.FC<{
                         </Link>
                     </Typography>
                     <Chip variant="outlined" color="primary" size="md" sx={{ pointerEvents: "none" }}>
-                        Sotware Engineer
+                        Software Engineer
                     </Chip>
                     <SocialMediaContainer>
                         <Link href={linkedInURL}>
@@ -105,25 +106,39 @@ const CirucularCard: React.FC<{
 const AboutUs: React.FC = () => {
     const authors = [
         {
-            name: "Mohamed Elsayed",
-            imageURL: "https://avatars.githubusercontent.com/u/54964739?v=4",
-            country: "Egypt",
-            linkedInURL: "https://www.linkedin.com/in/mohamed-elsayed-7a8b3b1b3/",
-            githubURL: "www.githubusercontent.com/mohamedelsayed98"
+            name: "Abdulaziz Hassan",
+            imageURL: "https://avatars.githubusercontent.com/u/82768721?v=4",
+            country: "Saudi Arabia",
+            linkedInURL: "http://www.linkedin.com/in/abdulaziz-alamri-",
+            githubURL: "https://github.com/Abdulaziz-Hassan"
         },
         {
-            name: "Mohamed Elsayed",
-            imageURL: "https://avatars.githubusercontent.com/u/54964739?v=4",
+            name: "Ahmed Nasser",
+            imageURL: "https://avatars.githubusercontent.com/u/37817681?v=4",
             country: "Egypt",
-            linkedInURL: "https://www.linkedin.com/in/mohamed-elsayed-7a8b3b1b3/",
-            githubURL: "www.github.com/mohamedelsayed98"
+            linkedInURL: "https://www.linkedin.com/in/ahmednasser217/",
+            githubURL: "https://github.com/AhmedNasserG"
         },
         {
-            name: "Mohamed Elsayed",
-            imageURL: "https://avatars.githubusercontent.com/u/54964739?v=4",
+            name: "Mohammad Omar",
+            imageURL: "https://avatars.githubusercontent.com/u/72332009?v=4",
             country: "Egypt",
-            linkedInURL: "https://www.linkedin.com/in/mohamed-elsayed-7a8b3b1b3/",
-            githubURL: "www.github.com/mohamedelsayed98"
+            linkedInURL: "https://www.linkedin.com/in/mohammad-omar-taha/",
+            githubURL: "https://github.com/MohammadOTaha"
+        },
+        {
+            name: "Ibrahim Abou Elenein",
+            imageURL: "https://avatars.githubusercontent.com/u/35760882?v=4",
+            country: "Egypt",
+            linkedInURL: "https://www.linkedin.com/in/aboueleyes/",
+            githubURL: "https://github.com/aboueleyes"
+        },
+        {
+            name: "Elshimaa Betah",
+            imageURL: "https://avatars.githubusercontent.com/u/79271594?v=4",
+            country: "Egypt",
+            linkedInURL: "https://www.linkedin.com/in/shimaa-ahmed2864/",
+            githubURL: "https://github.com/ShimaaBetah"
         }
     ];
     return (
@@ -132,16 +147,15 @@ const AboutUs: React.FC = () => {
             <Title level="h1" fontSize="xl" id="card-description" mb={0.5}>
                 Meet the team behind this piece of art
             </Title>
-            <br />
             <ProfileCards>
                 {authors.map((author, index) => (
-                    <CirucularCard
+                    <CircularCard
                         name={author.name}
                         imageURL={author.imageURL}
                         country={author.country}
                         linkedInURL={author.linkedInURL}
                         githubURL={author.githubURL}
-                        alternate={index % 2 === 0}
+                        alternate={index % 2 === 1}
                     />
                 ))}
             </ProfileCards>
