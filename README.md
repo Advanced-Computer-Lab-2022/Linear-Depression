@@ -1528,7 +1528,6 @@ Response
 
 </details>
 
-
 ### Payment
 
 #### Create a checkout session
@@ -1583,7 +1582,6 @@ Response
 ```
 
 </details>
-
 
 ### Enrollments
 
@@ -1683,7 +1681,6 @@ Response
 ```
 
 </details>
-
 
 ### Authentication
 
@@ -2606,7 +2603,6 @@ Response
 
 </details>
 
-
 ### Reports
 
 ### Get all user's reports
@@ -2840,7 +2836,6 @@ Response
 ```
 
 </details>
-
 
 ### Generate API Documentation
 
