@@ -1,6 +1,6 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import BugReportIcon from "@mui/icons-material/BugReport";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useContext, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import Avatar from "./Avatar";
 import OptionsButton from "./OptionsButton";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
+import logo from "./navbar/logo.png";
 import { config } from "@internals/config";
 import { CountryContext } from "@internals/contexts";
 import { useAuth, useFetchProfile } from "@internals/hooks";
@@ -92,28 +93,14 @@ const Navbar: React.FC<{ search?: boolean }> = ({ search = false }) => {
     return (
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/">
-                    Linear Depression
-                </Link>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarText"
-                    aria-controls="navbarText"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+                <img src={logo} alt="logo" className="logo" onClick={() => navigate("/")} />
                 <div className="collapse navbar-collapse" id="navbarText">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
                         <li className="nav-item">
-                            <a className="nav-link" href="/">
-                                Categories
-                            </a>
+                            <Link className="nav-link all-courses" to="/">
+                                All Courses
+                            </Link>
                         </li>
-                        {/* TODO: make search field fill the navbar */}
                         {search && (
                             <li className="search-container container-fluid flex-fill">
                                 <button className="search-button" type="button">
@@ -144,14 +131,9 @@ const Navbar: React.FC<{ search?: boolean }> = ({ search = false }) => {
                         )}
                     </ul>
                     <ul className="navbar-nav buttons-list">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/">
-                                LD Business
-                            </a>
-                        </li>
                         {auth.userType !== User.GUEST && (
                             <li className="nav-item">
-                                <Link className="nav-link" to="/me/courses">
+                                <Link className="nav-link all-courses" to="/me/courses">
                                     My Courses
                                 </Link>
                             </li>

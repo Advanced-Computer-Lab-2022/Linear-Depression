@@ -4,6 +4,7 @@ interface IPromotionProps {
     endDate: Date;
     discountPercent: number;
     courses?: string[];
+    source?: string;
 }
 
 export default IPromotionProps;
