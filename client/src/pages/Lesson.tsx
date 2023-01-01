@@ -32,15 +32,24 @@ const VideoContainer = styled.div`
 `;
 
 const VideoInfoContainer = styled.div`
-    margin-left: 20px;
+    margin: 0 20px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px;
 `;
 
 const Title = styled.h1``;
 
-const Description = styled.p``;
+const Description = styled.div``;
 
 const SideMenu = styled.div`
     width: 70%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 0 20px;
 `;
 
 export const CourseContentTitle = styled.h4`
