@@ -3,8 +3,8 @@ import Divider from "@mui/material/Divider";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import logo from "../assets/logo-black.png";
 import CircularProgressBar from "./CircularProgressBar";
-import logo from "./navbar/logo-black.png";
 import { useFetchMyEnrollment } from "@internals/hooks";
 import { useAppSelector } from "@internals/redux";
 import { downloadCertificate } from "@internals/services";

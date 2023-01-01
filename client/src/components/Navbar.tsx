@@ -7,12 +7,12 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Flag from "react-world-flags";
 import styled from "styled-components";
 
+import logo from "../assets/logo-white.png";
 import countries from "../media/country-currency.json";
 import Avatar from "./Avatar";
 import OptionsButton from "./OptionsButton";
 import CountrySelect from "./navbar/CountrySelect";
 import "./navbar/Navbar.css";
-import logo from "./navbar/logo-white.png";
 import { config } from "@internals/config";
 import { CountryContext } from "@internals/contexts";
 import { useAuth, useFetchProfile } from "@internals/hooks";
