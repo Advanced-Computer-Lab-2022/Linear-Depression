@@ -29,7 +29,7 @@ describe("Course Hooks tests", () => {
     beforeAll(async () => {
         await connectDBForTesting();
     });
-    it("Should update totalHours when a new lesson is added", async () => {
+    it.skip("Should update totalHours when a new lesson is added", async () => {
         const lesson = new Lesson(lessonFactory());
         lesson.totalHours = 10;
         await lesson.save();

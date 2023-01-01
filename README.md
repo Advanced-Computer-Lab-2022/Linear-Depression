@@ -881,6 +881,7 @@ Response
     }
 ]
 ```
+
 </details>
 
 #### Create Instructor
@@ -941,39 +942,41 @@ Response
 
 ```json
 [
-        {
-            "enrollments": [],
-            "_id": "6362ed5b802b350e006822d6",
-            "firstName": "john",
-            "lastName": "barker",
-            "email": "john@example.com",
-            "userName": "john",
-            "passwordHash": "$2b$10$i5aOe7TqSsmVx8IWz7JCjOQ.ymyHdOFk.vPeUY61O1m9TZIEs3XIy",
-            "courses": [],
-            "gender": "male",
-            "corporate": "amazon",
-            "status": "ACTIVE",
-            "expiredAt": "2022-11-23T22:00:00.000Z",
-            "__t": "CorporateTrainee",
-            "__v": 0
-        },
-        {
-            "enrollments": [],
-            "_id": "63638d2dfa52a234ba846b39",
-            "firstName": "jhalskjdghajkld",
-            "lastName": "jklhgakjshgd",
-            "email": "asjdg@gmail.com",
-            "userName": "kjashdjk",
-            "passwordHash": "$2b$10$EAQbim1cSB6FcAqT0hOYFuRDEEgc/6ddc9DdlvlDAoR6ON6YzmwWa",
-            "courses": [],
-            "gender": "male",
-            "corporate": "hjagsdhj",
-            "status": "ACTIVE",
-            "expiredAt": "2022-11-14T22:00:00.000Z",
-            "__t": "CorporateTrainee",
-            "__v": 0
-        }]
+    {
+        "enrollments": [],
+        "_id": "6362ed5b802b350e006822d6",
+        "firstName": "john",
+        "lastName": "barker",
+        "email": "john@example.com",
+        "userName": "john",
+        "passwordHash": "$2b$10$i5aOe7TqSsmVx8IWz7JCjOQ.ymyHdOFk.vPeUY61O1m9TZIEs3XIy",
+        "courses": [],
+        "gender": "male",
+        "corporate": "amazon",
+        "status": "ACTIVE",
+        "expiredAt": "2022-11-23T22:00:00.000Z",
+        "__t": "CorporateTrainee",
+        "__v": 0
+    },
+    {
+        "enrollments": [],
+        "_id": "63638d2dfa52a234ba846b39",
+        "firstName": "jhalskjdghajkld",
+        "lastName": "jklhgakjshgd",
+        "email": "asjdg@gmail.com",
+        "userName": "kjashdjk",
+        "passwordHash": "$2b$10$EAQbim1cSB6FcAqT0hOYFuRDEEgc/6ddc9DdlvlDAoR6ON6YzmwWa",
+        "courses": [],
+        "gender": "male",
+        "corporate": "hjagsdhj",
+        "status": "ACTIVE",
+        "expiredAt": "2022-11-14T22:00:00.000Z",
+        "__t": "CorporateTrainee",
+        "__v": 0
+    }
+]
 ```
+
 </details>
 #### Create Corporate Trainee
 
@@ -985,17 +988,16 @@ Response
 | :-------------- | :------- | :--------------------------------------- |
 | `Authorization` | `string` | **Required**. Bearer token of the Admin. |
 
-| Body        | Type     | Description                               |
-| :---------- | :------- | :---------------------------------------- |
-| `firstName` | `string` | **Required**. firstName of corporate trainee     |
-| `lastName`  | `string` | **Required**. lastName of the corporate trainee  |
-| `email`     | `string` | **Required**. email of corporate trainee         |
-| `userName`  | `string` | **Required**. user name of the corporate trainee |
-| `password`  | `string` | **Required**. password of the corporate trainee  |
-|`gender`     | enum     | **Required**. gender of the corporate trainee  |
-|`corporate`| `string` | **Required**. corporate of the corporate trainee  |
-|`expiredAt`| `date`   |**Required** . expiration date the corporate trainee  |
-
+| Body        | Type     | Description                                          |
+| :---------- | :------- | :--------------------------------------------------- |
+| `firstName` | `string` | **Required**. firstName of corporate trainee         |
+| `lastName`  | `string` | **Required**. lastName of the corporate trainee      |
+| `email`     | `string` | **Required**. email of corporate trainee             |
+| `userName`  | `string` | **Required**. user name of the corporate trainee     |
+| `password`  | `string` | **Required**. password of the corporate trainee      |
+| `gender`    | enum     | **Required**. gender of the corporate trainee        |
+| `corporate` | `string` | **Required**. corporate of the corporate trainee     |
+| `expiredAt` | `date`   | **Required** . expiration date the corporate trainee |
 
 <details>
 <summary>
@@ -1023,8 +1025,6 @@ Response
 ```
 
 </details>
-
-
 
 ### Courses Resource
 
@@ -1722,7 +1722,6 @@ Response
 
 </details>
 
-
 ### Payment
 
 #### Create a checkout session
@@ -1777,7 +1776,6 @@ Response
 ```
 
 </details>
-
 
 ### Enrollments
 
@@ -1877,7 +1875,6 @@ Response
 ```
 
 </details>
-
 
 ### Authentication
 
@@ -2291,7 +2288,6 @@ Response
 ```
 
 </details>
-
 
 ### Exercise
 
@@ -2955,7 +2951,6 @@ Response
 
 </details>
 
-
 ### Reports
 
 ### Get all user's reports
@@ -3189,7 +3184,6 @@ Response
 ```
 
 </details>
-
 
 ### Generate API Documentation
 

@@ -11,6 +11,6 @@ const execute = async (request: any) => {
     }
 
     return request;
-}
+};
 
 export default execute;
