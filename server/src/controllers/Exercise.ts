@@ -152,13 +152,6 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                     .save()
                     .then(() => {
                         evaluateExercise(traineeId, exerciseId).then(async (evaluation) => {
-                            const enrollment = await Enrollment.find({
-                                courseId: courseId,
-                                traineeId: traineeId
-                            });
-                            if (enrollment.length > 0) {
-                                enrollment[0].setCompletedExercise(lessonId, exerciseId);
-                            }
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
                     })
@@ -175,13 +168,6 @@ const submitExercise = (req: Request, res: Response, next: NextFunction) => {
                     .save()
                     .then(() => {
                         evaluateExercise(traineeId, exerciseId).then(async (evaluation) => {
-                            const enrollment = await Enrollment.find({
-                                courseId: courseId,
-                                traineeId: traineeId
-                            });
-                            if (enrollment.length > 0) {
-                                enrollment[0].setCompletedExercise(lessonId, exerciseId);
-                            }
                             res.status(StatusCodes.CREATED).json({ evaluation });
                         });
                     })
