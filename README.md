@@ -14,7 +14,7 @@ An implementation of full stack web application using the MERN stack. The applic
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 
-## Motivation
+## Motivation 🔥
 
 
 This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is a project-based course that aims to teach students
@@ -26,7 +26,7 @@ This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is 
 -   Software Testing
 -   latest backend and frontend technologies
 
-## Build Status
+## Build Status 🔨
 
 ![example workflow](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression/actions/workflows/test.yml/badge.svg)
 
@@ -36,7 +36,7 @@ This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is 
 -   A caching layer needs to be added to the application.
 -   A message broker needs to be added to the application to handle asynchronous tasks such as sending emails and notifications.
 
-## Code Style
+## Code Style 📜
 
 The code style is enforced using `eslint` and `prettier`. The code style is enforced using `pre-commit` hooks and `pre-commit github action.`
 
@@ -47,22 +47,22 @@ The pre-commit hook is managed by pre-commit. It is a versatile way of managing 
 Install pre-commit package by running
 
 ```bash
-pip install pre-commit
+> pip install pre-commit
 ```
 
 Once installed, run the following for a one-time setup
 
 ```bash
-pre-commit install
+> pre-commit install
 ```
 
 Afterwards, the hook should run the next commit you will attempt!
 
-## Screenshots
+## Screenshots 🖵
 
 To be added
 
-## Tech/Framework used
+## Tech/Framework used 🧰
 
 -   [React](https://reactjs.org/)
 -   [Redux](https://redux.js.org/)
@@ -85,7 +85,7 @@ To be added
 -   [Pre-commit](https://pre-commit.com/)
 -   [Mailtrap](https://mailtrap.io/)
 
-## Features
+## Features ✨
 
 -   User Authentication
 -   User Roles
@@ -110,7 +110,7 @@ To be added
 -   Reporting System
 -
 
-## Code Examples
+## Code Examples 🐱‍💻
 
 ```typescript
 import { sendEmail } from "./sendMailService";
@@ -156,7 +156,7 @@ courseSchema.methods.reOpen = async function (this: ICourseModel) {
 };
 ```
 
-## Running Tests
+## Running Tests 🧪
 
 The testing is done using `jest`. To run the tests, run the following command
 
@@ -164,7 +164,7 @@ The testing is done using `jest`. To run the tests, run the following command
 > npm run test
 ```
 
-## Installation
+## Installation 📥
 
 Install my-project with `npm`
 
@@ -175,7 +175,7 @@ Install my-project with `npm`
 > cd client && npm i -f && cd -
 ```
 
-## Feedback
+## Feedback 🥹
 
 If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
 
@@ -835,18 +835,6 @@ stripe login --api-key sk_test_example
 stripe listen --forward-to localhost:PORT/payment/stripe-webhook
 # PORT is the port you are running the server on
 ```
-
-## Testing
-
-The testing is done using jest. To run the tests, run the following command
-
-```bash
-npm run test
-```
-
-You can use vscode to run the tests as well.
-
----
 
 ## Admin Dashboard
 
