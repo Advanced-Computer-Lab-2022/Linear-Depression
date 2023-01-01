@@ -39,7 +39,8 @@ import {
     PaymentSuccess,
     PrivacyPolicy,
     NotFound,
-    AboutUs
+    AboutUs,
+    Footer
 } from "@internals/pages";
 
 function App() {
@@ -107,6 +108,7 @@ function App() {
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
+                <Footer />
             </div>
         </CountryContext.Provider>
     );

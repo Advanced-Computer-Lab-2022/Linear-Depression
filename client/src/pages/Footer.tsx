@@ -79,7 +79,12 @@ const CopyRightsContainer = styled.div`
 
 const Footer: React.FC = () => {
     return (
-        <>
+        <div
+            style={{
+                bottom: "0",
+                width: "100%"
+            }}
+        >
             <Container>
                 <CustomParagraph>
                     Top companies choose Linear Depression Company to build in-demand career skills
@@ -119,7 +124,7 @@ const Footer: React.FC = () => {
                 </CopyRightsContainer>
                 <CustomCopyRight />
             </FooterContainer>
-        </>
+        </div>
     );
 };
 
