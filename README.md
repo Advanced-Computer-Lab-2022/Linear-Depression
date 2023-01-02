@@ -16,7 +16,6 @@ An implementation of full stack web application using the MERN stack. The applic
 
 ## Motivation 🔥
 
-
 This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is a project-based course that aims to teach students
 
 -   Scrum and Agile methodologies
@@ -86,8 +85,6 @@ Afterwards, the hook should run the next commit you will attempt!
 
 ![image](https://user-images.githubusercontent.com/82768721/210188044-d69bc4cc-a8f9-4f95-96b4-6ac5e4903d5c.png)
 
-
-
 ## Tech/Framework used 🧰
 
 -   [React](https://reactjs.org/)
@@ -156,6 +153,7 @@ export const sendCertificateEmail = async (email: string, courseName: string, ce
     sendEmail(email, context, "certificateUponCompletion", "Linear Depression | Congrats 🎉", attachments);
 };
 ```
+
 ```typescript
 courseSchema.methods.close = async function (this: ICourseModel) {
     if (this.status !== CourseStatus.PUBLISHED) {
@@ -181,6 +179,7 @@ courseSchema.methods.reOpen = async function (this: ICourseModel) {
     await this.save();
 };
 ```
+
 ```typescript
 const rateLimiter = (requestsPerMinute: number = 120) => {
     return rateLimit({
@@ -195,6 +194,7 @@ const rateLimiter = (requestsPerMinute: number = 120) => {
     });
 };
 ```
+
 ```typescript
 // run every day at 00:00
 const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
@@ -218,6 +218,31 @@ const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
     fs.writeFileSync("src/media/currency-rates.json", JSON.stringify(currencyRates));
 });
 ```
+
+```typescript
+export const PromotionValidator = {
+    validate: async (promotion: IPromotionModel) => {
+        if (!isValidStartDate(promotion)) {
+            throw new Error("Promotion start date is invalid");
+        }
+
+        if (!isValidEndDate(promotion)) {
+            throw new Error("Promotion end date is invalid");
+        }
+
+        if (!(await onlyIncludesPaidCourses(promotion))) {
+            throw new Error("Promotion can only include paid courses");
+        }
+
+        if (!(await noConflictWithAdminPromotion(promotion))) {
+            throw new Error("Promotion conflicts with Admin promotion");
+        }
+
+        return true;
+    }
+};
+```
+
 ```typescript
 <HorizontalContainer>
     <NavItem>
@@ -250,6 +275,7 @@ const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
     )}
 </HorizontalContainer>
 ```
+
 ```typescript
 <ErrorCourseCard>
     <div key={index}>
@@ -982,7 +1008,6 @@ http://localhost:PORT/admin
 ```
 
 ![Admin Dashboard](https://user-images.githubusercontent.com/82768721/210188231-acaaf2d2-7556-4004-afe0-fc3a3727acb5.png)
-
 
 ## API Documentation
 
