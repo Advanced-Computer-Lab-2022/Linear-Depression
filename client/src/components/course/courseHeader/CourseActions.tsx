@@ -92,7 +92,8 @@ const CourseActions: React.FC<{
                     setLoading(false);
                 });
         } else if (userType === User.INDIVIDUAL_TRAINEE) {
-            if (price > 0) {
+            const priceAfterPromotion = promotion ? price - (price * promotion.discountPercent) / 100 : price;
+            if (priceAfterPromotion > 0) {
                 handleCheckout(courseId);
             } else {
                 enrollOnCourse(courseId)

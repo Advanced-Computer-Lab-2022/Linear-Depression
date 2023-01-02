@@ -45,6 +45,7 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
         }
         coursePriceAfterPromotion = course.price;
     }
+    console.log(coursePriceAfterPromotion, amount_off);
 
     if (coursePriceAfterPromotion <= 0.5 || coursePriceAfterPromotion - amount_off <= 0.5) {
         createEnrollmentService(userId, courseId)
@@ -65,32 +66,37 @@ const createCheckoutSession = async (req: Request, res: Response, _next: NextFun
         return res.status(StatusCodes.OK).json({ url: `${process.env.FRONT_END_URL}/payment/success/${courseId}` });
     }
 
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: [
-            {
-                price_data: {
-                    currency: "usd",
-                    product_data: {
-                        name: course.title,
-                        images: [course.thumbnail]
+    const session = await stripe.checkout.sessions
+        .create({
+            payment_method_types: ["card"],
+            line_items: [
+                {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: course.title,
+                            images: [course.thumbnail]
+                        },
+                        unit_amount: Math.ceil(coursePriceAfterPromotion * 100)
                     },
-                    unit_amount: Math.ceil(coursePriceAfterPromotion * 100)
-                },
-                quantity: 1
-            }
-        ],
-        metadata: {
-            courseId,
-            userId,
-            amount_off
-        },
-        customer_email: trainee.email,
-        mode: "payment",
-        ...(discounts.length && { discounts }),
-        success_url: `${process.env.FRONT_END_URL}/payment/success/${courseId}`,
-        cancel_url: `${process.env.FRONT_END_URL}/payment/cancel`
-    });
+                    quantity: 1
+                }
+            ],
+            metadata: {
+                courseId,
+                userId,
+                amount_off
+            },
+            customer_email: trainee.email,
+            mode: "payment",
+            ...(discounts.length && { discounts }),
+            success_url: `${process.env.FRONT_END_URL}/payment/success/${courseId}`,
+            cancel_url: `${process.env.FRONT_END_URL}/payment/cancel`
+        })
+        .catch((err: any) => {
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Error creating checkout session" });
+        });
 
     res.json({ url: session.url, id: session.id });
 };
