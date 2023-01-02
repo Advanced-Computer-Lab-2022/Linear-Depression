@@ -2,6 +2,7 @@ import mongoose, { Document } from "mongoose";
 import { sendRefundRequestApprovalEmail } from "../services/emails/refundRequests/sendRefundRequestApprovalEmail";
 import { sendRefundRequestCreationEmail } from "../services/emails/refundRequests/sendRefundRequestCreationEmail";
 import { sendRefundRequestRejectionEmail } from "../services/emails/refundRequests/sendRefundRequestRejectionEmail";
+import Answer from "./Answer";
 import Course from "./Course";
 import Enrollment from "./Enrollment";
 import IndividualTrainee from "./IndividualTrainee";
@@ -59,6 +60,19 @@ refundRequestSchema.methods.approve = async function () {
         if (!trainee) {
             console.log("Trainee not found");
             return;
+        }
+        const enrollment = await Enrollment.findById(this.enrollmentId);
+        if (!enrollment) {
+            console.log("Enrollment not found");
+            return;
+        }
+        for (const lesson of enrollment.lessons) {
+            for (const exercise of lesson.exercisesStatus) {
+                await Answer.findOneAndDelete({
+                    traineeId: this.traineeId,
+                    exerciseId: exercise.exerciseId
+                });
+            }
         }
         trainee.enrollments.splice(trainee.enrollments.indexOf(this.enrollmentId), 1);
         await Enrollment.findByIdAndDelete(this.enrollmentId);
