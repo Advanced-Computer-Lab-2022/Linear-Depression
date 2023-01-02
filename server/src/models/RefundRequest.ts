@@ -78,6 +78,13 @@ refundRequestSchema.methods.approve = async function () {
         await Enrollment.findByIdAndDelete(this.enrollmentId);
         trainee.credit(this.refundAmount);
         sendRefundRequestApprovalEmail(trainee.email, this.refundAmount);
+        const course = await Course.findById(enrollment.courseId);
+        if (!course) {
+            console.log("Course not found");
+            return;
+        }
+        course.enrollmentsCount--;
+        await course.save();
     });
     await this.save();
 };
