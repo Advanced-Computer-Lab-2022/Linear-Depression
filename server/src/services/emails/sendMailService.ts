@@ -36,5 +36,7 @@ export const sendEmail = async (
         attachments: attachments
     };
 
-    await transporter.sendMail(message);
+    await transporter.sendMail(message).catch((err) => {
+        console.log(err);
+    });
 };
