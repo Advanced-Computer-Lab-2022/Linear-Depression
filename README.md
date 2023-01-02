@@ -62,17 +62,13 @@ Afterwards, the hook should run the next commit you will attempt!
 
 ![image](https://user-images.githubusercontent.com/82768721/210187997-797355b5-106f-4efd-b75d-ee809ebfa7c1.png)
 
-![image](https://user-images.githubusercontent.com/82768721/210187998-bdbaa0a4-d627-4119-a74a-6811ffe52090.png)
-
 ![image](https://user-images.githubusercontent.com/82768721/210188000-36b95d03-6d96-4af7-b5ff-fc8a227fd24d.png)
 
 ![image](https://user-images.githubusercontent.com/82768721/210188002-6b651151-74c4-45b9-9684-f6da660cc915.png)
 
 ![image](https://user-images.githubusercontent.com/82768721/210188006-1dbdf795-0f3d-4d9e-ae16-fa7a832d0e3d.png)
 
-![image](https://user-images.githubusercontent.com/82768721/210188007-c37065bd-bee0-4cfc-a2b4-f95652195aa8.png)
-
-![image](https://user-images.githubusercontent.com/82768721/210188010-f1651eb2-fa16-456f-9233-750969ba8888.png)
+![image](https://user-images.githubusercontent.com/82768721/210188187-b1724bf4-1247-4b46-a470-53f431fd82b6.png)
 
 ![image](https://user-images.githubusercontent.com/82768721/210188013-cf33cf2f-f473-4e47-a98e-9bec634a1afb.png)
 
@@ -80,11 +76,9 @@ Afterwards, the hook should run the next commit you will attempt!
 
 ![image](https://user-images.githubusercontent.com/82768721/210188023-0ba2b3fe-368a-484c-8471-bd8d57765744.png)
 
-![image](https://user-images.githubusercontent.com/82768721/210188026-cca07c3d-f287-43a4-80f5-31ff4adadd9f.png)
-
-![image](https://user-images.githubusercontent.com/82768721/210188027-17a9c91e-8be4-478c-a86d-28f91554cd2f.png)
-
 ![image](https://user-images.githubusercontent.com/82768721/210188031-9c6287c2-8a9e-4b27-8471-7a6b283b5d73.png)
+
+![image](https://user-images.githubusercontent.com/82768721/210188208-793cb897-06bc-4940-834b-5320ae511056.png)
 
 ![image](https://user-images.githubusercontent.com/82768721/210188033-3da8e7e4-bb1a-4c85-8d82-811ed1481e53.png)
 
@@ -878,7 +872,8 @@ Access the admin dashboard by going to the following URL
 http://localhost:PORT/admin
 ```
 
-![Admin Dashboard](docs/AdminDashboard.png)
+![Admin Dashboard](https://user-images.githubusercontent.com/82768721/210188231-acaaf2d2-7556-4004-afe0-fc3a3727acb5.png)
+
 
 ## API Documentation
 
