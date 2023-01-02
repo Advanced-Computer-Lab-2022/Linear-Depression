@@ -44,7 +44,7 @@ app.use(
 app.use("/payment/stripe-webhook", express.raw({ type: "*/*" }));
 
 app.use(cookieParser());
-const swaggerFile = require("./swagger.json");
+const swaggerFile = require("./swagger/swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /* --- End Create Server --- */
