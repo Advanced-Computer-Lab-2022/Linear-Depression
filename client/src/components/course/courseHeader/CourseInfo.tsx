@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 import BadgeRatedEnrolled from "./courseInfo/BadgeRatedEnrolled";
 import { useAuth, useToast } from "@internals/hooks";
-import { getCourse, useAppDispatch } from "@internals/redux";
+import { getCourse, useAppDispatch, useAppSelector } from "@internals/redux";
 import { publish, close, open } from "@internals/services";
 import { CourseStatus, User } from "@internals/types";
 
@@ -79,6 +79,8 @@ const CourseInfo: React.FC<{
 
     rating = Number(rating.toFixed(1));
     const dispatch = useAppDispatch();
+
+    const enrollment = useAppSelector((state) => state.enrollment);
 
     const { courseId } = useParams();
     const [loading, setLoading] = useState(false);
@@ -181,12 +183,12 @@ const CourseInfo: React.FC<{
                         </Tooltip>
                     ))}
             </HorizontalContainer>
-            <Description>{description.substring(0, 300).trim() + "..."}</Description>
+            <Description>{description.substring(0, 290).trim() + "..."}</Description>
             <BadgeRatedEnrolled rating={rating} />
             <div>
                 Created by <Instructor>{instructor}</Instructor>
             </div>
-            {(userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && (
+            {(userType === User.INDIVIDUAL_TRAINEE || userType === User.CORPORATE_TRAINEE) && enrollment.data && (
                 <Button onClick={onClick}>Review</Button>
             )}
 

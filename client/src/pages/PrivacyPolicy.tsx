@@ -3,8 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { Copyright } from "@internals/components";
-
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -40,8 +38,6 @@ const PrivacyPolicy = () => {
             </Button>
 
             <br />
-
-            <Copyright />
         </Container>
     );
 };

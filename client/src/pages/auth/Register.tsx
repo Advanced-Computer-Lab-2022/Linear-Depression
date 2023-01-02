@@ -18,7 +18,6 @@ import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
-import { Copyright } from "@internals/components";
 import { useAuth } from "@internals/hooks";
 import { login, register } from "@internals/services";
 import { RegistrationData } from "@internals/types";
@@ -224,7 +223,6 @@ const Register: React.FC = () => {
                         )}
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
     );
