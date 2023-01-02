@@ -22,6 +22,7 @@ const CrossedPrice = styled.p<{ small?: boolean }>`
     font-weight: ${(props) => (props.small ? "400" : "800")};
     font-size: ${(props) => (props.small ? "14px" : "16px")};
     text-decoration: line-through;
+    margin-left: ${(props) => (props.small ? "8px" : "0")};
 `;
 
 const CoursePrice: React.FC<{ currency: string; price: number; promotion?: Promotion; horizontalView?: boolean }> = ({
