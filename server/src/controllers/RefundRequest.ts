@@ -22,7 +22,7 @@ const createRefundRequest = async (req: Request, res: Response, _next: NextFunct
             if (!enrollment) {
                 return res.status(StatusCodes.BAD_REQUEST).json({ message: "You are not enrolled on this course" });
             }
-            if (enrollment.progress >= 0.5) {
+            if (enrollment.progress >= 50) {
                 return res
                     .status(StatusCodes.BAD_REQUEST)
                     .json({ message: "You cannot request a refund after 50% of the course has been completed" });
