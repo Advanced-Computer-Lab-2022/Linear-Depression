@@ -195,6 +195,52 @@ const rateLimiter = (requestsPerMinute: number = 120) => {
     });
 };
 ```
+```typescript
+const CourseNavbar: React.FC = () => {
+    const course = useAppSelector((state) => state.course);
+    useFetchMyEnrollment(course.data?._id);
+    const enrollment = useAppSelector((state) => state.enrollment);
+
+    const navigate = useNavigate();
+
+    const handleDownloadCertificate = () => {
+        downloadCertificate(enrollment.data?._id);
+    };
+
+    return (
+        <HorizontalContainer>
+            <NavItem>
+                <Image src={logo} alt="logo" onClick={() => navigate("/")} />
+            </NavItem>
+            <CustomDivider orientation="vertical" flexItem />
+            <NavItem>
+                <ArrowBackIcon sx={{ marginRight: "10px" }} />
+                <Link className="navbar-brand" to={`/courses/${course.data?._id}`}>
+                    {course.data?.title}
+                </Link>
+            </NavItem>
+            {enrollment.data && (
+                <ProgressContainer>
+                    <NavItem>{enrollment.data && <CircularProgressBar value={enrollment.data?.progress} />}</NavItem>
+                    {enrollment.data?.progress === 100 ? (
+                        <Button
+                            sx={{
+                                color: "white",
+                                textTransform: "none"
+                            }}
+                            onClick={handleDownloadCertificate}
+                        >
+                            Get Certificate
+                        </Button>
+                    ) : (
+                        "Your Progress"
+                    )}
+                </ProgressContainer>
+            )}
+        </HorizontalContainer>
+    );
+};
+```
 
 ## Running Tests 🧪
 
