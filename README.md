@@ -196,52 +196,6 @@ const rateLimiter = (requestsPerMinute: number = 120) => {
 };
 ```
 ```typescript
-const CourseNavbar: React.FC = () => {
-    const course = useAppSelector((state) => state.course);
-    useFetchMyEnrollment(course.data?._id);
-    const enrollment = useAppSelector((state) => state.enrollment);
-
-    const navigate = useNavigate();
-
-    const handleDownloadCertificate = () => {
-        downloadCertificate(enrollment.data?._id);
-    };
-
-    return (
-        <HorizontalContainer>
-            <NavItem>
-                <Image src={logo} alt="logo" onClick={() => navigate("/")} />
-            </NavItem>
-            <CustomDivider orientation="vertical" flexItem />
-            <NavItem>
-                <ArrowBackIcon sx={{ marginRight: "10px" }} />
-                <Link className="navbar-brand" to={`/courses/${course.data?._id}`}>
-                    {course.data?.title}
-                </Link>
-            </NavItem>
-            {enrollment.data && (
-                <ProgressContainer>
-                    <NavItem>{enrollment.data && <CircularProgressBar value={enrollment.data?.progress} />}</NavItem>
-                    {enrollment.data?.progress === 100 ? (
-                        <Button
-                            sx={{
-                                color: "white",
-                                textTransform: "none"
-                            }}
-                            onClick={handleDownloadCertificate}
-                        >
-                            Get Certificate
-                        </Button>
-                    ) : (
-                        "Your Progress"
-                    )}
-                </ProgressContainer>
-            )}
-        </HorizontalContainer>
-    );
-};
-```
-```typescript
 // run every day at 00:00
 const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
     console.log("Cache currency rates");
@@ -263,6 +217,78 @@ const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
     }
     fs.writeFileSync("src/media/currency-rates.json", JSON.stringify(currencyRates));
 });
+```
+```typescript
+<HorizontalContainer>
+    <NavItem>
+        <Image src={logo} alt="logo" onClick={() => navigate("/")} />
+    </NavItem>
+    <CustomDivider orientation="vertical" flexItem />
+    <NavItem>
+        <ArrowBackIcon sx={{ marginRight: "10px" }} />
+        <Link className="navbar-brand" to={`/courses/${course.data?._id}`}>
+            {course.data?.title}
+        </Link>
+    </NavItem>
+    {enrollment.data && (
+        <ProgressContainer>
+            <NavItem>{enrollment.data && <CircularProgressBar value={enrollment.data?.progress} />}</NavItem>
+            {enrollment.data?.progress === 100 ? (
+                <Button
+                    sx={{
+                        color: "white",
+                        textTransform: "none"
+                    }}
+                    onClick={handleDownloadCertificate}
+                >
+                    Get Certificate
+                </Button>
+            ) : (
+                "Your Progress"
+            )}
+        </ProgressContainer>
+    )}
+</HorizontalContainer>
+```
+```typescript
+<ErrorCourseCard>
+    <div key={index}>
+        <HorizontalContainer>
+            <QuestionTitle>{question.question}</QuestionTitle>
+            <QuestionAction>
+                <ModeEditIcon
+                    onClick={() => {
+                        handleOpenEditQuestion(index);
+                    }}
+                    sx={{
+                        "&:hover": {
+                            fontSize: "1.8rem"
+                        },
+                        margin: "5px"
+                    }}
+                />
+                <DeleteIcon
+                    onClick={() => {
+                        deleteQuestion(index);
+                    }}
+                    sx={{
+                        color: "error.main",
+                        "&:hover": {
+                            fontSize: "1.8rem"
+                        },
+                        margin: "5px"
+                    }}
+                />
+            </QuestionAction>
+        </HorizontalContainer>
+        <GroupRadioButton
+            answer={question.answerIndex}
+            questionNumber={index}
+            choices={question.choices}
+            onChange={handleSetAnswer}
+        />
+    </div>
+</ErrorCourseCard>
 ```
 
 ## Running Tests 🧪
