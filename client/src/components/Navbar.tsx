@@ -85,8 +85,8 @@ const Navbar: React.FC<{ search?: boolean }> = ({ search = false }) => {
 
     const handleClose = async (value: string) => {
         setOpen(false);
-        setCountry(value);
-        fetch(`${config.API_URL}/country/${value}`, {
+        setCountry(value || "us");
+        fetch(`${config.API_URL}/country/${value || "us"}`, {
             method: "POST",
             credentials: "include",
             headers: {
