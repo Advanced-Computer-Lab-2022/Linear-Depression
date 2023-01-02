@@ -66,8 +66,6 @@ Afterwards, the hook should run the next commit you will attempt!
 
 ![image](https://user-images.githubusercontent.com/82768721/210188002-6b651151-74c4-45b9-9684-f6da660cc915.png)
 
-![image](https://user-images.githubusercontent.com/82768721/210188006-1dbdf795-0f3d-4d9e-ae16-fa7a832d0e3d.png)
-
 ![image](https://user-images.githubusercontent.com/82768721/210188187-b1724bf4-1247-4b46-a470-53f431fd82b6.png)
 
 ![image](https://user-images.githubusercontent.com/82768721/210188013-cf33cf2f-f473-4e47-a98e-9bec634a1afb.png)
@@ -220,6 +218,8 @@ If you have any feedback, please reach out to us at [ibrahim.abouelenein@student
 -   [@ShimaaBetah](https://www.github.com/ShimaaBetah)
 -   [@MohammadOTaha](https://www.github.com/MohammadOTaha)
 -   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassan)
+
+![image](https://user-images.githubusercontent.com/82768721/210188006-1dbdf795-0f3d-4d9e-ae16-fa7a832d0e3d.png)
 
 ## Contributing
 
