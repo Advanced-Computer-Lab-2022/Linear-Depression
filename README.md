@@ -337,12 +337,14 @@ Install my-project with `npm`
 ```
 To run backend 
 ```bash
-cd server && nodemon 
+cd server && nodemon src/start.ts
 ```
 To run frontend
 ```bash
 cd client && npm start
 ```
+the backend server and client will be running on the specified ports on your env files.
+
 ## Feedback 🥹
 
 If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
