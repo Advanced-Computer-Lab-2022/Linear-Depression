@@ -335,7 +335,14 @@ Install my-project with `npm`
 > cd server && npm i && cd -
 > cd client && npm i -f && cd -
 ```
-
+To run backend 
+```bash
+cd server && nodemon 
+```
+To run frontend
+```bash
+cd client && npm start
+```
 ## Feedback 🥹
 
 If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
