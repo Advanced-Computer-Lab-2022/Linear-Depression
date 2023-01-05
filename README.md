@@ -181,27 +181,43 @@ Afterwards, the hook should run the next commit you will attempt!
 
 ## Features ✨
 
--   User Authentication
--   User Roles
--   User Profile
--   User Courses
--   User Payments
--   User Notifications
--   User Email Notifications
--   User Password Reset
--   REST API
--   REST API Documentation
--   Admin Dashboard
--   Admin Dashboard Authentication
--   Admin Dashboard Users
--   Refund Policy
--   Corporate Policy
--   Terms and Conditions
--   Fuzzy Search
--   Caching
--   Rate Limiting
--   Rating System
--   Reporting System
+The system serves different type of users (Admin, Instructor , Individual Trainee, Corporate Trainee)
+
+### As an Admin I could 
+- Add instructors and corporate trainees to the system 
+- View Reported problems and resolve them 
+- View access requests from Corporate Trainees and grant access
+- View Refund Requests from Individual Trainees
+
+### As an Instructor I could 
+- Create and edit a draft Course 
+- Publish draft Course so trainees could enroll in 
+- Close a published course to prevent more trainees from enrolling in it
+- View my settlements and update my profile
+- Add a promotion for a specific period
+
+### As an Individual Trainee I could 
+- Search and filter Courses 
+- Pay for a course 
+- Report problems 
+- Watch a video and solve exercises from my courses
+- See my progress
+- Recieve a certificate by mail
+- Request refund 
+- Rate a course and its instructor
+
+### As a Corporate Trainee I could 
+- Search and filter Courses 
+- Send access requests for specific course
+- Watch a video and solve exercises from my courses
+- See my progress
+- Recieve a certificate by mail
+- Rate a course and its instructor
+
+
+### As a Guest I could 
+- Sign up as individual trainee 
+- Search and filter courses
 
 ## Code Examples 🐱‍💻
 
@@ -418,35 +434,7 @@ cd client && npm start
 ```
 the backend server and client will be running on the specified ports on your env files.
 
-## Feedback 🥹
-
-If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
-
-## Optimizations
-
--   Currency rates are cached using an cron job that runs at 12 AM.
--   Asynchronous programming was used.
--   Index was used on db to optimize search
-
-## Authors
-
--   [@aboueleyes](https://www.github.com/aboueleyes)
--   [@AhmedNasserG](https://www.github.com/AhmedNasserG)
--   [@ShimaaBetah](https://www.github.com/ShimaaBetah)
--   [@MohammadOTaha](https://www.github.com/MohammadOTaha)
--   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassan)
-
-![image](https://user-images.githubusercontent.com/82768721/210188006-1dbdf795-0f3d-4d9e-ae16-fa7a832d0e3d.png)
-
-## Contributing
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
-
-## Environment Variables
+### Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
 
@@ -483,6 +471,36 @@ To run this project, you will need to add the following environment variables to
 `STRIPE_SECRET_KEY`
 
 `STRIPE_WEBHOOK_SECRET`
+
+
+## Feedback 🥹
+
+If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
+
+## Optimizations
+
+-   Currency rates are cached using an cron job that runs at 12 AM.
+-   Asynchronous programming was used.
+-   Index was used on db to optimize search
+
+## Authors
+
+-   [@aboueleyes](https://www.github.com/aboueleyes)
+-   [@AhmedNasserG](https://www.github.com/AhmedNasserG)
+-   [@ShimaaBetah](https://www.github.com/ShimaaBetah)
+-   [@MohammadOTaha](https://www.github.com/MohammadOTaha)
+-   [@Abdulaziz-Hassan](https://www.github.com/Abdulaziz-Hassan)
+
+![image](https://user-images.githubusercontent.com/82768721/210188006-1dbdf795-0f3d-4d9e-ae16-fa7a832d0e3d.png)
+
+## Contributing
+
+Contributions are always welcome!
+
+See `contributing.md` for ways to get started.
+
+Please adhere to this project's `code of conduct`.
+
 
 ## Project Structure
 
