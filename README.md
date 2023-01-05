@@ -202,7 +202,6 @@ Afterwards, the hook should run the next commit you will attempt!
 -   Rate Limiting
 -   Rating System
 -   Reporting System
--
 
 ## Code Examples 🐱‍💻
 
@@ -406,6 +405,9 @@ Install my-project with `npm`
 > cd server && npm i && cd -
 > cd client && npm i -f && cd -
 ```
+
+## How to use
+
 To run backend 
 ```bash
 cd server && nodemon src/start.ts
@@ -1049,8 +1051,9 @@ To run this project, you will need to add the following environment variables to
 
 The software is open source under the GPL.3 License.
 
-~[GPT3](https://choosealicense.com/licenses/gpl-3.0/)~
-[Apache](https://www.apache.org/licenses/LICENSE-2.0)
+[GPT3](https://choosealicense.com/licenses/gpl-3.0/)
+
+\+ [Apache](https://www.apache.org/licenses/LICENSE-2.0) for stripe
 
 ## Stripe in development mode
 
