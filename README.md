@@ -59,31 +59,102 @@ Afterwards, the hook should run the next commit you will attempt!
 
 ## Screenshots 🖵
 
-![image](https://user-images.githubusercontent.com/82768721/210187997-797355b5-106f-4efd-b75d-ee809ebfa7c1.png)
 
-![image](https://user-images.githubusercontent.com/82768721/210188000-36b95d03-6d96-4af7-b5ff-fc8a227fd24d.png)
-
-![image](https://user-images.githubusercontent.com/82768721/210188002-6b651151-74c4-45b9-9684-f6da660cc915.png)
-
-![image](https://user-images.githubusercontent.com/82768721/210188187-b1724bf4-1247-4b46-a470-53f431fd82b6.png)
+<details>
+<summary>Course page</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188013-cf33cf2f-f473-4e47-a98e-9bec634a1afb.png)
+    
+</details>
 
+
+<details>
+<summary>Course page (course content - courese reviews)</summary>
+    
 ![image](https://user-images.githubusercontent.com/82768721/210188015-7711fce7-d410-4258-b5d3-82dca97f9381.png)
+   
+</details>
+
+<details>
+<summary>Lesson page</summary>
+    
+![image](https://user-images.githubusercontent.com/82768721/210188002-6b651151-74c4-45b9-9684-f6da660cc915.png)
+    
+</details>
+
+
+<details>
+<summary>Exercise page</summary>
+
+![image](https://user-images.githubusercontent.com/82768721/210188187-b1724bf4-1247-4b46-a470-53f431fd82b6.png)
+    
+</details>
+
+<details>
+<summary>Profile page</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188023-0ba2b3fe-368a-484c-8471-bd8d57765744.png)
+    
+</details>
 
-![image](https://user-images.githubusercontent.com/82768721/210188031-9c6287c2-8a9e-4b27-8471-7a6b283b5d73.png)
+
+<details>
+<summary>Admin dashboard login</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188208-793cb897-06bc-4940-834b-5320ae511056.png)
+    
+</details>
+
+<details>
+<summary>Admin dashboard</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188033-3da8e7e4-bb1a-4c85-8d82-811ed1481e53.png)
+    
+</details>
+
+
+<details>
+<summary>Report a course</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188036-fb6e5356-13ee-4104-b6f8-d0c1165a52e5.png)
+    
+</details>
+
+<details>
+<summary>Report thread</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188040-2e2b80e6-0d54-4077-b2f0-414ddcd30c6c.png)
+    
+</details>
+
+
+<details>
+<summary>My reports</summary>
 
 ![image](https://user-images.githubusercontent.com/82768721/210188044-d69bc4cc-a8f9-4f95-96b4-6ac5e4903d5c.png)
+    
+</details>
+
+<details>
+<summary>Reset password email</summary>
+    
+![image](https://user-images.githubusercontent.com/82768721/210187997-797355b5-106f-4efd-b75d-ee809ebfa7c1.png)
+
+</details>
+
+<details>
+<summary>Enrollment email</summary>
+    
+![image](https://user-images.githubusercontent.com/82768721/210188000-36b95d03-6d96-4af7-b5ff-fc8a227fd24d.png)
+    
+</details>
+
+<details>
+<summary>Certificate of completion</summary>
+
+![image](https://user-images.githubusercontent.com/82768721/210188031-9c6287c2-8a9e-4b27-8471-7a6b283b5d73.png)
+    
+</details>
 
 ## Tech/Framework used 🧰
 
