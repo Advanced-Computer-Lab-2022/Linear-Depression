@@ -473,10 +473,6 @@ To run this project, you will need to add the following environment variables to
 `STRIPE_WEBHOOK_SECRET`
 
 
-## Feedback 🥹
-
-If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
-
 ## Optimizations
 
 -   Currency rates are cached using an cron job that runs at 12 AM.
@@ -1517,7 +1513,7 @@ Response
 
 </details>
 
-### Update Course
+#### Update Course
 
 ```http
   PUT /courses/:id
@@ -1564,7 +1560,7 @@ Response
 
 </details>
 
-### Delete Course
+#### Delete Course
 
 ```http
   DELETE /courses/:id
@@ -1587,7 +1583,7 @@ Response
 
 </details>
 
-### List Course Subjects
+#### List Course Subjects
 
 ```http
   GET /courses/subjects
@@ -1620,7 +1616,7 @@ Response
 
 </details>
 
-### Close Course
+#### Close Course
 
 ```http
   PUT /courses/:id/close
@@ -1643,7 +1639,7 @@ Response
 
 </details>
 
-### Open Course
+#### Open Course
 
 ```http
   PUT /courses/:id/open
@@ -1666,7 +1662,7 @@ Response
 
 </details>
 
-### Publish Course
+#### Publish Course
 
 ```http
   PUT /courses/:id/publish
@@ -1691,7 +1687,7 @@ Response
 
 ### Me
 
-### My courses
+#### My courses
 
 ```http
   GET /me/courses
@@ -1751,7 +1747,7 @@ Response
 
 </details>
 
-### List my enrollments
+#### List my enrollments
 
 ```http
   GET /me/enrollments
@@ -1796,7 +1792,7 @@ Response
 
 </details>
 
-### Create a new enrollment
+#### Create a new enrollment
 
 ```http
   POST /me/enrollments
@@ -1827,7 +1823,7 @@ Response
 
 </details>
 
-### Get your refund requests
+#### Get your refund requests
 
 ```http
   GET /me/enrollments/:enrollmentId/refunds
@@ -1859,7 +1855,7 @@ Response
 
 </details>
 
-### Create a new refund request
+#### Create a new refund request
 
 ```http
   POST /me/enrollments/:enrollmentId/refunds
@@ -1891,7 +1887,7 @@ Response
 
 </details>
 
-### Delete a refund request
+#### Delete a refund request
 
 ```http
   DELETE /me/enrollments/:enrollmentId/refunds/
@@ -1923,7 +1919,7 @@ Response
 
 </details>
 
-### List my notes of a lesson
+#### List my notes of a lesson
 
 ```http
   GET /me/lessons/:lessonId/notes
@@ -1952,7 +1948,7 @@ Response
 
 </details>
 
-### Create a new note
+#### Create a new note
 
 ```http
   POST /me/lessons/:lessonId/notes
@@ -1982,7 +1978,7 @@ Response
 
 </details>
 
-### Update a note
+#### Update a note
 
 ```http
   PUT /me/lessons/:lessonId/notes/:noteId
@@ -2069,7 +2065,7 @@ Response
 
 ### Enrollments
 
-### Get enrollment
+#### Get enrollment
 
 ```http
 GET /enrollments/:enrollmentId
@@ -2116,7 +2112,7 @@ Response
 
 ---
 
-### Update enrollment
+#### Update enrollment
 
 ```http
 PUT /enrollments/:enrollmentId
@@ -2581,7 +2577,7 @@ Response
 
 ### Exercise
 
-### Get all exercises in a specific lesson
+#### Get all exercises in a specific lesson
 
 ```http
   GET /courses/:courseId/lessons/:lessonId/exercises
@@ -2647,7 +2643,7 @@ Response
 
 </details>
 
-### Get a specific exercise in a specific lesson
+#### Get a specific exercise in a specific lesson
 
 ```http
   GET /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
@@ -2688,7 +2684,7 @@ Response
 
 </details>
 
-### Create a new Exercise in a specific lesson
+#### Create a new Exercise in a specific lesson
 
 ```http
   POST /courses/:courseId/lessons/:lessonId/exercises
@@ -2727,7 +2723,7 @@ Response
 
 </details>
 
-### Update a exercise in a specific lesson
+#### Update a exercise in a specific lesson
 
 ```http
   PUT /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
@@ -2766,7 +2762,7 @@ Response
 
 </details>
 
-### Delete a specific exercise
+#### Delete a specific exercise
 
 ```http
   DELETE /courses/:courseId/lessons/:lessonId/exercises/:exerciseId
@@ -2791,7 +2787,7 @@ Response
 
 </details>
 
-### Get a specifc submission of a exercise in a specific lesson
+#### Get a specifc submission of a exercise in a specific lesson
 
 ```http
   GET /courses/:courseId/lessons/:lessonId/exercises/:exerciseId/submission
@@ -2825,7 +2821,7 @@ Response
 
 </details>
 
-### Submit a exercise in a specific lesson
+#### Submit a exercise in a specific lesson
 
 ```http
   POST /courses/:courseId/lessons/:lessonId/exercises/:exerciseId/submission
@@ -2861,7 +2857,7 @@ Response
 
 ### Lesson
 
-### Get a specific Lesson
+#### Get a specific Lesson
 
 ```http
   GET /courses/:courseId/lessons/:lessonId
@@ -2897,7 +2893,7 @@ Response
 
 </details>
 
-### Create a new Lesson
+#### Create a new Lesson
 
 ```http
   POST /courses/:courseId/lessons
@@ -2937,7 +2933,7 @@ Response
 
 </details>
 
-### Update a Lesson
+#### Update a Lesson
 
 ```http
   PUT /courses/:courseId/lessons/:lessonId
@@ -2977,7 +2973,7 @@ Response
 
 </details>
 
-### Delete a Lesson
+#### Delete a Lesson
 
 ```http
   DELETE /courses/:courseId/lessons/:lessonId
@@ -3004,7 +3000,7 @@ Response
 
 ### Promotions
 
-### Get all promotions
+#### Get all promotions
 
 ```http
 GET /promotions
@@ -3056,7 +3052,7 @@ Response
 
 ---
 
-### Get a promotion
+#### Get a promotion
 
 ```http
 GET /promotions/:promotionId
@@ -3106,7 +3102,7 @@ Response
 
 ---
 
-### Create a promotion
+#### Create a promotion
 
 ```http
 POST /promotions
@@ -3164,7 +3160,7 @@ Response
 
 ---
 
-### Update a promotion
+#### Update a promotion
 
 ```http
 PUT /promotions/:promotionId
@@ -3222,7 +3218,7 @@ Response
 
 ---
 
-### Delete a promotion
+#### Delete a promotion
 
 ```http
 DELETE /promotions/:promotionId
@@ -3243,7 +3239,7 @@ Response
 
 ### Reports
 
-### Get all user's reports
+#### Get all user's reports
 
 ```http
 GET /me/reports
@@ -3287,7 +3283,7 @@ Response
 
 ---
 
-### Get a specific report
+#### Get a specific report
 
 ```http
 GET /me/reports/:reportId
@@ -3350,7 +3346,7 @@ Response
 
 ---
 
-### Create a new report
+#### Create a new report
 
 ```http
 POST /me/reports
@@ -3394,7 +3390,7 @@ Response
 
 ---
 
-### Post a reply to a report
+#### Post a reply to a report
 
 ```http
 POST /me/reports/:reportId
@@ -3438,7 +3434,7 @@ Response
 
 ---
 
-### Get report thread
+#### Get report thread
 
 ```http
 GET /me/report-thread/:threadId
@@ -3475,13 +3471,13 @@ Response
 
 </details>
 
-### Generate API Documentation
+## Generate API Documentation
 
 ```bash
 > npm run generate-docs
 ```
 
-### Credits
+## Credits
 
 - [Clean code](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
 - [RESTful Web API Patterns and Practices Cookbook](https://learning.oreilly.com/library/view/restful-web-api/9781098106737/)
@@ -3491,4 +3487,8 @@ Response
 - [ReactJs docs](https://reactjs.org/docs/getting-started.html)
 - [Redux docs](https://redux.js.org/api/api-reference)
 - [NodeJs docs](https://nodejs.org/en/docs/)
+
+## Feedback 🥹
+
+If you have any feedback, please reach out to us at [ibrahim.abouelenein@student.guc.edu.eg](mailto:ibrahim.abouelenein@student.guc.edu.eg)
 
