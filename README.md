@@ -978,7 +978,8 @@ To run this project, you will need to add the following environment variables to
 
 The software is open source under the GPL.3 License.
 
-[GPT3](https://choosealicense.com/licenses/gpl-3.0/)
+~[GPT3](https://choosealicense.com/licenses/gpl-3.0/)~
+[Apache](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Stripe in development mode
 
@@ -3387,3 +3388,15 @@ Response
 ```bash
 > npm run generate-docs
 ```
+
+### Credits
+
+- [Clean code](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
+- [RESTful Web API Patterns and Practices Cookbook](https://learning.oreilly.com/library/view/restful-web-api/9781098106737/)
+- [Designing Data Intensive Applications](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781491903063/)
+- [Mongoose docs](https://mongoosejs.com/docs/)
+- [Express docs](https://expressjs.com/en/4x/api.html)
+- [ReactJs docs](https://reactjs.org/docs/getting-started.html)
+- [Redux docs](https://redux.js.org/api/api-reference)
+- [NodeJs docs](https://nodejs.org/en/docs/)
+
