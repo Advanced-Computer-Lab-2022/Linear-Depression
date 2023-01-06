@@ -411,6 +411,10 @@ The testing is done using `jest`. To run the tests, run the following command
 ```bash
 > cd server && npm run test
 ```
+
+![image](https://user-images.githubusercontent.com/35760882/211102907-56f489aa-ba15-4cfc-be88-e6ce930e8685.png)
+
+
 ### Models tests
 `js-faker` is used to generate data to test different models 
 
