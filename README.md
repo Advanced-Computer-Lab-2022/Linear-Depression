@@ -1,6 +1,9 @@
 # Linear-Depression
 
 An implementation of a full-stack web application. The application is a platform to manage an online learning platform that serves 4 different types of users : Individual/Corporate Trainees , Instructors and Admins. It was built using the `MERN` stack.
+
+[Read this on medium!](https://medium.com/@ibrahimabouelanin/a-software-engineering-team-wants-to-share-with-you-their-experience-16175a0cfe9a)
+
 ## Badges
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
