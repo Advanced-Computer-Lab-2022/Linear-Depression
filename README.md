@@ -415,6 +415,58 @@ The testing is done using `jest`. To run the tests, run the following command
 
 ![image](https://user-images.githubusercontent.com/35760882/211102907-56f489aa-ba15-4cfc-be88-e6ce930e8685.png)
 
+### Tests Structure 
+<details>
+<summary> Click Me! </summary>
+
+```bash
+.
+├── test_apis
+│   ├── course
+│   │   └── course.test.ts
+│   ├── course_ratings
+│   │   └── rating.test.ts
+│   ├── example.test.ts
+│   ├── instructor
+│   │   └── instructor.test.ts
+│   ├── instructor_ratings
+│   │   └── instructor_ratings.test.ts
+│   └── trainee
+│       ├── corporateTrainee.test.ts
+│       └── individualTrainee.test.ts
+├── test_models
+│   ├── answer
+│   │   ├── answer.test.ts
+│   │   └── factory.ts
+│   ├── course
+│   │   ├── course.test.ts
+│   │   └── factory.ts
+│   ├── enrollment
+│   │   └── factory.ts
+│   ├── exercise
+│   │   ├── exercise.test.ts
+│   │   └── factory.ts
+│   ├── instructor
+│   │   ├── factory.ts
+│   │   └── instructor.test.ts
+│   ├── lesson
+│   │   ├── factory.ts
+│   │   └── lesson.test.ts
+│   ├── rating
+│   │   ├── factory.ts
+│   │   └── rating.test.ts
+│   ├── trainee
+│   │   ├── factory.ts
+│   │   └── trainee.test.ts
+│   └── userFactory.ts
+├── test_services
+│   └── CourseService.test.ts
+└── test_utils
+    └── modelUtilities.test.ts
+
+```
+</details>
+
 
 ### Models tests
 `js-faker` is used to generate data to test different models 
@@ -621,6 +673,8 @@ describe("GET /courses?name=...", () => {
     }, TIME_OUT);
 });
 ```
+
+Also `curl` with used througout the process
 
 ## Installation 📥
 
