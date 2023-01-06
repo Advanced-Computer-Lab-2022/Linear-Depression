@@ -1,7 +1,6 @@
 # Linear-Depression
 
-An implementation of full stack web application using the MERN stack. The application is a platform for users to manage an online learning platform. The application is built using the `MERN` stack.
-
+An implementation of a full-stack web application. The application is a platform for users to manage an online learning platform. It was built using the `MERN` stack.
 ## Badges
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
@@ -30,6 +29,8 @@ This project was created for The GUC `CSEN704 Advanced Computer lab` The lab is 
 ![example workflow](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression/actions/workflows/test.yml/badge.svg)
 
 -   The project is currently in development.
+-   The admin need some improvements
+-   Course Page and API' needs Pagagination.
 -   The Unit tests needs modifications.
 -   A CI/CD pipeline needs to be migrated to Jenkins.
 -   A caching layer needs to be added to the application.
