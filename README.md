@@ -176,21 +176,33 @@ Afterwards, the hook should run the next commit you will attempt!
 ## Features ✨
 
 The system serves different type of users (Admin, Instructor , Individual Trainee, Corporate Trainee)
+<details>
+    
+ <summary> As an Admin I can </summary>
 
-### As an Admin I could 
 - Add instructors and corporate trainees to the system 
 - View Reported problems and resolve them 
 - View access requests from Corporate Trainees and grant access
 - View Refund Requests from Individual Trainees
 
-### As an Instructor I could 
+</details>
+
+<details>
+
+<summary> As an Instructor I can </summary>
+
 - Create and edit a draft Course 
 - Publish draft Course so trainees could enroll in 
 - Close a published course to prevent more trainees from enrolling in it
 - View my settlements and update my profile
 - Add a promotion for a specific period
 
-### As an Individual Trainee I could 
+ </details>
+
+<details>
+
+<summary> As an Individual Trainee I can </summary>
+
 - Search and filter Courses 
 - Pay for a course 
 - Report problems 
@@ -200,7 +212,12 @@ The system serves different type of users (Admin, Instructor , Individual Traine
 - Request refund 
 - Rate a course and its instructor
 
-### As a Corporate Trainee I could 
+</details>
+
+<details>
+
+<summary> As a Corporate Trainee I can </summary>
+
 - Search and filter Courses 
 - Send access requests for specific course
 - Watch a video and solve exercises from my courses
@@ -208,11 +225,18 @@ The system serves different type of users (Admin, Instructor , Individual Traine
 - Recieve a certificate by mail
 - Rate a course and its instructor
 
+</details>
 
-### As a Guest I could 
+<details>
+
+<summary> As  Guest I can </summary>
+
 - Sign up as individual trainee 
 - Search and filter courses
 
+</details>
+
+    
 ## Code Examples 🐱‍💻
 ### Send Certificate Service
 
