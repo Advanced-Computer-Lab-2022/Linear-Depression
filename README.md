@@ -238,7 +238,11 @@ The system serves different type of users (Admin, Instructor , Individual Traine
 
     
 ## Code Examples 🐱‍💻
-### Send Certificate Service
+
+<details>
+    <summary>
+    Send Certificate Service
+    </summary>
 
 ```typescript
 import { sendEmail } from "./sendMailService";
@@ -258,7 +262,14 @@ export const sendCertificateEmail = async (email: string, courseName: string, ce
     sendEmail(email, context, "certificateUponCompletion", "Linear Depression | Congrats 🎉", attachments);
 };
 ```
-### Course Action Methods
+
+
+</details>
+
+<details>
+    
+<summary> Course Action Methods </summary>
+
 ```typescript
 courseSchema.methods.close = async function (this: ICourseModel) {
     if (this.status !== CourseStatus.PUBLISHED) {
@@ -284,7 +295,14 @@ courseSchema.methods.reOpen = async function (this: ICourseModel) {
     await this.save();
 };
 ```
-### Setting Rate Limiter
+
+
+</details>
+
+<details>
+
+<summary>  Setting Rate Limiters </summary>
+
 ```typescript
 const rateLimiter = (requestsPerMinute: number = 120) => {
     return rateLimit({
@@ -299,7 +317,14 @@ const rateLimiter = (requestsPerMinute: number = 120) => {
     });
 };
 ```
-### Caching Currency Rates 
+
+</details>
+<details>
+
+<summary>
+    Caching Currency Rates
+</summary> 
+
 ```typescript
 // run every day at 00:00
 const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
@@ -323,7 +348,14 @@ const getCurrencyRatesTask = new CronJob("0 0 0 * * *", async () => {
     fs.writeFileSync("src/media/currency-rates.json", JSON.stringify(currencyRates));
 });
 ```
-### Promotion Validator
+
+</details>
+
+<details>
+    <summary>
+        Promotion Validator
+    </summary> 
+
 ```typescript
 export const PromotionValidator = {
     validate: async (promotion: IPromotionModel) => {
@@ -347,7 +379,15 @@ export const PromotionValidator = {
     }
 };
 ```
-### Course NavBar
+
+</details>
+
+<details>
+
+<summary>
+    Course NavBar
+</summary>
+
 ```typescript
 <HorizontalContainer>
     <NavItem>
@@ -380,7 +420,16 @@ export const PromotionValidator = {
     )}
 </HorizontalContainer>
 ```
-### Question Card
+
+</details>
+
+
+<details>
+
+   <summary>
+        Question Card
+   </summary> 
+   
 ```typescript
 <ErrorCourseCard>
     <div key={index}>
@@ -421,6 +470,8 @@ export const PromotionValidator = {
     </div>
 </ErrorCourseCard>
 ```
+
+</details>
 
 ## Running Tests 🧪
 
@@ -520,6 +571,12 @@ the backend server and client will be running on the specified ports on your env
 
 To run this project, you will need to add the following environment variables to your .env file
 
+<details>
+    <summary>
+        envs
+    </summary>
+
+
 `REACT_APP_API_URL`
 
 `REACT_APP_STRIPE_PUBLISHABLE_KEY`
@@ -554,6 +611,8 @@ To run this project, you will need to add the following environment variables to
 
 `STRIPE_WEBHOOK_SECRET`
 
+
+</details>
 
 ## Optimizations
 
